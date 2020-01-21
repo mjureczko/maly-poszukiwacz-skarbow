@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.app.job.JobScheduler
+import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -9,6 +9,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,12 +36,30 @@ class MainActivity : AppCompatActivity() {
 
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager!!.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 1.0F, MyLocationListener())
-        } else {
-            ActivityCompat.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION),MY_PERMISSION_ACCESS_FINE_LOCATION)
-        }
 
+
+        val locationListener = MyLocationListener()
+        val handler = Handler()
+        val context: Context = this
+        val activity: Activity = this
+
+        val runnableCode: Runnable = object : Runnable {
+                override fun run() { // Do something here on the main thread
+                    if (ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        locationManager!!.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            1000L,
+                            1.0F,
+                            locationListener
+                        )
+                        handler.postDelayed(this, 1000L)
+                    }  else {
+                        ActivityCompat.requestPermissions(activity, arrayOf(ACCESS_FINE_LOCATION),MY_PERMISSION_ACCESS_FINE_LOCATION)
+                    }
+
+                }
+        }
+        handler.post(runnableCode)
     }
 
 //    @Override
