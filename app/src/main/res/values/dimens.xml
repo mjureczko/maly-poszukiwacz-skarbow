@@ -1,4 +1,7 @@
 <resources  xmlns:tools="http://schemas.android.com/tools">
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="design_fab_image_size" tools:override="true">66dp</dimen>
+<!--    <dimen name="textview_height">40dp</dimen>-->
+    <dimen name="font_size">32dp</dimen>
+    <dimen name="textview_width">200dp</dimen>
 </resources>
