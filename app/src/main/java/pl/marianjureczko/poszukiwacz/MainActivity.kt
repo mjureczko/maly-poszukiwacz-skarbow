@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.location.Location
@@ -10,18 +11,22 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
+import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener  {
 
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
 
     private var locationManager: LocationManager? = null
+
+    private lateinit var qrScan: IntentIntegrator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,11 +34,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+        qrScan = IntentIntegrator(this)
+        scanBtn.setOnClickListener(this)
 
+        val latValue = findViewById<TextView>(R.id.latValue)
+        latValue.text = "changed"
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
@@ -62,27 +67,25 @@ class MainActivity : AppCompatActivity() {
         handler.post(runnableCode)
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults)
-//    {
-//        switch(requestCode) {
-//                case MY_PERMISSION_ACCESS_FINE_LOCATION : {
-//                    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                        // permission was granted
-//                    } else {
-//                        // permission denied
-//                    }
-//                    break;
-//                }
-//
-//            }
-//        }
-//    }
+    override fun onClick(view: View) {
+        println("clicked")
+        qrScan.initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int,resultCode: Int,data: Intent?) {
+        println("scanning")
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            println("scanned: ${result.contents}")
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
 }
 
 class MyLocationListener : LocationListener {
     override fun onLocationChanged(location: Location?) {
-        println("szerokość: ${location?.latitude} długość: ${location?.longitude}")
+//        println("szerokość: ${location?.latitude} długość: ${location?.longitude}")
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
