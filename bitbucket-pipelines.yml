@@ -1,4 +1,5 @@
-image: java:8
+image: mingc/android-build-box:latest
+
 pipelines:
   default:
     - step:
