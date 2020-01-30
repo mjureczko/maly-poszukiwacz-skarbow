@@ -2,6 +2,8 @@ package pl.marianjureczko.poszukiwacz
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -77,6 +79,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener  {
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
             println("scanned: ${result.contents}")
+//            val builder = Dialog.Builder(it)
+
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
