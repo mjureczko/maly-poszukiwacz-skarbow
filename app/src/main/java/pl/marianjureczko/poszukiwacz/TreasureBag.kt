@@ -12,10 +12,10 @@ class TreasureBag {
     var diamonds: Int = 0
         private set
 
-    fun containsTreasure(treasure: Treasure): Boolean =
+    fun contains(treasure: Treasure): Boolean =
         collected.contains(treasure.id)
 
-    fun collectTreasure(treasure: Treasure) {
+    fun collect(treasure: Treasure) {
         collected.add(treasure.id)
         when(treasure.type) {
             TreasureType.GOLD -> golds += treasure.quantity

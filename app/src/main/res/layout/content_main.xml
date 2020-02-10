@@ -12,8 +12,8 @@
         android:id="@+id/latValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_size"
         android:text="00.00000"
+        android:textSize="@dimen/font_size"
         app:layout_constraintBottom_toTopOf="@+id/longValue"
         app:layout_constraintLeft_toRightOf="@+id/latLabel"
         app:layout_constraintRight_toRightOf="parent"
@@ -23,20 +23,19 @@
         android:id="@+id/latLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_size"
         android:text="Szerokość:"
+        android:textSize="@dimen/font_size"
         app:layout_constraintBottom_toTopOf="@+id/longLabel"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/latValue"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/longValue"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:textSize="@dimen/font_size"
+        android:layout_height="wrap_content"
         android:text="00.00000"
+        android:textSize="@dimen/font_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/longLabel"
         app:layout_constraintRight_toRightOf="parent"
@@ -44,13 +43,76 @@
 
     <TextView
         android:id="@+id/longLabel"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:textSize="@dimen/font_size"
+        android:layout_height="wrap_content"
         android:text="Długość:"
+        android:textSize="@dimen/font_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/longValue"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/goldView"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="1px"
+            app:srcCompat="@drawable/gold" />
+
+        <TextView
+            android:id="@+id/goldTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10px"
+            android:layout_toRightOf="@id/goldView"
+            android:text="0"
+            android:textSize="22dp" />
+
+        <ImageView
+            android:id="@+id/rubyView"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1px"
+            android:layout_toRightOf="@id/goldTxt"
+            app:srcCompat="@drawable/ruby" />
+
+        <TextView
+            android:id="@+id/rubyTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10px"
+            android:layout_toRightOf="@id/rubyView"
+            android:text="0"
+            android:textSize="22dp" />
+
+        <ImageView
+            android:id="@+id/diamondView"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1px"
+            android:layout_toRightOf="@id/rubyTxt"
+            app:srcCompat="@drawable/diamond" />
+
+        <TextView
+            android:id="@+id/diamondTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1px"
+            android:layout_toRightOf="@id/diamondView"
+            android:text="0"
+            android:textSize="22dp" />
+
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    tools:layout_editor_absoluteX="1dp"-->
+<!--    tools:layout_editor_absoluteY="1dp"-->

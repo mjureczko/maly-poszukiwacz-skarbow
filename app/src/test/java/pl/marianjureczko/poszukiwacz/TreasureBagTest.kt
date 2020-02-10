@@ -18,8 +18,8 @@ class TreasureBagTest {
         val bag = TreasureBag()
 
         //when
-        bag.collectTreasure(gold7)
-        bag.collectTreasure(gold9)
+        bag.collect(gold7)
+        bag.collect(gold9)
 
         //then
         assertEquals(gold7.quantity + gold9.quantity, bag.golds)
@@ -33,8 +33,8 @@ class TreasureBagTest {
         val bag = TreasureBag()
 
         //when
-        bag.collectTreasure(diamond17)
-        bag.collectTreasure(diamond18)
+        bag.collect(diamond17)
+        bag.collect(diamond18)
 
         //then
         assertEquals(diamond17.quantity + diamond18.quantity, bag.diamonds)
@@ -48,8 +48,8 @@ class TreasureBagTest {
         val bag = TreasureBag()
 
         //when
-        bag.collectTreasure(ruby27)
-        bag.collectTreasure(ruby98)
+        bag.collect(ruby27)
+        bag.collect(ruby98)
 
         //then
         assertEquals(ruby27.quantity + ruby98.quantity, bag.rubies)
@@ -61,10 +61,10 @@ class TreasureBagTest {
     fun detectAlreadyCollectedTreasures() {
         //given
         val bag = TreasureBag()
-        bag.collectTreasure(gold9)
+        bag.collect(gold9)
 
         //then
-        assertFalse(bag.containsTreasure(gold7))
-        assertTrue(bag.containsTreasure(gold9))
+        assertFalse(bag.contains(gold7))
+        assertTrue(bag.contains(gold9))
     }
 }
