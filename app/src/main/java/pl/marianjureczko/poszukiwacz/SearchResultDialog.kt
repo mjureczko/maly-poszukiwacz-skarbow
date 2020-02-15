@@ -12,7 +12,7 @@ import kotlin.math.roundToInt
 
 class SearchResultDialog(val activity: Activity) {
 
-    fun show(text: String, imageId: Int?) {
+    fun show(text: String, imageId: Int?): AlertDialog {
         val group = LinearLayout(activity)
         group.orientation = LinearLayout.VERTICAL
         group.gravity = Gravity.CENTER_HORIZONTAL
@@ -30,7 +30,7 @@ class SearchResultDialog(val activity: Activity) {
         val txtView = TextView(activity)
         txtView.text = text
         txtView.gravity = Gravity.CENTER_HORIZONTAL
-        txtView.textSize = 75.0f
+        txtView.textSize = 45.0f
 
         group.addView(txtView)
 
@@ -38,10 +38,14 @@ class SearchResultDialog(val activity: Activity) {
         builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
         builder.setView(group)
         val dialog = builder.create()
+
         dialog.show()
+        println("########> dialog.show()")
         val positiveButton: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
         val buttonLayoutParams = positiveButton.layoutParams as LinearLayout.LayoutParams
         buttonLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         positiveButton.layoutParams = buttonLayoutParams
+
+        return dialog
     }
 }

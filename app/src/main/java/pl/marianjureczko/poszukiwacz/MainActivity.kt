@@ -2,11 +2,11 @@ package pl.marianjureczko.poszukiwacz
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.graphics.*
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -24,30 +24,99 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
+    private val AMOUNTS = "AMOUNTS"
+    private val COLLECTED = "COLLECTED"
+    private val MSG_TO_SHOW = "MSG_TO_SHOW"
+    private val IMG_TO_SHOW = "IMG_TO_SHOW"
+
+    private var dialog: AlertDialog? = null
 
     private var locationManager: LocationManager? = null
 
     private lateinit var qrScan: IntentIntegrator
 
-    private val treasureBagPresenter = TreasureBagPresenter()
-    private val treasureParser = TreasureParser()
+    private lateinit var treasureBagPresenter: TreasureBagPresenter
+
+    private var dialogToShow: DialogData? = null
+
+    override fun onPostResume() {
+        super.onPostResume()
+        println("########> onPostResume ${System.currentTimeMillis() % 100_000}")
+        val toShow = dialogToShow
+        if (toShow != null) {
+            try {
+                dialog = SearchResultDialog(this).show(toShow!!.msg, toShow!!.imageId)
+                println("########> onPostResume ${System.currentTimeMillis() % 100_000} setting null")
+                dialogToShow = null
+            } catch (ex: Throwable) {
+                dialogToShow = toShow
+            }
+        }
+    }
+
+    override fun onStart() {
+        println("########> onStart ${System.currentTimeMillis() % 100_000}")
+        super.onStart()
+    }
+
+    override fun onResume() {
+        println("########> onResume ${System.currentTimeMillis() % 100_000}")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        println("########> onPause ${System.currentTimeMillis() % 100_000}")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        println("########> onStop ${System.currentTimeMillis() % 100_000}")
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        println("########> onDestroy ${System.currentTimeMillis() % 100_000}")
+        super.onDestroy()
+        dialog?.dismiss()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        println("########> onRestoreInstanceState ${System.currentTimeMillis() % 100_000}")
+        restoreState(savedInstanceState)
+    }
+
+    // invoked when the activity may be temporarily destroyed, save the instance state here
+    override fun onSaveInstanceState(outState: Bundle?) {
+        println("########> onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
+        outState?.run {
+            putIntegerArrayList(AMOUNTS, treasureBagPresenter.bagContent())
+            putStringArrayList(COLLECTED, treasureBagPresenter.collectedInBag())
+            println("########> onSaveInstanceState dialog:$dialogToShow")
+            putString(MSG_TO_SHOW, dialogToShow?.msg)
+            if (dialogToShow?.imageId != null) {
+                putInt(IMG_TO_SHOW, dialogToShow?.imageId!!)
+            }
+        }
+        // call superclass to save any view hierarchy
+        super.onSaveInstanceState(outState)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        println("########> onCreate ${System.currentTimeMillis() % 100_000}")
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        restoreState(savedInstanceState)
+
         qrScan = IntentIntegrator(this)
         scanBtn.setOnClickListener(this)
 
-        val latValue = findViewById<TextView>(R.id.latValue)
-        latValue.text = "changed"
-
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-
-        val locationListener = MyLocationListener()
+        val locationListener =
+            MyLocationListener(findViewById(R.id.latValue), findViewById(R.id.longValue))
         val handler = Handler()
         val context: Context = this
         val activity: Activity = this
@@ -77,26 +146,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         handler.post(runnableCode)
     }
 
+    private fun restoreState(savedInstanceState: Bundle?) {
+        treasureBagPresenter = TreasureBagPresenter(
+            savedInstanceState?.getIntegerArrayList(AMOUNTS),
+            savedInstanceState?.getStringArrayList(COLLECTED)
+        )
+        treasureBagPresenter.init(
+            findViewById(R.id.goldTxt),
+            findViewById(R.id.rubyTxt),
+            findViewById(R.id.diamondTxt)
+        )
+        treasureBagPresenter.showTreasure()
+        savedInstanceState?.getString(MSG_TO_SHOW)?.let {
+            dialogToShow = DialogData(it, savedInstanceState?.getInt(IMG_TO_SHOW))
+        }
+        println("########> restoreState dialog:$dialogToShow")
+    }
+
     override fun onClick(view: View) {
         onActivityResult(1, 1, null)
         qrScan.initiateScan()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        println("########> onActivityResult ${System.currentTimeMillis() % 100_000}")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            val resultDialog = SearchResultDialog(this)
-            try {
-                val treasure = treasureParser.parse(result.contents)
-                if(treasureBagPresenter.contains(treasure)) {
-                    resultDialog.show("Ten skarb został już zabrany!", null)
-                } else {
-                    resultDialog.show(treasure.quantity.toString(), treasure.type.image())
-                    treasureBagPresenter.add(treasure)
-                }
-            } catch (ex: IllegalArgumentException) {
-                resultDialog.show("To nie jest skarb!", null)
-            }
+            dialogToShow = treasureBagPresenter.processSearchingResult(result.contents, SearchResultDialog(this))
+            println("########> onActivityResult (done) dialog:$dialogToShow ${System.currentTimeMillis() % 100_000}")
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -104,9 +182,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 }
 
-class MyLocationListener : LocationListener {
+class MyLocationListener(private val latValue: TextView, private val longValue: TextView) :
+    LocationListener {
+
+    private val formatter = CoordinatesFormatter()
+
     override fun onLocationChanged(location: Location?) {
-//        println("szerokość: ${location?.latitude} długość: ${location?.longitude}")
+        latValue.text = formatter.format(location?.latitude)
+        longValue.text = formatter.format(location?.longitude)
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
@@ -121,44 +204,4 @@ class MyLocationListener : LocationListener {
         println("onProviderDisabled - provider: $provider")
     }
 
-}
-
-
-object DrawableUtil {
-
-    fun writeTextOnDrawableInternal(
-        bm: Bitmap,
-        text: String,
-        textSizeDp: Int,
-        horizontalOffset: Int,
-        verticalOffset: Int
-    ): Unit {
-
-        val tf = Typeface.create("Helvetica", Typeface.BOLD)
-
-        val paint = Paint()
-        paint.style = Paint.Style.FILL
-        paint.color = Color.WHITE
-        paint.typeface = tf
-        paint.textAlign = Paint.Align.LEFT
-//        paint.textSize = context.dip(textSizeDp).toFloat()
-
-        val textRect = Rect()
-        paint.getTextBounds(text, 0, text.length, textRect)
-
-        val canvas = Canvas(bm)
-
-//        //If the text is bigger than the canvas , reduce the font size
-//        if (textRect.width() >= canvas.getWidth() - 4)
-//        //the padding on either sides is considered as 4, so as to appropriately fit in the text
-//            paint.textSize = context.dip(12).toFloat()
-
-        //Calculate the positions
-        val xPos = canvas.width.toFloat() / 2 + horizontalOffset
-
-        //"- ((paint.descent() + paint.ascent()) / 2)" is the distance from the baseline to the center.
-        val yPos = (canvas.height / 2 - (paint.descent() + paint.ascent()) / 2) + verticalOffset
-
-        canvas.drawText(text, xPos, yPos, paint)
-    }
 }
