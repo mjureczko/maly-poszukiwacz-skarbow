@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val toShow = dialogToShow
         if (toShow != null) {
             try {
-                dialog = SearchResultDialog(this).show(toShow!!.msg, toShow!!.imageId)
+                dialog = SearchResultDialog(this).show(toShow.msg, toShow.imageId)
                 println("########> onPostResume ${System.currentTimeMillis() % 100_000} setting null")
                 dialogToShow = null
             } catch (ex: Throwable) {
@@ -115,8 +115,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        val locationListener =
-            MyLocationListener(findViewById(R.id.latValue), findViewById(R.id.longValue))
+        val locationListener = MyLocationListener(findViewById(R.id.latValue), findViewById(R.id.longValue))
         val handler = Handler()
         val context: Context = this
         val activity: Activity = this
@@ -182,8 +181,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 }
 
-class MyLocationListener(private val latValue: TextView, private val longValue: TextView) :
-    LocationListener {
+class MyLocationListener(private val latValue: TextView, private val longValue: TextView) : LocationListener {
 
     private val formatter = CoordinatesFormatter()
 

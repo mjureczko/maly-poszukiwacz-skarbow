@@ -31,7 +31,7 @@
         android:scaleType="fitCenter"
         app:backgroundTint="@android:color/transparent"
         android:src="@drawable/chest"
-        app:fabCustomSize="180px"
+        app:fabCustomSize="128dp"
         app:useCompatPadding="true"
         app:elevation="1dp"
         app:borderWidth="5dp"
