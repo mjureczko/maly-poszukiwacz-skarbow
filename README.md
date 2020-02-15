@@ -4,3 +4,5 @@ Treasure format [grd]\d\d\w\w\w
 e.g.: g01abc
 
 Can be generated using: https://zxing.appspot.com/generator
+
+GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
