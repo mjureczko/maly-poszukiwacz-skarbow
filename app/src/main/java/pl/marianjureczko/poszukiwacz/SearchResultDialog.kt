@@ -3,8 +3,6 @@ package pl.marianjureczko.poszukiwacz
 import android.app.Activity
 import android.app.AlertDialog
 import android.view.Gravity
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -41,10 +39,6 @@ class SearchResultDialog(val activity: Activity) {
 
         dialog.show()
         println("########> dialog.show()")
-        val positiveButton: Button = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-        val buttonLayoutParams = positiveButton.layoutParams as LinearLayout.LayoutParams
-        buttonLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        positiveButton.layoutParams = buttonLayoutParams
 
         return dialog
     }
