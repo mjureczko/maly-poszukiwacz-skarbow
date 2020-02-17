@@ -35,7 +35,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var qrScan: IntentIntegrator
 
-    private lateinit var treasureBagPresenter: TreasureBagPresenter
+    companion object {
+        private var treasureBagPresenter: TreasureBagPresenter? = null
+    }
 
     private var dialogToShow: DialogData? = null
 
@@ -89,8 +91,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onSaveInstanceState(outState: Bundle?) {
         println("########> onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
         outState?.run {
-            putIntegerArrayList(AMOUNTS, treasureBagPresenter.bagContent())
-            putStringArrayList(COLLECTED, treasureBagPresenter.collectedInBag())
+            putIntegerArrayList(AMOUNTS, treasureBagPresenter!!.bagContent())
+            putStringArrayList(COLLECTED, treasureBagPresenter!!.collectedInBag())
             println("########> onSaveInstanceState dialog:$dialogToShow")
             putString(MSG_TO_SHOW, dialogToShow?.msg)
             if (dialogToShow?.imageId != null) {
@@ -115,7 +117,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        val locationListener = MyLocationListener(findViewById(R.id.latValue), findViewById(R.id.longValue))
+        val locationListener =
+            MyLocationListener(findViewById(R.id.latValue), findViewById(R.id.longValue))
         val handler = Handler()
         val context: Context = this
         val activity: Activity = this
@@ -146,16 +149,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
-        treasureBagPresenter = TreasureBagPresenter(
-            savedInstanceState?.getIntegerArrayList(AMOUNTS),
-            savedInstanceState?.getStringArrayList(COLLECTED)
-        )
-        treasureBagPresenter.init(
+        if (treasureBagPresenter == null) {
+            treasureBagPresenter = TreasureBagPresenter(
+                savedInstanceState?.getIntegerArrayList(AMOUNTS),
+                savedInstanceState?.getStringArrayList(COLLECTED)
+            )
+        }
+        treasureBagPresenter!!.init(
             findViewById(R.id.goldTxt),
             findViewById(R.id.rubyTxt),
             findViewById(R.id.diamondTxt)
         )
-        treasureBagPresenter.showTreasure()
+        treasureBagPresenter!!.showTreasure()
         savedInstanceState?.getString(MSG_TO_SHOW)?.let {
             dialogToShow = DialogData(it, savedInstanceState?.getInt(IMG_TO_SHOW))
         }
@@ -171,8 +176,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         println("########> onActivityResult ${System.currentTimeMillis() % 100_000}")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            dialogToShow = treasureBagPresenter.processSearchingResult(result.contents, SearchResultDialog(this))
+        if (result != null && result.contents != null) {
+            dialogToShow = treasureBagPresenter!!.processSearchingResult(
+                result.contents,
+                SearchResultDialog(this)
+            )
             println("########> onActivityResult (done) dialog:$dialogToShow ${System.currentTimeMillis() % 100_000}")
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -181,7 +189,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 }
 
-class MyLocationListener(private val latValue: TextView, private val longValue: TextView) : LocationListener {
+class MyLocationListener(private val latValue: TextView, private val longValue: TextView) :
+    LocationListener {
 
     private val formatter = CoordinatesFormatter()
 
