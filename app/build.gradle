@@ -39,3 +39,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
+
+configurations {
+    all {
+        exclude group: 'xpp3', module: 'xpp3'
+    }
+}
