@@ -12,9 +12,12 @@ class MainActivity : AppCompatActivity() {
     companion object {
     }
 
+    private lateinit var storageHelper : StorageHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         println("########> onCreate ${System.currentTimeMillis() % 100_000}")
         super.onCreate(savedInstanceState)
+        storageHelper = StorageHelper(this)
 
         setContentView(R.layout.activity_main)
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -34,12 +37,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun showTreasuresLists(treasures: MutableList<TreasuresList>) {
         val treasuresList = findViewById<ListView>(R.id.treasures_list)
-        val adapter = TreasuresListsAdapter(treasures, this)
+        val adapter = TreasuresListsAdapter(treasures, this, storageHelper)
         treasuresList.adapter = adapter
     }
 
     private fun createAndLoadTreasures(): MutableList<TreasuresList> {
-        val storageHelper = StorageHelper(this)
         createSomeTreasures(storageHelper)
         val treasures = storageHelper.loadAll()
         println("########> Tresures ${treasures.size}")

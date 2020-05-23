@@ -1,57 +1,77 @@
 package pl.marianjureczko.poszukiwacz
 
-import junit.framework.Assert.assertEquals
-import org.junit.Assert
+import android.app.Application
+import org.jeasy.random.EasyRandom
+import org.jeasy.random.EasyRandomParameters
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Test
-import org.simpleframework.xml.Serializer
-import org.simpleframework.xml.core.Persister
-import java.io.ByteArrayOutputStream
+import java.io.File
 
 class StorageHelperTest {
 
+    private val parameters = EasyRandomParameters()
+    private lateinit var easyRandom: EasyRandom
+    private val context = TestContext()
+    private val storageHelper = StorageHelper(context)
+
+    @Before
+    fun init() {
+        parameters.overrideDefaultInitialization(true)
+        easyRandom = EasyRandom(parameters)
+    }
+
+    @After
+    fun cleanup() {
+        File(context.filesDir.absolutePath + StorageHelper.treasuresDirectory).delete()
+    }
+
     @Test
-    fun xml() {
+    fun `save and load treasures list`() {
         //given
-        val someTreasures = TreasuresList("name", ArrayList(listOf(TreasureDescription(1.1, 1.2))))
-        val serializer: Serializer = Persister()
-        val out = ByteArrayOutputStream()
+        val someTreasures = easyRandom.nextObject(TreasuresList::class.java)
 
         //when
-        serializer.write(someTreasures, out)
-        val actual = out.toString("UTF-8")
+        storageHelper.save(someTreasures)
+        val actual = storageHelper.loadAll()
 
         //then
-        print(actual)
-        Assert.assertNotNull(actual)
-        val deserialized = serializer.read(TreasuresList::class.java, actual)
-        assertEquals(someTreasures, deserialized)
+        val matching = actual.first { it.name == someTreasures.name }
+        assertEquals(someTreasures, matching)
     }
 
     @Test
-    fun xml2() {
-        val xml = "<treasuresList>\n" +
-                "   <name>test1</name>\n" +
-                "   <tresures class=\"java.util.Arrays\$ArrayList\">\n" +
-                "      <treasureDescription>\n" +
-                "         <latitude>1.1</latitude>\n" +
-                "         <longitude>1.2</longitude>\n" +
-                "      </treasureDescription>\n" +
-                "      <treasureDescription>\n" +
-                "         <latitude>2.1</latitude>\n" +
-                "         <longitude>2.2</longitude>\n" +
-                "      </treasureDescription>\n" +
-                "   </tresures>\n" +
-                "</treasuresList>"
-    }
-    @Test
-    fun save() {
+    fun `save and remove treasures list`() {
         //given
-//        val helper = StorageHelper()
-        val someTreasures = TreasuresList("name", ArrayList(listOf(TreasureDescription(1.1, 1.2))))
+        val someTreasures = easyRandom.nextObject(TreasuresList::class.java)
+        storageHelper.save(someTreasures)
 
         //when
-//        helper.save(someTreasures)
+        storageHelper.remove(someTreasures)
+        val actual = storageHelper.loadAll()
 
         //then
+        val matching = actual.firstOrNull { it.name == someTreasures.name }
+        assertNull(matching)
     }
+
+    @Test
+    fun `ignore invalid files when loading treasures`() {
+        //given
+        storageHelper.save(easyRandom.nextObject(TreasuresList::class.java))
+        File(context.filesDir.absolutePath + StorageHelper.treasuresDirectory + "/invalid.file.xml")
+            .writeText("it' not a xml")
+
+        //when
+        val actual = storageHelper.loadAll()
+
+        //then
+        assertEquals(1, actual.size)
+    }
+}
+
+class TestContext : Application() {
+    override fun getFilesDir(): File = File(".")
 }

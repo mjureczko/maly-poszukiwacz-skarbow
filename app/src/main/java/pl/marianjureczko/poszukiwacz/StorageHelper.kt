@@ -7,23 +7,40 @@ import org.simpleframework.xml.Root
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
 import java.io.File
+import java.lang.Exception
 
 class StorageHelper(val context: Context) {
 
-    private val treasuresDirectory = "/treasures_lists"
+    companion object {
+        val treasuresDirectory = "/treasures_lists"
+    }
 
     fun save(treasures: TreasuresList) {
-        val dir = getTreasuresDir()
-        //todo: validate name
-        val xmlFile = File("${dir.absolutePath}/${treasures.name}.xml")
+        val xmlFile = getTreasuresFile(treasures)
         saveXml(treasures, xmlFile)
     }
 
     fun loadAll(): MutableList<TreasuresList> {
         val dir = getTreasuresDir()
         return dir.listFiles()
-            .map { loadTreasuresFromFile(it) }
+            .mapNotNull {
+                try {
+                    loadTreasuresFromFile(it)
+                } catch (e: Exception) {
+                    null
+                }
+            }
             .toMutableList()
+    }
+
+    fun remove(listToRemove: TreasuresList) {
+        val fileToRemove = getTreasuresFile(listToRemove)
+        fileToRemove.delete()
+    }
+
+    private fun getTreasuresFile(treasures: TreasuresList): File {
+        val dir = getTreasuresDir()
+        return File("${dir.absolutePath}/${treasures.fileName()}.xml")
     }
 
     private fun loadTreasuresFromFile(xmlFile: File): TreasuresList {
@@ -52,6 +69,11 @@ data class TreasuresList(
     @field:ElementList var tresures: ArrayList<TreasureDescription>
 ) {
     constructor() : this("", ArrayList()) {
+    }
+
+    //todo: validate name
+    fun fileName(): String {
+        return name
     }
 }
 

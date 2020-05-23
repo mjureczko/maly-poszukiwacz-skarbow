@@ -13,7 +13,8 @@ import android.widget.ListAdapter
 
 class TreasuresListsAdapter(
     private val list: MutableList<TreasuresList>,
-    private val context: Context
+    private val context: Context,
+    private val storageHelper: StorageHelper
 ) : BaseAdapter(), ListAdapter {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -23,13 +24,13 @@ class TreasuresListsAdapter(
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = inflater.inflate(R.layout.treasures_lists_item_layout, null)
         }
-        configureTresureListButton(view!!, position)
+        configureTresuresListButton(view!!, position)
         configureEditButton(view, position)
         configureRemoveButton(view, position)
         return view
     }
 
-    private fun configureTresureListButton(view: View, position: Int) {
+    private fun configureTresuresListButton(view: View, position: Int) {
         val treasuresList: Button = view!!.findViewById(R.id.list)
         treasuresList.text = list[position].name
         treasuresList.setOnClickListener(View.OnClickListener {
@@ -56,8 +57,10 @@ class TreasuresListsAdapter(
     }
 
     private fun removeList(position: Int) {
+        val listToRemove = list[position]
         list.removeAt(position)
         this.notifyDataSetChanged()
+        storageHelper.remove(listToRemove)
     }
 
     override fun getItem(position: Int): Any {
