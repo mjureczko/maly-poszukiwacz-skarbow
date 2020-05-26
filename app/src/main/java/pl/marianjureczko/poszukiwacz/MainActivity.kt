@@ -20,10 +20,8 @@ class MainActivity : AppCompatActivity() {
         storageHelper = StorageHelper(this)
 
         setContentView(R.layout.activity_main)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        dummy_button.setOnTouchListener(mDelayHideTouchListener)
-        val treasures = createAndLoadTreasures()
 
+        val treasures = createAndLoadTreasures()
         showTreasuresLists(treasures)
 
         val newListButton = findViewById<Button>(R.id.new_list_button)
@@ -35,17 +33,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        println("########> onResume ${System.currentTimeMillis() % 100_000}")
+        val treasures = createAndLoadTreasures()
+        showTreasuresLists(treasures)
+    }
+
     private fun showTreasuresLists(treasures: MutableList<TreasuresList>) {
-        val treasuresList = findViewById<ListView>(R.id.treasures_list)
+        val treasuresList = findViewById<ListView>(R.id.treasures_lists)
         val adapter = TreasuresListsAdapter(treasures, this, storageHelper)
         treasuresList.adapter = adapter
     }
 
     private fun createAndLoadTreasures(): MutableList<TreasuresList> {
         createSomeTreasures(storageHelper)
-        val treasures = storageHelper.loadAll()
-        println("########> Tresures ${treasures.size}")
-        return treasures
+        return storageHelper.loadAll()
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here

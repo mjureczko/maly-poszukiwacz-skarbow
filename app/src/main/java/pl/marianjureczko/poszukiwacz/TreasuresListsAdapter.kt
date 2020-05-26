@@ -31,7 +31,7 @@ class TreasuresListsAdapter(
     }
 
     private fun configureTresuresListButton(view: View, position: Int) {
-        val treasuresList: Button = view!!.findViewById(R.id.list)
+        val treasuresList: Button = view.findViewById(R.id.list)
         treasuresList.text = list[position].name
         treasuresList.setOnClickListener(View.OnClickListener {
             //do something
@@ -39,14 +39,14 @@ class TreasuresListsAdapter(
     }
 
     private fun configureEditButton(view: View, position: Int) {
-        val edit: Button = view!!.findViewById(R.id.edit)
+        val edit: Button = view.findViewById(R.id.edit)
         edit.setOnClickListener(View.OnClickListener {
             //do something
         })
     }
 
     private fun configureRemoveButton(view: View, position: Int) {
-        val remove: Button = view!!.findViewById(R.id.del)
+        val remove: Button = view.findViewById(R.id.del)
         remove.setOnClickListener {
             AlertDialog.Builder(context)
                 .setMessage(Html.fromHtml("Czy na pewno chcesz skasować listę <b>${list[position].name}</b>?"))
@@ -63,15 +63,8 @@ class TreasuresListsAdapter(
         storageHelper.remove(listToRemove)
     }
 
-    override fun getItem(position: Int): Any {
-        return list[position]
-    }
+    override fun getItem(position: Int): Any = list[position]
+    override fun getItemId(position: Int): Long = 0
+    override fun getCount(): Int = list.size
 
-    override fun getItemId(position: Int): Long {
-        return 0
-    }
-
-    override fun getCount(): Int {
-        return list.size
-    }
 }
