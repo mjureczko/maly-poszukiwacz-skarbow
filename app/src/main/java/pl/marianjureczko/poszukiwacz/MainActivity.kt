@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
 
     companion object {
+        const val SELECTED_LIST = "SELECTED_LIST"
     }
 
     private lateinit var storageHelper : StorageHelper
@@ -21,14 +22,12 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val treasures = createAndLoadTreasures()
+        val treasures = storageHelper.loadAll()
         showTreasuresLists(treasures)
 
         val newListButton = findViewById<Button>(R.id.new_list_button)
         newListButton.setOnClickListener {
-            val intent = Intent(this, TreasuresEditorActivity::class.java).apply {
-//                putExtra(EXTRA_MESSAGE, message)
-            }
+            val intent = Intent(this, TreasuresEditorActivity::class.java).apply {}
             startActivity(intent)
         }
     }
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         println("########> onResume ${System.currentTimeMillis() % 100_000}")
-        val treasures = createAndLoadTreasures()
+        val treasures = storageHelper.loadAll()
         showTreasuresLists(treasures)
     }
 
@@ -46,11 +45,6 @@ class MainActivity : AppCompatActivity() {
         treasuresList.adapter = adapter
     }
 
-    private fun createAndLoadTreasures(): MutableList<TreasuresList> {
-        createSomeTreasures(storageHelper)
-        return storageHelper.loadAll()
-    }
-
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle?) {
         println("########> onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
@@ -58,24 +52,4 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
 
     }
-
-    private fun createSomeTreasures(storageHelper: StorageHelper) {
-        storageHelper.save(
-            TreasuresList(
-                "test1", ArrayList(listOf(
-                    TreasureDescription(1.1, 1.2),
-                    TreasureDescription(2.1, 2.2)
-                ))
-            )
-        )
-        storageHelper.save(
-            TreasuresList(
-                "test2", ArrayList(listOf(
-                    TreasureDescription(1.1, 3.2),
-                    TreasureDescription(2.1, 3.2)
-                ))
-            )
-        )
-    }
-
 }

@@ -4,12 +4,12 @@ import android.content.Context
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
-import org.simpleframework.xml.Serializer
-import org.simpleframework.xml.core.Persister
 import java.io.File
 import java.lang.Exception
 
 class StorageHelper(val context: Context) {
+
+    private val xmlHelper = XmlHelper()
 
     companion object {
         val treasuresDirectory = "/treasures_lists"
@@ -17,7 +17,7 @@ class StorageHelper(val context: Context) {
 
     fun save(treasures: TreasuresList) {
         val xmlFile = getTreasuresFile(treasures)
-        saveXml(treasures, xmlFile)
+        xmlHelper.writeToFile(treasures, xmlFile)
     }
 
     fun loadAll(): MutableList<TreasuresList> {
@@ -25,7 +25,7 @@ class StorageHelper(val context: Context) {
         return dir.listFiles()
             .mapNotNull {
                 try {
-                    loadTreasuresFromFile(it)
+                    xmlHelper.loadFromFile(it)
                 } catch (e: Exception) {
                     null
                 }
@@ -43,23 +43,12 @@ class StorageHelper(val context: Context) {
         return File("${dir.absolutePath}/${treasures.fileName()}.xml")
     }
 
-    private fun loadTreasuresFromFile(xmlFile: File): TreasuresList {
-        val serializer: Serializer = Persister()
-        val xml = xmlFile.readText()
-        return serializer.read(TreasuresList::class.java, xml)
-    }
-
     private fun getTreasuresDir(): File {
         val dir = File(context.filesDir.absolutePath + treasuresDirectory)
         if (!dir.exists()) {
             dir.mkdir()
         }
         return dir
-    }
-
-    private fun saveXml(treasures: TreasuresList, outputFile: File) {
-        val serializer: Serializer = Persister()
-        serializer.write(treasures, outputFile)
     }
 }
 
@@ -68,8 +57,7 @@ data class TreasuresList(
     @field:Element var name: String,
     @field:ElementList var tresures: ArrayList<TreasureDescription>
 ) {
-    constructor() : this("", ArrayList()) {
-    }
+    constructor() : this("", ArrayList())
 
     //todo: validate name
     fun fileName(): String {
@@ -82,6 +70,7 @@ data class TreasureDescription(
     @field:Element var latitude: Double,
     @field:Element var longitude: Double
 ) {
-    constructor() : this(0.0, 0.0) {
-    }
+    constructor() : this(0.0, 0.0)
+
+    fun prettyName(): String = "$latitude $longitude"
 }

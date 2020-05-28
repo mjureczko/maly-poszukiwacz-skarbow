@@ -17,13 +17,22 @@ class TreasuresEditorActivity : AppCompatActivity() {
     }
 
     val storageHelper = StorageHelper(this)
+    val xmlHelper = XmlHelper()
     var treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
     lateinit var list: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_treasures_editor)
-        setupTreasuresListUsingDialog()
+
+        val existingList = intent.getStringExtra(MainActivity.SELECTED_LIST)
+        if (existingList != null) {
+            treasuresList = xmlHelper.loadFromString(existingList)
+            treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
+            //TODO: treasuresList and treasuresAdapter are changed together
+        } else {
+            setupTreasuresListUsingDialog()
+        }
 
         val addTreasureButton = findViewById<Button>(R.id.add_treasure)
         val lon = findViewById<TextView>(R.id.editorLongValue)

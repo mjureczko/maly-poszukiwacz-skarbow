@@ -1,8 +1,6 @@
 package pl.marianjureczko.poszukiwacz
 
-import android.app.AlertDialog
 import android.content.Context
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,19 +27,19 @@ class TreasuresAdapter(
 
     private fun configureLabel(view: View, position: Int) {
         val label = view.findViewById<TextView>(R.id.treasure_name)
-        val treasure = list.tresures[position]
-        label.text = "${treasure.latitude};${treasure.longitude}"
+        label.text = list.tresures[position].prettyName()
     }
 
     private fun configureRemoveButton(view: View, position: Int) {
         val remove: Button = view.findViewById(R.id.del_treasure)
         remove.setOnClickListener {
-
+            list.tresures.removeAt(position)
+            notifyDataSetChanged()
+            storageHelper.save(list)
         }
     }
 
     override fun getItem(position: Int): Any = list.tresures[position]
     override fun getItemId(position: Int): Long = 0
     override fun getCount(): Int = list.tresures.size
-
 }

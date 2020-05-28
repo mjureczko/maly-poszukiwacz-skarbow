@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,8 @@ class TreasuresListsAdapter(
     private val context: Context,
     private val storageHelper: StorageHelper
 ) : BaseAdapter(), ListAdapter {
+
+    private val xmlHelper = XmlHelper()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = convertView
@@ -41,7 +44,10 @@ class TreasuresListsAdapter(
     private fun configureEditButton(view: View, position: Int) {
         val edit: Button = view.findViewById(R.id.edit)
         edit.setOnClickListener(View.OnClickListener {
-            //do something
+            val intent = Intent(context, TreasuresEditorActivity::class.java).apply {
+                putExtra(MainActivity.SELECTED_LIST, xmlHelper.writeToString(list[position]))
+            }
+            context.startActivity(intent)
         })
     }
 
