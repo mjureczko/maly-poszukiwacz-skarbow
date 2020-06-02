@@ -1,43 +1,76 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.activity
 
-import android.Manifest
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_searching.*
+import pl.marianjureczko.poszukiwacz.*
+import pl.marianjureczko.poszukiwacz.dialog.SearchResultDialog
+import pl.marianjureczko.poszukiwacz.dialog.TreasureSelectionDialog
+import pl.marianjureczko.poszukiwacz.listener.ChangeTreasureButtonListener
+import pl.marianjureczko.poszukiwacz.listener.ScanButtonListener
+import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
 
-class SearchingActivity : AppCompatActivity(), View.OnClickListener {
-    private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
+interface TreasureLocationView {
+    fun showTreasureLocation(which: Int)
+}
+
+interface TreasureSelectorView {
+    fun selectTreasureForSearching()
+}
+
+class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSelectorView {
     private val AMOUNTS = "AMOUNTS"
     private val COLLECTED = "COLLECTED"
     private val MSG_TO_SHOW = "MSG_TO_SHOW"
     private val IMG_TO_SHOW = "IMG_TO_SHOW"
+    private val xmlHelper = XmlHelper()
+    private val formatter = CoordinatesFormatter()
 
     private var dialog: AlertDialog? = null
-
-    private var locationManager: LocationManager? = null
-
     private lateinit var qrScan: IntentIntegrator
 
     companion object {
         private var treasureBagPresenter: TreasureBagPresenter? = null
+        private var treasuresList: TreasuresList? = null
+        private var selectedTreasure: Int = 0
     }
 
     private var dialogToShow: DialogData? = null
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        println("########> onCreate ${System.currentTimeMillis() % 100_000}")
+        super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setContentView(R.layout.activity_searching)
+
+        restoreState(savedInstanceState)
+
+        qrScan = IntentIntegrator(this)
+        scanBtn.setOnClickListener(ScanButtonListener(qrScan))
+
+        val locationListener =
+            TextViewBasedLocationListener(
+                findViewById(R.id.latValue),
+                findViewById(R.id.longValue)
+            )
+        val handler = Handler()
+        val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val presenter = LocationPresenter(this, locationListener, handler, this, location)
+        handler.post(presenter)
+        treasuresList = xmlHelper.loadFromString(intent.getStringExtra(MainActivity.SELECTED_LIST))
+        selectTreasureForSearching()
+        changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
+    }
 
     override fun onPostResume() {
         super.onPostResume()
@@ -81,57 +114,17 @@ class SearchingActivity : AppCompatActivity(), View.OnClickListener {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        println("########> onCreate ${System.currentTimeMillis() % 100_000}")
-        super.onCreate(savedInstanceState)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        setContentView(R.layout.activity_searching)
-        setSupportActionBar(toolbar)
-
-        restoreState(savedInstanceState)
-
-        qrScan = IntentIntegrator(this)
-        scanBtn.setOnClickListener(this)
-
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        val locationListener =
-            MyLocationListener(findViewById(R.id.latValue), findViewById(R.id.longValue))
-        val handler = Handler()
-        val context: Context = this
-        val activity: Activity = this
-
-        val runnableCode: Runnable = object : Runnable {
-            override fun run() {
-                if (ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    locationManager!!.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        1000L,
-                        1.0F,
-                        locationListener
-                    )
-                    handler.postDelayed(this, 1000L)
-                } else {
-                    ActivityCompat.requestPermissions(
-                        activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSION_ACCESS_FINE_LOCATION
-                    )
-                }
-
-            }
-        }
-        handler.post(runnableCode)
+    override fun selectTreasureForSearching() {
+        TreasureSelectionDialog(this, this).show(treasuresList!!)
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
         if (treasureBagPresenter == null) {
-            treasureBagPresenter = TreasureBagPresenter(
-                savedInstanceState?.getIntegerArrayList(AMOUNTS),
-                savedInstanceState?.getStringArrayList(COLLECTED)
-            )
+            treasureBagPresenter =
+                TreasureBagPresenter(
+                    savedInstanceState?.getIntegerArrayList(AMOUNTS),
+                    savedInstanceState?.getStringArrayList(COLLECTED)
+                )
         }
         treasureBagPresenter!!.init(
             findViewById(R.id.goldTxt),
@@ -143,11 +136,6 @@ class SearchingActivity : AppCompatActivity(), View.OnClickListener {
             dialogToShow = DialogData(it, savedInstanceState?.getInt(IMG_TO_SHOW))
         }
         println("########> restoreState dialog:$dialogToShow")
-    }
-
-    override fun onClick(view: View) {
-        onActivityResult(1, 1, null)
-        qrScan.initiateScan()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -165,28 +153,13 @@ class SearchingActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-}
-
-class MyLocationListener(private val latValue: TextView, private val longValue: TextView) :
-    LocationListener {
-
-    private val formatter = CoordinatesFormatter()
-
-    override fun onLocationChanged(location: Location?) {
-        latValue.text = formatter.format(location?.latitude)
-        longValue.text = formatter.format(location?.longitude)
-    }
-
-    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        println("onStatusChanged - provider: $provider")
-    }
-
-    override fun onProviderEnabled(provider: String?) {
-        println("onProviderEnabled - provider: $provider")
-    }
-
-    override fun onProviderDisabled(provider: String?) {
-        println("onProviderDisabled - provider: $provider")
+    override fun showTreasureLocation(which: Int) {
+        selectedTreasure = which
+        val treasure = treasuresList!!.tresures[selectedTreasure]
+        val latitude = findViewById<TextView>(R.id.latTarget)
+        latitude.text = formatter.format(treasure.latitude)
+        val longitude = findViewById<TextView>(R.id.longTarget)
+        longitude.text = formatter.format(treasure.longitude)
     }
 
 }

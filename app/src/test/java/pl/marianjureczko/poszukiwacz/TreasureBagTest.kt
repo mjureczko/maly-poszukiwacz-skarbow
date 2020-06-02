@@ -2,15 +2,42 @@ package pl.marianjureczko.poszukiwacz
 
 import org.junit.Assert.*
 import org.junit.Test
+import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
+import pl.marianjureczko.poszukiwacz.model.TreasureType
 
 class TreasureBagTest {
 
-    val gold7 = Treasure("a", 7, TreasureType.GOLD)
-    val gold9 = Treasure("b", 9, TreasureType.GOLD)
-    val diamond17 = Treasure("c", 17, TreasureType.DIAMOND)
-    val diamond18 = Treasure("d", 18, TreasureType.DIAMOND)
-    val ruby27 = Treasure("e", 27, TreasureType.RUBY)
-    val ruby98 = Treasure("f", 98, TreasureType.RUBY)
+    val gold7 = Treasure(
+        "a",
+        7,
+        TreasureType.GOLD
+    )
+    val gold9 = Treasure(
+        "b",
+        9,
+        TreasureType.GOLD
+    )
+    val diamond17 = Treasure(
+        "c",
+        17,
+        TreasureType.DIAMOND
+    )
+    val diamond18 = Treasure(
+        "d",
+        18,
+        TreasureType.DIAMOND
+    )
+    val ruby27 = Treasure(
+        "e",
+        27,
+        TreasureType.RUBY
+    )
+    val ruby98 = Treasure(
+        "f",
+        98,
+        TreasureType.RUBY
+    )
 
     @Test
     fun addGoldToBag() {

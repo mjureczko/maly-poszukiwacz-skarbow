@@ -1,10 +1,15 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.activity
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.StorageHelper
+import pl.marianjureczko.poszukiwacz.TreasuresList
+import pl.marianjureczko.poszukiwacz.TreasuresListsAdapter
 
 
 class MainActivity : AppCompatActivity() {
@@ -13,11 +18,12 @@ class MainActivity : AppCompatActivity() {
         const val SELECTED_LIST = "SELECTED_LIST"
     }
 
-    private lateinit var storageHelper : StorageHelper
+    private lateinit var storageHelper: StorageHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         println("########> onCreate ${System.currentTimeMillis() % 100_000}")
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         storageHelper = StorageHelper(this)
 
         setContentView(R.layout.activity_main)

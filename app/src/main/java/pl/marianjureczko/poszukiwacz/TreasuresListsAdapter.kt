@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ListAdapter
+import pl.marianjureczko.poszukiwacz.activity.MainActivity
+import pl.marianjureczko.poszukiwacz.activity.SearchingActivity
+import pl.marianjureczko.poszukiwacz.activity.TreasuresEditorActivity
 
 
 class TreasuresListsAdapter(
@@ -37,7 +40,10 @@ class TreasuresListsAdapter(
         val treasuresList: Button = view.findViewById(R.id.list)
         treasuresList.text = list[position].name
         treasuresList.setOnClickListener(View.OnClickListener {
-            //do something
+            val intent = Intent(context, SearchingActivity::class.java).apply {
+                putExtra(MainActivity.SELECTED_LIST, xmlHelper.writeToString(list[position]))
+            }
+            context.startActivity(intent)
         })
     }
 

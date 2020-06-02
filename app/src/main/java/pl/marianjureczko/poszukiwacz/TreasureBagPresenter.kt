@@ -1,6 +1,10 @@
 package pl.marianjureczko.poszukiwacz
 
 import android.widget.TextView
+import pl.marianjureczko.poszukiwacz.dialog.SearchResultDialog
+import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
+import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import java.util.*
 
 class TreasureBagPresenter(
@@ -8,8 +12,12 @@ class TreasureBagPresenter(
     collectedTreasures: ArrayList<String>?
 ) {
 
-    private val treasureBag = TreasureBag(treasuresAmount, collectedTreasures)
-    private val treasureParser = TreasureParser()
+    private val treasureBag = TreasureBag(
+        treasuresAmount,
+        collectedTreasures
+    )
+    private val treasureParser =
+        TreasureParser()
 
     private lateinit var goldView: TextView
     private lateinit var rubyView: TextView
@@ -25,15 +33,12 @@ class TreasureBagPresenter(
         try {
             val treasure = treasureParser.parse(result)
             if (treasureBag.contains(treasure)) {
-//                resultDialog.show("Ten skarb został już zabrany!", null)
                 return DialogData("Ten skarb został już zabrany!", null)
             } else {
-//                resultDialog.show(treasure.quantity.toString(), treasure.type.image())
                 add(treasure)
                 return DialogData(treasure.quantity.toString(), treasure.type.image())
             }
         } catch (ex: IllegalArgumentException) {
-//            resultDialog.show("To nie jest skarb!", null)
             return DialogData("To nie jest skarb!", null)
         }
     }

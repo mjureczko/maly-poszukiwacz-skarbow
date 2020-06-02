@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.model
 
 import java.util.ArrayList
 

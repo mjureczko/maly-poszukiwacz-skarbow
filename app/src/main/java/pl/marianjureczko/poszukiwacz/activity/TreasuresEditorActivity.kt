@@ -1,13 +1,20 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.activity
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
+import android.content.pm.ActivityInfo
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
 import android.text.InputType
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import pl.marianjureczko.poszukiwacz.*
+import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
 
 
 class TreasuresEditorActivity : AppCompatActivity() {
@@ -16,13 +23,15 @@ class TreasuresEditorActivity : AppCompatActivity() {
         var treasuresList = TreasuresList("Nienazwana", ArrayList())
     }
 
-    val storageHelper = StorageHelper(this)
-    val xmlHelper = XmlHelper()
+    private val storageHelper = StorageHelper(this)
+    private val xmlHelper = XmlHelper()
     var treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
     lateinit var list: ListView
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_treasures_editor)
 
         val existingList = intent.getStringExtra(MainActivity.SELECTED_LIST)
@@ -35,20 +44,27 @@ class TreasuresEditorActivity : AppCompatActivity() {
         }
 
         val addTreasureButton = findViewById<Button>(R.id.add_treasure)
-        val lon = findViewById<TextView>(R.id.editorLongValue)
         val lat = findViewById<TextView>(R.id.editorLatValue)
+        val lon = findViewById<TextView>(R.id.editorLongValue)
         list = findViewById(R.id.treasures)
         list.adapter = treasuresAdapter
 
         addTreasureButton.setOnClickListener {
             val treasure = TreasureDescription(
-                longitude = lon.text.toString().toDouble(),
-                latitude = lat.text.toString().toDouble()
+                latitude = lat.text.toString().toDouble(),
+                longitude = lon.text.toString().toDouble()
             )
             treasuresList.tresures.add(treasure)
             treasuresAdapter.notifyDataSetChanged()
             storageHelper.save(treasuresList)
         }
+
+        val locationListener = TextViewBasedLocationListener(lat, lon)
+        //TODO: copied from SearchingActivity
+        val handler = Handler()
+        val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val presenter = LocationPresenter(this, locationListener, handler, this, location)
+        handler.post(presenter)
     }
 
     private fun setupTreasuresListUsingDialog() {

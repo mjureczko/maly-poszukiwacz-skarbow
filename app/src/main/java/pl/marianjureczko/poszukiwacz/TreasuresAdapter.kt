@@ -36,6 +36,7 @@ class TreasuresAdapter(
             list.tresures.removeAt(position)
             notifyDataSetChanged()
             storageHelper.save(list)
+            //TODO: remove when last treasure removed (?)
         }
     }
 

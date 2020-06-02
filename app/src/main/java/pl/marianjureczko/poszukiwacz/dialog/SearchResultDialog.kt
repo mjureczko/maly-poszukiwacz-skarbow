@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.dialog
 
 import android.app.Activity
 import android.app.AlertDialog
