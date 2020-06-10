@@ -1,21 +1,29 @@
 package pl.marianjureczko.poszukiwacz.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import pl.marianjureczko.poszukiwacz.*
 import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
+import java.io.IOException
 
+private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
+private const val LOG_TAG = "TreasuresEditorActivity"
 
 class TreasuresEditorActivity : AppCompatActivity() {
 
@@ -23,9 +31,11 @@ class TreasuresEditorActivity : AppCompatActivity() {
         var treasuresList = TreasuresList("Nienazwana", ArrayList())
     }
 
+    private var permissionToRecordAccepted = false
+    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
     private val storageHelper = StorageHelper(this)
     private val xmlHelper = XmlHelper()
-    var treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
+    private var treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
     lateinit var list: ListView
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -33,6 +43,7 @@ class TreasuresEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_treasures_editor)
+        requestRecordingPermission()
 
         val existingList = intent.getStringExtra(MainActivity.SELECTED_LIST)
         if (existingList != null) {
@@ -74,13 +85,35 @@ class TreasuresEditorActivity : AppCompatActivity() {
         input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL
         builder.setView(input)
         val listName = findViewById<TextView>(R.id.treasures_list_name)
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setPositiveButton("OK") { _, _ ->
             val name = input.text.toString()
             treasuresList = TreasuresList(name, ArrayList())
             treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
+            treasuresAdapter.permissionToRecordAccepted = permissionToRecordAccepted
             list.adapter = treasuresAdapter
             listName.text = name
         }
         builder.show()
+    }
+
+
+
+
+    override fun onRequestPermissionsResult(code: Int, perms: Array<String>, results: IntArray) {
+        super.onRequestPermissionsResult(code, perms, results)
+        permissionToRecordAccepted = if (code == REQUEST_RECORD_AUDIO_PERMISSION) {
+            results[0] == PackageManager.PERMISSION_GRANTED
+        } else {
+            false
+        }
+        //TODO: using this setter is ugly
+        treasuresAdapter.permissionToRecordAccepted = permissionToRecordAccepted
+        if (!permissionToRecordAccepted) {
+            finish()
+        }
+    }
+
+    private fun requestRecordingPermission() {
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
     }
 }

@@ -11,6 +11,14 @@
             />
 
     <Button
+        android:id="@+id/record_tip"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@android:drawable/ic_btn_speak_now"
+        />
+
+    <Button
             android:id="@+id/del_treasure"
             android:layout_width="@android:dimen/app_icon_size"
             android:layout_height="wrap_content"

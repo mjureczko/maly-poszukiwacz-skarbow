@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.LocationManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
@@ -18,6 +20,8 @@ import pl.marianjureczko.poszukiwacz.dialog.TreasureSelectionDialog
 import pl.marianjureczko.poszukiwacz.listener.ChangeTreasureButtonListener
 import pl.marianjureczko.poszukiwacz.listener.ScanButtonListener
 import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
+import java.io.File
+import java.io.IOException
 
 interface TreasureLocationView {
     fun showTreasureLocation(which: Int)
@@ -26,6 +30,8 @@ interface TreasureLocationView {
 interface TreasureSelectorView {
     fun selectTreasureForSearching()
 }
+
+private const val LOG_TAG = "SearchingActivity"
 
 class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSelectorView {
     private val AMOUNTS = "AMOUNTS"
@@ -70,6 +76,19 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         treasuresList = xmlHelper.loadFromString(intent.getStringExtra(MainActivity.SELECTED_LIST))
         selectTreasureForSearching()
         changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
+        playTipBtn.setOnClickListener() { _ ->
+            MediaPlayer().apply {
+                try {
+                    var f = File("/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/test.3gp")
+                    setDataSource("/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/test.3gp")
+                    prepare()
+                    start()
+                    Thread.sleep(3000)
+                } catch (e: Exception) {
+                    Log.e(LOG_TAG, "Cannot play the treasure tip.")
+                }
+            }
+        }
     }
 
     override fun onPostResume() {

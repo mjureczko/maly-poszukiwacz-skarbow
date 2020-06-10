@@ -1,6 +1,10 @@
 package pl.marianjureczko.poszukiwacz
 
+import android.app.Activity
 import android.content.Context
+import android.media.AudioManager
+import android.media.ToneGenerator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,12 +12,20 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ListAdapter
 import android.widget.TextView
+import pl.marianjureczko.poszukiwacz.dialog.RecordingDialog
+import java.util.*
+
+
+private const val LOG_TAG = "TreasuresAdapter"
 
 class TreasuresAdapter(
     private val list: TreasuresList,
-    private val context: Context,
+    private val context: Activity,
     private val storageHelper: StorageHelper
 ) : BaseAdapter(), ListAdapter {
+
+    var permissionToRecordAccepted: Boolean = false
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = convertView
         if (view == null) {
@@ -22,6 +34,7 @@ class TreasuresAdapter(
         }
         configureLabel(view!!, position)
         configureRemoveButton(view, position)
+        configureRecordTipButton(view, position)
         return view
     }
 
@@ -37,6 +50,19 @@ class TreasuresAdapter(
             notifyDataSetChanged()
             storageHelper.save(list)
             //TODO: remove when last treasure removed (?)
+        }
+    }
+
+    private fun configureRecordTipButton(view: View, position: Int) {
+        val record: Button = view.findViewById(R.id.record_tip)
+        record.setOnClickListener{
+            if(permissionToRecordAccepted) {
+                RecordingDialog(context, storageHelper.generateNewSoundFile()).show()
+            } else {
+                Log.w(LOG_TAG, "Recording not permitted")
+                ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50)
+                    .startTone(ToneGenerator.TONE_PROP_BEEP)
+            }
         }
     }
 

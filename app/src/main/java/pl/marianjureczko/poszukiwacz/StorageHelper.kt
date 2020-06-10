@@ -6,6 +6,8 @@ import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
 import java.io.File
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 class StorageHelper(val context: Context) {
 
@@ -14,6 +16,8 @@ class StorageHelper(val context: Context) {
     companion object {
         val treasuresDirectory = "/treasures_lists"
     }
+
+    fun generateNewSoundFile() = getTreasuresDir().absolutePath + "/" + "test" + /*UUID.randomUUID().toString() + */ ".3gp"
 
     fun save(treasures: TreasuresList) {
         val xmlFile = getTreasuresFile(treasures)
