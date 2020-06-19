@@ -38,6 +38,9 @@ class TreasuresEditorActivity : AppCompatActivity() {
     private var treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
     lateinit var list: ListView
 
+    private var showSetupDialog : Boolean? = null
+    private var setupDialog: AlertDialog? = null
+    
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
