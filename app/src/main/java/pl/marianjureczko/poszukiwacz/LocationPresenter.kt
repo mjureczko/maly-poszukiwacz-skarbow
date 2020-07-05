@@ -21,19 +21,12 @@ class LocationPresenter(
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
 
     override fun run() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER, 1000L, 1.0F, locationListener
-            )
+        //The permission should be already granted, but Idea reports error when the check is missing
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 1.0F, locationListener)
             handler.postDelayed(this, 1000L)
         } else {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                MY_PERMISSION_ACCESS_FINE_LOCATION
-            )
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSION_ACCESS_FINE_LOCATION)
         }
     }
 }
