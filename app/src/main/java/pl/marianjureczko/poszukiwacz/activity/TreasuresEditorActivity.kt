@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.location.LocationManager
-import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
@@ -20,17 +19,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import pl.marianjureczko.poszukiwacz.*
 import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
-import java.io.IOException
 
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 private const val LOG_TAG = "TreasuresEditorActivity"
 
-class TreasuresEditorActivity : AppCompatActivity() {
+class TreasuresEditorActivity() : AppCompatActivity() {
 
     companion object {
         var treasuresList = TreasuresList("Nienazwana", ArrayList())
     }
 
+    private val SHOW_SETUP_DIALOG: String = "SHOW_SETUP_DIALOG"
     private var permissionToRecordAccepted = false
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
     private val storageHelper = StorageHelper(this)
@@ -38,9 +37,9 @@ class TreasuresEditorActivity : AppCompatActivity() {
     private var treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
     lateinit var list: ListView
 
-    private var showSetupDialog : Boolean? = null
+    private var showSetupDialog: Boolean = false
     private var setupDialog: AlertDialog? = null
-    
+
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +53,7 @@ class TreasuresEditorActivity : AppCompatActivity() {
             treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
             //TODO: treasuresList and treasuresAdapter are changed together
         } else {
-            setupTreasuresListUsingDialog()
+            showSetupDialog = true
         }
 
         val addTreasureButton = findViewById<Button>(R.id.add_treasure)
@@ -68,7 +67,7 @@ class TreasuresEditorActivity : AppCompatActivity() {
                 latitude = lat.text.toString().toDouble(),
                 longitude = lon.text.toString().toDouble()
             )
-            treasuresList.tresures.add(treasure)
+            treasuresList.treasures.add(treasure)
             treasuresAdapter.notifyDataSetChanged()
             storageHelper.save(treasuresList)
         }
@@ -79,9 +78,10 @@ class TreasuresEditorActivity : AppCompatActivity() {
         val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val presenter = LocationPresenter(this, locationListener, handler, this, location)
         handler.post(presenter)
+        restoreState(savedInstanceState)
     }
 
-    private fun setupTreasuresListUsingDialog() {
+    private fun setupTreasuresListUsingDialog(): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle("Podaj nazwę listy skarbów:")
         val input = EditText(this)
@@ -96,11 +96,8 @@ class TreasuresEditorActivity : AppCompatActivity() {
             list.adapter = treasuresAdapter
             listName.text = name
         }
-        builder.show()
+        return builder.show()
     }
-
-
-
 
     override fun onRequestPermissionsResult(code: Int, perms: Array<String>, results: IntArray) {
         super.onRequestPermissionsResult(code, perms, results)
@@ -111,12 +108,53 @@ class TreasuresEditorActivity : AppCompatActivity() {
         }
         //TODO: using this setter is ugly
         treasuresAdapter.permissionToRecordAccepted = permissionToRecordAccepted
-        if (!permissionToRecordAccepted) {
-            finish()
-        }
     }
 
     private fun requestRecordingPermission() {
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+    }
+
+    private fun conditionallyShowSetupDialog() {
+        if (showSetupDialog) {
+            showSetupDialog = try {
+                setupDialog = setupTreasuresListUsingDialog()
+                false
+            } catch (ex: Throwable) {
+                true
+            }
+        }
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        Log.e(LOG_TAG, "########> onPostResume ${System.currentTimeMillis() % 100_000}")
+        conditionallyShowSetupDialog()
+    }
+
+    override fun onDestroy() {
+        Log.e(LOG_TAG, "########> onDestroy ${System.currentTimeMillis() % 100_000}")
+        super.onDestroy()
+        setupDialog?.dismiss()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        Log.e(LOG_TAG,"########> onRestoreInstanceState ${System.currentTimeMillis() % 100_000}")
+        restoreState(savedInstanceState)
+    }
+
+    // invoked when the activity may be temporarily destroyed, save the instance state here
+    override fun onSaveInstanceState(outState: Bundle?) {
+        Log.e(LOG_TAG,"######## > onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
+        outState?.run {
+            putBoolean(SHOW_SETUP_DIALOG, showSetupDialog)
+        }
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun restoreState(savedInstanceState: Bundle?) {
+        savedInstanceState?.getBoolean(SHOW_SETUP_DIALOG)?.let {
+            showSetupDialog = it
+            conditionallyShowSetupDialog()
+        }
     }
 }

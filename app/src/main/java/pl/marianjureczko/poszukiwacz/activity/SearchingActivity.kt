@@ -20,8 +20,6 @@ import pl.marianjureczko.poszukiwacz.dialog.TreasureSelectionDialog
 import pl.marianjureczko.poszukiwacz.listener.ChangeTreasureButtonListener
 import pl.marianjureczko.poszukiwacz.listener.ScanButtonListener
 import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
-import java.io.File
-import java.io.IOException
 
 interface TreasureLocationView {
     fun showTreasureLocation(which: Int)
@@ -79,11 +77,12 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         playTipBtn.setOnClickListener() { _ ->
             MediaPlayer().apply {
                 try {
-                    var f = File("/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/test.3gp")
-                    setDataSource("/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/test.3gp")
-                    prepare()
-                    start()
-                    Thread.sleep(3000)
+                    treasuresList?.treasures?.get(selectedTreasure)?.tipFileName?.let {
+                        setDataSource(it)
+                        prepare()
+                        start()
+                        Thread.sleep(3000)
+                    }
                 } catch (e: Exception) {
                     Log.e(LOG_TAG, "Cannot play the treasure tip.")
                 }
@@ -174,7 +173,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
 
     override fun showTreasureLocation(which: Int) {
         selectedTreasure = which
-        val treasure = treasuresList!!.tresures[selectedTreasure]
+        val treasure = treasuresList!!.treasures[selectedTreasure]
         val latitude = findViewById<TextView>(R.id.latTarget)
         latitude.text = formatter.format(treasure.latitude)
         val longitude = findViewById<TextView>(R.id.longTarget)

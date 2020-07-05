@@ -35,8 +35,6 @@ class RecordingDialog(val activity: Activity, val fileName: String) {
     }
 
     private fun startRecording() {
-//        val file = File(fileName)
-//        val createNewFile = file.createNewFile()
         recorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)

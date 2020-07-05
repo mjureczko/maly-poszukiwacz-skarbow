@@ -12,7 +12,7 @@ class TreasureSelectionDialog(val activity: Activity, val treasureLocationView :
 
     fun show(treasures: TreasuresList) {
         val arrayAdapter = ArrayAdapter<String>(activity, R.layout.select_dialog_singlechoice)
-        treasures.tresures.forEach {
+        treasures.treasures.forEach {
             arrayAdapter.add(it.prettyName())
         }
 

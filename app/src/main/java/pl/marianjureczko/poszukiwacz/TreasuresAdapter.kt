@@ -13,7 +13,6 @@ import android.widget.Button
 import android.widget.ListAdapter
 import android.widget.TextView
 import pl.marianjureczko.poszukiwacz.dialog.RecordingDialog
-import java.util.*
 
 
 private const val LOG_TAG = "TreasuresAdapter"
@@ -40,13 +39,13 @@ class TreasuresAdapter(
 
     private fun configureLabel(view: View, position: Int) {
         val label = view.findViewById<TextView>(R.id.treasure_name)
-        label.text = list.tresures[position].prettyName()
+        label.text = list.treasures[position].prettyName()
     }
 
     private fun configureRemoveButton(view: View, position: Int) {
         val remove: Button = view.findViewById(R.id.del_treasure)
         remove.setOnClickListener {
-            list.tresures.removeAt(position)
+            list.treasures.removeAt(position)
             notifyDataSetChanged()
             storageHelper.save(list)
             //TODO: remove when last treasure removed (?)
@@ -57,7 +56,10 @@ class TreasuresAdapter(
         val record: Button = view.findViewById(R.id.record_tip)
         record.setOnClickListener{
             if(permissionToRecordAccepted) {
-                RecordingDialog(context, storageHelper.generateNewSoundFile()).show()
+                val soundFileName = storageHelper.generateNewSoundFile()
+                list.treasures[position].tipFileName = soundFileName
+                storageHelper.save(list)
+                RecordingDialog(context, soundFileName).show()
             } else {
                 Log.w(LOG_TAG, "Recording not permitted")
                 ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50)
@@ -66,7 +68,7 @@ class TreasuresAdapter(
         }
     }
 
-    override fun getItem(position: Int): Any = list.tresures[position]
+    override fun getItem(position: Int): Any = list.treasures[position]
     override fun getItemId(position: Int): Long = 0
-    override fun getCount(): Int = list.tresures.size
+    override fun getCount(): Int = list.treasures.size
 }

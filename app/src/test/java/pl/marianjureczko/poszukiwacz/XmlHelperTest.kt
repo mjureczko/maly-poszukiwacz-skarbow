@@ -19,10 +19,26 @@ class XmlHelperTest {
     }
 
     @Test
-    fun writeToAndLoadFromString() {
+    fun should_writeToAndLoadFromString() {
         //given
         val xmlHelper = XmlHelper()
         val treasures = easyRandom.nextObject(TreasuresList::class.java)
+
+        //when
+        val xml = xmlHelper.writeToString(treasures)
+        val actual = xmlHelper.loadFromString(xml)
+
+        //then
+        assertEquals(treasures, actual)
+    }
+
+    @Test
+    fun should_writeToAndLoadFromString_when_tipIsNull() {
+        //given
+        val xmlHelper = XmlHelper()
+        var treasures = easyRandom.nextObject(TreasuresList::class.java)
+        val treasureDescriptions = ArrayList(treasures.treasures.map { it -> it.tipFileName = null; it; })
+        treasures = treasures.copy(treasures = treasureDescriptions)
 
         //when
         val xml = xmlHelper.writeToString(treasures)

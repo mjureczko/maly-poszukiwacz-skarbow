@@ -17,7 +17,7 @@ class StorageHelper(val context: Context) {
         val treasuresDirectory = "/treasures_lists"
     }
 
-    fun generateNewSoundFile() = getTreasuresDir().absolutePath + "/" + "test" + /*UUID.randomUUID().toString() + */ ".3gp"
+    fun generateNewSoundFile() = getTreasuresDir().absolutePath + "/" + "test" + UUID.randomUUID().toString() + ".3gp"
 
     fun save(treasures: TreasuresList) {
         val xmlFile = getTreasuresFile(treasures)
@@ -59,7 +59,7 @@ class StorageHelper(val context: Context) {
 @Root
 data class TreasuresList(
     @field:Element var name: String,
-    @field:ElementList var tresures: ArrayList<TreasureDescription>
+    @field:ElementList var treasures: ArrayList<TreasureDescription>
 ) {
     constructor() : this("", ArrayList())
 
@@ -69,12 +69,15 @@ data class TreasuresList(
     }
 }
 
+//TODO: remove tim file when removing description
 @Root
 data class TreasureDescription(
     @field:Element var latitude: Double,
-    @field:Element var longitude: Double
+    @field:Element var longitude: Double,
+    @field:Element(required = false) var tipFileName: String?
 ) {
-    constructor() : this(0.0, 0.0)
+    constructor(latitude: Double, longitude: Double): this(latitude, longitude, null)
+    constructor() : this(0.0, 0.0, null)
 
     fun prettyName(): String = "$latitude $longitude"
 }
