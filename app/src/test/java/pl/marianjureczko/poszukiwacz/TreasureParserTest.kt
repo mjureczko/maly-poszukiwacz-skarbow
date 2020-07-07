@@ -3,6 +3,8 @@ package pl.marianjureczko.poszukiwacz
 import org.junit.Test
 
 import org.junit.Assert.*
+import pl.marianjureczko.poszukiwacz.model.TreasureParser
+import pl.marianjureczko.poszukiwacz.model.TreasureType
 
 class TreasureParserTest {
 

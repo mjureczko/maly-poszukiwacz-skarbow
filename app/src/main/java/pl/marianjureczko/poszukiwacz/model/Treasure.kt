@@ -1,4 +1,6 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.model
+
+import pl.marianjureczko.poszukiwacz.R
 
 enum class TreasureType {
     GOLD {
@@ -32,6 +34,8 @@ class TreasureParser {
         Treasure(
             content.substring(3),
             content.substring(1, 3).toInt(),
-            TreasureType.from(content.substring(0, 1))
+            TreasureType.from(
+                content.substring(0, 1)
+            )
         )
 }

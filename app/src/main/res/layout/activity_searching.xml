@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.SearchingActivity">
+
+    <include layout="@layout/content_searching" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/scanBtn"
+        android:layout_width="128dp"
+        android:layout_height="117dp"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/fab_margin"
+        android:scaleType="fitCenter"
+        app:backgroundTint="@android:color/transparent"
+        android:src="@drawable/chest"
+        app:fabCustomSize="128dp"
+        app:useCompatPadding="true"
+        app:elevation="1dp"
+        app:borderWidth="5dp"
+        app:pressedTranslationZ="1dp"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/changeTreasureBtn"
+        android:layout_width="90dp"
+        android:layout_height="82dp"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="@dimen/fab_margin"
+        android:scaleType="fitCenter"
+        app:backgroundTint="@android:color/transparent"
+        android:src="@drawable/change_chest"
+        app:fabCustomSize="90dp"
+        app:useCompatPadding="true"
+        app:elevation="1dp"
+        app:borderWidth="5dp"
+        app:pressedTranslationZ="1dp"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/playTipBtn"
+        android:layout_width="90dp"
+        android:layout_height="82dp"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/fab_margin"
+        android:scaleType="fitCenter"
+        app:backgroundTint="@android:color/transparent"
+        android:src="@drawable/megaphone"
+        app:fabCustomSize="90dp"
+        app:useCompatPadding="true"
+        app:elevation="1dp"
+        app:borderWidth="5dp"
+        app:pressedTranslationZ="1dp"
+        />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

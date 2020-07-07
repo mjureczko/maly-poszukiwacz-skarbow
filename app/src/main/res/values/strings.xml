@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Mały Poszukiwacz Skarbów</string>
     <string name="action_settings">Settings</string>
+
+    <string name="title_activity_test">TestActivity</string>
+    <string name="new_treasure_list_button">Nowa lista skarbów</string>
+    <string name="treasures_list_header">Listy skarbów:</string>
 </resources>
