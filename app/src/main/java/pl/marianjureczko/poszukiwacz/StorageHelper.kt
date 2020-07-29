@@ -38,8 +38,17 @@ class StorageHelper(val context: Context) {
     }
 
     fun remove(listToRemove: TreasuresList) {
+        listToRemove.treasures.forEach {
+            removeTipFile(it)
+        }
         val fileToRemove = getTreasuresFile(listToRemove)
         fileToRemove.delete()
+    }
+
+    fun removeTipFile(treasureDescription: TreasureDescription) {
+        if (treasureDescription.tipFileName != null) {
+            File(treasureDescription.tipFileName).delete()
+        }
     }
 
     private fun getTreasuresFile(treasures: TreasuresList): File {
@@ -76,7 +85,7 @@ data class TreasureDescription(
     @field:Element var longitude: Double,
     @field:Element(required = false) var tipFileName: String?
 ) {
-    constructor(latitude: Double, longitude: Double): this(latitude, longitude, null)
+    constructor(latitude: Double, longitude: Double) : this(latitude, longitude, null)
     constructor() : this(0.0, 0.0, null)
 
     fun prettyName(): String = "$latitude $longitude"

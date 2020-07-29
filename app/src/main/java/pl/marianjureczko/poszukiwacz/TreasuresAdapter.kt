@@ -57,6 +57,7 @@ class TreasuresAdapter(
         record.setOnClickListener{
             if(permissionToRecordAccepted) {
                 val soundFileName = storageHelper.generateNewSoundFile()
+                storageHelper.removeTipFile(list.treasures[position] )
                 list.treasures[position].tipFileName = soundFileName
                 storageHelper.save(list)
                 RecordingDialog(context, soundFileName).show()
