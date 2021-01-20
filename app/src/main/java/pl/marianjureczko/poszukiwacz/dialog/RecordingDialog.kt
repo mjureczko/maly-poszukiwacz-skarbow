@@ -6,7 +6,8 @@ import android.media.MediaRecorder
 import android.util.Log
 import android.view.Gravity
 import android.widget.Chronometer
-import java.io.File
+import android.widget.Toast
+import pl.marianjureczko.poszukiwacz.R
 import java.io.IOException
 
 private const val LOG_TAG = "RecordingDialog"
@@ -52,6 +53,7 @@ class RecordingDialog(val activity: Activity, val fileName: String) {
     private fun stopRecording() {
         recorder?.apply {
             stop()
+            Toast.makeText(activity, R.string.tip_recorded, Toast.LENGTH_SHORT).show()
             release()
         }
         recorder = null
