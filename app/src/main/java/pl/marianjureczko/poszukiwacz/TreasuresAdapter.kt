@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListAdapter
 import android.widget.TextView
 import pl.marianjureczko.poszukiwacz.dialog.RecordingDialog
@@ -43,7 +43,7 @@ class TreasuresAdapter(
     }
 
     private fun configureRemoveButton(view: View, position: Int) {
-        val remove: Button = view.findViewById(R.id.del_treasure)
+        val remove: ImageButton = view.findViewById(R.id.del_treasure)
         remove.setOnClickListener {
             list.treasures.removeAt(position)
             notifyDataSetChanged()
@@ -53,7 +53,7 @@ class TreasuresAdapter(
     }
 
     private fun configureRecordTipButton(view: View, position: Int) {
-        val record: Button = view.findViewById(R.id.record_tip)
+        val record: ImageButton = view.findViewById(R.id.record_tip)
         record.setOnClickListener{
             if(permissionToRecordAccepted) {
                 val soundFileName = storageHelper.generateNewSoundFile()

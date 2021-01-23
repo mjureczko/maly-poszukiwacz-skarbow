@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,12 +23,12 @@ class MainActivity : AppCompatActivity() {
         const val SELECTED_LIST = "SELECTED_LIST"
     }
 
+    private val TAG = javaClass.simpleName
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
-
     private lateinit var storageHelper: StorageHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        println("########> onCreate ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         storageHelper = StorageHelper(this)
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        println("########> onResume ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onResume")
         val treasures = storageHelper.loadAll()
         showTreasuresLists(treasures)
     }
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle?) {
-        println("########> onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onSaveInstanceState")
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState)
 

@@ -32,6 +32,7 @@ interface TreasureSelectorView {
 private const val LOG_TAG = "SearchingActivity"
 
 class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSelectorView {
+    private val TAG = javaClass.simpleName
     private val AMOUNTS = "AMOUNTS"
     private val COLLECTED = "COLLECTED"
     private val MSG_TO_SHOW = "MSG_TO_SHOW"
@@ -52,7 +53,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
-        println("########> onCreate ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_searching)
@@ -92,12 +93,12 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
 
     override fun onPostResume() {
         super.onPostResume()
-        println("########> onPostResume ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onPostResume")
         val toShow = dialogToShow
         if (toShow != null) {
             try {
                 dialog = SearchResultDialog(this).show(toShow.msg, toShow.imageId)
-                println("########> onPostResume ${System.currentTimeMillis() % 100_000} setting null")
+                Log.d(TAG,"########> onPostResume setting null")
                 dialogToShow = null
             } catch (ex: Throwable) {
                 dialogToShow = toShow
@@ -106,23 +107,23 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     }
 
     override fun onDestroy() {
-        println("########> onDestroy ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onDestroy")
         super.onDestroy()
         dialog?.dismiss()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        println("########> onRestoreInstanceState ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onRestoreInstanceState")
         restoreState(savedInstanceState)
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle?) {
-        println("########> onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onSaveInstanceState")
         outState?.run {
             putIntegerArrayList(AMOUNTS, treasureBagPresenter!!.bagContent())
             putStringArrayList(COLLECTED, treasureBagPresenter!!.collectedInBag())
-            println("########> onSaveInstanceState dialog:$dialogToShow")
+            Log.d(TAG, "########> onSaveInstanceState dialog:$dialogToShow")
             putString(MSG_TO_SHOW, dialogToShow?.msg)
             if (dialogToShow?.imageId != null) {
                 putInt(IMG_TO_SHOW, dialogToShow?.imageId!!)
@@ -153,19 +154,19 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         savedInstanceState?.getString(MSG_TO_SHOW)?.let {
             dialogToShow = DialogData(it, savedInstanceState?.getInt(IMG_TO_SHOW))
         }
-        println("########> restoreState dialog:$dialogToShow")
+        Log.d(TAG, "########> restoreState dialog:$dialogToShow")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println("########> onActivityResult ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onActivityResult")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             dialogToShow = treasureBagPresenter!!.processSearchingResult(
                 result.contents,
                 SearchResultDialog(this)
             )
-            println("########> onActivityResult (done) dialog:$dialogToShow ${System.currentTimeMillis() % 100_000}")
+            Log.d(TAG, "########> onActivityResult (done) dialog:$dialogToShow")
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }

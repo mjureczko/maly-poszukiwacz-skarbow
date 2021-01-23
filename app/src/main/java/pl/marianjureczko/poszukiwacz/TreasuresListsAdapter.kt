@@ -4,11 +4,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListAdapter
 import pl.marianjureczko.poszukiwacz.activity.MainActivity
 import pl.marianjureczko.poszukiwacz.activity.SearchingActivity
@@ -21,6 +23,7 @@ class TreasuresListsAdapter(
     private val storageHelper: StorageHelper
 ) : BaseAdapter(), ListAdapter {
 
+    private val TAG = javaClass.simpleName
     private val xmlHelper = XmlHelper()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -48,7 +51,7 @@ class TreasuresListsAdapter(
     }
 
     private fun configureEditButton(view: View, position: Int) {
-        val edit: Button = view.findViewById(R.id.edit)
+        val edit: ImageButton = view.findViewById(R.id.edit)
         edit.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, TreasuresEditorActivity::class.java).apply {
                 putExtra(MainActivity.SELECTED_LIST, xmlHelper.writeToString(list[position]))
@@ -58,11 +61,11 @@ class TreasuresListsAdapter(
     }
 
     private fun configureRemoveButton(view: View, position: Int) {
-        val remove: Button = view.findViewById(R.id.del)
+        val remove: ImageButton = view.findViewById(R.id.del)
         remove.setOnClickListener {
             AlertDialog.Builder(context)
                 .setMessage(Html.fromHtml("Czy na pewno chcesz skasować listę <b>${list[position].name}</b>?"))
-                .setPositiveButton("Nie") { dialog, which -> println("####no") }
+                .setPositiveButton("Nie") { dialog, which -> Log.d(TAG, "####no") }
                 .setNegativeButton("Tak") { dialog, which -> removeList(position) }
                 .show()
         }

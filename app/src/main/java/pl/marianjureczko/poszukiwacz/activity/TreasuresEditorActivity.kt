@@ -11,10 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.InputType
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import pl.marianjureczko.poszukiwacz.*
@@ -56,7 +53,7 @@ class TreasuresEditorActivity() : AppCompatActivity() {
             showSetupDialog = true
         }
 
-        val addTreasureButton = findViewById<Button>(R.id.add_treasure)
+        val addTreasureButton = findViewById<ImageButton>(R.id.add_treasure)
         val lat = findViewById<TextView>(R.id.editorLatValue)
         val lon = findViewById<TextView>(R.id.editorLongValue)
         list = findViewById(R.id.treasures)

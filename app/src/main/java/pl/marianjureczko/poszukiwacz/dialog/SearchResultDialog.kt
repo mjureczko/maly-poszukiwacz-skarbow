@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.dialog
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.util.Log
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -9,6 +10,8 @@ import android.widget.TextView
 import kotlin.math.roundToInt
 
 class SearchResultDialog(val activity: Activity) {
+
+    private val TAG = javaClass.simpleName
 
     fun show(text: String, imageId: Int?): AlertDialog {
         val group = LinearLayout(activity)
@@ -38,7 +41,7 @@ class SearchResultDialog(val activity: Activity) {
         val dialog = builder.create()
 
         dialog.show()
-        println("########> dialog.show()")
+        Log.d(TAG, "########> dialog.show()")
 
         return dialog
     }

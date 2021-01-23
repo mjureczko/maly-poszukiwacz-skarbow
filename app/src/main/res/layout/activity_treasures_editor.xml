@@ -69,11 +69,11 @@
                 android:textSize="@dimen/small_font_size" />
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/add_treasure"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:drawableLeft="@drawable/chest_small" />
+            android:src="@drawable/chest_small" />
     </LinearLayout>
 </LinearLayout>

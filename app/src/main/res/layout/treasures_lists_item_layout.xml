@@ -10,20 +10,20 @@
         android:layout_height="wrap_content"
         android:text="List name" />
 
-    <Button
+    <ImageButton
         android:id="@+id/edit"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:drawableLeft="@android:drawable/ic_menu_manage"
+        android:src="@android:drawable/ic_menu_manage"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/del"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:drawableLeft="@android:drawable/ic_delete"
+        android:src="@android:drawable/ic_delete"
         />
 
 </LinearLayout>
