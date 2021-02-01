@@ -140,7 +140,7 @@ class TreasuresEditorActivity() : AppCompatActivity() {
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         Log.e(LOG_TAG,"######## > onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
         outState?.run {
             putBoolean(SHOW_SETUP_DIALOG, showSetupDialog)

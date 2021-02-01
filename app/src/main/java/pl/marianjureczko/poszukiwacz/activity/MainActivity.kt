@@ -25,18 +25,15 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG = javaClass.simpleName
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
-    private lateinit var storageHelper: StorageHelper
+    private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        storageHelper = StorageHelper(this)
-
         setContentView(R.layout.activity_main)
 
-        val treasures = storageHelper.loadAll()
-        showTreasuresLists(treasures)
+        showTreasuresLists(storageHelper.loadAll())
 
         val newListButton = findViewById<Button>(R.id.new_list_button)
         newListButton.setOnClickListener {
@@ -49,8 +46,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "########> onResume")
-        val treasures = storageHelper.loadAll()
-        showTreasuresLists(treasures)
+        showTreasuresLists(storageHelper.loadAll())
     }
 
     private fun showTreasuresLists(treasures: MutableList<TreasuresList>) {
@@ -60,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         Log.d(TAG, "########> onSaveInstanceState")
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState)

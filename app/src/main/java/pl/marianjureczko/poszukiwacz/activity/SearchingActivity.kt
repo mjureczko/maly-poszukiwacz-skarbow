@@ -11,7 +11,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_searching.*
 import pl.marianjureczko.poszukiwacz.*
@@ -33,10 +35,11 @@ private const val LOG_TAG = "SearchingActivity"
 
 class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSelectorView {
     private val TAG = javaClass.simpleName
-    private val AMOUNTS = "AMOUNTS"
-    private val COLLECTED = "COLLECTED"
-    private val MSG_TO_SHOW = "MSG_TO_SHOW"
-    private val IMG_TO_SHOW = "IMG_TO_SHOW"
+    private val AMOUNTS_KEY = "AMOUNTS"
+    private val COLLECTED_KEY = "COLLECTED"
+    private val MSG_TO_SHOW_KEY = "MSG_TO_SHOW"
+    private val IMG_TO_SHOW_KEY = "IMG_TO_SHOW"
+    private val SELECTED_TREASURES_LIST_KEY = "TREASURES_LIST"
     private val xmlHelper = XmlHelper()
     private val formatter = CoordinatesFormatter()
 
@@ -45,11 +48,14 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
 
     companion object {
         private var treasureBagPresenter: TreasureBagPresenter? = null
-        private var treasuresList: TreasuresList? = null
         private var selectedTreasure: Int = 0
     }
 
+    // When not null, a dialog should be shown on postResume
     private var dialogToShow: DialogData? = null
+    private val model: SearchingActivityViewModel by viewModels()
+
+    private var selectedTreasuresList: String? = null
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +65,10 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         setContentView(R.layout.activity_searching)
 
         restoreState(savedInstanceState)
+        if(selectedTreasuresList == null) {
+            selectedTreasuresList = intent.getStringExtra(MainActivity.SELECTED_LIST);
+        }
+        model.treasures = xmlHelper.loadFromString(selectedTreasuresList!!)
 
         qrScan = IntentIntegrator(this)
         scanBtn.setOnClickListener(ScanButtonListener(qrScan))
@@ -72,13 +82,12 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val presenter = LocationPresenter(this, locationListener, handler, this, location)
         handler.post(presenter)
-        treasuresList = xmlHelper.loadFromString(intent.getStringExtra(MainActivity.SELECTED_LIST))
         selectTreasureForSearching()
         changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
         playTipBtn.setOnClickListener() { _ ->
             MediaPlayer().apply {
                 try {
-                    treasuresList?.treasures?.get(selectedTreasure)?.tipFileName?.let {
+                    model.treasures?.treasures?.get(selectedTreasure)?.tipFileName?.let {
                         setDataSource(it)
                         prepare()
                         start()
@@ -118,15 +127,16 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         Log.d(TAG, "########> onSaveInstanceState")
         outState?.run {
-            putIntegerArrayList(AMOUNTS, treasureBagPresenter!!.bagContent())
-            putStringArrayList(COLLECTED, treasureBagPresenter!!.collectedInBag())
+            putString(SELECTED_TREASURES_LIST_KEY, selectedTreasuresList)
+            putIntegerArrayList(AMOUNTS_KEY, treasureBagPresenter!!.bagContent())
+            putStringArrayList(COLLECTED_KEY, treasureBagPresenter!!.collectedInBag())
             Log.d(TAG, "########> onSaveInstanceState dialog:$dialogToShow")
-            putString(MSG_TO_SHOW, dialogToShow?.msg)
+            putString(MSG_TO_SHOW_KEY, dialogToShow?.msg)
             if (dialogToShow?.imageId != null) {
-                putInt(IMG_TO_SHOW, dialogToShow?.imageId!!)
+                putInt(IMG_TO_SHOW_KEY, dialogToShow?.imageId!!)
             }
         }
         // call superclass to save any view hierarchy
@@ -134,15 +144,16 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     }
 
     override fun selectTreasureForSearching() {
-        TreasureSelectionDialog(this, this).show(treasuresList!!)
+        TreasureSelectionDialog(this, this).show(model.treasures!!)
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
+        selectedTreasuresList = savedInstanceState?.getString(SELECTED_TREASURES_LIST_KEY);
         if (treasureBagPresenter == null) {
             treasureBagPresenter =
                 TreasureBagPresenter(
-                    savedInstanceState?.getIntegerArrayList(AMOUNTS),
-                    savedInstanceState?.getStringArrayList(COLLECTED)
+                    savedInstanceState?.getIntegerArrayList(AMOUNTS_KEY),
+                    savedInstanceState?.getStringArrayList(COLLECTED_KEY)
                 )
         }
         treasureBagPresenter!!.init(
@@ -151,8 +162,8 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
             findViewById(R.id.diamondTxt)
         )
         treasureBagPresenter!!.showTreasure()
-        savedInstanceState?.getString(MSG_TO_SHOW)?.let {
-            dialogToShow = DialogData(it, savedInstanceState?.getInt(IMG_TO_SHOW))
+        savedInstanceState?.getString(MSG_TO_SHOW_KEY)?.let {
+            dialogToShow = DialogData(it, savedInstanceState?.getInt(IMG_TO_SHOW_KEY))
         }
         Log.d(TAG, "########> restoreState dialog:$dialogToShow")
     }
@@ -163,8 +174,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             dialogToShow = treasureBagPresenter!!.processSearchingResult(
-                result.contents,
-                SearchResultDialog(this)
+                result.contents
             )
             Log.d(TAG, "########> onActivityResult (done) dialog:$dialogToShow")
         } else {
@@ -174,7 +184,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
 
     override fun showTreasureLocation(which: Int) {
         selectedTreasure = which
-        val treasure = treasuresList!!.treasures[selectedTreasure]
+        val treasure = model.treasures!!.treasures[selectedTreasure]
         val latitude = findViewById<TextView>(R.id.latTarget)
         latitude.text = formatter.format(treasure.latitude)
         val longitude = findViewById<TextView>(R.id.longTarget)

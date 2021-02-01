@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz
 
 import android.widget.TextView
-import pl.marianjureczko.poszukiwacz.dialog.SearchResultDialog
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
@@ -29,7 +28,7 @@ class TreasureBagPresenter(
         this.diamondView = diamondView
     }
 
-    fun processSearchingResult(result: String, resultDialog: SearchResultDialog) : DialogData{
+    fun processSearchingResult(result: String) : DialogData{
         try {
             val treasure = treasureParser.parse(result)
             if (treasureBag.contains(treasure)) {
