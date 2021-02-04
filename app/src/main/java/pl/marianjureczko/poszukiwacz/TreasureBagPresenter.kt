@@ -28,17 +28,17 @@ class TreasureBagPresenter(
         this.diamondView = diamondView
     }
 
-    fun processSearchingResult(result: String) : DialogData{
+    fun processSearchingResult(result: String): DialogData {
         try {
             val treasure = treasureParser.parse(result)
             if (treasureBag.contains(treasure)) {
-                return DialogData("Ten skarb został już zabrany!", null)
+                return DialogData(App.getResources().getString(R.string.treasure_already_taken_msg), null)
             } else {
                 add(treasure)
                 return DialogData(treasure.quantity.toString(), treasure.type.image())
             }
         } catch (ex: IllegalArgumentException) {
-            return DialogData("To nie jest skarb!", null)
+            return DialogData(App.getResources().getString(R.string.not_a_treasure_msg), null)
         }
     }
 

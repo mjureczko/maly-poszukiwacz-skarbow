@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -19,10 +18,6 @@ import pl.marianjureczko.poszukiwacz.TreasuresListsAdapter
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        const val SELECTED_LIST = "SELECTED_LIST"
-    }
-
     private val TAG = javaClass.simpleName
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
@@ -37,8 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         val newListButton = findViewById<Button>(R.id.new_list_button)
         newListButton.setOnClickListener {
-            val intent = Intent(this, TreasuresEditorActivity::class.java).apply {}
-            startActivity(intent)
+            startActivity(TreasuresEditorActivity.intent(this))
         }
         requestAccessLocationPermission()
     }
@@ -53,14 +47,6 @@ class MainActivity : AppCompatActivity() {
         val treasuresList = findViewById<ListView>(R.id.treasures_lists)
         val adapter = TreasuresListsAdapter(treasures, this, storageHelper)
         treasuresList.adapter = adapter
-    }
-
-    // invoked when the activity may be temporarily destroyed, save the instance state here
-    override fun onSaveInstanceState(outState: Bundle) {
-        Log.d(TAG, "########> onSaveInstanceState")
-        // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState)
-
     }
 
     /**

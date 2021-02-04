@@ -2,7 +2,6 @@ package pl.marianjureczko.poszukiwacz
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.Intent
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +11,6 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ListAdapter
-import pl.marianjureczko.poszukiwacz.activity.MainActivity
 import pl.marianjureczko.poszukiwacz.activity.SearchingActivity
 import pl.marianjureczko.poszukiwacz.activity.TreasuresEditorActivity
 
@@ -24,7 +22,6 @@ class TreasuresListsAdapter(
 ) : BaseAdapter(), ListAdapter {
 
     private val TAG = javaClass.simpleName
-    private val xmlHelper = XmlHelper()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var view = convertView
@@ -42,31 +39,23 @@ class TreasuresListsAdapter(
     private fun configureTresuresListButton(view: View, position: Int) {
         val treasuresList: Button = view.findViewById(R.id.list)
         treasuresList.text = list[position].name
-        treasuresList.setOnClickListener(View.OnClickListener {
-            val intent = Intent(context, SearchingActivity::class.java).apply {
-                putExtra(MainActivity.SELECTED_LIST, xmlHelper.writeToString(list[position]))
-            }
-            context.startActivity(intent)
-        })
+        treasuresList.setOnClickListener { context.startActivity(SearchingActivity.intent(context, list[position])) }
     }
 
     private fun configureEditButton(view: View, position: Int) {
         val edit: ImageButton = view.findViewById(R.id.edit)
-        edit.setOnClickListener(View.OnClickListener {
-            val intent = Intent(context, TreasuresEditorActivity::class.java).apply {
-                putExtra(MainActivity.SELECTED_LIST, xmlHelper.writeToString(list[position]))
-            }
-            context.startActivity(intent)
-        })
+        edit.setOnClickListener { context.startActivity(TreasuresEditorActivity.intent(context, list[position])) }
     }
 
     private fun configureRemoveButton(view: View, position: Int) {
         val remove: ImageButton = view.findViewById(R.id.del)
         remove.setOnClickListener {
+            val name = list[position].name
+            val msg = App.getResources().getString(R.string.list_remove_prompt)
             AlertDialog.Builder(context)
-                .setMessage(Html.fromHtml("Czy na pewno chcesz skasować listę <b>${list[position].name}</b>?"))
-                .setPositiveButton("Nie") { dialog, which -> Log.d(TAG, "####no") }
-                .setNegativeButton("Tak") { dialog, which -> removeList(position) }
+                .setMessage(Html.fromHtml(String.format(msg, name)))
+                .setPositiveButton(R.string.no) { _, _ -> Log.d(TAG, "####no") }
+                .setNegativeButton(R.string.yes) { _, _ -> removeList(position) }
                 .show()
         }
     }

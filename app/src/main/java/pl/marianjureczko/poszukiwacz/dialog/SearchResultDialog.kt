@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import pl.marianjureczko.poszukiwacz.R
 import kotlin.math.roundToInt
 
 class SearchResultDialog(val activity: Activity) {
@@ -36,7 +37,7 @@ class SearchResultDialog(val activity: Activity) {
         group.addView(txtView)
 
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
-        builder.setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+        builder.setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
         builder.setView(group)
         val dialog = builder.create()
 

@@ -10,16 +10,14 @@ import android.widget.Toast
 import pl.marianjureczko.poszukiwacz.R
 import java.io.IOException
 
-private const val LOG_TAG = "RecordingDialog"
-
 class RecordingDialog(val activity: Activity, val fileName: String) {
-
+    private val TAG = javaClass.simpleName
     private var recorder: MediaRecorder? = null
 
     fun show(): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         configureChronometerView(builder)
-        builder.setNeutralButton("Zatrzymaj nagrywanie") { dialog, _ -> dialog.dismiss() }
+        builder.setNeutralButton(R.string.stop_recording) { dialog, _ -> dialog.dismiss() }
         builder.setOnDismissListener { _ -> stopRecording() }
         startRecording()
         val dialog = builder.create()
@@ -45,7 +43,7 @@ class RecordingDialog(val activity: Activity, val fileName: String) {
                 prepare()
                 start()
             } catch (e: IOException) {
-                Log.e(LOG_TAG, "Audio recording failed ${e.message}")
+                Log.e(TAG, "Audio recording failed ${e.message}")
             }
         }
     }

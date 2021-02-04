@@ -14,15 +14,12 @@ import android.widget.ListAdapter
 import android.widget.TextView
 import pl.marianjureczko.poszukiwacz.dialog.RecordingDialog
 
-
-private const val LOG_TAG = "TreasuresAdapter"
-
 class TreasuresAdapter(
     private val list: TreasuresList,
     private val context: Activity,
     private val storageHelper: StorageHelper
 ) : BaseAdapter(), ListAdapter {
-
+    private val TAG = "TreasuresAdapter"
     var permissionToRecordAccepted: Boolean = false
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -62,7 +59,7 @@ class TreasuresAdapter(
                 storageHelper.save(list)
                 RecordingDialog(context, soundFileName).show()
             } else {
-                Log.w(LOG_TAG, "Recording not permitted")
+                Log.w(TAG, "Recording not permitted")
                 ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50)
                     .startTone(ToneGenerator.TONE_PROP_BEEP)
             }
