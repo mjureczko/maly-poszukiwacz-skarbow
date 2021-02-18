@@ -14,4 +14,6 @@
     <string name="no">Nie</string>
     <string name="treasure_already_taken_msg">Ten skarb został już zabrany!</string>
     <string name="not_a_treasure_msg">To nie jest skarb!</string>
+    <string name="latitude">"Szerokość:"</string>
+    <string name="longitude">"Długość:"</string>
 </resources>

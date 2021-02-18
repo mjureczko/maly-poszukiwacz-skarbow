@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#0099cc"
     android:orientation="vertical"
-    tools:context=".activity.TreasuresEditorActivity">
+    tools:context=".activity.treasureseditor.TreasuresEditorActivity">
 
     <TextView
         android:id="@+id/route_name"
@@ -15,14 +15,13 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/treasures"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:layout_weight="0.8"
-        android:fitsSystemWindows="true">
-
-    </ListView>
+        android:layout_height="0dp"
+        android:fitsSystemWindows="true"
+        android:padding="2dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,13 +36,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Szerokość:"
+                android:text="@string/latitude"
                 android:textSize="@dimen/small_font_size" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Długość:"
+                android:text="@string/longitude"
                 android:textSize="@dimen/small_font_size" />
         </LinearLayout>
 

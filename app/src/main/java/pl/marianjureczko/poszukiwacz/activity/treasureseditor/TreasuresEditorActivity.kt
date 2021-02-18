@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity
+package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -14,14 +14,19 @@ import android.text.InputType
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.*
 import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
 
-class TreasuresEditorActivity() : AppCompatActivity() {
+interface RecordingPermission {
+    fun granted(): Boolean
+}
+
+class TreasuresEditorActivity() : AppCompatActivity(), RecordingPermission {
 
     companion object {
         private var route = Route("???", ArrayList())
@@ -42,8 +47,8 @@ class TreasuresEditorActivity() : AppCompatActivity() {
     private var permissionToRecordAccepted = false
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
     private val storageHelper = StorageHelper(this)
-    private var treasuresAdapter = TreasuresAdapter(route, this, storageHelper)
-    lateinit var list: ListView
+    lateinit var treasuresRecyclerView: RecyclerView
+    lateinit var treasureAdapter: TreasureAdapter
     private var showSetupDialog: Boolean = false
     private var setupDialog: AlertDialog? = null
 
@@ -54,20 +59,19 @@ class TreasuresEditorActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_treasures_editor)
         requestRecordingPermission()
 
+        val addTreasureButton = findViewById<ImageButton>(R.id.add_treasure)
+        val lat = findViewById<TextView>(R.id.editorLatValue)
+        val lon = findViewById<TextView>(R.id.editorLongValue)
+        treasuresRecyclerView = findViewById(R.id.treasures)
+        treasuresRecyclerView.layoutManager = LinearLayoutManager(this)
         val existingList = intent.getStringExtra(SELECTED_LIST)
         if (existingList != null) {
             route = xmlHelper.loadFromString(existingList)
-            treasuresAdapter = TreasuresAdapter(route, this, storageHelper)
+            setupAdapter(route)
             //TODO: route and treasuresAdapter are changed together
         } else {
             showSetupDialog = true
         }
-
-        val addTreasureButton = findViewById<ImageButton>(R.id.add_treasure)
-        val lat = findViewById<TextView>(R.id.editorLatValue)
-        val lon = findViewById<TextView>(R.id.editorLongValue)
-        list = findViewById(R.id.treasures)
-        list.adapter = treasuresAdapter
 
         addTreasureButton.setOnClickListener {
             val treasure = TreasureDescription(
@@ -75,7 +79,7 @@ class TreasuresEditorActivity() : AppCompatActivity() {
                 longitude = lon.text.toString().toDouble()
             )
             route.treasures.add(treasure)
-            treasuresAdapter.notifyDataSetChanged()
+            treasureAdapter.notifyDataSetChanged()
             storageHelper.save(route)
         }
 
@@ -94,16 +98,19 @@ class TreasuresEditorActivity() : AppCompatActivity() {
         val input = EditText(this)
         input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL
         builder.setView(input)
-        val listName = findViewById<TextView>(R.id.route_name)
+        val routeName = findViewById<TextView>(R.id.route_name)
         builder.setPositiveButton(R.string.ok) { _, _ ->
             val name = input.text.toString()
             route = Route(name, ArrayList())
-            treasuresAdapter = TreasuresAdapter(route, this, storageHelper)
-            treasuresAdapter.permissionToRecordAccepted = permissionToRecordAccepted
-            list.adapter = treasuresAdapter
-            listName.text = name
+            setupAdapter(route)
+            routeName.text = name
         }
         return builder.show()
+    }
+
+    private fun setupAdapter(route: Route) {
+        treasureAdapter = TreasureAdapter(this, route, this, storageHelper)
+        treasuresRecyclerView.adapter = treasureAdapter
     }
 
     override fun onRequestPermissionsResult(code: Int, perms: Array<String>, results: IntArray) {
@@ -113,8 +120,6 @@ class TreasuresEditorActivity() : AppCompatActivity() {
         } else {
             false
         }
-        //TODO: using this setter is ugly
-        treasuresAdapter.permissionToRecordAccepted = permissionToRecordAccepted
     }
 
     private fun requestRecordingPermission() {
@@ -152,7 +157,7 @@ class TreasuresEditorActivity() : AppCompatActivity() {
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle) {
         Log.e(TAG, "######## > onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
-        outState?.run {
+        outState.run {
             putBoolean(SHOW_SETUP_DIALOG, showSetupDialog)
         }
         super.onSaveInstanceState(outState)
@@ -164,4 +169,6 @@ class TreasuresEditorActivity() : AppCompatActivity() {
             conditionallyShowSetupDialog()
         }
     }
+
+    override fun granted(): Boolean = permissionToRecordAccepted
 }

@@ -13,16 +13,16 @@ interface RoutesRemover {
 
 class RouteAdapter(
     private val activity: Activity,
-    private var routes: MutableList<Route>,
+    private val routes: MutableList<Route>,
     private val storageHelper: StorageHelper
 ) : RecyclerView.Adapter<RouteHolder>(), RoutesRemover {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RouteHolder {
         val view = activity.layoutInflater.inflate(R.layout.routes_item, parent, false)
-        return RouteHolder(activity, view, this)
+        return RouteHolder(view, activity, this)
     }
 
     override fun onBindViewHolder(holder: RouteHolder, position: Int) {
-        holder.setRoute(routes[position])
+        holder.setupRoute(routes[position])
     }
 
     override fun getItemCount(): Int {

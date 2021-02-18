@@ -12,11 +12,11 @@ import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.Route
 import pl.marianjureczko.poszukiwacz.activity.SearchingActivity
-import pl.marianjureczko.poszukiwacz.activity.TreasuresEditorActivity
+import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 
 class RouteHolder(
-    private val context: Context,
     view: View,
+    private val context: Context,
     private val routesRemover: RoutesRemover
 ) : RecyclerView.ViewHolder(view) {
     private val TAG = javaClass.simpleName
@@ -24,7 +24,7 @@ class RouteHolder(
     private val editBtn: ImageButton = itemView.findViewById(R.id.edit_route)
     private val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_route)
 
-    fun setRoute(route: Route) {
+    fun setupRoute(route: Route) {
         selectBtn.text = route.name
         selectBtn.setOnClickListener { context.startActivity(SearchingActivity.intent(context, route)) }
 
