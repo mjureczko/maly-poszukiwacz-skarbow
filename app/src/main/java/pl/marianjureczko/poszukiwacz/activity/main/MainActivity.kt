@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity
+package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.Manifest
 import android.content.pm.ActivityInfo
@@ -6,14 +6,15 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.Route
 import pl.marianjureczko.poszukiwacz.StorageHelper
-import pl.marianjureczko.poszukiwacz.TreasuresList
-import pl.marianjureczko.poszukiwacz.TreasuresListsAdapter
+import pl.marianjureczko.poszukiwacz.activity.TreasuresEditorActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG = javaClass.simpleName
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
+    private lateinit var routesRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "########> onCreate")
@@ -28,10 +30,13 @@ class MainActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
 
-        showTreasuresLists(storageHelper.loadAll())
+        routesRecyclerView = findViewById(R.id.routes)
+        routesRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        val newListButton = findViewById<Button>(R.id.new_list_button)
-        newListButton.setOnClickListener {
+        showRoutes(storageHelper.loadAll())
+
+        val newRouteButton = findViewById<Button>(R.id.new_route_button)
+        newRouteButton.setOnClickListener {
             startActivity(TreasuresEditorActivity.intent(this))
         }
         requestAccessLocationPermission()
@@ -40,13 +45,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "########> onResume")
-        showTreasuresLists(storageHelper.loadAll())
+        showRoutes(storageHelper.loadAll())
     }
 
-    private fun showTreasuresLists(treasures: MutableList<TreasuresList>) {
-        val treasuresList = findViewById<ListView>(R.id.treasures_lists)
-        val adapter = TreasuresListsAdapter(treasures, this, storageHelper)
-        treasuresList.adapter = adapter
+    private fun showRoutes(routes: MutableList<Route>) {
+        val routeAdapter = RouteAdapter(this, routes, storageHelper)
+        routesRecyclerView.adapter = routeAdapter
     }
 
     /**

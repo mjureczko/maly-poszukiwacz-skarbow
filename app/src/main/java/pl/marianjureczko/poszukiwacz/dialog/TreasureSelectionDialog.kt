@@ -4,13 +4,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.widget.ArrayAdapter
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.TreasuresList
+import pl.marianjureczko.poszukiwacz.Route
 import pl.marianjureczko.poszukiwacz.activity.TreasureLocationView
 
 
 class TreasureSelectionDialog(val activity: Activity, val treasureLocationView : TreasureLocationView) {
 
-    fun show(treasures: TreasuresList) {
+    fun show(treasures: Route) {
         val arrayAdapter = ArrayAdapter<String>(activity, android.R.layout.select_dialog_singlechoice)
         treasures.treasures.forEach {
             arrayAdapter.add(it.prettyName())

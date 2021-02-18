@@ -8,22 +8,22 @@ import java.io.StringWriter
 class XmlHelper {
     private val serializer: Serializer = Persister()
 
-    fun writeToFile(treasures: TreasuresList, outputFile: File) {
-        serializer.write(treasures, outputFile)
+    fun writeToFile(route: Route, outputFile: File) {
+        serializer.write(route, outputFile)
     }
 
-    fun writeToString(treasures: TreasuresList): String {
+    fun writeToString(route: Route): String {
         val stringWriter = StringWriter()
-        serializer.write(treasures, stringWriter)
+        serializer.write(route, stringWriter)
         return stringWriter.toString()
     }
 
-    fun loadFromFile(xmlFile: File): TreasuresList {
+    fun loadFromFile(xmlFile: File): Route {
         val xml = xmlFile.readText()
-        return serializer.read(TreasuresList::class.java, xml)
+        return serializer.read(Route::class.java, xml)
     }
 
-    fun loadFromString(xml: String): TreasuresList {
-        return serializer.read(TreasuresList::class.java, xml)
+    fun loadFromString(xml: String): Route {
+        return serializer.read(Route::class.java, xml)
     }
 }

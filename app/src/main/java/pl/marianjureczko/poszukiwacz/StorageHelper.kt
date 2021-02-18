@@ -5,7 +5,6 @@ import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
 import java.io.File
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -14,34 +13,32 @@ class StorageHelper(val context: Context) {
     private val xmlHelper = XmlHelper()
 
     companion object {
-        val treasuresDirectory = "/treasures_lists"
+        val routesDirectory = "/treasures_lists"
     }
 
-    fun generateNewSoundFile() = getTreasuresDir().absolutePath + "/" + "test" + UUID.randomUUID().toString() + ".3gp"
+    fun generateNewSoundFile() = getRoutesDir().absolutePath + "/" + "test" + UUID.randomUUID().toString() + ".3gp"
 
-    fun save(treasures: TreasuresList) {
-        val xmlFile = getTreasuresFile(treasures)
-        xmlHelper.writeToFile(treasures, xmlFile)
+    fun save(route: Route) {
+        val xmlFile = getRouteFile(route)
+        xmlHelper.writeToFile(route, xmlFile)
     }
 
-    fun loadAll(): MutableList<TreasuresList> {
-        val dir = getTreasuresDir()
-        return dir.listFiles()
-            .mapNotNull {
-                try {
-                    xmlHelper.loadFromFile(it)
-                } catch (e: Exception) {
-                    null
-                }
+    fun loadAll(): MutableList<Route> {
+        val dir = getRoutesDir()
+        return dir.listFiles().mapNotNull {
+            try {
+                xmlHelper.loadFromFile(it)
+            } catch (e: Exception) {
+                null
             }
-            .toMutableList()
+        }.toMutableList()
     }
 
-    fun remove(listToRemove: TreasuresList) {
-        listToRemove.treasures.forEach {
+    fun remove(toRemove: Route) {
+        toRemove.treasures.forEach {
             removeTipFile(it)
         }
-        val fileToRemove = getTreasuresFile(listToRemove)
+        val fileToRemove = getRouteFile(toRemove)
         fileToRemove.delete()
     }
 
@@ -51,13 +48,13 @@ class StorageHelper(val context: Context) {
         }
     }
 
-    private fun getTreasuresFile(treasures: TreasuresList): File {
-        val dir = getTreasuresDir()
+    private fun getRouteFile(treasures: Route): File {
+        val dir = getRoutesDir()
         return File("${dir.absolutePath}/${treasures.fileName()}.xml")
     }
 
-    private fun getTreasuresDir(): File {
-        val dir = File(context.filesDir.absolutePath + treasuresDirectory)
+    private fun getRoutesDir(): File {
+        val dir = File(context.filesDir.absolutePath + routesDirectory)
         if (!dir.exists()) {
             dir.mkdir()
         }
@@ -66,9 +63,9 @@ class StorageHelper(val context: Context) {
 }
 
 @Root
-data class TreasuresList(
+data class Route(
     @field:Element var name: String,
-    @field:ElementList var treasures: ArrayList<TreasureDescription>
+    @field:ElementList var treasures: MutableList<TreasureDescription>
 ) {
     constructor() : this("", ArrayList())
 
@@ -78,7 +75,6 @@ data class TreasuresList(
     }
 }
 
-//TODO: remove tim file when removing description
 @Root
 data class TreasureDescription(
     @field:Element var latitude: Double,

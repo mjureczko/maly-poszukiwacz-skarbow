@@ -15,11 +15,11 @@ import android.widget.TextView
 import pl.marianjureczko.poszukiwacz.dialog.RecordingDialog
 
 class TreasuresAdapter(
-    private val list: TreasuresList,
+    private val route: Route,
     private val context: Activity,
     private val storageHelper: StorageHelper
 ) : BaseAdapter(), ListAdapter {
-    private val TAG = "TreasuresAdapter"
+    private val TAG = javaClass.simpleName
     var permissionToRecordAccepted: Boolean = false
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -36,37 +36,36 @@ class TreasuresAdapter(
 
     private fun configureLabel(view: View, position: Int) {
         val label = view.findViewById<TextView>(R.id.treasure_name)
-        label.text = list.treasures[position].prettyName()
+        label.text = route.treasures[position].prettyName()
     }
 
     private fun configureRemoveButton(view: View, position: Int) {
         val remove: ImageButton = view.findViewById(R.id.del_treasure)
         remove.setOnClickListener {
-            list.treasures.removeAt(position)
+            route.treasures.removeAt(position)
             notifyDataSetChanged()
-            storageHelper.save(list)
+            storageHelper.save(route)
             //TODO: remove when last treasure removed (?)
         }
     }
 
     private fun configureRecordTipButton(view: View, position: Int) {
         val record: ImageButton = view.findViewById(R.id.record_tip)
-        record.setOnClickListener{
-            if(permissionToRecordAccepted) {
+        record.setOnClickListener {
+            if (permissionToRecordAccepted) {
                 val soundFileName = storageHelper.generateNewSoundFile()
-                storageHelper.removeTipFile(list.treasures[position] )
-                list.treasures[position].tipFileName = soundFileName
-                storageHelper.save(list)
+                storageHelper.removeTipFile(route.treasures[position])
+                route.treasures[position].tipFileName = soundFileName
+                storageHelper.save(route)
                 RecordingDialog(context, soundFileName).show()
             } else {
                 Log.w(TAG, "Recording not permitted")
-                ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50)
-                    .startTone(ToneGenerator.TONE_PROP_BEEP)
+                ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP)
             }
         }
     }
 
-    override fun getItem(position: Int): Any = list.treasures[position]
+    override fun getItem(position: Int): Any = route.treasures[position]
     override fun getItemId(position: Int): Long = 0
-    override fun getCount(): Int = list.treasures.size
+    override fun getCount(): Int = route.treasures.size
 }

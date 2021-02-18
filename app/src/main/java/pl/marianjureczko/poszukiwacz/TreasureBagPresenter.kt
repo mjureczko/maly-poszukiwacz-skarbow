@@ -31,11 +31,11 @@ class TreasureBagPresenter(
     fun processSearchingResult(result: String): DialogData {
         try {
             val treasure = treasureParser.parse(result)
-            if (treasureBag.contains(treasure)) {
-                return DialogData(App.getResources().getString(R.string.treasure_already_taken_msg), null)
+            return if (treasureBag.contains(treasure)) {
+                DialogData(App.getResources().getString(R.string.treasure_already_taken_msg), null)
             } else {
                 add(treasure)
-                return DialogData(treasure.quantity.toString(), treasure.type.image())
+                DialogData(treasure.quantity.toString(), treasure.type.image())
             }
         } catch (ex: IllegalArgumentException) {
             return DialogData(App.getResources().getString(R.string.not_a_treasure_msg), null)

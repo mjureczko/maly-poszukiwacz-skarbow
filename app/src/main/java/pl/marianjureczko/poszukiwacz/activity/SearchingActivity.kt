@@ -40,9 +40,9 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         private val xmlHelper = XmlHelper()
         private const val SELECTED_LIST = "pl.marianjureczko.poszukiwacz.activity.list_select_to_search";
 
-        fun intent(packageContext: Context, treasures: TreasuresList) =
+        fun intent(packageContext: Context, route: Route) =
             Intent(packageContext, SearchingActivity::class.java).apply {
-                putExtra(SELECTED_LIST, xmlHelper.writeToString(treasures))
+                putExtra(SELECTED_LIST, xmlHelper.writeToString(route))
             }
     }
 
@@ -51,14 +51,14 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     private val COLLECTED_KEY = "COLLECTED"
     private val MSG_TO_SHOW_KEY = "MSG_TO_SHOW"
     private val IMG_TO_SHOW_KEY = "IMG_TO_SHOW"
-    private val SELECTED_TREASURES_LIST_KEY = "TREASURES_LIST"
+    private val SELECTED_ROUTE_KEY = "ROUTE"
     private val formatter = CoordinatesFormatter()
     private var dialog: AlertDialog? = null
     private lateinit var qrScan: IntentIntegrator
     // When not null, a dialog should be shown on postResume
     private var dialogToShow: DialogData? = null
     private val model: SearchingActivityViewModel by viewModels()
-    private var selectedTreasuresList: String? = null
+    private var selectedRoute: String? = null
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,10 +68,10 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         setContentView(R.layout.activity_searching)
 
         restoreState(savedInstanceState)
-        if (selectedTreasuresList == null) {
-            selectedTreasuresList = intent.getStringExtra(SELECTED_LIST);
+        if (selectedRoute == null) {
+            selectedRoute = intent.getStringExtra(SELECTED_LIST);
         }
-        model.treasures = xmlHelper.loadFromString(selectedTreasuresList!!)
+        model.route = xmlHelper.loadFromString(selectedRoute!!)
 
         qrScan = IntentIntegrator(this)
         scanBtn.setOnClickListener(ScanButtonListener(qrScan))
@@ -90,7 +90,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         playTipBtn.setOnClickListener() { _ ->
             MediaPlayer().apply {
                 try {
-                    model.treasures?.treasures?.get(selectedTreasure)?.tipFileName?.let {
+                    model.route?.treasures?.get(selectedTreasure)?.tipFileName?.let {
                         setDataSource(it)
                         prepare()
                         start()
@@ -133,7 +133,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     override fun onSaveInstanceState(outState: Bundle) {
         Log.d(TAG, "########> onSaveInstanceState")
         outState?.run {
-            putString(SELECTED_TREASURES_LIST_KEY, selectedTreasuresList)
+            putString(SELECTED_ROUTE_KEY, selectedRoute)
             putIntegerArrayList(AMOUNTS_KEY, treasureBagPresenter!!.bagContent())
             putStringArrayList(COLLECTED_KEY, treasureBagPresenter!!.collectedInBag())
             Log.d(TAG, "########> onSaveInstanceState dialog:$dialogToShow")
@@ -147,11 +147,11 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     }
 
     override fun selectTreasureForSearching() {
-        TreasureSelectionDialog(this, this).show(model.treasures!!)
+        TreasureSelectionDialog(this, this).show(model.route!!)
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
-        selectedTreasuresList = savedInstanceState?.getString(SELECTED_TREASURES_LIST_KEY);
+        selectedRoute = savedInstanceState?.getString(SELECTED_ROUTE_KEY);
         if (treasureBagPresenter == null) {
             treasureBagPresenter =
                 TreasureBagPresenter(
@@ -187,7 +187,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
 
     override fun showTreasureLocation(which: Int) {
         selectedTreasure = which
-        val treasure = model.treasures.treasures[selectedTreasure]
+        val treasure = model.route.treasures[selectedTreasure]
         val latitude = findViewById<TextView>(R.id.latTarget)
         latitude.text = formatter.format(treasure.latitude)
         val longitude = findViewById<TextView>(R.id.longTarget)

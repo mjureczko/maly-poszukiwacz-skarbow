@@ -24,15 +24,15 @@ import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
 class TreasuresEditorActivity() : AppCompatActivity() {
 
     companion object {
-        private var treasuresList = TreasuresList("Nienazwana", ArrayList())
+        private var route = Route("???", ArrayList())
         private val xmlHelper = XmlHelper()
         private const val SELECTED_LIST = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
 
         fun intent(packageContext: Context) = Intent(packageContext, TreasuresEditorActivity::class.java)
 
-        fun intent(packageContext: Context, treasures: TreasuresList) =
+        fun intent(packageContext: Context, route: Route) =
             Intent(packageContext, TreasuresEditorActivity::class.java).apply {
-                putExtra(SELECTED_LIST, xmlHelper.writeToString(treasures))
+                putExtra(SELECTED_LIST, xmlHelper.writeToString(route))
             }
     }
 
@@ -42,7 +42,7 @@ class TreasuresEditorActivity() : AppCompatActivity() {
     private var permissionToRecordAccepted = false
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
     private val storageHelper = StorageHelper(this)
-    private var treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
+    private var treasuresAdapter = TreasuresAdapter(route, this, storageHelper)
     lateinit var list: ListView
     private var showSetupDialog: Boolean = false
     private var setupDialog: AlertDialog? = null
@@ -56,9 +56,9 @@ class TreasuresEditorActivity() : AppCompatActivity() {
 
         val existingList = intent.getStringExtra(SELECTED_LIST)
         if (existingList != null) {
-            treasuresList = xmlHelper.loadFromString(existingList)
-            treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
-            //TODO: treasuresList and treasuresAdapter are changed together
+            route = xmlHelper.loadFromString(existingList)
+            treasuresAdapter = TreasuresAdapter(route, this, storageHelper)
+            //TODO: route and treasuresAdapter are changed together
         } else {
             showSetupDialog = true
         }
@@ -74,9 +74,9 @@ class TreasuresEditorActivity() : AppCompatActivity() {
                 latitude = lat.text.toString().toDouble(),
                 longitude = lon.text.toString().toDouble()
             )
-            treasuresList.treasures.add(treasure)
+            route.treasures.add(treasure)
             treasuresAdapter.notifyDataSetChanged()
-            storageHelper.save(treasuresList)
+            storageHelper.save(route)
         }
 
         val locationListener = TextViewBasedLocationListener(lat, lon)
@@ -88,17 +88,17 @@ class TreasuresEditorActivity() : AppCompatActivity() {
         restoreState(savedInstanceState)
     }
 
-    private fun setupTreasuresListUsingDialog(): AlertDialog {
+    private fun setupRouteUsingDialog(): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle(R.string.treasures_list_name_prompt)
+        builder.setTitle(R.string.route_name_prompt)
         val input = EditText(this)
         input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL
         builder.setView(input)
-        val listName = findViewById<TextView>(R.id.treasures_list_name)
+        val listName = findViewById<TextView>(R.id.route_name)
         builder.setPositiveButton(R.string.ok) { _, _ ->
             val name = input.text.toString()
-            treasuresList = TreasuresList(name, ArrayList())
-            treasuresAdapter = TreasuresAdapter(treasuresList, this, storageHelper)
+            route = Route(name, ArrayList())
+            treasuresAdapter = TreasuresAdapter(route, this, storageHelper)
             treasuresAdapter.permissionToRecordAccepted = permissionToRecordAccepted
             list.adapter = treasuresAdapter
             listName.text = name
@@ -124,7 +124,7 @@ class TreasuresEditorActivity() : AppCompatActivity() {
     private fun conditionallyShowSetupDialog() {
         if (showSetupDialog) {
             showSetupDialog = try {
-                setupDialog = setupTreasuresListUsingDialog()
+                setupDialog = setupRouteUsingDialog()
                 false
             } catch (ex: Throwable) {
                 true

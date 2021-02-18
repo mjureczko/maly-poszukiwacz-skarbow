@@ -4,30 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context=".activity.MainActivity"
+    tools:context=".activity.main.MainActivity"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/treasures_list_header"
+        android:text="@string/routes_header"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:gravity="center"
-        />
+        android:gravity="center" />
 
-    <ListView
-        android:id="@+id/treasures_lists"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/routes"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:layout_weight="0.8"
-        android:fitsSystemWindows="true">
-    </ListView>
+        android:layout_height="0dp"
+        android:fitsSystemWindows="true"
+        android:padding="4dp" />
 
     <Button
-        android:id="@+id/new_list_button"
+        android:id="@+id/new_route_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/new_treasure_list_button" />
+        android:text="@string/new_route_button" />
 
 </LinearLayout>

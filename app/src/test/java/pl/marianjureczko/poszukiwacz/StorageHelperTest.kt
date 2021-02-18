@@ -1,9 +1,8 @@
 package pl.marianjureczko.poszukiwacz
 
 import android.app.Application
-import org.jeasy.random.EasyRandom
-import org.jeasy.random.EasyRandomParameters
-import org.junit.After
+import com.ocadotechnology.gembus.test.some
+import org.apache.commons.io.FileUtils
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -12,56 +11,48 @@ import java.io.File
 
 class StorageHelperTest {
 
-    private val parameters = EasyRandomParameters()
-    private lateinit var easyRandom: EasyRandom
     private val context = TestContext()
     private val storageHelper = StorageHelper(context)
 
     @Before
-    fun init() {
-        parameters.overrideDefaultInitialization(true)
-        easyRandom = EasyRandom(parameters)
-    }
-
-    @After
     fun cleanup() {
-        File(context.filesDir.absolutePath + StorageHelper.treasuresDirectory).delete()
+        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.routesDirectory))
     }
 
     @Test
-    fun `save and load treasures list`() {
+    fun `save and load route`() {
         //given
-        val someTreasures = easyRandom.nextObject(TreasuresList::class.java)
+        val route = some<Route>()
 
         //when
-        storageHelper.save(someTreasures)
+        storageHelper.save(route)
         val actual = storageHelper.loadAll()
 
         //then
-        val matching = actual.first { it.name == someTreasures.name }
-        assertEquals(someTreasures, matching)
+        val matching = actual.first { it.name == route.name }
+        assertEquals(route, matching)
     }
 
     @Test
-    fun `save and remove treasures list`() {
+    fun `save and remove route`() {
         //given
-        val someTreasures = easyRandom.nextObject(TreasuresList::class.java)
-        storageHelper.save(someTreasures)
+        val route = some<Route>()
+        storageHelper.save(route)
 
         //when
-        storageHelper.remove(someTreasures)
+        storageHelper.remove(route)
         val actual = storageHelper.loadAll()
 
         //then
-        val matching = actual.firstOrNull { it.name == someTreasures.name }
+        val matching = actual.firstOrNull { it.name == route.name }
         assertNull(matching)
     }
 
     @Test
     fun `ignore invalid files when loading treasures`() {
         //given
-        storageHelper.save(easyRandom.nextObject(TreasuresList::class.java))
-        File(context.filesDir.absolutePath + StorageHelper.treasuresDirectory + "/invalid.file.xml")
+        storageHelper.save(some<Route>())
+        File(context.filesDir.absolutePath + StorageHelper.routesDirectory + "/invalid.file.xml")
             .writeText("it' not a xml")
 
         //when
