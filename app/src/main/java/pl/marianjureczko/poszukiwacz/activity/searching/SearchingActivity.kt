@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity
+package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -10,7 +10,6 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
@@ -77,10 +76,9 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         scanBtn.setOnClickListener(ScanButtonListener(qrScan))
 
         val locationListener =
-            TextViewBasedLocationListener(
-                findViewById(R.id.latValue),
-                findViewById(R.id.longValue)
-            )
+            TextViewBasedLocationListener(null, null);
+//                findViewById(R.id.latValue),
+//                findViewById(R.id.longValue))
         val handler = Handler()
         val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val presenter = LocationPresenter(this, locationListener, handler, this, location)
@@ -90,7 +88,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         playTipBtn.setOnClickListener() { _ ->
             MediaPlayer().apply {
                 try {
-                    model.route?.treasures?.get(selectedTreasure)?.tipFileName?.let {
+                    model.route.treasures[selectedTreasure].tipFileName?.let {
                         setDataSource(it)
                         prepare()
                         start()
@@ -188,10 +186,10 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     override fun showTreasureLocation(which: Int) {
         selectedTreasure = which
         val treasure = model.route.treasures[selectedTreasure]
-        val latitude = findViewById<TextView>(R.id.latTarget)
-        latitude.text = formatter.format(treasure.latitude)
-        val longitude = findViewById<TextView>(R.id.longTarget)
-        longitude.text = formatter.format(treasure.longitude)
+//        val latitude = findViewById<TextView>(R.id.latTarget)
+//        latitude.text = formatter.format(treasure.latitude)
+//        val longitude = findViewById<TextView>(R.id.longTarget)
+//        longitude.text = formatter.format(treasure.longitude)
     }
 
 }

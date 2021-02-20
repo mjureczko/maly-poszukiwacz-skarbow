@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity
+package pl.marianjureczko.poszukiwacz.activity.searching
 
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.Route

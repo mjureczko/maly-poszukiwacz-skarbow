@@ -5,7 +5,7 @@ import android.app.AlertDialog
 import android.widget.ArrayAdapter
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.Route
-import pl.marianjureczko.poszukiwacz.activity.TreasureLocationView
+import pl.marianjureczko.poszukiwacz.activity.searching.TreasureLocationView
 
 
 class TreasureSelectionDialog(val activity: Activity, val treasureLocationView : TreasureLocationView) {
