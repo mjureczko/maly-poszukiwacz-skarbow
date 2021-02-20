@@ -1,50 +1,38 @@
 package pl.marianjureczko.poszukiwacz
 
-import org.jeasy.random.EasyRandom
-import org.jeasy.random.EasyRandomParameters
+import com.ocadotechnology.gembus.test.some
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
-import org.junit.Assert.*
-import org.junit.Before
-
 class XmlHelperTest {
-
-    private val parameters = EasyRandomParameters()
-    private lateinit var easyRandom: EasyRandom
-
-    @Before
-    fun init() {
-        parameters.overrideDefaultInitialization(true)
-        easyRandom = EasyRandom(parameters)
-    }
 
     @Test
     fun should_writeToAndLoadFromString() {
         //given
         val xmlHelper = XmlHelper()
-        val treasures = easyRandom.nextObject(TreasuresList::class.java)
+        val route = some<Route>()
 
         //when
-        val xml = xmlHelper.writeToString(treasures)
+        val xml = xmlHelper.writeToString(route)
         val actual = xmlHelper.loadFromString(xml)
 
         //then
-        assertEquals(treasures, actual)
+        assertEquals(route, actual)
     }
 
     @Test
     fun should_writeToAndLoadFromString_when_tipIsNull() {
         //given
         val xmlHelper = XmlHelper()
-        var treasures = easyRandom.nextObject(TreasuresList::class.java)
-        val treasureDescriptions = ArrayList(treasures.treasures.map { it -> it.tipFileName = null; it; })
-        treasures = treasures.copy(treasures = treasureDescriptions)
+        var route = some<Route>()
+        val treasureDescriptions = ArrayList(route.treasures.map { it -> it.tipFileName = null; it; })
+        route = route.copy(treasures = treasureDescriptions)
 
         //when
-        val xml = xmlHelper.writeToString(treasures)
+        val xml = xmlHelper.writeToString(route)
         val actual = xmlHelper.loadFromString(xml)
 
         //then
-        assertEquals(treasures, actual)
+        assertEquals(route, actual)
     }
 }

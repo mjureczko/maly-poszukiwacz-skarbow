@@ -1,69 +1,56 @@
-package pl.marianjureczko.poszukiwacz.activity
+package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.Route
 import pl.marianjureczko.poszukiwacz.StorageHelper
-import pl.marianjureczko.poszukiwacz.TreasuresList
-import pl.marianjureczko.poszukiwacz.TreasuresListsAdapter
+import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        const val SELECTED_LIST = "SELECTED_LIST"
-    }
-
+    private val TAG = javaClass.simpleName
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
-
-    private lateinit var storageHelper: StorageHelper
+    private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
+    private lateinit var routesRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        println("########> onCreate ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        storageHelper = StorageHelper(this)
-
         setContentView(R.layout.activity_main)
 
-        val treasures = storageHelper.loadAll()
-        showTreasuresLists(treasures)
+        routesRecyclerView = findViewById(R.id.routes)
+        routesRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        val newListButton = findViewById<Button>(R.id.new_list_button)
-        newListButton.setOnClickListener {
-            val intent = Intent(this, TreasuresEditorActivity::class.java).apply {}
-            startActivity(intent)
+        showRoutes(storageHelper.loadAll())
+
+        val newRouteButton = findViewById<Button>(R.id.new_route_button)
+        newRouteButton.setOnClickListener {
+            startActivity(TreasuresEditorActivity.intent(this))
         }
         requestAccessLocationPermission()
     }
 
     override fun onResume() {
         super.onResume()
-        println("########> onResume ${System.currentTimeMillis() % 100_000}")
-        val treasures = storageHelper.loadAll()
-        showTreasuresLists(treasures)
+        Log.d(TAG, "########> onResume")
+        showRoutes(storageHelper.loadAll())
     }
 
-    private fun showTreasuresLists(treasures: MutableList<TreasuresList>) {
-        val treasuresList = findViewById<ListView>(R.id.treasures_lists)
-        val adapter = TreasuresListsAdapter(treasures, this, storageHelper)
-        treasuresList.adapter = adapter
-    }
-
-    // invoked when the activity may be temporarily destroyed, save the instance state here
-    override fun onSaveInstanceState(outState: Bundle?) {
-        println("########> onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
-        // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState)
-
+    private fun showRoutes(routes: MutableList<Route>) {
+        val routeAdapter = RouteAdapter(this, routes, storageHelper)
+        routesRecyclerView.adapter = routeAdapter
     }
 
     /**

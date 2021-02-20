@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.listener
 import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import pl.marianjureczko.poszukiwacz.CoordinatesFormatter
 
@@ -11,6 +12,7 @@ class TextViewBasedLocationListener(
     private val longValue: TextView
 ) : LocationListener {
 
+    private val TAG = javaClass.simpleName
     private val formatter = CoordinatesFormatter()
 
     override fun onLocationChanged(location: Location?) {
@@ -19,15 +21,15 @@ class TextViewBasedLocationListener(
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-        println("onStatusChanged - provider: $provider")
+        Log.d(TAG,"onStatusChanged - provider: $provider")
     }
 
     override fun onProviderEnabled(provider: String?) {
-        println("onProviderEnabled - provider: $provider")
+        Log.d(TAG, "onProviderEnabled - provider: $provider")
     }
 
     override fun onProviderDisabled(provider: String?) {
-        println("onProviderDisabled - provider: $provider")
+        Log.d(TAG, "onProviderDisabled - provider: $provider")
     }
 
 }

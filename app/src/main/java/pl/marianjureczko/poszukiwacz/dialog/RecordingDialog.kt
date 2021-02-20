@@ -6,19 +6,18 @@ import android.media.MediaRecorder
 import android.util.Log
 import android.view.Gravity
 import android.widget.Chronometer
-import java.io.File
+import android.widget.Toast
+import pl.marianjureczko.poszukiwacz.R
 import java.io.IOException
 
-private const val LOG_TAG = "RecordingDialog"
-
 class RecordingDialog(val activity: Activity, val fileName: String) {
-
+    private val TAG = javaClass.simpleName
     private var recorder: MediaRecorder? = null
 
     fun show(): AlertDialog {
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         configureChronometerView(builder)
-        builder.setNeutralButton("Zatrzymaj nagrywanie") { dialog, _ -> dialog.dismiss() }
+        builder.setNeutralButton(R.string.stop_recording) { dialog, _ -> dialog.dismiss() }
         builder.setOnDismissListener { _ -> stopRecording() }
         startRecording()
         val dialog = builder.create()
@@ -44,7 +43,7 @@ class RecordingDialog(val activity: Activity, val fileName: String) {
                 prepare()
                 start()
             } catch (e: IOException) {
-                Log.e(LOG_TAG, "Audio recording failed ${e.message}")
+                Log.e(TAG, "Audio recording failed ${e.message}")
             }
         }
     }
@@ -52,6 +51,7 @@ class RecordingDialog(val activity: Activity, val fileName: String) {
     private fun stopRecording() {
         recorder?.apply {
             stop()
+            Toast.makeText(activity, R.string.tip_recorded, Toast.LENGTH_SHORT).show()
             release()
         }
         recorder = null
