@@ -1,7 +1,8 @@
 package pl.marianjureczko.poszukiwacz
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
+import pl.marianjureczko.poszukiwacz.activity.treasureseditor.CoordinatesFormatter
 
 class CoordinatesFormatterTest {
 

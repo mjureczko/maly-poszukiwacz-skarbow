@@ -1,12 +1,14 @@
-package pl.marianjureczko.poszukiwacz.dialog
+package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.widget.ArrayAdapter
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.Route
-import pl.marianjureczko.poszukiwacz.activity.searching.TreasureLocationView
 
+interface TreasureLocationView {
+    fun showTreasureLocation(which: Int)
+}
 
 class TreasureSelectionDialog(val activity: Activity, val treasureLocationView : TreasureLocationView) {
 

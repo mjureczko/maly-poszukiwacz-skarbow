@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
 import java.text.NumberFormat
 import java.util.*

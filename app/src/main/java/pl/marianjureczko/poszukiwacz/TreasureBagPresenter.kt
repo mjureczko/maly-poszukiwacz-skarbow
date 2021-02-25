@@ -1,22 +1,16 @@
 package pl.marianjureczko.poszukiwacz
 
 import android.widget.TextView
+import pl.marianjureczko.poszukiwacz.activity.searching.DialogData
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import java.util.*
 
-class TreasureBagPresenter(
-    treasuresAmount: ArrayList<Int>?,
-    collectedTreasures: ArrayList<String>?
-) {
+class TreasureBagPresenter(treasuresAmount: ArrayList<Int>?, collectedTreasures: ArrayList<String>?) {
 
-    private val treasureBag = TreasureBag(
-        treasuresAmount,
-        collectedTreasures
-    )
-    private val treasureParser =
-        TreasureParser()
+    private val treasureBag = TreasureBag(treasuresAmount, collectedTreasures)
+    private val treasureParser = TreasureParser()
 
     private lateinit var goldView: TextView
     private lateinit var rubyView: TextView
@@ -48,10 +42,10 @@ class TreasureBagPresenter(
 
     private fun add(treasure: Treasure) {
         treasureBag.collect(treasure)
-        showTreasure()
+        showCollectedTreasures()
     }
 
-    fun showTreasure() {
+    fun showCollectedTreasures() {
         goldView.text = treasureBag.golds.toString()
         rubyView.text = treasureBag.rubies.toString()
         diamondView.text = treasureBag.diamonds.toString()
