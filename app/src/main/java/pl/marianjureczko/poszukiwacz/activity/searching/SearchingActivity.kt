@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.LocationManager
+import android.media.AudioManager
+import android.media.ToneGenerator
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -21,7 +23,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     companion object {
         private var treasureBagPresenter: TreasureBagPresenter? = null
         private val xmlHelper = XmlHelper()
-        private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.list_select_to_search";
+        private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_selected_to_searching";
 
         fun intent(packageContext: Context, route: Route) =
             Intent(packageContext, SearchingActivity::class.java).apply {
@@ -56,8 +58,10 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
         changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
         playTipBtn.setOnClickListener(PlayTipButtonListener(this))
+        mapBtn.setOnClickListener { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP) }
+
         val handler = Handler()
-        val locationListener = CompassBasedLocationListener(findViewById(R.id.stepsToDo), model)
+        val locationListener = CompassBasedLocationListener(findViewById(R.id.stepsToDo), findViewById(R.id.arrowImg), model)
         val locationPresenter = LocationPresenter(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
         handler.post(locationPresenter)
     }
@@ -125,7 +129,6 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             dialogToShow = treasureBagPresenter!!.processSearchingResult(result.contents)
-            Log.d(TAG, "########> onActivityResult (done) dialog:$dialogToShow")
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }

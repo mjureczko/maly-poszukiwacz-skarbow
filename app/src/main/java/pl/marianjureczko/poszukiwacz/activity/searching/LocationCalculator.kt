@@ -3,7 +3,6 @@ package pl.marianjureczko.poszukiwacz.activity.searching
 import android.location.Location
 import pl.marianjureczko.poszukiwacz.TreasureDescription
 
-
 class LocationCalculator {
 
     companion object {
