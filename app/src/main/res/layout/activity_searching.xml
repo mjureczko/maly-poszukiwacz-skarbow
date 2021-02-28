@@ -1,59 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.SearchingActivity">
+    android:background="#FFFFFF"
+    tools:context=".activity.searching.SearchingActivity">
 
-    <include layout="@layout/content_searching" />
+    <ImageView
+        android:id="@+id/goldView"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="3dp"
+        android:paddingRight="-10dp"
+        app:layout_constraintEnd_toStartOf="@+id/goldTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/gold" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <TextView
+        android:id="@+id/goldTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="18sp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/rubyView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/rubyView"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:paddingRight="-10dp"
+        app:layout_constraintEnd_toStartOf="@+id/rubyTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ruby" />
+
+    <TextView
+        android:id="@+id/rubyTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="18sp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/diamondView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/diamondView"
+        android:layout_width="50dp"
+        android:layout_height="25dp"
+        android:paddingRight="-10dp"
+        app:layout_constraintEnd_toStartOf="@+id/diamondTxt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/diamond" />
+
+    <TextView
+        android:id="@+id/diamondTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="18sp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/compassImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/middleGuideLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goldView"
+        app:srcCompat="@drawable/compass" />
+
+    <ImageView
+        android:id="@+id/arrowImg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintEnd_toEndOf="@+id/compassImg"
+        app:layout_constraintStart_toStartOf="@+id/compassImg"
+        app:layout_constraintTop_toTopOf="@+id/compassImg"
+        app:layout_constraintBottom_toBottomOf="@+id/compassImg"
+        app:srcCompat="@drawable/arrow" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.60" />
+
+    <TextView
+        android:id="@+id/stepsToDo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:text="0"
+        android:textStyle="bold"
+        android:textSize="56sp"
+        app:layout_constraintBottom_toTopOf="@+id/footerGuideLine"
+        app:layout_constraintEnd_toStartOf="@+id/steps"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/middleGuideLine" />
+
+    <ImageView
+        android:id="@+id/steps"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="50dp"
+        android:rotation="90"
+        app:layout_constraintBottom_toTopOf="@+id/footerGuideLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stepsToDo"
+        app:layout_constraintTop_toBottomOf="@+id/middleGuideLine"
+        app:srcCompat="@drawable/steps" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/footerGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.80" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.30" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.70" />
+
+    <ImageButton
         android:id="@+id/scanBtn"
-        android:layout_width="128dp"
-        android:layout_height="117dp"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="0dp"
         android:scaleType="fitCenter"
-        app:backgroundTint="@android:color/transparent"
-        android:src="@drawable/chest"
-        app:fabCustomSize="128dp"
-        app:useCompatPadding="true"
-        app:elevation="1dp"
-        app:borderWidth="5dp"
-        app:pressedTranslationZ="1dp"
-        />
+        android:adjustViewBounds="true"
+        android:background="@null"
+        app:srcCompat="@drawable/chest"
+        app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideLine"
+        app:layout_constraintStart_toEndOf="@+id/leftGuideLine" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/changeTreasureBtn"
-        android:layout_width="90dp"
-        android:layout_height="82dp"
-        android:layout_gravity="bottom|left"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:adjustViewBounds="true"
+        android:background="@null"
+        android:padding="5dp"
         android:scaleType="fitCenter"
-        app:backgroundTint="@android:color/transparent"
-        android:src="@drawable/change_chest"
-        app:fabCustomSize="90dp"
-        app:useCompatPadding="true"
-        app:elevation="1dp"
-        app:borderWidth="5dp"
-        app:pressedTranslationZ="1dp"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
+        app:layout_constraintEnd_toStartOf="@+id/leftGuideLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/change_chest" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/playTipBtn"
-        android:layout_width="90dp"
-        android:layout_height="82dp"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="1dp"
         android:scaleType="fitCenter"
-        app:backgroundTint="@android:color/transparent"
-        android:src="@drawable/megaphone"
-        app:fabCustomSize="90dp"
-        app:useCompatPadding="true"
-        app:elevation="1dp"
-        app:borderWidth="5dp"
-        app:pressedTranslationZ="1dp"
-        />
+        android:adjustViewBounds="true"
+        android:background="@null"
+        app:srcCompat="@drawable/megaphone"
+        app:layout_constraintTop_toBottomOf="@+id/mapBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rightGuideLine" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <ImageButton
+        android:id="@+id/mapBtn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:padding="1dp"
+        android:scaleType="fitCenter"
+        android:background="@null"
+        app:layout_constraintBottom_toTopOf="@+id/playTipBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rightGuideLine"
+        app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
+        app:srcCompat="@drawable/map" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

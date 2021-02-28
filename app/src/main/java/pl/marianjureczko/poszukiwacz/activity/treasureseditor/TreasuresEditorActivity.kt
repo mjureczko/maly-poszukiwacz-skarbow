@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.*
-import pl.marianjureczko.poszukiwacz.listener.TextViewBasedLocationListener
 
 interface RecordingPermission {
     fun granted(): Boolean
@@ -87,7 +86,7 @@ class TreasuresEditorActivity() : AppCompatActivity(), RecordingPermission {
         //TODO: copied from SearchingActivity
         val handler = Handler()
         val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val presenter = LocationPresenter(this, locationListener, handler, this, location)
+        val presenter = LocationPresenter(this, locationListener, handler, location)
         handler.post(presenter)
         restoreState(savedInstanceState)
     }
