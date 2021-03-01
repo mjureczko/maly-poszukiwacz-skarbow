@@ -18,9 +18,9 @@ android {
     signingConfigs {
         release {
             storeFile file("../android.jks")
-            storePassword RELEASE_STORE_PASSWORD
+            storePassword findProperty("RELEASE_STORE_PASSWORD")
             keyAlias "KeystoreAndroid"
-            keyPassword RELEASE_KEY_PASSWORD
+            keyPassword findProperty("RELEASE_KEY_PASSWORD")
         }
     }
     buildTypes {
