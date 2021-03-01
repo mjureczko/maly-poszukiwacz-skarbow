@@ -7,6 +7,6 @@ pipelines:
           - bash ./gradlew check
   branches:
     '*':
-      -step:
-        script:
-          - bash ./gradlew assembleRelease -PRELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD -PRELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD
+      - step:
+          script:
+            - bash ./gradlew assembleRelease -PRELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD -PRELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD
