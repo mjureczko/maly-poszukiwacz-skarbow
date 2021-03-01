@@ -5,3 +5,8 @@ pipelines:
     - step:
         script:
           - bash ./gradlew build
+  branches:
+    releasing:
+      -step:
+        script:
+          - bash ./gradlew assembleRelease -PRELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD -PRELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD
