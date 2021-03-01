@@ -4,7 +4,7 @@ pipelines:
   default:
     - step:
         script:
-          - bash ./gradlew build
+          - bash ./gradlew check
   branches:
     releasing:
       -step:
