@@ -10,4 +10,10 @@ pipelines:
       - step:
           script:
             - tagname=$(git describe --tags --abbrev=0)
-            - echo $tagname
+            - bash ./gradlew assembleRelease -PRELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD -PRELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD
+            - cp app/build/outputs/apk/release/app-release.apk maly-poszukiwacz-skarbow-$tagname.apk
+            - pipe: atlassian/bitbucket-upload-file:0.3.2
+                variables:
+                  BITBUCKET_USERNAME: $BITBUCKET_USERNAME
+                  BITBUCKET_APP_PASSWORD: $BITBUCKET_APP_PASSWORD
+                  FILENAME: "maly-poszukiwacz-skarbow-$tagname.apk"
