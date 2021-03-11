@@ -1,57 +1,53 @@
-# Mały Poszukiwacz Skarbów
-
-## [English](README_en.md)
+# Little Treasure Hunter
 
 GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
 
-## Rozgrywka
+## The game
 
-1. Do gry potrzebne są wydrukowane kody QR, które posłużą jako skarby.
-Można wygenerować własne na podstawie instrukcji [poniżej](#markdown-header-skarby) albo użyć dostępnych w tej samej sekcji.
+1. To play the game you need some printed out QR codes that will be used as treasures.
 
-2. Przygotowanie do poszukiwań wymaga ukrycia skarbów:
-	* Należy wybierać `NOWA TRASA DLA POSZUKIWACZY` i wprowadzić jej nazwę, dowolną.
-    * Trzeba ukryć skarby, czyli wydrukowane wcześniej kody QR.
-    * W miejscu ukrycia skarbu należy wcisnąć przycisk z wizerunkiem skrzyni ![picture](/app/src/main/res/drawable/chest_small.png).
-Dzięki temu gra zapamięta współrzędne skarbu.
-    * Dodatkowo można nagrać podpowiedź dla poszukiwaczy po naciśnięciu przycisku z symbolem mikrofonu.
+2. To prepare for the game you need to stash the treasures:
+    * You need to select `NOWA TRASA DLA POSZUKIWACZY` and enter a name for the route.
+    * You need to stash the treasures, that is the printed QR codes.
+    * When being in the place where the treasure is stashed you need to press the chest button ![picture](/app/src/main/res/drawable/chest_small.png).
+    The game will save treasure location coordinates.
+    * Additionally, you can record a tip about the treasure location using the button with a microphone.
 
-3. Gdy już wszystkie skarby są ukryte należy wycofać się do głównego ekranu gry, wybrać właśnie utworzoną trasę i przekazać telefon poszukiwaczom.
+3. When all treasures are stashed you need to go back to the game main screen and select the just created route.
+When everything is ready you can hand over the mobile to the treasures hunters.
 
-4. Poszukiwacze szukają na podstawie w informacji o odległości wyrażonej w liczbą kroków do skarbu i kompasu.
-Kompas wskazuje kierunek którym trzeba podążać aby dotrzeć do skarbu.
-Jest to kierunek świata, poszukiwacz musi samodzielnie ustalić gdzie jest północ żeby pójść we właściwą stronę.
+4. The treasures hunters use the distance to treasure expressed using the number of steps and the compass as a guide.
+The compass shows the direction towards the treasure.
+However, they still need to find out where the north is to use the compass correctly.
 
-5. Podczas poszukiwań można skorzystać z podpowiedzi nagranej wcześniej  przez ukrywającego skarby naciskając przycisk
-![picture](/app/src/main/res/drawable/megaphone_small.png).
+5. During the search, treasures hunters can use the recorded tip by pressing ![picture](/app/src/main/res/drawable/megaphone_small.png).
 
-6. Poszukiwacz po znalezieniu skarbu używa aplikacji do zeskanowania kodu QR i dzięki temu dowiaduje się co znalazł.
+6. When a treasure is found, the treasure hunter should press ![picture](/app/src/main/res/drawable/chest_small2.png) to scan the code and find out what exactly that is.
 
-7. Po znalezieniu skarbu można wybrać do poszukiwań kolejny przy pomocy przycisku
-![picture](/app/src/main/res/drawable/change_chest_small.png).
+7. The treasure hunter can select the next treasure for searching using ![picture](/app/src/main/res/drawable/change_chest_small.png).
 
-## Skarby
+## Treasures
 
-Skarby są reprezentowane przy pomocy kodów QR.
-Kod powinien być zgodny z formatem TNNIII (wyrażenie regularne: [grd]\d\d\w\w\w), np: g01abc.
+The treasures are represented using QR codes.
+The code should correspond with this pattern TDDWWW (regular expression [grd]\d\d\w\w\w), e.g. g01abc.
 
- * T - określa typ skarbu, g to złoto, r rubiny, d diamenty,
+ * T - treasure type, g is for gold, r is for rubies and d is for diamonds
 
- * N - ilość skarbu, powinna to być liczba z przedziału od 01 do 99,
+ * DD - the amount of treasure, should be from 01 to 99
 
- * I - identyfikator skarbu, każdy skarb powinien mięc przypisaną inną wartość.
+ * WWW - treasure identifier, each treasure should have a different one
 
-Kody QR można wygenerować na stronie (https://zxing.appspot.com/generator) albo użyć poniższych:
-* * *
-![picture](sample_treasures/diamond03.png)
-![picture](sample_treasures/diamond11.png)
-![picture](sample_treasures/diamond22.png)
-![picture](sample_treasures/gold01.png)
-![picture](sample_treasures/gold19.png)
-![picture](sample_treasures/gold27.png)
-![picture](sample_treasures/gold32.png)
-![picture](sample_treasures/gold37.png)
-![picture](sample_treasures/ruby02.png)
-![picture](sample_treasures/ruby14.png)
-![picture](sample_treasures/ruby26.png)
-* * *
+The treasures can be generated using (https://zxing.appspot.com/generator). You can also use on of the following:
+ * * *
+ ![picture](sample_treasures/diamond03.png)
+ ![picture](sample_treasures/diamond11.png)
+ ![picture](sample_treasures/diamond22.png)
+ ![picture](sample_treasures/gold01.png)
+ ![picture](sample_treasures/gold19.png)
+ ![picture](sample_treasures/gold27.png)
+ ![picture](sample_treasures/gold32.png)
+ ![picture](sample_treasures/gold37.png)
+ ![picture](sample_treasures/ruby02.png)
+ ![picture](sample_treasures/ruby14.png)
+ ![picture](sample_treasures/ruby26.png)
+ * * *
