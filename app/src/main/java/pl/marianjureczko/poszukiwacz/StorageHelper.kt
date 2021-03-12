@@ -73,16 +73,25 @@ data class Route(
     fun fileName(): String {
         return name
     }
+
+    fun nextId(): Int {
+        return if (treasures.isEmpty()) {
+            1
+        } else {
+            1 + treasures.map { it.id }.max()!!
+        }
+    }
 }
 
 @Root
 data class TreasureDescription(
+    @field:Element var id: Int,
     @field:Element var latitude: Double,
     @field:Element var longitude: Double,
     @field:Element(required = false) var tipFileName: String?
 ) {
-    constructor(latitude: Double, longitude: Double) : this(latitude, longitude, null)
-    constructor() : this(0.0, 0.0, null)
+    constructor(id: Int, latitude: Double, longitude: Double) : this(id, latitude, longitude, null)
+    constructor() : this(0, 0.0, 0.0, null)
 
-    fun prettyName(): String = "$latitude $longitude"
+    fun prettyName(): String = "[$id] $latitude $longitude"
 }

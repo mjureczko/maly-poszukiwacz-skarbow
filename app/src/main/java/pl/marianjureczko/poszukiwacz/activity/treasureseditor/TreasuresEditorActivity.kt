@@ -74,6 +74,7 @@ class TreasuresEditorActivity() : AppCompatActivity(), RecordingPermission {
 
         addTreasureButton.setOnClickListener {
             val treasure = TreasureDescription(
+                id = route.nextId(),
                 latitude = lat.text.toString().toDouble(),
                 longitude = lon.text.toString().toDouble()
             )
