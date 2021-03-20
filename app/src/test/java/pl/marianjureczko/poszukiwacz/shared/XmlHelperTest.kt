@@ -1,8 +1,9 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.shared
 
 import com.ocadotechnology.gembus.test.some
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import pl.marianjureczko.poszukiwacz.model.Route
 
 class XmlHelperTest {
 

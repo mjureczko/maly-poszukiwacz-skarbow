@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.shared
 
 import android.app.Application
 import com.ocadotechnology.gembus.test.some
@@ -7,6 +7,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
+import pl.marianjureczko.poszukiwacz.StorageHelper
+import pl.marianjureczko.poszukiwacz.model.Route
 import java.io.File
 
 class StorageHelperTest {

@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.dialog
+package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
 import android.app.Activity
 import android.app.AlertDialog

@@ -4,8 +4,8 @@ import android.app.Activity
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.Route
 import pl.marianjureczko.poszukiwacz.StorageHelper
+import pl.marianjureczko.poszukiwacz.model.Route
 
 interface RoutesRemover {
     fun remove(routeToRemove: Route)

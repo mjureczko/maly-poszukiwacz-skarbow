@@ -19,7 +19,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import pl.marianjureczko.poszukiwacz.*
+import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.StorageHelper
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.shared.LocationRequester
+import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
 interface RecordingPermission {
     fun granted(): Boolean
@@ -87,7 +92,7 @@ class TreasuresEditorActivity() : AppCompatActivity(), RecordingPermission {
         //TODO: copied from SearchingActivity
         val handler = Handler()
         val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val presenter = LocationPresenter(this, locationListener, handler, location)
+        val presenter = LocationRequester(this, locationListener, handler, location)
         handler.post(presenter)
         restoreState(savedInstanceState)
     }

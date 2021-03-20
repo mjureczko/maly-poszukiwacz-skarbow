@@ -15,10 +15,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_searching.*
-import pl.marianjureczko.poszukiwacz.*
-import pl.marianjureczko.poszukiwacz.listener.ScanButtonListener
+import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.LocationRequester
+import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
-class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSelectorView, TipNameProvider, DialogCleaner {
+class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogCleaner {
 
     companion object {
         private var treasureBagPresenter: TreasureBagPresenter? = null
@@ -57,13 +59,16 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
 
         scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
         changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
-        playTipBtn.setOnClickListener(PlayTipButtonListener(this))
+        playTipBtn.setOnClickListener(PlayTipButtonListener(model))
         mapBtn.setOnClickListener { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP) }
 
+        val locationListener = CompassBasedLocationListener(
+            model,
+            CompassPresenter(findViewById(R.id.stepsToDo), findViewById(R.id.arrowImg))
+        )
         val handler = Handler()
-        val locationListener = CompassBasedLocationListener(findViewById(R.id.stepsToDo), findViewById(R.id.arrowImg), model)
-        val locationPresenter = LocationPresenter(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
-        handler.post(locationPresenter)
+        val locationRequester = LocationRequester(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
+        handler.post(locationRequester)
     }
 
     override fun onPostResume() {
@@ -100,7 +105,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
     }
 
     override fun showTreasureSelectionDialog() {
-        TreasureSelectionDialog(this, this).show(model.route)
+        TreasureSelectionDialog(this, model).show(model.route)
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
@@ -108,7 +113,7 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
             model.setup(intent.getStringExtra(SELECTED_ROUTE))
         }
         savedInstanceState?.getString(SELECTED_ROUTE_KEY)?.let { model.setup(it) }
-        savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { showTreasureLocation(it) }
+        savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { model.selectTreasure(it) }
         if (treasureBagPresenter == null) {
             treasureBagPresenter = TreasureBagPresenter(
                 savedInstanceState?.getIntegerArrayList(AMOUNTS_KEY),
@@ -133,12 +138,6 @@ class SearchingActivity : AppCompatActivity(), TreasureLocationView, TreasureSel
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
-
-    override fun showTreasureLocation(which: Int) =
-        model.selectTreasure(which)
-
-    override fun tipName(): String? =
-        model.selectedTreasure?.tipFileName
 
     override fun cleanupAfterDialog() {
         dialogToShow = null

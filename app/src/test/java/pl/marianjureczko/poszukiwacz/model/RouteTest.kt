@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.some
 import org.junit.Assert.assertEquals

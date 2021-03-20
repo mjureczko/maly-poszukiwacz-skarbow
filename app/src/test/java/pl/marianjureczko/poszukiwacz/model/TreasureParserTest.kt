@@ -1,9 +1,7 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.model
 
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
-import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 
 class TreasureParserTest {
