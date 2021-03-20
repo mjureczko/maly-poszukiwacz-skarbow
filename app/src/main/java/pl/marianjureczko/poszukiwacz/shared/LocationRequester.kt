@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.shared
 
 import android.Manifest
 import android.app.Activity
@@ -9,7 +9,7 @@ import android.os.Handler
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-class LocationPresenter(
+class LocationRequester(
     private val activity: Activity,
     private val locationListener: LocationListener,
     private val handler: Handler,
@@ -24,13 +24,19 @@ class LocationPresenter(
         //The permission should be already granted, but Idea reports error when the check is missing
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 1.0F, locationListener)
-            handler.postDelayed(this, 1000L)
+            keepRequesting()
         } else {
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                MY_PERMISSION_ACCESS_FINE_LOCATION
-            )
+            requestPermission()
         }
     }
+
+    private fun keepRequesting() =
+        handler.postDelayed(this, 1000L)
+
+    private fun requestPermission() =
+        ActivityCompat.requestPermissions(
+            activity,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            MY_PERMISSION_ACCESS_FINE_LOCATION
+        )
 }

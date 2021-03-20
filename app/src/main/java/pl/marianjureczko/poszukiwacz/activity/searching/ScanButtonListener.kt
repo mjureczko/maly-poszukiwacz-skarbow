@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.listener
+package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.view.View
 import com.google.zxing.integration.android.IntentIntegrator

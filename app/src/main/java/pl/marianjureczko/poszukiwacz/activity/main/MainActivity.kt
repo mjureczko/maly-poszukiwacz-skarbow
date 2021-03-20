@@ -12,9 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.Route
 import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
+import pl.marianjureczko.poszukiwacz.model.Route
 
 
 class MainActivity : AppCompatActivity() {

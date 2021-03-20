@@ -1,7 +1,8 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.shared
 
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
+import pl.marianjureczko.poszukiwacz.model.Route
 import java.io.File
 import java.io.StringWriter
 

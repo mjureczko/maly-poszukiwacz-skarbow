@@ -1,12 +1,11 @@
 package pl.marianjureczko.poszukiwacz
 
 import android.content.Context
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Root
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
 
 class StorageHelper(val context: Context) {
 
@@ -62,27 +61,3 @@ class StorageHelper(val context: Context) {
     }
 }
 
-@Root
-data class Route(
-    @field:Element var name: String,
-    @field:ElementList var treasures: MutableList<TreasureDescription>
-) {
-    constructor() : this("", ArrayList())
-
-    //todo: validate name
-    fun fileName(): String {
-        return name
-    }
-}
-
-@Root
-data class TreasureDescription(
-    @field:Element var latitude: Double,
-    @field:Element var longitude: Double,
-    @field:Element(required = false) var tipFileName: String?
-) {
-    constructor(latitude: Double, longitude: Double) : this(latitude, longitude, null)
-    constructor() : this(0.0, 0.0, null)
-
-    fun prettyName(): String = "$latitude $longitude"
-}

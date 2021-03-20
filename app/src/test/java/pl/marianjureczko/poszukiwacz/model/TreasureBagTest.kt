@@ -1,9 +1,7 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.model
 
 import org.junit.Assert.*
 import org.junit.Test
-import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 
 class TreasureBagTest {

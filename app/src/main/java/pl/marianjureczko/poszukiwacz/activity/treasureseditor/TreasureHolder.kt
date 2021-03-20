@@ -9,10 +9,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.Route
 import pl.marianjureczko.poszukiwacz.StorageHelper
-import pl.marianjureczko.poszukiwacz.TreasureDescription
-import pl.marianjureczko.poszukiwacz.dialog.RecordingDialog
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
 class TreasureHolder(
     view: View,

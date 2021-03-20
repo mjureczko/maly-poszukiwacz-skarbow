@@ -16,4 +16,5 @@
     <string name="not_a_treasure_msg">To nie jest skarb!</string>
     <string name="latitude">"Szerokość:"</string>
     <string name="longitude">"Długość:"</string>
+    <string name="steps_to_treasure">"kroków do skarbu"</string>
 </resources>

@@ -1,7 +1,8 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.widget.TextView
-import pl.marianjureczko.poszukiwacz.activity.searching.DialogData
+import pl.marianjureczko.poszukiwacz.App
+import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureParser

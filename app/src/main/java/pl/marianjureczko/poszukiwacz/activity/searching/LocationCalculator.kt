@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.location.Location
-import pl.marianjureczko.poszukiwacz.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
 class LocationCalculator {
 
