@@ -1,21 +1,23 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
-import android.app.Activity
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
+private const val RECORD_TIP_DIALOG = "RecordTipDialog"
+
 class TreasureHolder(
     view: View,
-    private val activity: Activity,
+    private val activity: FragmentActivity,
     private val treasureRemover: TreasureRemover,
     private val recordingPermission: RecordingPermission,
     private val storageHelper: StorageHelper
@@ -34,7 +36,9 @@ class TreasureHolder(
                 storageHelper.removeTipFile(treasure)
                 treasure.tipFileName = soundFileName
                 storageHelper.save(route)
-                RecordingDialog(activity, soundFileName).show()
+                RecordingDialog.newInstance(soundFileName).apply {
+                    show(this@TreasureHolder.activity.supportFragmentManager, RECORD_TIP_DIALOG)
+                }
             } else {
                 Log.w(TAG, "Recording not permitted")
                 ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP)

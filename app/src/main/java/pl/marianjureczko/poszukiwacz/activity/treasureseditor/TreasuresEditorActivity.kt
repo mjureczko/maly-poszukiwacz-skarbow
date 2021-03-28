@@ -144,24 +144,24 @@ class TreasuresEditorActivity() : AppCompatActivity(), RecordingPermission {
 
     override fun onPostResume() {
         super.onPostResume()
-        Log.e(TAG, "########> onPostResume ${System.currentTimeMillis() % 100_000}")
+        Log.d(TAG, "########> onPostResume")
         conditionallyShowSetupDialog()
     }
 
     override fun onDestroy() {
-        Log.e(TAG, "########> onDestroy ${System.currentTimeMillis() % 100_000}")
+        Log.e(TAG, "########> onDestroy")
         super.onDestroy()
         setupDialog?.dismiss()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        Log.e(TAG, "########> onRestoreInstanceState ${System.currentTimeMillis() % 100_000}")
+        Log.e(TAG, "########> onRestoreInstanceState")
         restoreState(savedInstanceState)
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.e(TAG, "######## > onSaveInstanceState ${System.currentTimeMillis() % 100_000}")
+        Log.e(TAG, "######## > onSaveInstanceState")
         outState.run {
             putBoolean(SHOW_SETUP_DIALOG, showSetupDialog)
         }
