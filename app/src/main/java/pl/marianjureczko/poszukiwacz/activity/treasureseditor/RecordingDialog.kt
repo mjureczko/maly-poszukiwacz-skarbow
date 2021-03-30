@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,8 @@ private const val CLOSED_AT = "closed_at"
 class RecordingDialog : DialogFragment() {
     private val TAG = javaClass.simpleName
     private var recorder: MediaRecorder? = null
+    private var chronometer: Chronometer? = null
+    private var dialog: AlertDialog? = null
 
     companion object {
         fun newInstance(fileName: String): RecordingDialog {
@@ -33,48 +36,46 @@ class RecordingDialog : DialogFragment() {
     override fun onStop() {
         super.onStop()
         stopRecording()
+        if (chronometer != null) {
+            arguments?.putString(CLOSED_AT, chronometer!!.text as String)
+        }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        val closedAt = arguments?.getSerializable(CLOSED_AT) as String?
+        if (closedAt != null) {
+            chronometer?.stop()
+            dialog?.getButton(DialogInterface.BUTTON_NEUTRAL)?.setText(R.string.close)
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val fileName = arguments?.getSerializable(FILENAME) as String
         val closedAt = arguments?.getSerializable(CLOSED_AT) as String?
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
+        chronometer = createChronometer()
         if (closedAt != null) {
-            builder.setNeutralButton(R.string.close) { _, _ ->
-                dismiss()
-            }
-            configureStaticChronometerView(builder, closedAt)
+            builder.setNeutralButton(R.string.close) { _, _ -> dismiss() }
+            chronometer?.text = closedAt
         } else {
-            builder.setNeutralButton(R.string.stop_recording) { _, _ ->
-                dismiss()
+            builder.setNeutralButton(R.string.stop_recording) { _, _ -> dismiss() }
+            chronometer?.setOnChronometerTickListener {
+                arguments?.putString(CLOSED_AT, it.text as String)
             }
-            configureChronometerView(builder)
+            chronometer?.start()
             startRecording(fileName)
         }
-        return builder.create()
-    }
-
-    private fun configureChronometerView(builder: AlertDialog.Builder) {
-        val chronometer = Chronometer(activity)
-        formatChronometer(chronometer)
-        chronometer.start()
-        chronometer.setOnChronometerTickListener {
-            arguments?.putString(CLOSED_AT, it.text as String)
-        }
         builder.setView(chronometer)
+        dialog = builder.create()
+        return dialog!!
     }
 
-    private fun configureStaticChronometerView(builder: AlertDialog.Builder, chronometerText: String) {
+    private fun createChronometer(): Chronometer {
         val chronometer = Chronometer(activity)
-        chronometer.text = chronometerText
-        formatChronometer(chronometer)
-        builder.setView(chronometer)
-    }
-
-    private fun formatChronometer(chronometer: Chronometer) {
         chronometer.textSize = 50.0f
         chronometer.gravity = Gravity.CENTER
+        return chronometer
     }
 
     private fun startRecording(fileName: String) {
