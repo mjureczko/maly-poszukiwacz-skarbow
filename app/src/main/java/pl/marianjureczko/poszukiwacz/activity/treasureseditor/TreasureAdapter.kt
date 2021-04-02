@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
-import android.app.Activity
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.StorageHelper
@@ -13,7 +13,7 @@ interface TreasureRemover {
 }
 
 class TreasureAdapter(
-    private val activity: Activity,
+    private val activity: FragmentActivity,
     private val route: Route,
     private val recordingPermission: RecordingPermission,
     private val storageHelper: StorageHelper
