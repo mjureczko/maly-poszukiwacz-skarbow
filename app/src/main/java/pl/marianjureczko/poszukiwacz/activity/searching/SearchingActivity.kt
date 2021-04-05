@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -20,7 +19,9 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
-class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogCleaner {
+private const val RESULTS_DIALOG = "ResultsDialog"
+
+class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
 
     companion object {
         private var treasureBagPresenter: TreasureBagPresenter? = null
@@ -36,16 +37,8 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
     private val TAG = javaClass.simpleName
     private val AMOUNTS_KEY = "AMOUNTS"
     private val COLLECTED_KEY = "COLLECTED"
-    private val MSG_TO_SHOW_KEY = "MSG_TO_SHOW"
-    private val IMG_TO_SHOW_KEY = "IMG_TO_SHOW"
     private val SELECTED_ROUTE_KEY = "ROUTE"
     private val SELECTED_TREASURE_INDEX_KEY = "TREASURE"
-
-    // When not null, a dialog should be shown on postResume
-    private var dialogToShow: DialogData? = null
-
-    // Is set when the dialog is visible on screen
-    private var dialog: AlertDialog? = null
 
     private val model: SearchingActivityViewModel by viewModels()
 
@@ -71,22 +64,6 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
         handler.post(locationRequester)
     }
 
-    override fun onPostResume() {
-        super.onPostResume()
-        Log.d(TAG, "########> onPostResume")
-        if (dialogToShow != null && dialog == null) {
-            dialog = SearchResultDialog(this, this).show(dialogToShow!!)
-        } else if (model.selectedTreasure == null) {
-            showTreasureSelectionDialog()
-        }
-    }
-
-    override fun onDestroy() {
-        Log.d(TAG, "########> onDestroy")
-        super.onDestroy()
-        dialog?.dismiss()
-    }
-
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle) {
         Log.d(TAG, "########> onSaveInstanceState")
@@ -95,10 +72,6 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
             model.treasureIndex?.let { putInt(SELECTED_TREASURE_INDEX_KEY, it) }
             putIntegerArrayList(AMOUNTS_KEY, treasureBagPresenter!!.bagContent())
             putStringArrayList(COLLECTED_KEY, treasureBagPresenter!!.collectedInBag())
-            putString(MSG_TO_SHOW_KEY, dialogToShow?.msg)
-            if (dialogToShow?.imageId != null) {
-                putInt(IMG_TO_SHOW_KEY, dialogToShow?.imageId!!)
-            }
         }
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState)
@@ -122,9 +95,6 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
         }
         treasureBagPresenter!!.init(findViewById(R.id.goldTxt), findViewById(R.id.rubyTxt), findViewById(R.id.diamondTxt))
         treasureBagPresenter!!.showCollectedTreasures()
-        savedInstanceState?.getString(MSG_TO_SHOW_KEY)?.let {
-            dialogToShow = DialogData(it, savedInstanceState.getInt(IMG_TO_SHOW_KEY))
-        }
     }
 
     /** Result of scanning treasure qr code*/
@@ -133,14 +103,13 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
         Log.d(TAG, "########> onActivityResult")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
-            dialogToShow = treasureBagPresenter!!.processSearchingResult(result.contents)
+            var dialogToShow = treasureBagPresenter!!.processSearchingResult(result.contents)
+            SearchResultDialog.newInstance(dialogToShow).apply {
+                show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    override fun cleanupAfterDialog() {
-        dialogToShow = null
-        dialog = null
-    }
 }

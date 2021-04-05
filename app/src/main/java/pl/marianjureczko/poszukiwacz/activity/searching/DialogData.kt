@@ -1,3 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
-data class DialogData(val msg: String, val imageId: Int?)
+import java.io.Serializable
+
+data class DialogData(val msg: String, val imageId: Int?) : Serializable
