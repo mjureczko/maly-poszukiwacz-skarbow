@@ -77,8 +77,34 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onPostResume() {
+        Log.d(TAG, "########> onPostResume")
+        super.onPostResume()
+        if (model.selectedTreasure == null) {
+            showTreasureSelectionDialog()
+        }
+    }
+
     override fun showTreasureSelectionDialog() {
-        TreasureSelectionDialog(this, model).show(model.route)
+        TreasureSelectionDialog.newInstance(model.route).apply {
+            show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
+            this.treasureLocationStorage = model
+        }
+    }
+
+    /** Result of scanning treasure qr code*/
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(TAG, "########> onActivityResult")
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null && result.contents != null) {
+            var dialogToShow = treasureBagPresenter!!.processSearchingResult(result.contents)
+            SearchResultDialog.newInstance(dialogToShow).apply {
+                show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
@@ -95,21 +121,6 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
         }
         treasureBagPresenter!!.init(findViewById(R.id.goldTxt), findViewById(R.id.rubyTxt), findViewById(R.id.diamondTxt))
         treasureBagPresenter!!.showCollectedTreasures()
-    }
-
-    /** Result of scanning treasure qr code*/
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        Log.d(TAG, "########> onActivityResult")
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null && result.contents != null) {
-            var dialogToShow = treasureBagPresenter!!.processSearchingResult(result.contents)
-            SearchResultDialog.newInstance(dialogToShow).apply {
-                show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
     }
 
 }

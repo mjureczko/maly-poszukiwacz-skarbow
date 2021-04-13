@@ -29,35 +29,44 @@ class SearchResultDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val group = LinearLayout(activity)
-        group.orientation = LinearLayout.VERTICAL
-        group.gravity = Gravity.CENTER_HORIZONTAL
+        val layout = LinearLayout(activity)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.gravity = Gravity.CENTER_HORIZONTAL
         arguments?.getSerializable(DIALOG_DATA)?.let {
             it as DialogData
-            if (it.imageId != null && it.imageId != 0) {
-                val image = ImageView(activity)
-                image.setImageResource(it.imageId)
-                activity?.windowManager?.defaultDisplay?.let { display ->
-                    val width: Int = (display.width * 0.75f).roundToInt()
-                    val height: Int = (display.height * 0.5f).roundToInt()
-                    image.layoutParams = LinearLayout.LayoutParams(width, height)
-                    group.addView(image)
-                }
-
+            if (isThereImageToShow(it)) {
+                addImageToLayout(layout, it.imageId!!)
             }
-
-            val txtView = TextView(activity)
-            txtView.text = it.msg
-            txtView.gravity = Gravity.CENTER_HORIZONTAL
-            txtView.textSize = 45.0f
-            group.addView(txtView)
+            addTextToLayout(it, layout)
         }
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
-        builder.setView(group)
+        builder.setView(layout)
         builder.setPositiveButton(R.string.ok) { dialog, _ ->
             dialog.dismiss()
         }
         return builder.create()
 
+    }
+
+    private fun isThereImageToShow(it: DialogData) =
+        it.imageId != null && it.imageId != 0
+
+    private fun addImageToLayout(layout: LinearLayout, imageId: Int) {
+        val image = ImageView(activity)
+        image.setImageResource(imageId)
+        activity?.windowManager?.defaultDisplay?.let { display ->
+            val width: Int = (display.width * 0.75f).roundToInt()
+            val height: Int = (display.height * 0.5f).roundToInt()
+            image.layoutParams = LinearLayout.LayoutParams(width, height)
+            layout.addView(image)
+        }
+    }
+
+    private fun addTextToLayout(it: DialogData, group: LinearLayout) {
+        val txtView = TextView(activity)
+        txtView.text = it.msg
+        txtView.gravity = Gravity.CENTER_HORIZONTAL
+        txtView.textSize = 45.0f
+        group.addView(txtView)
     }
 }
