@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.model
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root
+import java.io.Serializable
 
 @Root
 data class TreasureDescription(
@@ -9,7 +10,7 @@ data class TreasureDescription(
     @field:Element var latitude: Double,
     @field:Element var longitude: Double,
     @field:Element(required = false) var tipFileName: String?
-) {
+) : Serializable {
     constructor(id: Int, latitude: Double, longitude: Double) : this(id, latitude, longitude, null)
     constructor() : this(0, 0.0, 0.0, null)
 

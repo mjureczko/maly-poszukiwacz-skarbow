@@ -39,6 +39,7 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
     private val COLLECTED_KEY = "COLLECTED"
     private val SELECTED_ROUTE_KEY = "ROUTE"
     private val SELECTED_TREASURE_INDEX_KEY = "TREASURE"
+    private val INITIALIZED_KEY = "INITIALIZED"
 
     private val model: SearchingActivityViewModel by viewModels()
 
@@ -72,6 +73,7 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
             model.treasureIndex?.let { putInt(SELECTED_TREASURE_INDEX_KEY, it) }
             putIntegerArrayList(AMOUNTS_KEY, treasureBagPresenter!!.bagContent())
             putStringArrayList(COLLECTED_KEY, treasureBagPresenter!!.collectedInBag())
+            putBoolean(INITIALIZED_KEY, model.treasureSelectionInitialized)
         }
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState)
@@ -80,7 +82,8 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
     override fun onPostResume() {
         Log.d(TAG, "########> onPostResume")
         super.onPostResume()
-        if (model.selectedTreasure == null) {
+        if (!model.treasureSelectionInitialized) {
+            model.treasureSelectionInitialized = true
             showTreasureSelectionDialog()
         }
     }
@@ -119,6 +122,7 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
                 savedInstanceState?.getStringArrayList(COLLECTED_KEY)
             )
         }
+        savedInstanceState?.getBoolean(INITIALIZED_KEY)?.let { model.treasureSelectionInitialized = it }
         treasureBagPresenter!!.init(findViewById(R.id.goldTxt), findViewById(R.id.rubyTxt), findViewById(R.id.diamondTxt))
         treasureBagPresenter!!.showCollectedTreasures()
     }

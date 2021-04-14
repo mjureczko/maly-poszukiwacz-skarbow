@@ -13,6 +13,7 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasureLoca
     var routeXml: String? = null
     var selectedTreasure: TreasureDescription? = null
     var treasureIndex: Int? = null
+    var treasureSelectionInitialized = false
     private var currentLocation: Location? = null
 
     override fun getTreasure(): TreasureDescription? {

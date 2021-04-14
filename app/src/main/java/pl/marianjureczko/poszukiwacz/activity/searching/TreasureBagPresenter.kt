@@ -6,9 +6,10 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
+import java.io.Serializable
 import java.util.*
 
-class TreasureBagPresenter(treasuresAmount: ArrayList<Int>?, collectedTreasures: ArrayList<String>?) {
+class TreasureBagPresenter(treasuresAmount: ArrayList<Int>?, collectedTreasures: ArrayList<String>?) : Serializable {
 
     private val treasureBag = TreasureBag(treasuresAmount, collectedTreasures)
     private val treasureParser = TreasureParser()
