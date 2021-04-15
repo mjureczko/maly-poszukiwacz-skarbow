@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.activity.searching
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
@@ -15,6 +16,7 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasureLoca
     var treasureIndex: Int? = null
     var treasureSelectionInitialized = false
     private var currentLocation: Location? = null
+    var treasureBag: TreasureBag? = null
 
     override fun getTreasure(): TreasureDescription? {
         return selectedTreasure
