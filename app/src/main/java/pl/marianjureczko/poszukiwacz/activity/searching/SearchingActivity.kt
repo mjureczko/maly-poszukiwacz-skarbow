@@ -29,11 +29,10 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
     companion object {
         private val xmlHelper = XmlHelper()
         private val treasureParser = TreasureParser()
-        private val AMOUNTS_KEY = "AMOUNTS"
-        private val COLLECTED_KEY = "COLLECTED"
         private val SELECTED_ROUTE_KEY = "ROUTE"
         private val SELECTED_TREASURE_INDEX_KEY = "TREASURE"
         private val INITIALIZED_KEY = "INITIALIZED"
+        private val BAG_KEY = "BAG"
         private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_selected_to_searching";
 
         fun intent(packageContext: Context, route: Route) =
@@ -73,8 +72,7 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
         outState.run {
             putString(SELECTED_ROUTE_KEY, model.routeXml)
             model.treasureIndex?.let { putInt(SELECTED_TREASURE_INDEX_KEY, it) }
-            putIntegerArrayList(AMOUNTS_KEY, model.treasureBag!!.bagContent())
-            putStringArrayList(COLLECTED_KEY, ArrayList<String>(model.treasureBag!!.collected))
+            putSerializable(BAG_KEY, model.treasureBag)
             putBoolean(INITIALIZED_KEY, model.treasureSelectionInitialized)
         }
         // call superclass to save any view hierarchy
@@ -118,12 +116,7 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
         }
         savedInstanceState?.getString(SELECTED_ROUTE_KEY)?.let { model.setup(it) }
         savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { model.selectTreasure(it) }
-        if (model.treasureBag == null) {
-            model.treasureBag = TreasureBag(
-                savedInstanceState?.getIntegerArrayList(AMOUNTS_KEY),
-                savedInstanceState?.getStringArrayList(COLLECTED_KEY)
-            )
-        }
+        savedInstanceState?.getSerializable(BAG_KEY)?.let { model.treasureBag = it as TreasureBag }
         savedInstanceState?.getBoolean(INITIALIZED_KEY)?.let { model.treasureSelectionInitialized = it }
         showCollectedTreasures()
     }
