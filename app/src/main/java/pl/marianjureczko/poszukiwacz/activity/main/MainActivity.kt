@@ -16,7 +16,9 @@ import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 import pl.marianjureczko.poszukiwacz.model.Route
 
-
+/**
+ * Routes creation and selection activity
+ */
 class MainActivity : AppCompatActivity() {
 
     private val TAG = javaClass.simpleName

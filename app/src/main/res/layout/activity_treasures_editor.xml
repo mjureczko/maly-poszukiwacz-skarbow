@@ -7,14 +7,6 @@
     android:orientation="vertical"
     tools:context=".activity.treasureseditor.TreasuresEditorActivity">
 
-    <TextView
-        android:id="@+id/route_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/treasures"
         android:layout_width="match_parent"
