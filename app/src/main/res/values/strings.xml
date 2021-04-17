@@ -2,7 +2,7 @@
     <string name="app_name">Mały Poszukiwacz Skarbów</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_test">TestActivity</string>
-    <string name="new_route_button">Nowa trasa dla poszukiwaczy</string>
+    <string name="new_route_button">Nowa trasa</string>
     <string name="tip_recorded">Podpowiedź została nagrana</string>
     <string name="tip_recording_failed">Nie udało się nagrać podpowiedzi</string>
     <string name="route_name_prompt">Podaj nazwę trasy:</string>
@@ -20,4 +20,5 @@
     <string name="steps_to_treasure">"kroków do skarbu"</string>
     <string name="main_activity_title">Trasy dla poszukiwaczy</string>
     <string name="route">Trasa</string>
+    <string name="searching_activity_title">Poszukiwania</string>
 </resources>

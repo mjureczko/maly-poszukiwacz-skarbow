@@ -65,6 +65,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/chest_small" />
+            android:src="@drawable/chest_add_small" />
     </LinearLayout>
 </LinearLayout>

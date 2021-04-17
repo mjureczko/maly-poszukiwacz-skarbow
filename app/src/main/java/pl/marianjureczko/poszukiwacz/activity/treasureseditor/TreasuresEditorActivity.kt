@@ -22,6 +22,7 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
 interface RecordingPermission {
     fun granted(): Boolean
@@ -56,6 +57,7 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_treasures_editor)
         requestRecordingPermission()

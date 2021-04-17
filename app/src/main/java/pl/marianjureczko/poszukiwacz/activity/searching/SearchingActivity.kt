@@ -21,6 +21,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
 private const val RESULTS_DIALOG = "ResultsDialog"
 
@@ -48,6 +49,7 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
+        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_searching)
         restoreState(savedInstanceState)

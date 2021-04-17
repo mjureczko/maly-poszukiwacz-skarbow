@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name=".activity.searching.SearchingActivity"
-            android:label="@string/app_name"
+            android:label="@string/searching_activity_title"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
