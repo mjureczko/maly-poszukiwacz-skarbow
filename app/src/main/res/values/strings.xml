@@ -21,4 +21,5 @@
     <string name="main_activity_title">Trasy dla poszukiwaczy</string>
     <string name="route">Trasa</string>
     <string name="searching_activity_title">Poszukiwania</string>
+    <string name="no_routes">Dodaj trasę aby rozpocząć zabawę</string>
 </resources>

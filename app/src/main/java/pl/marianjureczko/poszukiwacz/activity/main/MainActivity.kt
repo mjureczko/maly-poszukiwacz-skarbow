@@ -5,12 +5,14 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
@@ -49,7 +51,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Log.d(TAG, "########> onResume")
-        showRoutes(storageHelper.loadAll())
+        val routes = storageHelper.loadAll()
+        showRoutes(routes)
+        if (routes.isNotEmpty()) {
+            no_routes.visibility = View.GONE
+        }
     }
 
     private fun showRoutes(routes: MutableList<Route>) {
