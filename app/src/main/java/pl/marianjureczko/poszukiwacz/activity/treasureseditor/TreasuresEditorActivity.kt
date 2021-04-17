@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_treasures_editor.*
+import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -121,7 +122,7 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
         model.route = route
         treasureAdapter = TreasureAdapter(this, route, this, storageHelper)
         treasuresRecyclerView.adapter = treasureAdapter
-        route_name.text = route.name
+        supportActionBar?.title = "${App.getResources().getString(R.string.route)} ${route.name}"
     }
 
     private fun requestRecordingPermission() =

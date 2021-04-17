@@ -7,14 +7,6 @@
     tools:context=".activity.main.MainActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/routes_header"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/routes"
         android:layout_width="match_parent"

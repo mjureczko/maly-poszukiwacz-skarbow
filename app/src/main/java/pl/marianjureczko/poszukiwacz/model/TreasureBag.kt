@@ -1,17 +1,17 @@
 package pl.marianjureczko.poszukiwacz.model
 
-import java.util.ArrayList
+import java.io.Serializable
 
-class TreasureBag(treasuresAmount: ArrayList<Int>?, collectedTreasures: ArrayList<String>?) {
-    val collected : MutableSet<String> = collectedTreasures?.toMutableSet() ?: mutableSetOf()
+class TreasureBag() : Serializable {
+    private val collected: MutableSet<String> = mutableSetOf()
 
-    var golds: Int = treasuresAmount?.get(0) ?: 0
+    var golds: Int = 0
         private set
 
-    var rubies: Int = treasuresAmount?.get(1) ?: 0
+    var rubies: Int = 0
         private set
 
-    var diamonds: Int = treasuresAmount?.get(2) ?: 0
+    var diamonds: Int = 0
         private set
 
     fun contains(treasure: Treasure): Boolean =
@@ -25,6 +25,4 @@ class TreasureBag(treasuresAmount: ArrayList<Int>?, collectedTreasures: ArrayLis
             TreasureType.RUBY -> rubies += treasure.quantity
         }
     }
-
-    fun bagContent() = arrayListOf(golds, rubies, diamonds)
 }
