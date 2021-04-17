@@ -40,7 +40,7 @@ class TreasureBagTest {
     @Test
     fun addGoldToBag() {
         //given
-        val bag = TreasureBag(null, null)
+        val bag = TreasureBag()
 
         //when
         bag.collect(gold7)
@@ -55,7 +55,7 @@ class TreasureBagTest {
     @Test
     fun addDiamondsToBag() {
         //given
-        val bag = TreasureBag(null, null)
+        val bag = TreasureBag()
 
         //when
         bag.collect(diamond17)
@@ -70,7 +70,7 @@ class TreasureBagTest {
     @Test
     fun addRubiesToBag() {
         //given
-        val bag = TreasureBag(null, null)
+        val bag = TreasureBag()
 
         //when
         bag.collect(ruby27)
@@ -85,7 +85,7 @@ class TreasureBagTest {
     @Test
     fun detectAlreadyCollectedTreasures() {
         //given
-        val bag = TreasureBag(null, null)
+        val bag = TreasureBag()
         bag.collect(gold9)
 
         //then
