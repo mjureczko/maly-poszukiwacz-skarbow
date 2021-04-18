@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckedTextView
 import androidx.fragment.app.DialogFragment
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 
@@ -53,7 +52,6 @@ class TreasureSelectionDialog : DialogFragment() {
     }
 
     private fun prepareArrayAdapterWithTreasuresDescriptions(treasures: Route): ArrayAdapter<String> {
-        val message = App.getResources().getString(R.string.steps_to_treasure)
         val arrayAdapter: ArrayAdapter<String> =
             object : ArrayAdapter<String>(activity?.baseContext!!, android.R.layout.select_dialog_singlechoice) {
                 override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -67,8 +65,8 @@ class TreasureSelectionDialog : DialogFragment() {
 
         treasures.treasures.forEach { treasure ->
             if (treasureLocationStorage?.getCurrentLocation() != null) {
-                val distance = locationCalculator.distanceInSteps(treasure, treasureLocationStorage?.getCurrentLocation()!!)
-                arrayAdapter.add("[${treasure.id}] $distance $message")
+                val distance: Int = locationCalculator.distanceInSteps(treasure, treasureLocationStorage?.getCurrentLocation()!!)
+                arrayAdapter.add(activity?.getString(R.string.steps_to_treasure, treasure.id, distance))
             } else {
                 arrayAdapter.add(treasure.prettyName())
             }
