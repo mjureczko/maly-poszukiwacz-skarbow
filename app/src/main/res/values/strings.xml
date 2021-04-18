@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">Mały Poszukiwacz Skarbów</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_test">TestActivity</string>
-    <string name="new_route_button">Nowa trasa dla poszukiwaczy</string>
-    <string name="routes_header">Trasy dla poszukiwaczy:</string>
+    <string name="new_route_button">Nowa trasa</string>
     <string name="tip_recorded">Podpowiedź została nagrana</string>
     <string name="tip_recording_failed">Nie udało się nagrać podpowiedzi</string>
     <string name="route_name_prompt">Podaj nazwę trasy:</string>
@@ -11,12 +8,16 @@
     <string name="stop_recording">Zatrzymaj nagrywanie</string>
     <string name="close">Zamknij</string>
     <string name="select_treasure_dialog_title">Wybierz skarb</string>
-    <string name="route_remove_prompt">Czy na pewno chcesz skasować listę <b>%s</b>?</string>
+    <string name="route_remove_prompt">Czy na pewno chcesz skasować listę %1$s?</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>
     <string name="treasure_already_taken_msg">Ten skarb został już zabrany!</string>
     <string name="not_a_treasure_msg">To nie jest skarb!</string>
     <string name="latitude">"Szerokość:"</string>
     <string name="longitude">"Długość:"</string>
-    <string name="steps_to_treasure">"kroków do skarbu"</string>
+    <string name="steps_to_treasure">"[%1$d] %2$d kroków do skarbu"</string>
+    <string name="main_activity_title">Trasy dla poszukiwaczy</string>
+    <string name="route">Trasa</string>
+    <string name="searching_activity_title">Poszukiwania</string>
+    <string name="no_routes">Dodaj trasę aby rozpocząć zabawę</string>
 </resources>

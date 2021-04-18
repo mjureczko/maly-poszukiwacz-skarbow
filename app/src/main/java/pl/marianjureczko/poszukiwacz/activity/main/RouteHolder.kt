@@ -2,13 +2,11 @@ package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.app.AlertDialog
 import android.content.Context
-import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.SearchingActivity
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
@@ -31,10 +29,8 @@ class RouteHolder(
         editBtn.setOnClickListener { context.startActivity(TreasuresEditorActivity.intent(context, route)) }
 
         deleteBtn.setOnClickListener {
-            val name = route.name
-            val msg = App.getResources().getString(R.string.route_remove_prompt)
             AlertDialog.Builder(context)
-                .setMessage(Html.fromHtml(String.format(msg, name)))
+                .setMessage(context.getString(R.string.route_remove_prompt, route.name))
                 .setPositiveButton(R.string.no) { _, _ -> Log.d(TAG, "####no") }
                 .setNegativeButton(R.string.yes) { _, _ -> routesRemover.remove(route) }
                 .show()

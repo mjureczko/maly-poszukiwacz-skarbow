@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -17,14 +16,24 @@ import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_searching.*
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
+import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
-class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogCleaner {
+private const val RESULTS_DIALOG = "ResultsDialog"
+
+class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
 
     companion object {
-        private var treasureBagPresenter: TreasureBagPresenter? = null
         private val xmlHelper = XmlHelper()
+        private val treasureParser = TreasureParser()
+        private val SELECTED_ROUTE_KEY = "ROUTE"
+        private val SELECTED_TREASURE_INDEX_KEY = "TREASURE"
+        private val INITIALIZED_KEY = "INITIALIZED"
+        private val BAG_KEY = "BAG"
         private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_selected_to_searching";
 
         fun intent(packageContext: Context, route: Route) =
@@ -34,25 +43,13 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
     }
 
     private val TAG = javaClass.simpleName
-    private val AMOUNTS_KEY = "AMOUNTS"
-    private val COLLECTED_KEY = "COLLECTED"
-    private val MSG_TO_SHOW_KEY = "MSG_TO_SHOW"
-    private val IMG_TO_SHOW_KEY = "IMG_TO_SHOW"
-    private val SELECTED_ROUTE_KEY = "ROUTE"
-    private val SELECTED_TREASURE_INDEX_KEY = "TREASURE"
-
-    // When not null, a dialog should be shown on postResume
-    private var dialogToShow: DialogData? = null
-
-    // Is set when the dialog is visible on screen
-    private var dialog: AlertDialog? = null
-
     private val model: SearchingActivityViewModel by viewModels()
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
+        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_searching)
         restoreState(savedInstanceState)
@@ -71,59 +68,32 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
         handler.post(locationRequester)
     }
 
-    override fun onPostResume() {
-        super.onPostResume()
-        Log.d(TAG, "########> onPostResume")
-        if (dialogToShow != null && dialog == null) {
-            dialog = SearchResultDialog(this, this).show(dialogToShow!!)
-        } else if (model.selectedTreasure == null) {
-            showTreasureSelectionDialog()
-        }
-    }
-
-    override fun onDestroy() {
-        Log.d(TAG, "########> onDestroy")
-        super.onDestroy()
-        dialog?.dismiss()
-    }
-
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle) {
         Log.d(TAG, "########> onSaveInstanceState")
         outState.run {
             putString(SELECTED_ROUTE_KEY, model.routeXml)
             model.treasureIndex?.let { putInt(SELECTED_TREASURE_INDEX_KEY, it) }
-            putIntegerArrayList(AMOUNTS_KEY, treasureBagPresenter!!.bagContent())
-            putStringArrayList(COLLECTED_KEY, treasureBagPresenter!!.collectedInBag())
-            putString(MSG_TO_SHOW_KEY, dialogToShow?.msg)
-            if (dialogToShow?.imageId != null) {
-                putInt(IMG_TO_SHOW_KEY, dialogToShow?.imageId!!)
-            }
+            putSerializable(BAG_KEY, model.treasureBag)
+            putBoolean(INITIALIZED_KEY, model.treasureSelectionInitialized)
         }
         // call superclass to save any view hierarchy
         super.onSaveInstanceState(outState)
     }
 
-    override fun showTreasureSelectionDialog() {
-        TreasureSelectionDialog(this, model).show(model.route)
+    override fun onPostResume() {
+        Log.d(TAG, "########> onPostResume")
+        super.onPostResume()
+        if (!model.treasureSelectionInitialized) {
+            model.treasureSelectionInitialized = true
+            showTreasureSelectionDialog()
+        }
     }
 
-    private fun restoreState(savedInstanceState: Bundle?) {
-        if (model.routeXml == null) {
-            model.setup(intent.getStringExtra(SELECTED_ROUTE))
-        }
-        savedInstanceState?.getString(SELECTED_ROUTE_KEY)?.let { model.setup(it) }
-        savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { model.selectTreasure(it) }
-        if (treasureBagPresenter == null) {
-            treasureBagPresenter = TreasureBagPresenter(
-                savedInstanceState?.getIntegerArrayList(AMOUNTS_KEY),
-                savedInstanceState?.getStringArrayList(COLLECTED_KEY)
-            )
-        }
-        treasureBagPresenter!!.init(findViewById(R.id.goldTxt), findViewById(R.id.rubyTxt), findViewById(R.id.diamondTxt))
-        treasureBagPresenter!!.showCollectedTreasures()
-        savedInstanceState?.getString(MSG_TO_SHOW_KEY)?.let {
-            dialogToShow = DialogData(it, savedInstanceState.getInt(IMG_TO_SHOW_KEY))
+    override fun showTreasureSelectionDialog() {
+        TreasureSelectionDialog.newInstance(model.route).apply {
+            show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
+            this.treasureLocationStorage = model
         }
     }
 
@@ -133,14 +103,48 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView, DialogClean
         Log.d(TAG, "########> onActivityResult")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
-            dialogToShow = treasureBagPresenter!!.processSearchingResult(result.contents)
+            var dialogToShow = processSearchingResult(result.contents)
+            SearchResultDialog.newInstance(dialogToShow).apply {
+                show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    override fun cleanupAfterDialog() {
-        dialogToShow = null
-        dialog = null
+    private fun restoreState(savedInstanceState: Bundle?) {
+        if (model.routeXml == null) {
+            model.setup(intent.getStringExtra(SELECTED_ROUTE))
+        }
+        savedInstanceState?.getString(SELECTED_ROUTE_KEY)?.let { model.setup(it) }
+        savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { model.selectTreasure(it) }
+        savedInstanceState?.getSerializable(BAG_KEY)?.let { model.treasureBag = it as TreasureBag }
+        savedInstanceState?.getBoolean(INITIALIZED_KEY)?.let { model.treasureSelectionInitialized = it }
+        showCollectedTreasures()
+    }
+
+    private fun processSearchingResult(result: String): DialogData {
+        try {
+            val treasure = treasureParser.parse(result)
+            return if (model.treasureBag!!.contains(treasure)) {
+                DialogData(resources.getString(R.string.treasure_already_taken_msg), null)
+            } else {
+                add(treasure)
+                DialogData(treasure.quantity.toString(), treasure.type.image())
+            }
+        } catch (ex: IllegalArgumentException) {
+            return DialogData(resources.getString(R.string.not_a_treasure_msg), null)
+        }
+    }
+
+    private fun add(treasure: Treasure) {
+        model.treasureBag!!.collect(treasure)
+        showCollectedTreasures()
+    }
+
+    private fun showCollectedTreasures() {
+        goldTxt.text = model.treasureBag!!.golds.toString()
+        rubyTxt.text = model.treasureBag!!.rubies.toString()
+        diamondTxt.text = model.treasureBag!!.diamonds.toString()
     }
 }
