@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
 /**

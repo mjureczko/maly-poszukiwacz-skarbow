@@ -3,11 +3,11 @@ package pl.marianjureczko.poszukiwacz.shared
 import android.app.Application
 import com.ocadotechnology.gembus.test.some
 import org.apache.commons.io.FileUtils
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.model.Route
 import java.io.File
 
@@ -62,6 +62,26 @@ class StorageHelperTest {
 
         //then
         assertEquals(1, actual.size)
+    }
+
+    @Test
+    fun `generate name for new sound file`() {
+        //when
+        val newSoundFile = storageHelper.newSoundFile()
+
+        //then
+        assertThat(newSoundFile).contains(".3gp")
+        assertThat(newSoundFile).matches(".*/treasures_lists/sound_.+\\.3gp")
+    }
+
+    @Test
+    fun `generate name for new photo file`() {
+        //when
+        val newPhotoFile = storageHelper.newPhotoFile()
+
+        //then
+        assertThat(newPhotoFile).contains(".jpg")
+        assertThat(newPhotoFile).matches(".*/treasures_lists/photo_.+\\.jpg")
     }
 }
 

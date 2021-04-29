@@ -20,4 +20,6 @@
     <string name="route">Trasa</string>
     <string name="searching_activity_title">Poszukiwania</string>
     <string name="no_routes">Dodaj trasę aby rozpocząć zabawę</string>
+    <string name="photo_saved">Zdjęcie zostało zapisane</string>
+    <string name="photo_failed">Zdjęcie nie zostało zapisane</string>
 </resources>

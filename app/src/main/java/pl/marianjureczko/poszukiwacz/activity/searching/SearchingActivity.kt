@@ -99,7 +99,6 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
 
     /** Result of scanning treasure qr code*/
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG, "########> onActivityResult")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {

@@ -4,9 +4,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 interface TreasureRemover {
     fun remove(treasureToRemove: TreasureDescription)

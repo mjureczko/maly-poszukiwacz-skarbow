@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -9,6 +10,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -17,10 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_treasures_editor.*
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
@@ -34,6 +36,7 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
 
     companion object {
         private val xmlHelper = XmlHelper()
+        const val REQUEST_PHOTO = 2
         private const val SELECTED_LIST = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
 
         fun intent(packageContext: Context) = Intent(packageContext, TreasuresEditorActivity::class.java)
@@ -118,6 +121,20 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
 
     override fun onNameEntered(name: String) {
         setupTreasureView(Route(name, ArrayList()))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "########> onActivityResult")
+        Activity.RESULT_OK
+        if (requestCode == REQUEST_PHOTO) {
+            if (Activity.RESULT_OK == resultCode) {
+                Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     private fun setupTreasureView(route: Route) {

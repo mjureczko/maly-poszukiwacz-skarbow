@@ -1,21 +1,26 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.shared
 
 import android.content.Context
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import java.io.File
 import java.util.*
 
-class StorageHelper(val context: Context) {
+open class StorageHelper(val context: Context) {
 
     private val xmlHelper = XmlHelper()
 
     companion object {
-        val routesDirectory = "/treasures_lists"
+        const val routesDirectory = "/treasures_lists"
     }
 
-    fun generateNewSoundFile() = getRoutesDir().absolutePath + "/" + "test" + UUID.randomUUID().toString() + ".3gp"
+    fun newSoundFile() = newFile("sound_", ".3gp")
+
+    open fun newPhotoFile() = newFile("photo_", ".jpg")
+
+    fun photoFile(): File {
+        return File(context.applicationContext.filesDir, "photo_" + UUID.randomUUID().toString() + ".jpg")
+    }
 
     fun save(route: Route) {
         val xmlFile = getRouteFile(route)
@@ -35,17 +40,21 @@ class StorageHelper(val context: Context) {
 
     fun remove(toRemove: Route) {
         toRemove.treasures.forEach {
-            removeTipFile(it)
+            removeTipFiles(it)
         }
         val fileToRemove = getRouteFile(toRemove)
         fileToRemove.delete()
     }
 
-    fun removeTipFile(treasureDescription: TreasureDescription) {
+    fun removeTipFiles(treasureDescription: TreasureDescription) {
         if (treasureDescription.tipFileName != null) {
             File(treasureDescription.tipFileName).delete()
         }
+        //TODO: remove photo
     }
+
+    private fun newFile(prefix: String, extension: String) =
+        getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
     private fun getRouteFile(treasures: Route): File {
         val dir = getRoutesDir()
