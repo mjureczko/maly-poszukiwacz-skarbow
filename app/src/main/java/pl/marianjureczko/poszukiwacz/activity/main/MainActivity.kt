@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         newRouteButton.setOnClickListener {
             startActivity(TreasuresEditorActivity.intent(this))
         }
+        setTitle(R.string.main_activity_title);
         requestAccessLocationPermission()
     }
 
