@@ -25,7 +25,7 @@ Jest to kierunek świata, poszukiwacz musi samodzielnie ustalić gdzie jest pó�
 5. Podczas poszukiwań można skorzystać z podpowiedzi nagranej wcześniej przez ukrywającego skarby naciskając przycisk
 ![picture](/app/src/main/res/drawable/megaphone_small.png).
 
-6. Poszukiwacz po znalezieniu skarbu używa aplikacji do zeskanowania kodu QR naciskając przycisk ![picture](/app/src/main/res/drawable/chest_small2.png) i dzięki temu dowiaduje się co znalazł.
+6. Poszukiwacz po znalezieniu skarbu używa aplikacji do zeskanowania kodu QR naciskając przycisk ![picture](/app/src/main/res/drawable/chest_small.png) i dzięki temu dowiaduje się co znalazł.
 
 7. Po znalezieniu skarbu można wybrać do poszukiwań kolejny przy pomocy przycisku
 ![picture](/app/src/main/res/drawable/change_chest_small.png).
