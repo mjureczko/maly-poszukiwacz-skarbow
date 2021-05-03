@@ -19,7 +19,7 @@ data class TreasureDescription(
 
     fun prettyName(): String = "[$id] $latitude $longitude"
 
-    fun createPhotoFile(storageHelper: StorageHelper): File {
+    fun instantiatePhotoFile(storageHelper: StorageHelper): File {
         if (photoFileName == null) {
             photoFileName = storageHelper.newPhotoFile()
         }

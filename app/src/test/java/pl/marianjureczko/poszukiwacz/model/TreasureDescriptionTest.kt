@@ -30,14 +30,14 @@ class TreasureDescriptionTest {
     }
 
     @Test
-    fun createPhotoFile_when_thereIsNoPhotoFileInTheDescription() {
+    fun instantiatePhotoFile_when_thereIsNoPhotoFileInTheDescription() {
         //given
         val given = some<TreasureDescription>().copy(photoFileName = null)
         val photoFile = some<String>()
         Mockito.`when`(storageHelper.newPhotoFile()).thenReturn(photoFile)
 
         //when
-        val actual = given.createPhotoFile(storageHelper)
+        val actual = given.instantiatePhotoFile(storageHelper)
 
         //then
         assertThat(actual.name).isEqualTo(photoFile)
@@ -45,13 +45,13 @@ class TreasureDescriptionTest {
     }
 
     @Test
-    fun createPhotoFile_when_thereIsPhotoFileInTheDescription() {
+    fun instantiatePhotoFile_when_thereIsPhotoFileInTheDescription() {
         //given
         val given = some<TreasureDescription>()
         val photoFile = given.photoFileName
 
         //when
-        val actual = given.createPhotoFile(storageHelper)
+        val actual = given.instantiatePhotoFile(storageHelper)
 
         //then
         assertThat(actual.name).isEqualTo(photoFile)
@@ -83,12 +83,12 @@ class TreasureDescriptionTest {
         try {
 
             //when
-            given.createPhotoFile(storageHelper).createNewFile()
+            given.instantiatePhotoFile(storageHelper).createNewFile()
 
             //then
             assertTrue(given.hasPhoto())
         } finally {
-            given.createPhotoFile(storageHelper).delete()
+            given.instantiatePhotoFile(storageHelper).delete()
         }
     }
 }

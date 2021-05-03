@@ -125,7 +125,6 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         Log.d(TAG, "########> onActivityResult")
-        Activity.RESULT_OK
         if (requestCode == REQUEST_PHOTO) {
             if (Activity.RESULT_OK == resultCode) {
                 Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()

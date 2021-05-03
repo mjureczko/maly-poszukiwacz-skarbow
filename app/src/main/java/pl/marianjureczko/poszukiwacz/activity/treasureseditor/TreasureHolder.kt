@@ -28,6 +28,8 @@ class TreasureHolder(
     private val storageHelper: StorageHelper
 ) : RecyclerView.ViewHolder(view) {
     private val TAG = javaClass.simpleName
+    private val packageManager: PackageManager by lazy { activity.packageManager }
+    private val thereIsActivityCapableOfCapturingPhoto: Boolean by lazy { packageManager.resolveActivity(capturePhotoIntent(), PackageManager.MATCH_DEFAULT_ONLY) != null }
     private val treasureNameLabel: TextView = itemView.findViewById((R.id.treasure_name))
     private val recordTipBtn: ImageButton = itemView.findViewById(R.id.record_tip)
     private val photoBtn: ImageButton = itemView.findViewById(R.id.photo_tip)
@@ -36,6 +38,11 @@ class TreasureHolder(
     fun setupTreasure(treasure: TreasureDescription, route: Route) {
         treasureNameLabel.text = treasure.prettyName();
         deleteBtn.setOnClickListener { treasureRemover.remove(treasure) }
+        setupRecordTipBtn(treasure, route)
+        setupPhotoBtn(treasure)
+    }
+
+    private fun setupRecordTipBtn(treasure: TreasureDescription, route: Route) {
         recordTipBtn.setOnClickListener {
             if (recordingPermission.granted()) {
                 val soundFileName = storageHelper.newSoundFile()
@@ -46,22 +53,32 @@ class TreasureHolder(
                     show(this@TreasureHolder.activity.supportFragmentManager, RECORD_TIP_DIALOG)
                 }
             } else {
-                Log.w(TAG, "Recording not permitted")
-                ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP)
+                operationNotPermitted("Recording not permitted")
             }
         }
+    }
 
-        val photoFile = storageHelper.photoFile()
-        val photoUri = FileProvider.getUriForFile(activity, "pl.marianjureczko.poszukiwacz.fileprovider", photoFile)
-        val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val packageManager: PackageManager = activity.packageManager
+    private fun setupPhotoBtn(treasure: TreasureDescription) {
+        val photoUri = FileProvider.getUriForFile(activity, "pl.marianjureczko.poszukiwacz.fileprovider", treasure.instantiatePhotoFile(storageHelper))
+        val captureImage = capturePhotoIntent()
+        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         photoBtn.setOnClickListener {
-            captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-            val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
-            for (cameraActivity in cameraActivities) {
-                activity.grantUriPermission(cameraActivity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            if(thereIsActivityCapableOfCapturingPhoto) {
+                val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
+                for (cameraActivity in cameraActivities) {
+                    activity.grantUriPermission(cameraActivity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                }
+                activity.startActivityForResult(captureImage, TreasuresEditorActivity.REQUEST_PHOTO)
+            } else {
+                operationNotPermitted("No intent capable of capturing photo is available")
             }
-            activity.startActivityForResult(captureImage, TreasuresEditorActivity.REQUEST_PHOTO)
         }
+    }
+
+    private fun capturePhotoIntent() = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+    private fun operationNotPermitted(message: String) {
+        Log.w(TAG, message)
+        ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP)
     }
 }
