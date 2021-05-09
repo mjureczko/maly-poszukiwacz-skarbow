@@ -125,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.80" />
+        app:layout_constraintGuide_percent="0.75" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuideLine"
@@ -159,13 +159,13 @@
         android:id="@+id/changeTreasureBtn"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
-        android:background="@null"
-        android:padding="5dp"
+        android:padding="1dp"
         android:scaleType="fitCenter"
+        android:background="@null"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
+        app:layout_constraintTop_toBottomOf="@+id/mapBtn"
         app:layout_constraintEnd_toStartOf="@+id/leftGuideLine"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/change_chest" />
@@ -174,12 +174,13 @@
         android:id="@+id/playTipBtn"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:adjustViewBounds="true"
         android:padding="1dp"
         android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
         android:background="@null"
         app:srcCompat="@drawable/megaphone"
-        app:layout_constraintTop_toBottomOf="@+id/mapBtn"
+        app:layout_constraintTop_toBottomOf="@+id/photoBtn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/rightGuideLine" />
@@ -192,11 +193,25 @@
         android:padding="1dp"
         android:scaleType="fitCenter"
         android:background="@null"
+        app:layout_constraintBottom_toTopOf="@+id/changeTreasureBtn"
+        app:layout_constraintEnd_toStartOf="@+id/leftGuideLine"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
+        app:srcCompat="@drawable/map" />
+
+    <ImageButton
+        android:id="@+id/photoBtn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:padding="1dp"
+        android:scaleType="fitCenter"
+        android:background="@null"
         app:layout_constraintBottom_toTopOf="@+id/playTipBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/rightGuideLine"
         app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
-        app:srcCompat="@drawable/map" />
+        app:srcCompat="@drawable/show_photo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

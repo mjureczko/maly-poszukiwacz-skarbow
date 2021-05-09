@@ -15,13 +15,13 @@ interface TreasureRemover {
 class TreasureAdapter(
     private val activity: FragmentActivity,
     private val route: Route,
-    private val recordingPermission: RecordingPermission,
+    private val permissions: TreasureHolder.Permissions,
     private val storageHelper: StorageHelper
 ) : RecyclerView.Adapter<TreasureHolder>(), TreasureRemover {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreasureHolder {
         val view = activity.layoutInflater.inflate(R.layout.treasures_item, parent, false)
-        return TreasureHolder(view, activity, this, recordingPermission, storageHelper)
+        return TreasureHolder(view, activity, this, permissions, storageHelper)
     }
 
     override fun onBindViewHolder(holder: TreasureHolder, position: Int) {

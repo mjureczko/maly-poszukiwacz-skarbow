@@ -26,13 +26,9 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
-interface RecordingPermission {
-    fun granted(): Boolean
-}
-
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
-class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteNameDialog.Callback {
+class TreasuresEditorActivity : AppCompatActivity(), TreasureHolder.Permissions, RouteNameDialog.Callback {
 
     companion object {
         private val xmlHelper = XmlHelper()
@@ -49,9 +45,11 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
 
     private val TAG = javaClass.simpleName
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
+    private val REQUEST_CAPTURE_PHOTO_PERMISSION = 300
     private val SETUP_DIALOG_SHOWN_KEY: String = "SETUP_DIALOG_SHOWN"
     private val ROUTE_KEY: String = "ROUTE"
-    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
+    private var recordingPermissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
+    private var capturingPhotoPermissions: Array<String> = arrayOf(Manifest.permission.CAMERA)
     private val storageHelper = StorageHelper(this)
     lateinit var treasuresRecyclerView: RecyclerView
     lateinit var treasureAdapter: TreasureAdapter
@@ -63,7 +61,8 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_treasures_editor)
-        requestRecordingPermission()
+//        requestRecordingPermission()
+        requestCapturingPhotoPermission()
 
         treasuresRecyclerView = findViewById(R.id.treasures)
         treasuresRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -115,9 +114,16 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
         } else {
             false
         }
+        model.permissionToCapturePhotoAccepted = if (code == REQUEST_CAPTURE_PHOTO_PERMISSION) {
+            results[0] == PackageManager.PERMISSION_GRANTED
+        } else {
+            false
+        }
     }
 
-    override fun granted(): Boolean = model.permissionToRecordAccepted
+    override fun recordingGranted(): Boolean = model.permissionToRecordAccepted
+
+    override fun capturingPhotoGranted(): Boolean = model.permissionToCapturePhotoAccepted
 
     override fun onNameEntered(name: String) {
         setupTreasureView(Route(name, ArrayList()))
@@ -144,7 +150,10 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
     }
 
     private fun requestRecordingPermission() =
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+        ActivityCompat.requestPermissions(this, recordingPermissions, REQUEST_RECORD_AUDIO_PERMISSION)
+
+    private fun requestCapturingPhotoPermission() =
+        ActivityCompat.requestPermissions(this, capturingPhotoPermissions, REQUEST_CAPTURE_PHOTO_PERMISSION)
 
     private fun isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState: Bundle?): Boolean =
         savedInstanceState?.getBoolean(SETUP_DIALOG_SHOWN_KEY) == null
