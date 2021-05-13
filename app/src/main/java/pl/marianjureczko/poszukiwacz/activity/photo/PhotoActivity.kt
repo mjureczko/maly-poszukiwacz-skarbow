@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_photo.*
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
 class PhotoActivity : AppCompatActivity() {
     companion object {
@@ -21,6 +22,7 @@ class PhotoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo)
+        addIconToActionBar(supportActionBar)
         val photo = intent.getStringExtra(PHOTO)
         val uri = Uri.parse(photo)
         photoImg.setImageURI(uri)

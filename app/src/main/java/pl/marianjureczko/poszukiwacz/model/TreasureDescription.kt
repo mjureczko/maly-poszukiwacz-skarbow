@@ -27,6 +27,6 @@ data class TreasureDescription(
     }
 
     fun hasPhoto(): Boolean {
-        return tipFileName != null && File(photoFileName).exists()
+        return photoFileName != null && File(photoFileName).exists()
     }
 }

@@ -15,7 +15,7 @@ interface TreasureRemover {
 class TreasureAdapter(
     private val activity: FragmentActivity,
     private val route: Route,
-    private val permissions: TreasureHolder.Permissions,
+    private val permissions: PermissionsManager,
     private val storageHelper: StorageHelper
 ) : RecyclerView.Adapter<TreasureHolder>(), TreasureRemover {
 

@@ -24,14 +24,9 @@ class TreasureHolder(
     view: View,
     private val activity: FragmentActivity,
     private val treasureRemover: TreasureRemover,
-    private val permissions: Permissions,
+    private val permissions: PermissionsManager,
     private val storageHelper: StorageHelper
 ) : RecyclerView.ViewHolder(view) {
-
-    interface Permissions {
-        fun recordingGranted(): Boolean
-        fun capturingPhotoGranted(): Boolean
-    }
 
     private val TAG = javaClass.simpleName
     private val packageManager: PackageManager by lazy { activity.packageManager }
@@ -70,8 +65,9 @@ class TreasureHolder(
     }
 
     private fun setupPhotoBtn(treasure: TreasureDescription, route: Route) {
+        val instantiatePhotoFile = treasure.instantiatePhotoFile(storageHelper)
         val photoUri =
-            FileProvider.getUriForFile(activity, "pl.marianjureczko.poszukiwacz.fileprovider", treasure.instantiatePhotoFile(storageHelper))
+            FileProvider.getUriForFile(activity, "pl.marianjureczko.poszukiwacz.fileprovider", instantiatePhotoFile)
         val captureImage = capturePhotoIntent()
         captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         photoBtn.setOnClickListener {
