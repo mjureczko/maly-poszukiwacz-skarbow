@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.activity.photo
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +22,9 @@ class PhotoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo)
         addIconToActionBar(supportActionBar)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setContentView(R.layout.activity_photo)
         val photo = intent.getStringExtra(PHOTO)
         val uri = Uri.parse(photo)
         photoImg.setImageURI(uri)
