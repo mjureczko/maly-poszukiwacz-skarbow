@@ -26,6 +26,5 @@ class PhotoActivity : AppCompatActivity() {
         val photo = intent.getStringExtra(PHOTO)
         val uri = Uri.parse(photo)
         photoImg.setImageURI(uri)
-        photoImg.rotation = 270f
     }
 }
