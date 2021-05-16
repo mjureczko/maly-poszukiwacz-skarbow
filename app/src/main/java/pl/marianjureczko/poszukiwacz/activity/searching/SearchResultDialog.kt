@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import pl.marianjureczko.poszukiwacz.R
 import kotlin.math.roundToInt
 
@@ -46,6 +47,16 @@ class SearchResultDialog : DialogFragment() {
         }
         return builder.create()
 
+    }
+
+    override fun show(manager: FragmentManager, tag: String?) {
+        try {
+            val ft = manager.beginTransaction()
+            ft.add(this, tag)
+            ft.commitAllowingStateLoss()
+        } catch (ignored: IllegalStateException) {
+            ignored.printStackTrace()
+        }
     }
 
     private fun isThereImageToShow(it: DialogData) =
