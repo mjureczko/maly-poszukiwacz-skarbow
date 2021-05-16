@@ -12,10 +12,19 @@
         android:layout_height="wrap_content" />
 
     <ImageButton
+        android:id="@+id/photo_tip"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/add_photo" />
+
+    <ImageButton
         android:id="@+id/record_tip"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:foregroundTint="#1f5c70"
+        android:foregroundTintMode="src_atop"
         android:src="@android:drawable/ic_btn_speak_now" />
 
     <ImageButton

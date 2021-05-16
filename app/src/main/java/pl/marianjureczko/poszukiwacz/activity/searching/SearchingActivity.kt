@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.LocationManager
-import android.media.AudioManager
-import android.media.ToneGenerator
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -22,6 +20,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
+import pl.marianjureczko.poszukiwacz.shared.errorTone
 
 private const val RESULTS_DIALOG = "ResultsDialog"
 
@@ -57,7 +56,8 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
         scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
         changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
         playTipBtn.setOnClickListener(PlayTipButtonListener(model))
-        mapBtn.setOnClickListener { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP) }
+        mapBtn.setOnClickListener { errorTone() }
+        photoBtn.setOnClickListener(PhotoButtonListener(this, model))
 
         val locationListener = CompassBasedLocationListener(
             model,
@@ -99,7 +99,6 @@ class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
 
     /** Result of scanning treasure qr code*/
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG, "########> onActivityResult")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {

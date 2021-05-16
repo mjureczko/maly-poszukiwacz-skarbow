@@ -1,39 +1,36 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_treasures_editor.*
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.StorageHelper
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
-interface RecordingPermission {
-    fun granted(): Boolean
-}
-
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
-class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteNameDialog.Callback {
+class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
 
     companion object {
         private val xmlHelper = XmlHelper()
+        const val REQUEST_PHOTO = 2
         private const val SELECTED_LIST = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
 
         fun intent(packageContext: Context) = Intent(packageContext, TreasuresEditorActivity::class.java)
@@ -45,11 +42,16 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
     }
 
     private val TAG = javaClass.simpleName
-    private val REQUEST_RECORD_AUDIO_PERMISSION = 200
+    private val REQUEST_ALL_PERMISSIONS = 200
+    private var PERMISSIONS = arrayOf(
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.CAMERA
+    )
     private val SETUP_DIALOG_SHOWN_KEY: String = "SETUP_DIALOG_SHOWN"
     private val ROUTE_KEY: String = "ROUTE"
-    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
+
     private val storageHelper = StorageHelper(this)
+    private val permissionsManager = PermissionsManager(this)
     lateinit var treasuresRecyclerView: RecyclerView
     lateinit var treasureAdapter: TreasureAdapter
 
@@ -60,7 +62,7 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_treasures_editor)
-        requestRecordingPermission()
+        permissionsManager.requestPermissions()
 
         treasuresRecyclerView = findViewById(R.id.treasures)
         treasuresRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -105,30 +107,29 @@ class TreasuresEditorActivity : AppCompatActivity(), RecordingPermission, RouteN
         super.onSaveInstanceState(outState)
     }
 
-    override fun onRequestPermissionsResult(code: Int, perms: Array<String>, results: IntArray) {
-        super.onRequestPermissionsResult(code, perms, results)
-        model.permissionToRecordAccepted = if (code == REQUEST_RECORD_AUDIO_PERMISSION) {
-            results[0] == PackageManager.PERMISSION_GRANTED
-        } else {
-            false
-        }
-    }
-
-    override fun granted(): Boolean = model.permissionToRecordAccepted
-
     override fun onNameEntered(name: String) {
         setupTreasureView(Route(name, ArrayList()))
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d(TAG, "########> onActivityResult")
+        if (requestCode == REQUEST_PHOTO) {
+            if (Activity.RESULT_OK == resultCode) {
+                Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     private fun setupTreasureView(route: Route) {
         model.route = route
-        treasureAdapter = TreasureAdapter(this, route, this, storageHelper)
+        treasureAdapter = TreasureAdapter(this, route, permissionsManager, storageHelper)
         treasuresRecyclerView.adapter = treasureAdapter
         supportActionBar?.title = "${App.getResources().getString(R.string.route)} ${route.name}"
     }
-
-    private fun requestRecordingPermission() =
-        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
 
     private fun isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState: Bundle?): Boolean =
         savedInstanceState?.getBoolean(SETUP_DIALOG_SHOWN_KEY) == null
