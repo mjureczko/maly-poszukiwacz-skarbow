@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.model
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import java.io.Serializable
 
 @Root
@@ -27,5 +28,10 @@ data class Route(
         } else {
             1 + treasures.map { it.id }.max()!!
         }
+    }
+
+    fun remove(td: TreasureDescription, storageHelper: StorageHelper) {
+        treasures.remove(td)
+        storageHelper.removeTipFiles(td)
     }
 }

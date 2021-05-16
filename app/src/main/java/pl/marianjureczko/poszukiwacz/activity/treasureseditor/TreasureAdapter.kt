@@ -33,9 +33,8 @@ class TreasureAdapter(
     }
 
     override fun remove(treasureToRemove: TreasureDescription) {
-        route.treasures.remove(treasureToRemove)
+        route.remove(treasureToRemove, storageHelper)
         notifyDataSetChanged()
         storageHelper.save(route)
-        //TODO: remove route when last treasure removed (?)
     }
 }

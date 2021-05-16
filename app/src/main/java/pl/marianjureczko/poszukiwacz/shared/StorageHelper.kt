@@ -14,9 +14,9 @@ open class StorageHelper(val context: Context) {
         const val routesDirectory = "/treasures_lists"
     }
 
-    fun newSoundFile() = newFile("sound_", ".3gp")
+    fun newSoundFile(): String = newFile("sound_", ".3gp")
 
-    open fun newPhotoFile() = newFile("photo_", ".jpg")
+    open fun newPhotoFile(): String = newFile("photo_", ".jpg")
 
     fun photoFile(): File {
         return File(context.applicationContext.filesDir, "photo_" + UUID.randomUUID().toString() + ".jpg")
@@ -50,7 +50,9 @@ open class StorageHelper(val context: Context) {
         if (treasureDescription.tipFileName != null) {
             File(treasureDescription.tipFileName).delete()
         }
-        //TODO: remove photo
+        if (treasureDescription.hasPhoto()) {
+            File(treasureDescription.photoFileName).delete()
+        }
     }
 
     private fun newFile(prefix: String, extension: String) =
