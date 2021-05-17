@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
-import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -19,10 +19,7 @@ import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.LocationRequester
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.XmlHelper
-import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
+import pl.marianjureczko.poszukiwacz.shared.*
 
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
@@ -42,11 +39,6 @@ class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
     }
 
     private val TAG = javaClass.simpleName
-    private val REQUEST_ALL_PERMISSIONS = 200
-    private var PERMISSIONS = arrayOf(
-        Manifest.permission.RECORD_AUDIO,
-        Manifest.permission.CAMERA
-    )
     private val SETUP_DIALOG_SHOWN_KEY: String = "SETUP_DIALOG_SHOWN"
     private val ROUTE_KEY: String = "ROUTE"
 
@@ -73,9 +65,7 @@ class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
         } else {
             savedInstanceState?.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadFromString(it)) }
             if (isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState)) {
-                RouteNameDialog.newInstance().apply {
-                    show(this@TreasuresEditorActivity.supportFragmentManager, ROUTE_NAME_DIALOG)
-                }
+                showRouteNameDialog()
                 savedInstanceState?.putBoolean(SETUP_DIALOG_SHOWN_KEY, true)
             }
         }
@@ -108,7 +98,19 @@ class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
     }
 
     override fun onNameEntered(name: String) {
-        setupTreasureView(Route(name, ArrayList()))
+        val route = Route(name, ArrayList())
+        if (storageHelper.routeAlreadyExists(route)) {
+            AlertDialog.Builder(this)
+                .setMessage(R.string.overwritting_route)
+                .setPositiveButton(R.string.no) { _, _ -> showRouteNameDialog() }
+                .setNegativeButton(R.string.yes) { _, _ ->
+                    storageHelper.removeRouteByName(name)
+                    setupTreasureView(route)
+                }
+                .show()
+        } else {
+            setupTreasureView(route)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -137,5 +139,9 @@ class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
     private fun isInEditExistingRouteMode(existingList: String?) =
         existingList != null
 
+    private fun showRouteNameDialog() =
+        RouteNameDialog.newInstance().apply {
+            show(this@TreasuresEditorActivity.supportFragmentManager, ROUTE_NAME_DIALOG)
+        }
 }
 

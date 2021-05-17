@@ -55,7 +55,7 @@ class RouteTest {
     @Test
     fun `SHOULD remove treasureDescription files WHEN removing the TreasureDescription from Route`() {
         //given
-        val route = RouteArranger.withFiles(storageHelper)
+        val route = RouteArranger.savedWithFiles(storageHelper)
         val toRemove = route.treasures[0]
 
         //when

@@ -9,13 +9,14 @@ import java.io.File
 
 class RouteArranger : CustomArranger<Route>() {
     companion object {
-        fun withFiles(storageHelper: StorageHelper): Route {
+        fun savedWithFiles(storageHelper: StorageHelper): Route {
             val route = some<Route>()
             route.treasures.forEach { t ->
                 t.instantiatePhotoFile(storageHelper).createNewFile()
                 t.tipFileName = storageHelper.newSoundFile()
                 File(t.tipFileName).createNewFile()
             }
+            storageHelper.save(route)
             return route
         }
     }

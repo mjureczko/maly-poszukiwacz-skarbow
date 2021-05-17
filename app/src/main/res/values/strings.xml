@@ -23,4 +23,5 @@
     <string name="photo_saved">Zdjęcie zostało zapisane</string>
     <string name="photo_failed">Zdjęcie nie zostało zapisane</string>
     <string name="photo_tip">Podpowiedź</string>
+    <string name="overwritting_route">Trasa o takiej nazwie już istnieje, czy chcesz ją nadpisać?</string>
 </resources>

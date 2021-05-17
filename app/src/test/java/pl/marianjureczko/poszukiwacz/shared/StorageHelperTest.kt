@@ -4,8 +4,7 @@ import android.app.Application
 import com.ocadotechnology.gembus.test.some
 import org.apache.commons.io.FileUtils
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -88,10 +87,48 @@ class StorageHelperTest {
     @Test
     fun `SHOULD remove tip files WHEN removing route`() {
         //given
-        val route = RouteArranger.withFiles(storageHelper)
+        val route = RouteArranger.savedWithFiles(storageHelper)
 
         //when
         storageHelper.remove(route)
+
+        //then
+        route.treasures.forEach { actual ->
+            assertThat(File(actual.tipFileName).exists())
+                .`as`("Tip file should be removed")
+                .isFalse()
+            assertThat(File(actual.photoFileName).exists())
+                .`as`("Photo file should be removed")
+                .isFalse()
+        }
+    }
+
+    @Test
+    fun `SHOULD recognize route WHEN the route already exists`() {
+        //given
+        val route = some<Route>()
+        storageHelper.save(route)
+
+        //then
+        assertTrue(storageHelper.routeAlreadyExists(route))
+    }
+
+    @Test
+    fun `SHOULD recognize new route`() {
+        //given
+        val route = some<Route>()
+
+        //then
+        assertFalse(storageHelper.routeAlreadyExists(route))
+    }
+
+    @Test
+    fun `SHOULD remove tip files WHEN removing route by name`() {
+        //given
+        val route = RouteArranger.savedWithFiles(storageHelper)
+
+        //when
+        storageHelper.removeRouteByName(route.name)
 
         //then
         route.treasures.forEach { actual ->
