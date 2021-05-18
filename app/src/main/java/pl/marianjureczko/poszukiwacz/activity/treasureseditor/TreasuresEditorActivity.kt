@@ -61,7 +61,6 @@ class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
         val existingList = intent.getStringExtra(SELECTED_LIST)
         if (isInEditExistingRouteMode(existingList)) {
             setupTreasureView(xmlHelper.loadFromString(existingList))
-            //TODO: route and treasuresAdapter are changed together
         } else {
             savedInstanceState?.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadFromString(it)) }
             if (isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState)) {
@@ -82,7 +81,6 @@ class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
         }
 
         val locationListener = TextViewBasedLocationListener(editorLatValue, editorLongValue)
-        //TODO: copied from SearchingActivity
         val handler = Handler()
         val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val presenter = LocationRequester(this, locationListener, handler, location)

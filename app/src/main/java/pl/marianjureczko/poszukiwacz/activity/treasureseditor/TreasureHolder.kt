@@ -1,10 +1,12 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -31,10 +33,7 @@ class TreasureHolder(
     private val TAG = javaClass.simpleName
     private val packageManager: PackageManager by lazy { activity.packageManager }
     private val thereIsActivityCapableOfCapturingPhoto: Boolean by lazy {
-        packageManager.resolveActivity(
-            capturePhotoIntent(),
-            PackageManager.MATCH_DEFAULT_ONLY
-        ) != null
+        packageManager.resolveActivity(capturePhotoIntent(), PackageManager.MATCH_DEFAULT_ONLY) != null
     }
     private val treasureNameLabel: TextView = itemView.findViewById((R.id.treasure_name))
     private val recordTipBtn: ImageButton = itemView.findViewById(R.id.record_tip)
@@ -51,12 +50,14 @@ class TreasureHolder(
     private fun setupRecordTipBtn(treasure: TreasureDescription, route: Route) {
         recordTipBtn.setOnClickListener {
             if (permissions.recordingGranted()) {
-                val soundFileName = storageHelper.newSoundFile()
-                storageHelper.removeTipFiles(treasure)
-                treasure.tipFileName = soundFileName
-                storageHelper.save(route)
-                RecordingDialog.newInstance(soundFileName).apply {
-                    show(this@TreasureHolder.activity.supportFragmentManager, RECORD_TIP_DIALOG)
+                if (treasure.tipFileName != null) {
+                    AlertDialog.Builder(activity)
+                        .setMessage(R.string.overwritting_tip)
+                        .setPositiveButton(R.string.no) { _, _ -> }
+                        .setNegativeButton(R.string.yes) { _, _ -> recordNewTip(treasure, route) }
+                        .show()
+                } else {
+                    recordNewTip(treasure, route)
                 }
             } else {
                 operationNotPermitted("Recording not permitted")
@@ -64,25 +65,46 @@ class TreasureHolder(
         }
     }
 
+    private fun recordNewTip(treasure: TreasureDescription, route: Route) {
+        val soundFileName = storageHelper.newSoundFile()
+        storageHelper.removeTipFiles(treasure)
+        treasure.tipFileName = soundFileName
+        storageHelper.save(route)
+        RecordingDialog.newInstance(soundFileName).apply {
+            show(this@TreasureHolder.activity.supportFragmentManager, RECORD_TIP_DIALOG)
+        }
+    }
+
     private fun setupPhotoBtn(treasure: TreasureDescription, route: Route) {
         val instantiatePhotoFile = treasure.instantiatePhotoFile(storageHelper)
-        val photoUri =
-            FileProvider.getUriForFile(activity, "pl.marianjureczko.poszukiwacz.fileprovider", instantiatePhotoFile)
+        val photoUri = FileProvider.getUriForFile(activity, "pl.marianjureczko.poszukiwacz.fileprovider", instantiatePhotoFile)
         val captureImage = capturePhotoIntent()
         captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         photoBtn.setOnClickListener {
             if (thereIsActivityCapableOfCapturingPhoto && permissions.capturingPhotoGranted()) {
-                val cameraActivities: List<ResolveInfo> =
-                    packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
-                for (cameraActivity in cameraActivities) {
-                    activity.grantUriPermission(cameraActivity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                if (treasure.hasPhoto()) {
+                    AlertDialog.Builder(activity)
+                        .setMessage(R.string.overwritting_photo)
+                        .setPositiveButton(R.string.no) { _, _ -> }
+                        .setNegativeButton(R.string.yes) { _, _ -> captureNewPhoto(captureImage, photoUri, route) }
+                        .show()
+                } else {
+                    captureNewPhoto(captureImage, photoUri, route)
                 }
-                storageHelper.save(route)
-                activity.startActivityForResult(captureImage, TreasuresEditorActivity.REQUEST_PHOTO)
             } else {
                 operationNotPermitted("No intent capable of capturing photo is available")
             }
         }
+    }
+
+    private fun captureNewPhoto(captureImage: Intent, photoUri: Uri?, route: Route) {
+        val cameraActivities: List<ResolveInfo> =
+            packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
+        for (cameraActivity in cameraActivities) {
+            activity.grantUriPermission(cameraActivity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        }
+        storageHelper.save(route)
+        activity.startActivityForResult(captureImage, TreasuresEditorActivity.REQUEST_PHOTO)
     }
 
     private fun capturePhotoIntent() = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
