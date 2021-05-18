@@ -18,14 +18,14 @@ open class StorageHelper(val context: Context) {
 
     open fun newPhotoFile(): String = newFile("photo_", ".jpg")
 
-    fun photoFile(): File {
-        return File(context.applicationContext.filesDir, "photo_" + UUID.randomUUID().toString() + ".jpg")
-    }
-
     fun save(route: Route) {
         val xmlFile = getRouteFile(route)
         xmlHelper.writeToFile(route, xmlFile)
     }
+
+    fun routeAlreadyExists(route: Route): Boolean =
+        getRouteFile(route).exists()
+
 
     fun loadAll(): MutableList<Route> {
         val dir = getRoutesDir()
@@ -53,6 +53,12 @@ open class StorageHelper(val context: Context) {
         if (treasureDescription.hasPhoto()) {
             File(treasureDescription.photoFileName).delete()
         }
+    }
+
+    fun removeRouteByName(name: String) {
+        loadAll()
+            .filter { it -> it.name == name }
+            .forEach { it -> remove(it) }
     }
 
     private fun newFile(prefix: String, extension: String) =
