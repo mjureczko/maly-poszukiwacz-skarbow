@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -105,6 +106,14 @@ class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun onBackPressed() {
+        AlertDialog.Builder(this)
+            .setMessage(R.string.leaving_warning)
+            .setPositiveButton(R.string.no) { _, _ -> }
+            .setNegativeButton(R.string.yes) { _, _ -> super.onBackPressed() }
+            .show()
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
