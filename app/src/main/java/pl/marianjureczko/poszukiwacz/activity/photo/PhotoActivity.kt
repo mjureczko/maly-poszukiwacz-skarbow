@@ -5,12 +5,12 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_photo.*
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.shared.ActivityWithBackButton
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
-class PhotoActivity : AppCompatActivity() {
+class PhotoActivity : ActivityWithBackButton() {
     companion object {
         private const val PHOTO = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
 

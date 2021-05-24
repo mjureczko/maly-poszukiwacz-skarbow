@@ -11,7 +11,6 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_treasures_editor.*
@@ -21,9 +20,10 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.*
 
+
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
-class TreasuresEditorActivity : AppCompatActivity(), RouteNameDialog.Callback {
+class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callback {
 
     companion object {
         private val xmlHelper = XmlHelper()
