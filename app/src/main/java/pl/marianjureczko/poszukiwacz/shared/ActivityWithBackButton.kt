@@ -13,7 +13,7 @@ abstract class ActivityWithBackButton : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.back) {
-            super.onBackPressed()
+            onBackPressed()
         }
         return super.onOptionsItemSelected(item)
     }
