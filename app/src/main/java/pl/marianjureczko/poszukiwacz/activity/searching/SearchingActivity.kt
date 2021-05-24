@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.android.synthetic.main.activity_searching.*
 import pl.marianjureczko.poszukiwacz.R
@@ -17,14 +16,11 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
-import pl.marianjureczko.poszukiwacz.shared.LocationRequester
-import pl.marianjureczko.poszukiwacz.shared.XmlHelper
-import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
-import pl.marianjureczko.poszukiwacz.shared.errorTone
+import pl.marianjureczko.poszukiwacz.shared.*
 
 private const val RESULTS_DIALOG = "ResultsDialog"
 
-class SearchingActivity : AppCompatActivity(), TreasureSelectorView {
+class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
 
     companion object {
         private val xmlHelper = XmlHelper()
