@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
-import android.app.Activity
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
@@ -12,7 +11,7 @@ interface RoutesRemover {
 }
 
 class RouteAdapter(
-    private val activity: Activity,
+    private val activity: MainActivity,
     private val routes: MutableList<Route>,
     private val storageHelper: StorageHelper
 ) : RecyclerView.Adapter<RouteHolder>(), RoutesRemover {

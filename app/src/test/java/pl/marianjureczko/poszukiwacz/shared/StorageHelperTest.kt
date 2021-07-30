@@ -3,18 +3,27 @@ package pl.marianjureczko.poszukiwacz.shared
 import android.app.Application
 import com.ocadotechnology.gembus.test.some
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.RouteArranger
+import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.StringWriter
+import java.nio.charset.StandardCharsets
+import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
+
 
 class StorageHelperTest {
 
     private val context = TestContext()
     private val storageHelper = StorageHelper(context)
+    private val xmlHelper = XmlHelper()
 
     @Before
     fun cleanup() {
@@ -24,6 +33,7 @@ class StorageHelperTest {
     @Test
     fun `SHOULD save and load route`() {
         //given
+        val randomUUID = UUID.randomUUID()
         val route = some<Route>()
 
         //when
@@ -139,6 +149,29 @@ class StorageHelperTest {
                 .`as`("Photo file should be removed")
                 .isFalse()
         }
+    }
+
+    @Test
+    fun `SHOULD convert route to a zip stream WHEN the route is already saved`() {
+        //given
+        val route = RouteArranger.savedWithFiles(storageHelper)
+
+        //when
+        val actual = storageHelper.routeToZipOutputStream(route)
+        val actualZip = ZipInputStream(ByteArrayInputStream(actual.toByteArray()))
+
+        //then
+        var zipEntry: ZipEntry?
+        var checked = false
+        while (actualZip.nextEntry.also { zipEntry = it } != null) {
+            assertThat(zipEntry!!.name).isEqualTo(route.name + ".xml")
+            val stringWriter = StringWriter()
+            IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
+            assertThat(stringWriter.toString()).isEqualTo(xmlHelper.writeToString(route))
+            checked = true
+        }
+        actualZip.close()
+        assertTrue("no entries in zip", checked)
     }
 }
 

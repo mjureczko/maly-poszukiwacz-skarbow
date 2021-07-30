@@ -36,4 +36,9 @@
         android:layout_height="wrap_content"
         android:text="@string/new_route_button" />
 
+    <Button
+        android:id="@+id/route_from_bluetooth_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/route_from_bluetooth_button" />
 </LinearLayout>

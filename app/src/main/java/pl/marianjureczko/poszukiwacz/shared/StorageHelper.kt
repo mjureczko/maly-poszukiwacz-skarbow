@@ -3,8 +3,12 @@ package pl.marianjureczko.poszukiwacz.shared
 import android.content.Context
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 open class StorageHelper(val context: Context) {
 
@@ -21,6 +25,26 @@ open class StorageHelper(val context: Context) {
     fun save(route: Route) {
         val xmlFile = getRouteFile(route)
         xmlHelper.writeToFile(route, xmlFile)
+    }
+
+    /** The route should be already saved */
+    fun routeToZipOutputStream(route: Route): ByteArrayOutputStream {
+        val xmlFile = getRouteFile(route)
+        val outputStream = ByteArrayOutputStream()
+        val zipOut = ZipOutputStream(outputStream)
+        val routeFile = getRouteFile(route)
+        val fis = FileInputStream(routeFile)
+        val zipEntry = ZipEntry(routeFile.getName())
+        zipOut.putNextEntry(zipEntry);
+        val bytes = ByteArray(1024)
+        var length: Int
+        while (fis.read(bytes).also { length = it } >= 0) {
+            zipOut.write(bytes, 0, length)
+        }
+        fis.close()
+        zipOut.closeEntry()
+        zipOut.close()
+        return outputStream
     }
 
     fun routeAlreadyExists(route: Route): Boolean =
@@ -64,9 +88,9 @@ open class StorageHelper(val context: Context) {
     private fun newFile(prefix: String, extension: String) =
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
-    private fun getRouteFile(treasures: Route): File {
+    private fun getRouteFile(route: Route): File {
         val dir = getRoutesDir()
-        return File("${dir.absolutePath}/${treasures.fileName()}.xml")
+        return File("${dir.absolutePath}/${route.fileName()}.xml")
     }
 
     private fun getRoutesDir(): File {

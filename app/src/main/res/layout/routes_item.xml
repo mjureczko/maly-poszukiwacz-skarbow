@@ -20,6 +20,13 @@
         android:src="@android:drawable/ic_menu_manage" />
 
     <ImageButton
+        android:id="@+id/share_route"
+        android:layout_width="@android:dimen/app_icon_size"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:src="@drawable/share" />
+
+    <ImageButton
         android:id="@+id/delete_route"
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="match_parent"

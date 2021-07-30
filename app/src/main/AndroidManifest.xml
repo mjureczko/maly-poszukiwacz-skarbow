@@ -3,6 +3,8 @@
     package="pl.marianjureczko.poszukiwacz">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -18,6 +20,12 @@
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="false" />
 
     <application
         android:name=".App"
@@ -28,7 +36,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.photo.PhotoActivity"
-            android:label="@string/photo_tip"></activity>
+            android:label="@string/photo_tip" />
         <activity
             android:name=".activity.treasureseditor.TreasuresEditorActivity"
             android:theme="@style/FullscreenTheme" />

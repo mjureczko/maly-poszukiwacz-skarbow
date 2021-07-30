@@ -27,4 +27,5 @@
     <string name="overwritting_tip">Istnieje już podpowiedź, czy chcesz ją nadpisać?</string>
     <string name="overwritting_photo">Zrobiono już zdjęcie, czy chcesz je nadpisać?</string>
     <string name="leaving_warning">Powrót do tras spowoduje utratę infromacji o do tej pory znalezionych skarbach, czy na pewno chcesz kontynuować?</string>
+    <string name="route_from_bluetooth_button">Pobierz trasę przez Bluetooth</string>
 </resources>
