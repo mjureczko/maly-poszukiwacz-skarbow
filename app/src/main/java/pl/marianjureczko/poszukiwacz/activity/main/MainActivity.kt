@@ -170,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                     shouldLoop = false
                     null
                 }
+                handler.post { Toast.makeText(activity, "Accepted", Toast.LENGTH_SHORT).show() }
                 socket?.also {
                     handler.post { Toast.makeText(activity, "Bluetooth socket obtained.", Toast.LENGTH_SHORT).show() }
                     manageMyConnectedSocket(it)

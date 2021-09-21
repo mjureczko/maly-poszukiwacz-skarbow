@@ -7,7 +7,7 @@ import java.util.concurrent.Executors
 
 class App : Application() {
     companion object {
-        val executorService: ExecutorService = Executors.newSingleThreadExecutor()
+        val executorService: ExecutorService = Executors.newFixedThreadPool(10)
         private lateinit var res: Resources
         fun getResources() =  res
     }
