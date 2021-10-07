@@ -28,4 +28,6 @@
     <string name="overwritting_photo">Zrobiono już zdjęcie, czy chcesz je nadpisać?</string>
     <string name="leaving_warning">Powrót do tras spowoduje utratę infromacji o do tej pory znalezionych skarbach, czy na pewno chcesz kontynuować?</string>
     <string name="route_from_bluetooth_button">Pobierz trasę przez Bluetooth</string>
+    <string name="sending_route">Przesyłanie trasy</string>
+    <string name="select_bluetooth_device">> Wybierz urządzenie z którym chcesz się połączyć.\n> Lista sparowanych urządzeń:\n</string>
 </resources>

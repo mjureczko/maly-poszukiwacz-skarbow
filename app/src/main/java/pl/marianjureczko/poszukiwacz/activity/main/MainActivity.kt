@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.bluetooth.BluetoothActivity
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
@@ -133,13 +134,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fetchRouteFromBluetooth() {
-        val device = bluetooth.findDevice()
-        if (device != null) {
-            Toast.makeText(this, "Bluetooth device found, starting accept thread", Toast.LENGTH_SHORT).show()
-            App.executorService.submit(AcceptThread(this))
-        } else {
-            Toast.makeText(this, "Bluetooth device not found", Toast.LENGTH_SHORT).show()
-        }
+        startActivity(
+            BluetoothActivity.intent(
+                this,
+                arrayOf(
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    "six",
+                    "Samsung",
+                    "LG",
+                    "Telefunkel brand new model copletely orginal unique deluxe"
+                )
+            )
+        )
+//        startActivity(BluetoothActivity.intent(this, arrayOf("Samsung", "LG", "Telefunkel brand new model copletely orginal unique deluxe blah blah blah blah blah blah b.....")))
+//        val device = bluetooth.findDevice()
+//        if (device != null) {
+//            Toast.makeText(this, "Bluetooth device found, starting accept thread", Toast.LENGTH_SHORT).show()
+//            App.executorService.submit(AcceptThread(this))
+//        } else {
+//            Toast.makeText(this, "Bluetooth device not found", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     private fun manageMyConnectedSocket(socket: BluetoothSocket) {

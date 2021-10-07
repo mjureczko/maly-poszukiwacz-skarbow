@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    android:orientation="vertical"
+    tools:context=".activity.main.MainActivity">
+
+    <EditText
+        android:id="@+id/memo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1000"
+        android:background="@color/black"
+        android:fontFamily="monospace"
+        android:gravity="top|start"
+        android:hint="Multiline EditText by XML layout"
+        android:inputType="textMultiLine"
+        android:maxLines="30"
+        android:minLines="2"
+        android:padding="10dp"
+        android:scrollbars="vertical" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintHeight_max="300dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fitsSystemWindows="true"
+            app:layout_constrainedHeight="true"
+
+            app:layout_constraintHeight_max="200dp"
+            tools:ignore="MissingConstraints" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
