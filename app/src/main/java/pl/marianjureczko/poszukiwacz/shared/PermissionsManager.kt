@@ -7,7 +7,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 
 class PermissionsManager(private val activity: Activity) {
     companion object {
@@ -19,25 +18,25 @@ class PermissionsManager(private val activity: Activity) {
         private val MEDIA_PERMISSIONS = arrayOf(RECORD_AUDIO, CAMERA)
     }
 
-    fun requestPermissions() = ActivityCompat.requestPermissions(activity, MEDIA_PERMISSIONS, REQUEST_MEDIA_PERMISSIONS)
+    fun requestMediaPermissions() = ActivityCompat.requestPermissions(activity, MEDIA_PERMISSIONS, REQUEST_MEDIA_PERMISSIONS)
 
-    fun requestBluetoothPermission() {
-        if (ContextCompat.checkSelfPermission(activity, BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+    fun requestBluetoothPermissions() {
+        if (!checkPermissionIsGranted(BLUETOOTH)) {
             ActivityCompat.requestPermissions(activity, arrayOf(BLUETOOTH), REQUEST_BLUETOOTH_PERMISSION)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (ContextCompat.checkSelfPermission(activity, ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (!checkPermissionIsGranted(ACCESS_BACKGROUND_LOCATION)) {
                 ActivityCompat.requestPermissions(activity, arrayOf(ACCESS_BACKGROUND_LOCATION), REQUEST_ACCESS_BACKGROUND_LOCATION)
             }
         }
     }
 
-    fun recordingGranted(): Boolean = checkPermission(RECORD_AUDIO)
+    fun recordingGranted(): Boolean = checkPermissionIsGranted(RECORD_AUDIO)
 
-    fun capturingPhotoGranted(): Boolean = checkPermission(CAMERA)
+    fun capturingPhotoGranted(): Boolean = checkPermissionIsGranted(CAMERA)
 
-    fun bluetoothGranted(): Boolean = checkPermission(BLUETOOTH)
+    fun bluetoothGranted(): Boolean = checkPermissionIsGranted(BLUETOOTH)
 
-    private fun checkPermission(permission: String) =
+    private fun checkPermissionIsGranted(permission: String) =
         ActivityCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED
 }

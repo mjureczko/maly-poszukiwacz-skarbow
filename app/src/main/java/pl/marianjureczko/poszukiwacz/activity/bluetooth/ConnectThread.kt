@@ -33,7 +33,7 @@ class ConnectThread(
 
     override fun run() {
 //        memoConsole.print("ConnectThread started")
-        // Cancel discovery because it slows down the connection.
+        // Cancel discovery because it slows down the connection, requires android.permission.BLUETOOTH_SCAN.
         bluetooth.adapter?.cancelDiscovery()
 
         socket?.let { socket ->

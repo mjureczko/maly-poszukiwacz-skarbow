@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
         setTitle(R.string.main_activity_title)
         requestAccessLocationPermission()
-        permissionsManager.requestBluetoothPermission()
+        permissionsManager.requestBluetoothPermissions()
     }
 
     override fun onResume() {

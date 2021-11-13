@@ -54,7 +54,7 @@ class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callba
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_treasures_editor)
-        permissionsManager.requestPermissions()
+        permissionsManager.requestMediaPermissions()
 
         treasuresRecyclerView = findViewById(R.id.treasures)
         treasuresRecyclerView.layoutManager = LinearLayoutManager(this)

@@ -33,7 +33,7 @@ interface BluetoothConnectionManager {
 }
 
 //TODO: handle full activity lifecycle
-//TODO: bluetooth permissions handling
+//TODO: extend bluetooth capabilities: is Connected & look for Bluetooth devices (https://developer.android.com/guide/topics/connectivity/bluetooth/permissions)
 class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnectionManager {
 
     enum class Mode {
@@ -47,7 +47,7 @@ class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnec
         private val xmlHelper = XmlHelper()
 
         fun intent(packageContext: Context, mode: Mode, route: Route?) = Intent(packageContext, BluetoothActivity::class.java).apply {
-            putExtra(BluetoothActivity.MODE, mode.toString())
+            putExtra(MODE, mode.toString())
             route?.let {
                 putExtra(ROUTE, xmlHelper.writeToString(it))
             }
