@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.bluetooth.BluetoothActivity
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG = javaClass.simpleName
     private val MY_PERMISSION_ACCESS_FINE_LOCATION = 12
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
+    private val permissionsManager = PermissionsManager(this)
     private lateinit var routesRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +44,15 @@ class MainActivity : AppCompatActivity() {
 
         showRoutes(storageHelper.loadAll())
 
-        val newRouteButton = findViewById<Button>(R.id.new_route_button)
-        newRouteButton.setOnClickListener {
+        findViewById<Button>(R.id.new_route_button).setOnClickListener {
             startActivity(TreasuresEditorActivity.intent(this))
         }
-        setTitle(R.string.main_activity_title);
+        findViewById<Button>(R.id.route_from_bluetooth_button).setOnClickListener {
+            fetchRouteFromBluetooth()
+        }
+        setTitle(R.string.main_activity_title)
         requestAccessLocationPermission()
+        permissionsManager.requestBluetoothPermissions()
     }
 
     override fun onResume() {
@@ -79,4 +85,7 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSION_ACCESS_FINE_LOCATION)
         }
     }
+
+    private fun fetchRouteFromBluetooth() =
+        startActivity(BluetoothActivity.intent(this, BluetoothActivity.Mode.ACCEPTING, null))
 }

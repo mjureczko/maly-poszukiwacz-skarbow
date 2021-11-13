@@ -55,3 +55,7 @@ Kody QR można wygenerować na stronie (https://zxing.appspot.com/generator) alb
 ![picture](sample_treasures/ruby14.png)
 ![picture](sample_treasures/ruby26.png)
 * * *
+
+TODO:
+
+- check if route file name already exists when saving one received from bluetooth

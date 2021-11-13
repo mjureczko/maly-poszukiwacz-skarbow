@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 private const val RECORD_TIP_DIALOG = "RecordTipDialog"
