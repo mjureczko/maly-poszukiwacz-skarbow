@@ -7,9 +7,10 @@ import java.util.concurrent.Executors
 
 class App : Application() {
     companion object {
-        val executorService: ExecutorService = Executors.newFixedThreadPool(10)
+        //TODO: debug (sending route over Bluetotth when more than one device is paired) with pool of size 1
+        val executorService: ExecutorService = Executors.newFixedThreadPool(3)
         private lateinit var res: Resources
-        fun getResources() =  res
+        fun getResources() = res
     }
 
     override fun onCreate() {

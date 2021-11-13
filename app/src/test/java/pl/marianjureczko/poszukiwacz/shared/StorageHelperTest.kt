@@ -5,6 +5,7 @@ import com.ocadotechnology.gembus.test.some
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.withinPercentage
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -14,7 +15,6 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.StringWriter
 import java.nio.charset.StandardCharsets
-import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
@@ -33,7 +33,6 @@ class StorageHelperTest {
     @Test
     fun `SHOULD save and load route`() {
         //given
-        val randomUUID = UUID.randomUUID()
         val route = some<Route>()
 
         //when
@@ -162,16 +161,93 @@ class StorageHelperTest {
 
         //then
         var zipEntry: ZipEntry?
-        var checked = false
+        var actualRoute: Route? = null
+        var actualFiles: MutableSet<String> = mutableSetOf()
         while (actualZip.nextEntry.also { zipEntry = it } != null) {
-            assertThat(zipEntry!!.name).isEqualTo(route.name + ".xml")
-            val stringWriter = StringWriter()
-            IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
-            assertThat(stringWriter.toString()).isEqualTo(xmlHelper.writeToString(route))
-            checked = true
+            if (zipEntry!!.name == route.name + ".xml") {
+                val stringWriter = StringWriter()
+                IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
+                actualRoute = xmlHelper.loadFromString(stringWriter.toString())
+            } else {
+                actualFiles.add(zipEntry!!.name)
+            }
         }
         actualZip.close()
-        assertTrue("no entries in zip", checked)
+        assertRoute(actualRoute!!, route)
+        assertRouteFiles(actualFiles, route)
+    }
+
+    @Test
+    fun `SHOULD save route with pictures and sounds WHEN loading a zip`() {
+        //given
+        val loggedRoutes: MutableList<String> = mutableListOf()
+        val loggedFiles: MutableList<String> = mutableListOf()
+        var progress: ExtractionProgress = object : ExtractionProgress {
+            override fun routeExtracted(routeName: String) {
+                loggedRoutes.add(routeName)
+            }
+
+            override fun fileExtracted(fileName: String) {
+                loggedFiles.add(fileName)
+            }
+        }
+        val routeName = "001"
+        val inStream = ClassLoader.getSystemResourceAsStream("route.zip")
+        val treasure2Photo = "photo_dc4dff0e-d133-4abc-a8a5-d97bfc922f6e.jpg"
+        val treasure2Sound = "sound_c7cb62ea-909c-4612-ba44-3083467c054d.3gp"
+        val treasure3Photo = "photo_1d165328-7c40-486b-b802-1a84c0efd9ab.jpg"
+        FileUtils.cleanDirectory(File(storageHelper.pathToRoutesDir()))
+
+        //when
+        storageHelper.extractZipStream(inStream, progress)
+
+        //then
+        val dir = storageHelper.pathToRoutesDir() + "/";
+        var routes = storageHelper.loadAll().filter { it.name == routeName }
+        assertThat(routes).hasSize(1)
+        val actualRoute = routes[0]
+        assertThat(actualRoute.treasures).hasSize(2)
+        assertThat(actualRoute.treasures).anySatisfy {
+            assertThat(it.id).isEqualTo(2)
+            assertThat(it.photoFileName).isEqualTo(dir + treasure2Photo)
+            assertThat(it.tipFileName).isEqualTo(dir + treasure2Sound)
+            assertThat(it.latitude).isCloseTo(51.25482, withinPercentage(0.1))
+            assertThat(it.longitude).isCloseTo(16.9326, withinPercentage(0.1))
+        }
+        assertThat(actualRoute.treasures).anySatisfy {
+            assertThat(it.id).isEqualTo(3)
+            assertThat(it.photoFileName).isEqualTo(dir + treasure3Photo)
+            assertThat(it.tipFileName).isNull()
+            assertThat(it.latitude).isCloseTo(51.2502, withinPercentage(0.1))
+            assertThat(it.longitude).isCloseTo(16.93156, withinPercentage(0.1))
+        }
+        assertThat(File("${storageHelper.pathToRoutesDir()}/$treasure2Photo").length()).isEqualTo(163850);
+        assertThat(File("${storageHelper.pathToRoutesDir()}/$treasure2Sound").length()).isEqualTo(585221);
+        assertThat(File("${storageHelper.pathToRoutesDir()}/$treasure3Photo").length()).isEqualTo(61781);
+        assertThat(loggedRoutes).contains(routeName)
+        assertThat(loggedFiles).contains(treasure2Photo)
+        assertThat(loggedFiles).contains(treasure2Sound)
+        assertThat(loggedFiles).contains(treasure3Photo)
+    }
+
+    private fun assertRoute(actual: Route, expected: Route) {
+        assertThat(actual.name).isEqualTo(expected.name)
+        assertThat(actual.treasures).hasSize(expected.treasures.size)
+        expected.treasures.forEach {
+            assertThat(actual.treasures).contains(
+                it.copy(tipFileName = toRelative(it.tipFileName!!))
+            )
+        }
+    }
+
+    private fun toRelative(s: String) =
+        s.substring(storageHelper.pathToRoutesDir().length + 1)
+
+    private fun assertRouteFiles(actualFiles: MutableSet<String>, route: Route) {
+        route.treasures.forEach {
+            assertThat(actualFiles).contains(toRelative(it.tipFileName!!))
+            assertThat(actualFiles).contains(it.photoFileName!!)
+        }
     }
 }
 

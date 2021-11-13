@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.bluetooth
 
+import android.bluetooth.BluetoothDevice
 import android.view.View
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
@@ -9,5 +10,5 @@ abstract class AbstractDeviceHolder(view: View) : RecyclerView.ViewHolder(view) 
 
     val deviceName: Button = itemView.findViewById((R.id.device_name))
 
-    abstract fun setupView(deviceName: String)
+    abstract fun setupView(device: BluetoothDevice)
 }

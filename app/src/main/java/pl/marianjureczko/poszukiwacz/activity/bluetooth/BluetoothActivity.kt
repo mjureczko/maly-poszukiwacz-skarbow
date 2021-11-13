@@ -1,5 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.bluetooth
 
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -8,40 +10,55 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.EditText
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_bluetooth.*
+import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
-import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
-import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
+import pl.marianjureczko.poszukiwacz.activity.main.BluetoothException
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.*
+import java.util.*
 
 interface MemoConsole {
     fun print(msg: String)
 }
 
-class BluetoothActivity : AppCompatActivity(), MemoConsole {
+interface BluetoothConnectionManager {
+    fun tryToAcceptConnection()
+    fun readRuteFromConnectedSocket(socket: BluetoothSocket)
+    fun tryToConnect(selectedDevice: BluetoothDevice)
+}
+
+//TODO: handle full activity lifecycle
+//TODO: bluetooth permissions handling
+class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnectionManager {
+
+    enum class Mode {
+        SENDING, ACCEPTING
+    }
 
     companion object {
-        //        private val xmlHelper = XmlHelper()
-//        const val REQUEST_PHOTO = 2
-        private const val PARAM = "pl.marianjureczko.poszukiwacz.activity.devices";
+        private const val MODE = "pl.marianjureczko.poszukiwacz.activity.bluetooth_mode";
+        private const val ROUTE = "pl.marianjureczko.poszukiwacz.activity.route";
 
-        fun intent(packageContext: Context) = Intent(packageContext, BluetoothActivity::class.java)
+        private val xmlHelper = XmlHelper()
 
-        fun intent(packageContext: Context, devices: Array<String>) =
-            Intent(packageContext, BluetoothActivity::class.java).apply {
-                putExtra(PARAM, devices)
+        fun intent(packageContext: Context, mode: Mode, route: Route?) = Intent(packageContext, BluetoothActivity::class.java).apply {
+            putExtra(BluetoothActivity.MODE, mode.toString())
+            route?.let {
+                putExtra(ROUTE, xmlHelper.writeToString(it))
             }
+        }
     }
 
     private lateinit var devicesRecyclerView: RecyclerView
     private val permissionsManager = PermissionsManager(this)
-    private val bluetooth: Bluetooth = Bluetooth(this)
+    private val bluetooth: Bluetooth = Bluetooth(permissionsManager)
+    private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
 
-    //TODO: try to use array of devices directly in DeviceAdapter and remove the model
     private val model: BluetoothViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,39 +67,75 @@ class BluetoothActivity : AppCompatActivity(), MemoConsole {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         setContentView(R.layout.activity_bluetooth)
-
         setTitle(R.string.sending_route)
-        devicesRecyclerView = findViewById(R.id.devices)
-        devicesRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        val memo: EditText = configureMemo()
 //        requestAccessBluetoothDrivenLocationPermission()
 //        permissionsManager.requestBluetoothPermission()
-
-        val device = bluetooth.findDevice()
-        if (device != null) {
-            Toast.makeText(this, "Bluetooth device found, starting accept thread", Toast.LENGTH_SHORT).show()
-            App.executorService.submit(AcceptThread(this))
+        val mode = intent.getStringExtra(MODE)
+        if (Mode.SENDING.toString() == mode) {
+            model.setup(intent.getStringExtra(ROUTE))
+            devicesRecyclerView = findViewById(R.id.devices)
+            devicesRecyclerView.layoutManager = LinearLayoutManager(this)
+            try {
+                val devices: List<BluetoothDevice> = bluetooth.findDevices()
+                if (devices.isEmpty()) {
+                    memo.setText(R.string.no_bluetooth_device)
+                } else {
+                    devicesRecyclerView.adapter = DevicesAdapter(this, devices, this, this, devicesRecyclerView)
+                    if (devices.size > 1) {
+                        memo.setText(R.string.select_bluetooth_device)
+                    } else {
+                        memo.setText(R.string.one_bluetooth_device)
+                    }
+                }
+            } catch (e: BluetoothException) {
+                memo.setText(e.msgId)
+            }
         } else {
-            Toast.makeText(this, "Bluetooth device not found", Toast.LENGTH_SHORT).show()
+            tryToAcceptConnection()
         }
+    }
 
+    override fun onBackPressed() {
+        if (model.thread != null) {
+            model.thread!!.cancel()
+        }
+        super.onBackPressed()
+    }
 
-        model.devices = intent.getStringArrayExtra(PARAM)
-        devicesRecyclerView.adapter = DevicesAdapter(this, model.devices, this, devicesRecyclerView)
+    override fun tryToAcceptConnection() {
+        model.thread = AcceptThread(this, bluetooth, this, this)
+        App.executorService.submit(model.thread)
+    }
 
-        val memo: EditText = findViewById(R.id.memo)
-        memo.setText(R.string.select_bluetooth_device)
-        memo.isEnabled = false
-        memo.isFocusable = false
-        memo.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+    override fun readRuteFromConnectedSocket(socket: BluetoothSocket) {
+        model.thread = null
+        App.executorService.submit(ReaderThread(socket, this, this))
+    }
 
+    override fun tryToConnect(selectedDevice: BluetoothDevice) {
+        val zip = storageHelper.routeToZipOutputStream(model.route)
+        model.thread = ConnectThread(selectedDevice, zip, bluetooth, memoConsole = this, context = this)
+        App.executorService.submit(model.thread)
     }
 
     override fun print(msg: String) {
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             val text = memo.text
-            text.insert(text.length, "> $msg")
+            text.insert(text.length, "\n> $msg")
             memo.setSelection(text.length)
         }
     }
+
+    private fun configureMemo(): EditText {
+        val memo: EditText = findViewById(R.id.memo)
+        memo.isEnabled = false
+        memo.isFocusable = false
+        memo.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        return memo
+    }
 }
+
+val MY_BLUETOOTH_UUID: UUID = UUID.fromString("3c7397c5-68ea-487f-bc11-d5b113bcad71")

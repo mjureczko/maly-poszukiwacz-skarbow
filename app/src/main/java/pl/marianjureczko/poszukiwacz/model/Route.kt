@@ -34,4 +34,15 @@ data class Route(
         treasures.remove(td)
         storageHelper.removeTipFiles(td)
     }
+
+    fun addPrefixToFilesPaths(prefix: String) {
+        treasures.forEach { treasure ->
+            treasure.photoFileName?.let {
+                treasure.photoFileName = prefix + treasure.photoFileName
+            }
+            treasure.tipFileName?.let {
+                treasure.tipFileName = prefix + treasure.tipFileName
+            }
+        }
+    }
 }

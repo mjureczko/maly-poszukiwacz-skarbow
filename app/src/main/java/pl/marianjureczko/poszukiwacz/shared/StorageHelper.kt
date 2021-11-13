@@ -1,14 +1,20 @@
 package pl.marianjureczko.poszukiwacz.shared
 
 import android.content.Context
+import org.apache.commons.io.IOUtils
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
+import java.io.*
+import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
+
+interface ExtractionProgress {
+    fun routeExtracted(routeName: String)
+    fun fileExtracted(fileName: String)
+}
 
 open class StorageHelper(val context: Context) {
 
@@ -29,22 +35,68 @@ open class StorageHelper(val context: Context) {
 
     /** The route should be already saved */
     fun routeToZipOutputStream(route: Route): ByteArrayOutputStream {
-        val xmlFile = getRouteFile(route)
         val outputStream = ByteArrayOutputStream()
         val zipOut = ZipOutputStream(outputStream)
-        val routeFile = getRouteFile(route)
-        val fis = FileInputStream(routeFile)
-        val zipEntry = ZipEntry(routeFile.getName())
-        zipOut.putNextEntry(zipEntry);
-        val bytes = ByteArray(1024)
-        var length: Int
-        while (fis.read(bytes).also { length = it } >= 0) {
-            zipOut.write(bytes, 0, length)
-        }
-        fis.close()
+
+        val routeString = xmlHelper.writeToString(pathsToRelative(route))
+
+        val zipEntry = ZipEntry(route.name + ".xml")
+        zipOut.putNextEntry(zipEntry)
+        zipOut.write(routeString.toByteArray())
         zipOut.closeEntry()
+        route.treasures.forEach {
+            addFileToZipStream(zipOut, it.photoFileName)
+            addFileToZipStream(zipOut, it.tipFileName)
+        }
+
         zipOut.close()
         return outputStream
+    }
+
+    fun extractZipStream(inStream: InputStream, progress: ExtractionProgress) {
+        val actualZip = ZipInputStream(inStream)
+        var zipEntry: ZipEntry?
+        var routesDir = this.getRoutesDir().absolutePath
+        if (!routesDir.endsWith("/")) {
+            routesDir = "$routesDir/"
+        }
+        while (actualZip.nextEntry.also { zipEntry = it } != null) {
+            if (zipEntry!!.name.endsWith(".xml")) {
+                val route = extractRoute(actualZip, routesDir)
+                progress.routeExtracted(route.name)
+            } else {
+                extractFile(zipEntry!!, actualZip, routesDir)
+                progress.fileExtracted(zipEntry!!.name)
+            }
+        }
+        actualZip.close()
+    }
+
+    private fun extractFile(zipEntry: ZipEntry, actualZip: ZipInputStream, routesDir: String) {
+        FileOutputStream("${routesDir}${zipEntry.name}").use {
+            IOUtils.copy(actualZip, it)
+            actualZip.closeEntry()
+        }
+    }
+
+    private fun extractRoute(actualZip: ZipInputStream, routesDir: String): Route {
+        val stringWriter = StringWriter()
+        IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
+        val routeXml = stringWriter.toString()
+        var route = xmlHelper.loadFromString(routeXml)
+        route.addPrefixToFilesPaths(routesDir)
+        save(route)
+        actualZip.closeEntry()
+        return route
+    }
+
+    private fun addFileToZipStream(zipOut: ZipOutputStream, fileName: String?) {
+        if (fileName != null) {
+            val zipEntry = ZipEntry(toRelativePath(fileName))
+            zipOut.putNextEntry(zipEntry)
+            zipOut.write(File(fileName).readBytes())
+            zipOut.closeEntry()
+        }
     }
 
     fun routeAlreadyExists(route: Route): Boolean =
@@ -85,6 +137,8 @@ open class StorageHelper(val context: Context) {
             .forEach { it -> remove(it) }
     }
 
+    fun pathToRoutesDir(): String = getRoutesDir().absolutePath
+
     private fun newFile(prefix: String, extension: String) =
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
@@ -100,5 +154,27 @@ open class StorageHelper(val context: Context) {
         }
         return dir
     }
+
+    private fun pathsToRelative(route: Route): Route {
+        val relativeTreasures = route.treasures
+            .map { it.copy(tipFileName = toRelativePath(it.tipFileName), photoFileName = toRelativePath(it.photoFileName)) }
+            .toMutableList()
+        return route.copy(treasures = relativeTreasures)
+    }
+
+    private fun toRelativePath(fileName: String?): String? {
+        return fileName?.let {
+            return if (it.startsWith(pathToRoutesDir())) {
+                var cutSize = pathToRoutesDir().length
+                if (it[cutSize] == '/') {
+                    cutSize++
+                }
+                return it.substring(cutSize)
+            } else {
+                it
+            }
+        }
+    }
+
 }
 
