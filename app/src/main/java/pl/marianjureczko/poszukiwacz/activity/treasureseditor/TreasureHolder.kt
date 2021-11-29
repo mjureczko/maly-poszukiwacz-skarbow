@@ -65,11 +65,9 @@ class TreasureHolder(
     }
 
     private fun recordNewTip(treasure: TreasureDescription, route: Route) {
-        val soundFileName = storageHelper.newSoundFile()
-        storageHelper.removeTipFiles(treasure)
-        treasure.tipFileName = soundFileName
+        val soundFileName = treasure.instantiateSoundFile(storageHelper)
         storageHelper.save(route)
-        RecordingDialog.newInstance(soundFileName).apply {
+        RecordingDialog.newInstance(soundFileName.absolutePath).apply {
             show(this@TreasureHolder.activity.supportFragmentManager, RECORD_TIP_DIALOG)
         }
     }
