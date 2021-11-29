@@ -52,7 +52,7 @@ class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
 
         scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
         changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
-        playTipBtn.setOnClickListener(PlayTipButtonListener(model))
+        playTipBtn.setOnClickListener(PlayTipButtonListener(model, this))
         mapBtn.setOnClickListener { errorTone() }
         photoBtn.setOnClickListener(PhotoButtonListener(this, model))
 

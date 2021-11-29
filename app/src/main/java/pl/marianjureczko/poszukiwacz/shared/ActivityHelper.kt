@@ -11,5 +11,5 @@ fun addIconToActionBar(actionBar: ActionBar?) {
 }
 
 fun errorTone() {
-    ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP)
+    ToneGenerator(AudioManager.STREAM_NOTIFICATION, 90).startTone(ToneGenerator.TONE_PROP_BEEP)
 }

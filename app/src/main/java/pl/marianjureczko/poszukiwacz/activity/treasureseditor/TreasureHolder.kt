@@ -3,16 +3,13 @@ package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.media.AudioManager
 import android.media.ToneGenerator
-import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
@@ -27,6 +24,7 @@ class TreasureHolder(
     view: View,
     private val activity: FragmentActivity,
     private val treasureRemover: TreasureRemover,
+    private val treasurePhotoMaker: TreasurePhotoMaker,
     private val permissions: PermissionsManager,
     private val storageHelper: StorageHelper
 ) : RecyclerView.ViewHolder(view) {
@@ -77,20 +75,18 @@ class TreasureHolder(
     }
 
     private fun setupPhotoBtn(treasure: TreasureDescription, route: Route) {
-        val instantiatePhotoFile = treasure.instantiatePhotoFile(storageHelper)
-        val photoUri = FileProvider.getUriForFile(activity, "pl.marianjureczko.poszukiwacz.fileprovider", instantiatePhotoFile)
-        val captureImage = capturePhotoIntent()
-        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
         photoBtn.setOnClickListener {
             if (thereIsActivityCapableOfCapturingPhoto && permissions.capturingPhotoGranted()) {
                 if (treasure.hasPhoto()) {
                     AlertDialog.Builder(activity)
                         .setMessage(R.string.overwritting_photo)
                         .setPositiveButton(R.string.no) { _, _ -> }
-                        .setNegativeButton(R.string.yes) { _, _ -> captureNewPhoto(captureImage, photoUri, route) }
+                        .setNegativeButton(R.string.yes) { _, _ ->
+                            treasurePhotoMaker.doPhotoForTreasure(treasure)
+                        }
                         .show()
                 } else {
-                    captureNewPhoto(captureImage, photoUri, route)
+                    treasurePhotoMaker.doPhotoForTreasure(treasure)
                 }
             } else {
                 operationNotPermitted("No intent capable of capturing photo is available")
@@ -98,20 +94,10 @@ class TreasureHolder(
         }
     }
 
-    private fun captureNewPhoto(captureImage: Intent, photoUri: Uri?, route: Route) {
-        val cameraActivities: List<ResolveInfo> =
-            packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
-        for (cameraActivity in cameraActivities) {
-            activity.grantUriPermission(cameraActivity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        }
-        storageHelper.save(route)
-        activity.startActivityForResult(captureImage, TreasuresEditorActivity.REQUEST_PHOTO)
-    }
-
     private fun capturePhotoIntent() = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
     private fun operationNotPermitted(message: String) {
         Log.w(TAG, message)
-        ToneGenerator(AudioManager.STREAM_NOTIFICATION, 50).startTone(ToneGenerator.TONE_PROP_BEEP)
+        ToneGenerator(AudioManager.STREAM_NOTIFICATION, 90).startTone(ToneGenerator.TONE_PROP_BEEP)
     }
 }

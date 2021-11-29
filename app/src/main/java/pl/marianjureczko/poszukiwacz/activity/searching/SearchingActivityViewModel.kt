@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
+import android.content.Context
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.model.Route
