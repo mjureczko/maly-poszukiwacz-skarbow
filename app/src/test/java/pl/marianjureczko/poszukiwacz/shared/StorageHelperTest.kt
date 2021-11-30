@@ -64,7 +64,7 @@ class StorageHelperTest {
         //given
         storageHelper.save(some<Route>())
         File(context.filesDir.absolutePath + StorageHelper.routesDirectory + "/invalid.file.xml")
-            .writeText("it' not a xml")
+            .writeText("it's not a xml")
 
         //when
         val actual = storageHelper.loadAll()
