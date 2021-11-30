@@ -5,12 +5,20 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_treasures_editor.*
@@ -19,15 +27,19 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
-class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callback {
+class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callback, TreasurePhotoMaker {
 
     companion object {
         private val xmlHelper = XmlHelper()
         const val REQUEST_PHOTO = 2
+        const val TMP_PICTURE_FILE = "/tmp.jpg"
         private const val SELECTED_LIST = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
 
         fun intent(packageContext: Context) = Intent(packageContext, TreasuresEditorActivity::class.java)
@@ -115,7 +127,14 @@ class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callba
         Log.d(TAG, "########> onActivityResult")
         if (requestCode == REQUEST_PHOTO) {
             if (Activity.RESULT_OK == resultCode) {
-                Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, R.string.photo_saving, Toast.LENGTH_SHORT).show()
+                val photoTempFile = getPhotoTempFile()
+                val photoHelper = PhotoHelper(storageHelper)
+                if (model.treasureNeedingPhoto != null && photoHelper.rescaleImageAndSaveInTreasure(photoTempFile, model.treasureNeedingPhoto!!)) {
+                    Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
+                }
             } else {
                 Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
             }
@@ -124,9 +143,35 @@ class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callba
         }
     }
 
+    override fun doPhotoForTreasure(treasure: TreasureDescription) {
+        model.treasureNeedingPhoto = treasure
+        val photoUri = createPhotoUri()
+
+        val captureImage = capturePhotoIntent()
+        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+
+        val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
+        for (cameraActivity in cameraActivities) {
+            grantUriPermission(cameraActivity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        }
+        startActivityForResult(captureImage, REQUEST_PHOTO)
+    }
+
+    private fun createPhotoUri(): Uri {
+        val photoFile = getPhotoTempFile()
+        if (!photoFile.exists()) {
+            photoFile.createNewFile()
+        }
+        return FileProvider.getUriForFile(this, "pl.marianjureczko.poszukiwacz.fileprovider", photoFile)
+    }
+
+    private fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + TMP_PICTURE_FILE)
+
+    private fun capturePhotoIntent() = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
     private fun setupTreasureView(route: Route) {
         model.route = route
-        treasureAdapter = TreasureAdapter(this, route, permissionsManager, storageHelper)
+        treasureAdapter = TreasureAdapter(this, route, permissionsManager, storageHelper, this)
         treasuresRecyclerView.adapter = treasureAdapter
         supportActionBar?.title = "${App.getResources().getString(R.string.route)} ${route.name}"
     }

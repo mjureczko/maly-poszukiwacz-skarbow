@@ -20,8 +20,9 @@
     <string name="route">Trasa</string>
     <string name="searching_activity_title">Poszukiwania</string>
     <string name="no_routes">Dodaj trasę aby rozpocząć zabawę</string>
+    <string name="photo_saving">Zdjęcie jest zapisywane...</string>
     <string name="photo_saved">Zdjęcie zostało zapisane</string>
-    <string name="photo_failed">Zdjęcie nie zostało zapisane</string>
+    <string name="photo_failed">Błąd podczas zapisywania zdjęcia</string>
     <string name="photo_tip">Podpowiedź</string>
     <string name="overwritting_route">Trasa o takiej nazwie już istnieje, czy chcesz ją nadpisać?</string>
     <string name="overwritting_tip">Istnieje już podpowiedź, czy chcesz ją nadpisać?</string>
@@ -50,4 +51,6 @@
     <string name="sending_over_bluetooth">Wysyłanie trasy przez Bluetooth. Może to potrwać nawet kilkanaście minut... Proszę czekać na komunikat informujący o zakończeniu transmisji.</string>
     <string name="bluetooth_next_file">Oczekiwanie na przeprowadzenie transmisji następnego pliku...</string>
     <string name="error_when_creating_connection">Wystąpił błąd techniczny podczas nawiązywania połączenia: </string>
+    <string name="no_photo_to_show">Nie przygotowano podpowiedzi do wyświetlenia</string>
+    <string name="no_tip_to_play">Nie przygotowano podpowiedzi do odtworzenia</string>
 </resources>

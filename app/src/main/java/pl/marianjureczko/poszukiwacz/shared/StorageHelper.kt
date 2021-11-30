@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.shared
 
 import android.content.Context
+import android.util.Log
 import org.apache.commons.io.IOUtils
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -18,6 +19,7 @@ interface ExtractionProgress {
 
 open class StorageHelper(val context: Context) {
 
+    private val TAG = javaClass.simpleName
     private val xmlHelper = XmlHelper()
 
     companion object {
@@ -105,13 +107,16 @@ open class StorageHelper(val context: Context) {
 
     fun loadAll(): MutableList<Route> {
         val dir = getRoutesDir()
-        return dir.listFiles().mapNotNull {
-            try {
-                xmlHelper.loadFromFile(it)
-            } catch (e: Exception) {
-                null
-            }
-        }.toMutableList()
+        return dir.listFiles()
+            .filter { it.name.toLowerCase().endsWith(".xml") }
+            .mapNotNull {
+                try {
+                    xmlHelper.loadFromFile(it)
+                } catch (e: Exception) {
+                    Log.d(TAG, "Error when loading ${it.name}:" + e.message)
+                    null
+                }
+            }.toMutableList()
     }
 
     fun remove(toRemove: Route) {

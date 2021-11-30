@@ -26,6 +26,13 @@ data class TreasureDescription(
         return File(photoFileName)
     }
 
+    fun instantiateSoundFile(storageHelper: StorageHelper): File {
+        if(tipFileName == null) {
+            tipFileName = storageHelper.newSoundFile()
+        }
+        return File(tipFileName)
+    }
+
     fun hasPhoto(): Boolean {
         return photoFileName != null && File(photoFileName).exists()
     }
