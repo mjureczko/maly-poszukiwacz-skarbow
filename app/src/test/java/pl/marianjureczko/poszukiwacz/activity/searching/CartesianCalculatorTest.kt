@@ -1,36 +1,30 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
-import java.lang.Math.sqrt
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import kotlin.math.sqrt
 
-@RunWith(value = Parameterized::class)
-class CartesianCalculatorQuarterTest(
-    private val xTreasure: Double,
-    private val yTreasure: Double,
-    private val xLocation: Double,
-    private val yLocation: Double,
-    private val expected: Quarter
-) {
+class CartesianCalculatorQuarterTest {
+
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "treasure({0},{1}) against location({2},{3}) is in {4}")
-        fun data(): Iterable<Array<Any>> {
-            return arrayListOf(
-                arrayOf(0f, 2f, 0f, 0f, Quarter.LINE_Y),
-                arrayOf(-2f, 0f, 0f, 0f, Quarter.LINE_X),
-                arrayOf(-2f, -3f, -5f, -6f, Quarter.ONE),
-                arrayOf(-2f, 3f, 0f, 0f, Quarter.TWO),
-                arrayOf(-2f, -3f, 0f, 0f, Quarter.THREE),
-                arrayOf(2f, -3f, 1f, -2f, Quarter.FOUR)
-            ).toList()
+        fun data(): List<Arguments> {
+            return listOf(
+                Arguments.of(0f, 2f, 0f, 0f, Quarter.LINE_Y),
+                Arguments.of(-2f, 0f, 0f, 0f, Quarter.LINE_X),
+                Arguments.of(-2f, -3f, -5f, -6f, Quarter.ONE),
+                Arguments.of(-2f, 3f, 0f, 0f, Quarter.TWO),
+                Arguments.of(-2f, -3f, 0f, 0f, Quarter.THREE),
+                Arguments.of(2f, -3f, 1f, -2f, Quarter.FOUR)
+            )
         }
     }
 
-    @Test
-    fun quarter() {
+    @ParameterizedTest(name = "treasure({0},{1}) against location({2},{3}) is in {4}")
+    @MethodSource("data")
+    fun quarter(xTreasure: Double, yTreasure: Double, xLocation: Double, yLocation: Double, expected: Quarter) {
         //when
         val actual = CartesianCalculator().quarter(xTreasure, yTreasure, xLocation, yLocation)
 
@@ -39,28 +33,21 @@ class CartesianCalculatorQuarterTest(
     }
 }
 
-@RunWith(value = Parameterized::class)
-class CartesianCalculatorCosTest(
-    private val xTreasure: Double,
-    private val yTreasure: Double,
-    private val xLocation: Double,
-    private val yLocation: Double,
-    private val expected: Double
-) {
+class CartesianCalculatorCosTest() {
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "treasure({0},{1}) against location({2},{3}) creates arc with cos {4}")
-        fun data(): Iterable<Array<Any>> {
-            return arrayListOf(
-                arrayOf(2f, 2f, 1f, 1f, 0.707106781187),
-                arrayOf(0.5f, sqrt(3.0) / 2, 0f, 0f, 0.866025403785),
-                arrayOf(sqrt(3.0) / 2, 0.5f, 0f, 0f, 0.5)
-            ).toList()
+        fun data(): List<Arguments> {
+            return listOf(
+                Arguments.of(2f, 2f, 1f, 1f, 0.707106781187),
+                Arguments.of(0.5f, sqrt(3.0) / 2, 0f, 0f, 0.866025403785),
+                Arguments.of(sqrt(3.0) / 2, 0.5f, 0f, 0f, 0.5)
+            )
         }
     }
 
-    @Test
-    fun cos() {
+    @ParameterizedTest(name = "treasure({0},{1}) against location({2},{3}) creates arc with cos {4}")
+    @MethodSource("data")
+    fun cos(xTreasure: Double, yTreasure: Double, xLocation: Double, yLocation: Double, expected: Double) {
         //when
         val actual = CartesianCalculator().cos(xTreasure, yTreasure, xLocation, yLocation)
 

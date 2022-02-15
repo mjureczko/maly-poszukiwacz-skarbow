@@ -46,7 +46,7 @@ open class StorageHelper(val context: Context) {
         zipOut.putNextEntry(zipEntry)
         zipOut.write(routeString.toByteArray())
         zipOut.closeEntry()
-        route.treasures.forEach {
+        route.treasures.iterator().forEach {
             addFileToZipStream(zipOut, it.photoFileName)
             addFileToZipStream(zipOut, it.tipFileName)
         }
@@ -120,7 +120,7 @@ open class StorageHelper(val context: Context) {
     }
 
     fun remove(toRemove: Route) {
-        toRemove.treasures.forEach {
+        toRemove.treasures.iterator().forEach {
             removeTipFiles(it)
         }
         val fileToRemove = getRouteFile(toRemove)

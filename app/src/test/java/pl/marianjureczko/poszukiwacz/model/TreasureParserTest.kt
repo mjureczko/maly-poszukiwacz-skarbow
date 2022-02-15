@@ -1,8 +1,8 @@
 package pl.marianjureczko.poszukiwacz.model
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import pl.marianjureczko.poszukiwacz.model.TreasureType
+import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class TreasureParserTest {
 
@@ -54,14 +54,16 @@ class TreasureParserTest {
         assertEquals(id, actual.id)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun parseInvalidTreasureType() {
-        TreasureParser().parse("x01id")
+        assertThatThrownBy { TreasureParser().parse("x01id") }
+            .isInstanceOf(IllegalArgumentException::class.java)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun parseInvalidQuantityType() {
-        TreasureParser().parse("d0aid")
+        assertThatThrownBy { TreasureParser().parse("d0aid") }
+            .isInstanceOf(IllegalArgumentException::class.java)
     }
 
     @Test

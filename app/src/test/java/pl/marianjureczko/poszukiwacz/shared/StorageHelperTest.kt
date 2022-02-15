@@ -6,9 +6,10 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.withinPercentage
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Test
+import org.assertj.core.api.ThrowingConsumer
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import java.io.ByteArrayInputStream
@@ -25,7 +26,7 @@ class StorageHelperTest {
     private val storageHelper = StorageHelper(context)
     private val xmlHelper = XmlHelper()
 
-    @Before
+    @BeforeEach
     fun cleanup() {
         FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.routesDirectory))
     }
@@ -207,20 +208,21 @@ class StorageHelperTest {
         assertThat(routes).hasSize(1)
         val actualRoute = routes[0]
         assertThat(actualRoute.treasures).hasSize(2)
-        assertThat(actualRoute.treasures).anySatisfy {
+
+        assertThat(actualRoute.treasures).anySatisfy(ThrowingConsumer {
             assertThat(it.id).isEqualTo(2)
             assertThat(it.photoFileName).isEqualTo(dir + treasure2Photo)
             assertThat(it.tipFileName).isEqualTo(dir + treasure2Sound)
             assertThat(it.latitude).isCloseTo(51.25482, withinPercentage(0.1))
             assertThat(it.longitude).isCloseTo(16.9326, withinPercentage(0.1))
-        }
-        assertThat(actualRoute.treasures).anySatisfy {
+        })
+        assertThat(actualRoute.treasures).anySatisfy(ThrowingConsumer {
             assertThat(it.id).isEqualTo(3)
             assertThat(it.photoFileName).isEqualTo(dir + treasure3Photo)
             assertThat(it.tipFileName).isNull()
             assertThat(it.latitude).isCloseTo(51.2502, withinPercentage(0.1))
             assertThat(it.longitude).isCloseTo(16.93156, withinPercentage(0.1))
-        }
+        })
         assertThat(File("${storageHelper.pathToRoutesDir()}/$treasure2Photo").length()).isEqualTo(163850);
         assertThat(File("${storageHelper.pathToRoutesDir()}/$treasure2Sound").length()).isEqualTo(585221);
         assertThat(File("${storageHelper.pathToRoutesDir()}/$treasure3Photo").length()).isEqualTo(61781);

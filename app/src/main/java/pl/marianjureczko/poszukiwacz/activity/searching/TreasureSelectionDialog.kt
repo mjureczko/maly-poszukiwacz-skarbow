@@ -63,10 +63,11 @@ class TreasureSelectionDialog : DialogFragment() {
                 }
             }
 
-        treasures.treasures.forEach { treasure ->
+        treasures.treasures.iterator().forEach { treasure ->
             if (treasureLocationStorage?.getCurrentLocation() != null) {
                 val distance: Int = locationCalculator.distanceInSteps(treasure, treasureLocationStorage?.getCurrentLocation()!!)
-                arrayAdapter.add(activity?.getString(R.string.steps_to_treasure, treasure.id, distance))
+                val id: Int = treasure.id
+                arrayAdapter.add(activity?.getString(R.string.steps_to_treasure, id, distance))
             } else {
                 arrayAdapter.add(treasure.prettyName())
             }
