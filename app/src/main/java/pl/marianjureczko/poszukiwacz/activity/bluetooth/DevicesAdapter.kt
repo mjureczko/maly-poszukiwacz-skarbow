@@ -17,7 +17,10 @@ class DevicesAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AbstractDeviceHolder {
         val view = activity.layoutInflater.inflate(R.layout.device_item, parent, false)
         return if (devices.size == 1) {
-            memoConsole.print(activity.getString(R.string.connect_to_device, devices[0].name))
+            try {
+                memoConsole.print(activity.getString(R.string.connect_to_device, devices[0].name))
+            } catch (e: SecurityException) {
+            }
             manager.tryToConnect(devices[0])
             ImmutableDeviceHolder(view)
         } else {

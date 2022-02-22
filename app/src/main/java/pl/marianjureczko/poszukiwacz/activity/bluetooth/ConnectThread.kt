@@ -25,29 +25,40 @@ class ConnectThread(
     private val socket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
         try {
             selectedDevice.createRfcommSocketToServiceRecord(MY_BLUETOOTH_UUID)
-        } catch (e: Exception) {
-            memoConsole.print(context.getString(R.string.bluetooth_connecting_error) + e.message)
-            null
+        } catch (e: SecurityException) {
+            reportException(memoConsole, e)
+        }
+        catch (e: Exception) {
+            reportException(memoConsole, e)
         }
     }
 
+    private fun reportException(memoConsole: MemoConsole, e: Exception): Nothing? {
+        printInConsole(context.getString(R.string.bluetooth_connecting_error) + e.message)
+        return null
+    }
+
     override fun run() {
-//        memoConsole.print("ConnectThread started")
         // Cancel discovery because it slows down the connection, requires android.permission.BLUETOOTH_SCAN.
-        bluetooth.adapter?.cancelDiscovery()
+        try {
+            bluetooth.adapter?.cancelDiscovery()
+        } catch (e: SecurityException) {
+        }
 
         socket?.let { socket ->
             try {
                 socket.connect()
                 printInConsole(context.getString(R.string.bluetooth_connection_created))
                 writeRouteToSocket(socket)
-            } catch (e: IOException) {
+            } catch(e: SecurityException) {
+                printInConsole(context.getString(R.string.error_when_creating_connection) + e.message)
+            }
+            catch (e: IOException) {
                 Log.e(TAG, "Error occurred when creating connection", e)
                 printInConsole(context.getString(R.string.error_when_creating_connection) + e.message)
             }
         }
         done.set(true)
-//        memoConsole.print("ConnectThread finished")
     }
 
     private fun writeRouteToSocket(socket: BluetoothSocket) {

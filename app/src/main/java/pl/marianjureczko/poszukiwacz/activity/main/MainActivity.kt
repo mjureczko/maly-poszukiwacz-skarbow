@@ -6,16 +6,15 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.bluetooth.BluetoothActivity
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
+import pl.marianjureczko.poszukiwacz.databinding.ActivityMainBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -31,28 +30,32 @@ class MainActivity : AppCompatActivity() {
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
     private val permissionsManager = PermissionsManager(this)
     private lateinit var routesRecyclerView: RecyclerView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "########> onCreate")
+        binding = ActivityMainBinding.inflate(layoutInflater)
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
 
-        routesRecyclerView = findViewById(R.id.routes)
+        routesRecyclerView = binding.routes
         routesRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        showRoutes(storageHelper.loadAll())
+        val routes = storageHelper.loadAll()
+        showRoutes(routes)
 
-        findViewById<Button>(R.id.new_route_button).setOnClickListener {
+        binding.newRouteButton.setOnClickListener {
             startActivity(TreasuresEditorActivity.intent(this))
         }
-        findViewById<Button>(R.id.route_from_bluetooth_button).setOnClickListener {
+        binding.routeFromBluetoothButton.setOnClickListener {
             fetchRouteFromBluetooth()
         }
         setTitle(R.string.main_activity_title)
         requestAccessLocationPermission()
         permissionsManager.requestBluetoothPermissions()
+        setContentView(binding.root)
     }
 
     override fun onResume() {
@@ -61,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         val routes = storageHelper.loadAll()
         showRoutes(routes)
         if (routes.isNotEmpty()) {
-            no_routes.visibility = View.GONE
+            binding.noRoutes.visibility = View.GONE
         }
     }
 

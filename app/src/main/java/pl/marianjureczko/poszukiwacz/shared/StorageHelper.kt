@@ -129,10 +129,10 @@ open class StorageHelper(val context: Context) {
 
     fun removeTipFiles(treasureDescription: TreasureDescription) {
         if (treasureDescription.tipFileName != null) {
-            File(treasureDescription.tipFileName).delete()
+            File(treasureDescription.tipFileName!!).delete()
         }
         if (treasureDescription.hasPhoto()) {
-            File(treasureDescription.photoFileName).delete()
+            File(treasureDescription.photoFileName!!).delete()
         }
     }
 

@@ -25,14 +25,18 @@ class Bluetooth(private val permissionsManager: PermissionsManager) {
         if (!adapter!!.isEnabled) {
             throw BluetoothException(R.string.bluetooth_disabled)
         }
-        if (!permissionsManager.bluetoothGranted()) {
+        if (!permissionsManager.bluetoothGranted() || !permissionsManager.bluetoothConnectGranted()) {
             throw BluetoothException(R.string.no_bluetooth_permission)
         }
-        return adapter?.bondedDevices
-            ?.filter {
-                it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.PHONE
-            }
-            ?: listOf()
+        return try {
+            adapter?.bondedDevices
+                ?.filter {
+                    it.bluetoothClass.majorDeviceClass == BluetoothClass.Device.Major.PHONE
+                }
+                ?: listOf()
+        } catch (e: SecurityException) {
+            listOf()
+        }
     }
 
     fun isConnected() {

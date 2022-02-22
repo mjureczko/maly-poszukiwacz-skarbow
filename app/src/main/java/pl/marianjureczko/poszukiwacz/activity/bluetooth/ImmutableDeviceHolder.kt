@@ -6,7 +6,10 @@ import android.view.View
 class ImmutableDeviceHolder(view: View) : AbstractDeviceHolder(view) {
 
     override fun setupView(device: BluetoothDevice) {
-        this.deviceName.text = device.name
+        try {
+            this.deviceName.text = device.name
+        } catch (e: SecurityException) {
+        }
         this.deviceName.isEnabled = false
     }
 }

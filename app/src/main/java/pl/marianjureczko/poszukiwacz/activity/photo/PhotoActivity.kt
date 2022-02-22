@@ -5,8 +5,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_photo.*
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.databinding.ActivityPhotoBinding
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithBackButton
 import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
@@ -20,13 +20,18 @@ class PhotoActivity : ActivityWithBackButton() {
             }
     }
 
+    private lateinit var binding: ActivityPhotoBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityPhotoBinding.inflate(layoutInflater)
+
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_photo)
         val photo = intent.getStringExtra(PHOTO)
         val uri = Uri.parse(photo)
-        photoImg.setImageURI(uri)
+        binding.photoImg.setImageURI(uri)
+        setContentView(binding.root)
     }
 }

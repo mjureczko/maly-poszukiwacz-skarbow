@@ -17,11 +17,14 @@ class AcceptThread(
 
     private val TAG = javaClass.simpleName
     private val serverSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.PUBLICATION) {
-        bluetooth.adapter?.listenUsingRfcommWithServiceRecord(Bluetooth.NAME, MY_BLUETOOTH_UUID)
+        try {
+            bluetooth.adapter?.listenUsingRfcommWithServiceRecord(Bluetooth.NAME, MY_BLUETOOTH_UUID)
+        } catch (e: SecurityException) {
+            null
+        }
     }
 
     override fun run() {
-//        memoConsole.print("AcceptThread started")
         if (serverSocket == null) {
             printInConsole(context.getString(R.string.no_bluetooth_to_receive_route))
             return
@@ -43,7 +46,6 @@ class AcceptThread(
                 shouldLoop = false
             }
         }
-//        memoConsole.print("AcceptThread finished")
     }
 
     override fun cancel() {

@@ -15,10 +15,13 @@ class DeviceHolder(
 ) : AbstractDeviceHolder(view) {
 
     override fun setupView(device: BluetoothDevice) {
-        this.deviceName.text = device.name
-        this.deviceName.setOnClickListener {
-            memoConsole.print(activity.getString(R.string.device_was_selected, device.name))
-            recyclerView.adapter = DevicesAdapter(activity, listOf(device), memoConsole, manager, recyclerView)
+        try {
+            this.deviceName.text = device.name
+            this.deviceName.setOnClickListener {
+                memoConsole.print(activity.getString(R.string.device_was_selected, device.name))
+                recyclerView.adapter = DevicesAdapter(activity, listOf(device), memoConsole, manager, recyclerView)
+            }
+        } catch (e: SecurityException) {
         }
     }
 }

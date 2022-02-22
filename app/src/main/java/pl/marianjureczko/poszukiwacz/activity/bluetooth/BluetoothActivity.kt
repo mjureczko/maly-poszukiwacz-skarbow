@@ -13,7 +13,6 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_bluetooth.*
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
@@ -70,11 +69,9 @@ class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnec
         setTitle(R.string.sending_route)
 
         val memo: EditText = configureMemo()
-//        requestAccessBluetoothDrivenLocationPermission()
-//        permissionsManager.requestBluetoothPermission()
         val mode = intent.getStringExtra(MODE)
         if (Mode.SENDING.toString() == mode) {
-            model.setup(intent.getStringExtra(ROUTE))
+            model.setup(intent.getStringExtra(ROUTE)!!)
             devicesRecyclerView = findViewById(R.id.devices)
             devicesRecyclerView.layoutManager = LinearLayoutManager(this)
             try {
@@ -123,6 +120,7 @@ class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnec
     override fun print(msg: String) {
         val handler = Handler(Looper.getMainLooper())
         handler.post {
+            val memo: EditText = findViewById(R.id.memo)
             val text = memo.text
             text.insert(text.length, "\n> $msg")
             memo.setSelection(text.length)
