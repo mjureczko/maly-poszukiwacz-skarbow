@@ -4,11 +4,13 @@ pipelines:
   default:
     - step:
         script:
+          - export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
           - bash ./gradlew check
   tags:
     '*':
       - step:
           script:
+            - export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
             - tagname=$(git describe --tags --abbrev=0)
             - bash ./gradlew assembleRelease -PRELEASE_KEY_PASSWORD=$RELEASE_KEY_PASSWORD -PRELEASE_STORE_PASSWORD=$RELEASE_STORE_PASSWORD
             - cp app/build/outputs/apk/release/app-release.apk maly-poszukiwacz-skarbow-$tagname.apk
