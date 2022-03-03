@@ -22,13 +22,16 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasuresEditorBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.permissions.PermissionsSpec
+import pl.marianjureczko.poszukiwacz.permissions.PermissionsForPhotoAndAudioTip
+import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.shared.*
 import java.io.File
 
 
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
-class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callback, TreasurePhotoMaker {
+class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, TreasurePhotoMaker {
 
     companion object {
         private val xmlHelper = XmlHelper()
@@ -55,12 +58,16 @@ class TreasuresEditorActivity : ActivityWithBackButton(), RouteNameDialog.Callba
 
     private val model: TreasuresEditorViewModel by viewModels()
 
+    override fun onPermissionsGranted(permissionsSpec: PermissionsSpec) {
+        //do nothing
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTreasuresEditorBinding.inflate(layoutInflater)
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        permissionsManager.requestMediaPermissions()
+        assurePermissionsAreGranted(PermissionsForPhotoAndAudioTip, false)
 
         binding.treasures.layoutManager = LinearLayoutManager(this)
         val existingList = intent.getStringExtra(SELECTED_LIST)

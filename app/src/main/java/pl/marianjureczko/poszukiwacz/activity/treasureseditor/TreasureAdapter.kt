@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -28,7 +27,7 @@ class TreasureAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreasureHolder {
         val view = activity.layoutInflater.inflate(R.layout.treasures_item, parent, false)
-        return TreasureHolder(view, activity, this, treasurePhotoMaker, permissions, storageHelper)
+        return TreasureHolder(view, activity, this, treasurePhotoMaker, storageHelper)
     }
 
     override fun onBindViewHolder(holder: TreasureHolder, position: Int) {

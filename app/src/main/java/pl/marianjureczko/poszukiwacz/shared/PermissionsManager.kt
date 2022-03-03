@@ -9,16 +9,10 @@ import androidx.core.app.ActivityCompat
 
 class PermissionsManager(private val activity: Activity) {
     companion object {
-        private const val REQUEST_MEDIA_PERMISSIONS = 200
         private const val REQUEST_BLUETOOTH_PERMISSION = 201
         private const val REQUEST_ACCESS_BACKGROUND_LOCATION = 202
         private const val REQUEST_BLUETOOTH_CONNECT_PERMISSION = 203
-        private const val RECORD_AUDIO: String = Manifest.permission.RECORD_AUDIO
-        private const val CAMERA: String = Manifest.permission.CAMERA
-        private val MEDIA_PERMISSIONS = arrayOf(RECORD_AUDIO, CAMERA)
     }
-
-    fun requestMediaPermissions() = ActivityCompat.requestPermissions(activity, MEDIA_PERMISSIONS, REQUEST_MEDIA_PERMISSIONS)
 
     fun requestBluetoothPermissions() {
         if (!bluetoothGranted()) {
@@ -33,10 +27,6 @@ class PermissionsManager(private val activity: Activity) {
             }
         }
     }
-
-    fun recordingGranted(): Boolean = checkPermissionIsGranted(RECORD_AUDIO)
-
-    fun capturingPhotoGranted(): Boolean = checkPermissionIsGranted(CAMERA)
 
     fun bluetoothGranted(): Boolean = checkPermissionIsGranted(BLUETOOTH)
 
