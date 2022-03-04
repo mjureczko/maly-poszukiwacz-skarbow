@@ -12,9 +12,9 @@ class PermissionManager(private val permissionListener: PermissionListener) {
 
     companion object {
 
-        fun areAllPermissionsGranted(context: Context, permissionWithCodes: Array<out PermissionWithCode>): Boolean {
-            return permissionWithCodes.all { permissionRequest ->
-                permissionRequest.getPermissionTextArray().all { permission ->
+        fun areAllPermissionsGranted(context: Context, permissionsWithCodes: Array<out PermissionWithCode>): Boolean {
+            return permissionsWithCodes.all { permissionRequest ->
+                permissionRequest.getPermissionsTextArray().all { permission ->
                     val permissionStatus = ContextCompat.checkSelfPermission(context, permission)
                     permissionStatus == PackageManager.PERMISSION_GRANTED
                 }
@@ -22,7 +22,7 @@ class PermissionManager(private val permissionListener: PermissionListener) {
         }
 
         fun isPermissionGranted(context: Context, permissionWithCode: PermissionWithCode): Boolean {
-            return permissionWithCode.getPermissionTextArray().all { permission ->
+            return permissionWithCode.getPermissionsTextArray().all { permission ->
                 val permissionStatus = ContextCompat.checkSelfPermission(context, permission)
                 permissionStatus == PackageManager.PERMISSION_GRANTED
             }
@@ -30,10 +30,10 @@ class PermissionManager(private val permissionListener: PermissionListener) {
     }
 
     fun requestAllPermissions(activity: PermissionActivity, permissionsSpec: PermissionsSpec) {
-        val permissions = permissionsSpec.getPermissionRequestsArray()
-            .flatMap { it.getPermissionTextArray().asSequence() }
+        val permissions = permissionsSpec.getPermissionWithCodeArray()
+            .flatMap { it.getPermissionsTextArray().asSequence() }
             .toTypedArray()
-        val requestCode = permissionsSpec.getPermissionRequestsArray().sumOf { it.request }
+        val requestCode = permissionsSpec.getPermissionWithCodeArray().sumOf { it.request }
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
 
