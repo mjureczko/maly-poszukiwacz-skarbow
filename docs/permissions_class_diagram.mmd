@@ -1,0 +1,37 @@
+classDiagram
+    class PermissionsSpec{
+        <<interface>>
+        getPermissionWithCodeArray()
+        getMessage()
+        getMessageForPermanentDenial()
+    }
+    class PermissionActivity{
+        <<abstract>>
+        assurePermissionsAreGranted()
+    }
+    class PermissionWithCode{
+        <<enum>>
+        request: Int
+        getPermissionsTextArray()
+    }
+    class PermissionListener{
+        <<interface>>
+        permissionsGranted()
+        navigateToSettings()
+        deny()
+        retry()
+    }
+    class PermissionManager{
+        areAllPermissionsGranted()$
+        isPermissionGranted()$
+        requestAllPermissions()
+        handleRequestPermissionsResult()
+        handleResume()
+    }
+    PermissionActivity <|-- XyzActivity
+    PermissionActivity --> PermissionManager
+    PermissionActivity --> PermissionsSpec
+    PermissionsSpec <|-- PermissionsForAbcd
+    PermissionsForAbcd --> "1..*" PermissionWithCode
+    PermissionManager --> PermissionListener
+    PermissionActivity *--> PermissionListener : inner class
