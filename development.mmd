@@ -10,6 +10,8 @@ sequenceDiagram
         XyzActivity -->>- PermissionActivity: x
     else
         PermissionActivity ->>+ PermissionManager: requestAllPermissions(:PermissionsSpec)
+        PermissionManager ->>+ PermissionsSpec: getPermissionWithCodeArray()
+        ActivityCompat -->>- PermissionManager: x
         PermissionManager -->>- PermissionActivity: x
     end
     PermissionActivity -->>- XyzActivity: x
