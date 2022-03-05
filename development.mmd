@@ -5,5 +5,12 @@ sequenceDiagram
     PermissionsSpec -->>- PermissionActivity: x
     PermissionActivity ->>+ PermissionManager: areAllPermissionsGranted(:Array<PermissionWithCode>)
     PermissionManager -->>- PermissionActivity: x
+    alt all permissions granted
+        PermissionActivity ->>+ XyzActivity: onPermissionsGranted()
+        XyzActivity -->>- PermissionActivity: x
+    else
+        PermissionActivity ->>+ PermissionManager: requestAllPermissions(:PermissionsSpec)
+        PermissionManager -->>- PermissionActivity: x
+    end
     PermissionActivity -->>- XyzActivity: x
     XyzActivity -->>- Start: x
