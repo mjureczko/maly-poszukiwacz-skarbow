@@ -1,20 +1,8 @@
 sequenceDiagram
-    Start ->>+ XyzActivity: onCreate()
-    XyzActivity ->>+ PermissionActivity: assurePermissionsAreGranted(:PermissionsSpec)
-    PermissionActivity ->>+ PermissionsSpec: getPermissionWithCodeArray()
-    PermissionsSpec -->>- PermissionActivity: x
-    PermissionActivity ->>+ PermissionManager: areAllPermissionsGranted(:Array<PermissionWithCode>)
+    Start ->>+ PermissionActivity: onRequestPermissionsResult(requestCode,permissions,grantResults)
+    PermissionActivity ->>+ PermissionManager: handleRequestPermissionsResult(:PermissionsSpec,permissions,grantResults)
     PermissionManager -->>- PermissionActivity: x
-    alt all permissions granted
-        PermissionActivity ->>+ XyzActivity: onPermissionsGranted()
-        XyzActivity -->>- PermissionActivity: x
-    else
-        PermissionActivity ->>+ PermissionManager: requestAllPermissions(:PermissionsSpec)
-        PermissionManager ->>+ PermissionsSpec: getPermissionWithCodeArray()
-        PermissionsSpec -->>- PermissionManager: x
-        PermissionManager ->>+ ActivityCompat: requestPermissions(permissions,requestCode)
-        ActivityCompat -->>- PermissionManager: x
-        PermissionManager -->>- PermissionActivity: x
-    end
-    PermissionActivity -->>- XyzActivity: x
-    XyzActivity -->>- Start: x
+    PermissionActivity -->>- Start: x
+    Settings ->>+ PermissionActivity: onResume()
+    PermissionActivity ->>+ PermissionManager: handleResume()
+    PermissionManager -->>- PermissionActivity: x
