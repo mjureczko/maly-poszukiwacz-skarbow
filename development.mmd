@@ -26,6 +26,6 @@ sequenceDiagram
     end
     PermissionManager -->>- PermissionActivity: x
     PermissionActivity -->>- Start: x
-    Settings ->>+ PermissionActivity: onResume()
+    Settings -)+ PermissionActivity: onResume()
     PermissionActivity ->>+ PermissionManager: handleResume()
     PermissionManager -->>- PermissionActivity: x
