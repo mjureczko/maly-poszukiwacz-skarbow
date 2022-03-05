@@ -15,6 +15,10 @@ sequenceDiagram
             PermissionManager -->>- PermissionManager: x
         else
             PermissionManager ->>+ PermissionManager: showPermissionPermanentDenialDialog(:PermissionsSpec,deniedPermission)
+            opt user wants to change permissions in settings
+                PermissionManager ->>+ PermissionListener: navigateToSettings()
+                PermissionListener -->>- PermissionManager: x
+            end
             PermissionManager -->>- PermissionManager: x
         end
         ActivityCompat -->>- PermissionManager: x
