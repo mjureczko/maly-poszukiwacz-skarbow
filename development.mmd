@@ -8,6 +8,15 @@ sequenceDiagram
         PermissionListener -->>- PermissionManager: x
     else
         PermissionManager ->>+ ActivityCompat: shouldShowRequestPermissionRationale(deniedPermission)
+        alt should show rationale
+            PermissionManager ->>+ PermissionManager: showPermissionRationaleDialog(:PermissionsSpec)
+            PermissionManager ->>+  PermissionListener: retry()
+            PermissionListener -->>- PermissionManager: x
+            PermissionManager -->>- PermissionManager: x
+        else
+            PermissionManager ->>+ PermissionManager: showPermissionPermanentDenialDialog(:PermissionsSpec,deniedPermission)
+            PermissionManager -->>- PermissionManager: x
+        end
         ActivityCompat -->>- PermissionManager: x
     end
     PermissionManager -->>- PermissionActivity: x
