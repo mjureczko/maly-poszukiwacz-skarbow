@@ -1,0 +1,31 @@
+sequenceDiagram
+    Start ->>+ PermissionActivity: onRequestPermissionsResult(requestCode,permissions,grantResults)
+    PermissionActivity ->>+ PermissionManager: handleRequestPermissionsResult(:PermissionsSpec,permissions,grantResults)
+    alt are all permissions granted
+        PermissionManager ->>+ PermissionListener: permissionsGranted(:PermissionsSpec)
+        PermissionListener ->>+ PermissionActivity: onPermissionsGranted(:PermissionsSpec)
+        PermissionActivity -->>- PermissionListener:
+        PermissionListener -->>- PermissionManager:
+    else
+        PermissionManager ->>+ ActivityCompat: shouldShowRequestPermissionRationale(deniedPermission)
+        alt should show rationale
+            PermissionManager ->>+ PermissionManager: showPermissionRationaleDialog(:PermissionsSpec)
+            PermissionManager ->>+  PermissionListener: retry()
+            PermissionListener -->>- PermissionManager:
+            PermissionManager -->>- PermissionManager:
+        else
+            PermissionManager ->>+ PermissionManager: showPermissionPermanentDenialDialog(:PermissionsSpec,deniedPermission)
+            opt user wants to change permissions in settings
+                PermissionManager ->>+ PermissionListener: navigateToSettings()
+                PermissionListener ->> Settings: startActivity(intent)
+                PermissionListener -->>- PermissionManager:
+            end
+            PermissionManager -->>- PermissionManager:
+        end
+        ActivityCompat -->>- PermissionManager:
+    end
+    PermissionManager -->>- PermissionActivity:
+    PermissionActivity -->>- Start:
+    Settings ->>+ PermissionActivity: onResume()
+    PermissionActivity ->>+ PermissionManager: handleResume()
+    PermissionManager -->>- PermissionActivity:
