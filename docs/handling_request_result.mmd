@@ -17,7 +17,7 @@ sequenceDiagram
             PermissionManager ->>+ PermissionManager: showPermissionPermanentDenialDialog(:PermissionsSpec,deniedPermission)
             opt user wants to change permissions in settings
                 PermissionManager ->>+ PermissionListener: navigateToSettings()
-                PermissionListener ->> Settings: startActivity(intent)
+                PermissionListener -) Settings: startActivity(intent)
                 PermissionListener -->>- PermissionManager: x
             end
             PermissionManager -->>- PermissionManager: x
@@ -26,6 +26,6 @@ sequenceDiagram
     end
     PermissionManager -->>- PermissionActivity: x
     PermissionActivity -->>- Start: x
-    Settings ->>+ PermissionActivity: onResume()
+    Settings -)+ PermissionActivity: onResume()
     PermissionActivity ->>+ PermissionManager: handleResume()
     PermissionManager -->>- PermissionActivity: x
