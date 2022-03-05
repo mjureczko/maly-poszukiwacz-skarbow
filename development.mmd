@@ -11,6 +11,8 @@ sequenceDiagram
     else
         PermissionActivity ->>+ PermissionManager: requestAllPermissions(:PermissionsSpec)
         PermissionManager ->>+ PermissionsSpec: getPermissionWithCodeArray()
+        PermissionsSpec -->>- PermissionManager: x
+        PermissionManager ->>+ ActivityCompat: requestPermissions(permissions,requestCode)
         ActivityCompat -->>- PermissionManager: x
         PermissionManager -->>- PermissionActivity: x
     end
