@@ -4,28 +4,28 @@ sequenceDiagram
     alt are all permissions granted
         PermissionManager ->>+ PermissionListener: permissionsGranted(:PermissionsSpec)
         PermissionListener ->>+ PermissionActivity: onPermissionsGranted(:PermissionsSpec)
-        PermissionActivity -->>- PermissionListener:
-        PermissionListener -->>- PermissionManager:
+        PermissionActivity -->>- PermissionListener: x
+        PermissionListener -->>- PermissionManager: x
     else
         PermissionManager ->>+ ActivityCompat: shouldShowRequestPermissionRationale(deniedPermission)
         alt should show rationale
             PermissionManager ->>+ PermissionManager: showPermissionRationaleDialog(:PermissionsSpec)
             PermissionManager ->>+  PermissionListener: retry()
-            PermissionListener -->>- PermissionManager:
-            PermissionManager -->>- PermissionManager:
+            PermissionListener -->>- PermissionManager: x
+            PermissionManager -->>- PermissionManager: x
         else
             PermissionManager ->>+ PermissionManager: showPermissionPermanentDenialDialog(:PermissionsSpec,deniedPermission)
             opt user wants to change permissions in settings
                 PermissionManager ->>+ PermissionListener: navigateToSettings()
                 PermissionListener ->> Settings: startActivity(intent)
-                PermissionListener -->>- PermissionManager:
+                PermissionListener -->>- PermissionManager: x
             end
-            PermissionManager -->>- PermissionManager:
+            PermissionManager -->>- PermissionManager: x
         end
-        ActivityCompat -->>- PermissionManager:
+        ActivityCompat -->>- PermissionManager: x
     end
-    PermissionManager -->>- PermissionActivity:
-    PermissionActivity -->>- Start:
+    PermissionManager -->>- PermissionActivity: x
+    PermissionActivity -->>- Start: x
     Settings ->>+ PermissionActivity: onResume()
     PermissionActivity ->>+ PermissionManager: handleResume()
-    PermissionManager -->>- PermissionActivity:
+    PermissionManager -->>- PermissionActivity: x
