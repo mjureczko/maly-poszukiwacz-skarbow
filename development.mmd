@@ -18,7 +18,7 @@ sequenceDiagram
             opt user wants to change permissions in settings
                 PermissionManager ->>+ PermissionListener: navigateToSettings()
                 PermissionListener ->> Settings: startActivity(intent)
-                Settings --> PermissionListener: x
+                Settings -->> PermissionListener: x
                 PermissionListener -->>- PermissionManager: x
             end
             PermissionManager -->>- PermissionManager: x
