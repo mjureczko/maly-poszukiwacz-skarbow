@@ -12,9 +12,9 @@ sequenceDiagram
         PermissionActivity ->>+ PermissionManager: requestAllPermissions(:PermissionsSpec)
         PermissionManager ->>+ PermissionsSpec: getPermissionWithCodeArray()
         PermissionsSpec -->>- PermissionManager: x
-        PermissionManager ->>+ ActivityCompat: requestPermissions(permissions, requestCode)
+        PermissionManager ->>+ ActivityCompat: requestPermissions(permissions,requestCode)
         ActivityCompat -->>- PermissionManager: x
         PermissionManager -->>- PermissionActivity: x
     end
     PermissionActivity -->>- XyzActivity: x
-    XyzActivity -->>-Start: x
+    XyzActivity -->>- Start: x
