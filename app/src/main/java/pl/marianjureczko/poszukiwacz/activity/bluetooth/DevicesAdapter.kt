@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.bluetooth
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
@@ -14,13 +15,11 @@ class DevicesAdapter(
     private val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<AbstractDeviceHolder>() {
 
+    @SuppressLint("MissingPermission")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AbstractDeviceHolder {
         val view = activity.layoutInflater.inflate(R.layout.device_item, parent, false)
         return if (devices.size == 1) {
-            try {
-                memoConsole.print(activity.getString(R.string.connect_to_device, devices[0].name))
-            } catch (e: SecurityException) {
-            }
+            memoConsole.print(activity.getString(R.string.connect_to_device, devices[0].name))
             manager.tryToConnect(devices[0])
             ImmutableDeviceHolder(view)
         } else {

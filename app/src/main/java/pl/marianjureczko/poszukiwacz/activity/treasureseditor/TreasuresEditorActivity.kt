@@ -22,8 +22,8 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasuresEditorBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.permissions.PermissionsSpec
-import pl.marianjureczko.poszukiwacz.permissions.PermissionsForPhotoAndAudioTip
+import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForPhotoAndAudioTip
 import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.shared.*
 import java.io.File
@@ -52,13 +52,12 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     private val ROUTE_KEY: String = "ROUTE"
 
     private val storageHelper = StorageHelper(this)
-    private val permissionsManager = PermissionsManager(this)
     lateinit var treasureAdapter: TreasureAdapter
     private lateinit var binding: ActivityTreasuresEditorBinding
 
     private val model: TreasuresEditorViewModel by viewModels()
 
-    override fun onPermissionsGranted(permissionsSpec: PermissionsSpec) {
+    override fun onPermissionsGranted(activityRequirements: ActivityRequirements) {
         //do nothing
     }
 
@@ -67,7 +66,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         binding = ActivityTreasuresEditorBinding.inflate(layoutInflater)
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        assurePermissionsAreGranted(PermissionsForPhotoAndAudioTip, false)
+        assurePermissionsAreGranted(RequirementsForPhotoAndAudioTip, false)
 
         binding.treasures.layoutManager = LinearLayoutManager(this)
         val existingList = intent.getStringExtra(SELECTED_LIST)
@@ -173,7 +172,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     private fun setupTreasureView(route: Route) {
         model.route = route
-        treasureAdapter = TreasureAdapter(this, route, permissionsManager, storageHelper, this)
+        treasureAdapter = TreasureAdapter(this, route, storageHelper, this)
         binding.treasures.adapter = treasureAdapter
         supportActionBar?.title = "${App.getResources().getString(R.string.route)} ${route.name}"
     }

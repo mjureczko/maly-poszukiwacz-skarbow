@@ -7,22 +7,21 @@ import android.os.Bundle
 import android.provider.Settings
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithBackButton
 
-
 abstract class PermissionActivity : ActivityWithBackButton() {
 
     private lateinit var permissionManager: PermissionManager
-    private lateinit var permissionsSpec: PermissionsSpec
+    private lateinit var activityRequirements: ActivityRequirements
     private var isComingFromSettings = false
     private var exitOnDenied = false
 
-    abstract fun onPermissionsGranted(permissionsSpec: PermissionsSpec)
+    abstract fun onPermissionsGranted(activityRequirements: ActivityRequirements)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val permissionListener = object : PermissionListener {
 
-            override fun permissionsGranted(permissionsSpec: PermissionsSpec) {
-                onPermissionsGranted(permissionsSpec)
+            override fun permissionsGranted(activityRequirements: ActivityRequirements) {
+                onPermissionsGranted(activityRequirements)
             }
 
             override fun navigateToSettings() {
@@ -36,29 +35,29 @@ abstract class PermissionActivity : ActivityWithBackButton() {
             }
 
             override fun retry() {
-                assurePermissionsAreGranted(permissionsSpec, exitOnDenied)
+                assurePermissionsAreGranted(activityRequirements, exitOnDenied)
             }
         }
         permissionManager = PermissionManager(permissionListener)
     }
 
     /**
-     * Checks whether user granted necessary permissions for [permissionsSpec]. If the user already
+     * Checks whether user granted necessary permissions for [activityRequirements]. If the user already
      * granted that permissions, it will call [onPermissionsGranted] method, otherwise it will make preparations to take permissions from user.
-     * @param permissionsSpec It is actually an answer to the question 'What are you going to do with these permissions?'.
+     * @param activityRequirements It is actually an answer to the question 'What are you going to do with these permissions?'.
      * @param exitOnDenied An optional parameter. It will make your activity finish when user denies permissions.
      * Pass it **true** if your activity cannot live without permissions. Default is **false**
      */
-    fun assurePermissionsAreGranted(permissionsSpec: PermissionsSpec, exitOnDenied: Boolean = false) {
-        this.permissionsSpec = permissionsSpec
+    fun assurePermissionsAreGranted(activityRequirements: ActivityRequirements, exitOnDenied: Boolean = false) {
+        this.activityRequirements = activityRequirements
         this.exitOnDenied = exitOnDenied
         if (::permissionManager.isInitialized) {
-            val permissions = permissionsSpec.getPermissionWithCodeArray()
+            val permissions = activityRequirements.getPermissionsArray()
 
             if (PermissionManager.areAllPermissionsGranted(this, permissions)) {
-                onPermissionsGranted(permissionsSpec)
+                onPermissionsGranted(activityRequirements)
             } else {
-                permissionManager.requestAllPermissions(this, permissionsSpec)
+                permissionManager.requestAllPermissions(this, activityRequirements)
             }
         }
     }
@@ -71,14 +70,14 @@ abstract class PermissionActivity : ActivityWithBackButton() {
 
     @SuppressLint("MissingSuperCall")
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (::permissionsSpec.isInitialized) {
-            permissionManager.handleRequestPermissionsResult(this, permissionsSpec, permissions, grantResults)
+        if (::activityRequirements.isInitialized) {
+            permissionManager.handleRequestPermissionsResult(this, activityRequirements, permissions, grantResults)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (isComingFromSettings && ::permissionsSpec.isInitialized) {
+        if (isComingFromSettings && ::activityRequirements.isInitialized) {
             isComingFromSettings = false
             permissionManager.handleResume(this)
         }

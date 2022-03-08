@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.bluetooth
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Context
@@ -11,6 +12,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.concurrent.atomic.AtomicReference
 
+@SuppressLint("MissingPermission")
 class ConnectThread(
     selectedDevice: BluetoothDevice,
     private val route: ByteArrayOutputStream,
@@ -25,10 +27,7 @@ class ConnectThread(
     private val socket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
         try {
             selectedDevice.createRfcommSocketToServiceRecord(MY_BLUETOOTH_UUID)
-        } catch (e: SecurityException) {
-            reportException(memoConsole, e)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             reportException(memoConsole, e)
         }
     }
@@ -38,22 +37,17 @@ class ConnectThread(
         return null
     }
 
+    @SuppressLint("MissingPermission")
     override fun run() {
         // Cancel discovery because it slows down the connection, requires android.permission.BLUETOOTH_SCAN.
-        try {
-            bluetooth.adapter?.cancelDiscovery()
-        } catch (e: SecurityException) {
-        }
+        bluetooth.adapter?.cancelDiscovery()
 
         socket?.let { socket ->
             try {
                 socket.connect()
                 printInConsole(context.getString(R.string.bluetooth_connection_created))
                 writeRouteToSocket(socket)
-            } catch(e: SecurityException) {
-                printInConsole(context.getString(R.string.error_when_creating_connection) + e.message)
-            }
-            catch (e: IOException) {
+            } catch (e: Exception) {
                 Log.e(TAG, "Error occurred when creating connection", e)
                 printInConsole(context.getString(R.string.error_when_creating_connection) + e.message)
             }

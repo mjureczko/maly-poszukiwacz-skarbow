@@ -1,18 +1,29 @@
 package pl.marianjureczko.poszukiwacz.permissions
 
-import pl.marianjureczko.poszukiwacz.R
+import android.Manifest
+import android.os.Build
 
-interface PermissionsSpec {
-    fun getPermissionWithCodeArray(): Array<PermissionWithCode>
-    fun getMessage(): Int
-    fun getMessageForPermanentDenial(): Int
-}
+enum class PermissionsSpec(val request: Int) {
+    CAMERA(1),
+    MICROPHONE(2),
+    LOCATION(4),
+    BLUETOOTH(8);
 
-object PermissionsForPhotoAndAudioTip: PermissionsSpec {
-    val camera = PermissionWithCode.CAMERA
-    val microphone = PermissionWithCode.MICROPHONE
-
-    override fun getPermissionWithCodeArray(): Array<PermissionWithCode> = arrayOf(camera, microphone)
-    override fun getMessage(): Int = R.string.missing_photo_and_audio_permission
-    override fun getMessageForPermanentDenial(): Int = R.string.missing_photo_and_audio_permission
+    fun getPermissionsTextArray(): Array<String> {
+        return when (this) {
+            CAMERA -> arrayOf(Manifest.permission.CAMERA)
+            MICROPHONE -> arrayOf(Manifest.permission.RECORD_AUDIO)
+            LOCATION -> arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+            BLUETOOTH -> {
+                val permissions = mutableListOf(Manifest.permission.BLUETOOTH)
+                if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)) {
+                    permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                }
+                permissions.toTypedArray()
+            }
+        }
+    }
 }

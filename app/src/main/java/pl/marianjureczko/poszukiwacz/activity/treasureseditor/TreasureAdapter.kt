@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 interface TreasureRemover {
@@ -20,7 +19,6 @@ interface TreasurePhotoMaker {
 class TreasureAdapter(
     private val activity: FragmentActivity,
     private val route: Route,
-    private val permissions: PermissionsManager,
     private val storageHelper: StorageHelper,
     private val treasurePhotoMaker: TreasurePhotoMaker
 ) : RecyclerView.Adapter<TreasureHolder>(), TreasureRemover {

@@ -2,8 +2,8 @@ package pl.marianjureczko.poszukiwacz.permissions
 
 interface PermissionListener {
 
-    /** This event is invoked when all permissions required by [permissionsSpec] are granted to process the rest of the work. */
-    fun permissionsGranted(permissionsSpec: PermissionsSpec)
+    /** This event is invoked when all permissions required by [activityRequirements] are granted to process the rest of the work. */
+    fun permissionsGranted(activityRequirements: ActivityRequirements)
 
     /** This event is invoked when user permanently denied any permissions and should grant those permissions in settings menu. */
     fun navigateToSettings()

@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.bluetooth
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.content.Context
@@ -8,6 +9,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
 import java.io.IOException
 
+@SuppressLint("MissingPermission")
 class AcceptThread(
     memoConsole: MemoConsole,
     private val bluetooth: Bluetooth,
@@ -17,11 +19,7 @@ class AcceptThread(
 
     private val TAG = javaClass.simpleName
     private val serverSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.PUBLICATION) {
-        try {
-            bluetooth.adapter?.listenUsingRfcommWithServiceRecord(Bluetooth.NAME, MY_BLUETOOTH_UUID)
-        } catch (e: SecurityException) {
-            null
-        }
+        bluetooth.adapter?.listenUsingRfcommWithServiceRecord(Bluetooth.NAME, MY_BLUETOOTH_UUID)
     }
 
     override fun run() {
