@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.permissions
 import android.Manifest
 import android.os.Build
 
-enum class PermissionsSpec(val request: Int) {
+enum class PermissionsSpec(val requestCode: Int) {
     CAMERA(1),
     MICROPHONE(2),
     LOCATION(4),

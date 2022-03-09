@@ -52,7 +52,7 @@ abstract class PermissionActivity : ActivityWithBackButton() {
         this.activityRequirements = activityRequirements
         this.exitOnDenied = exitOnDenied
         if (::permissionManager.isInitialized) {
-            val permissions = activityRequirements.getPermissionsArray()
+            val permissions = activityRequirements.getSpecsArray()
 
             if (PermissionManager.areAllPermissionsGranted(this, permissions)) {
                 onPermissionsGranted(activityRequirements)

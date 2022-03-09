@@ -14,7 +14,7 @@ class PermissionManager(private val permissionListener: PermissionListener) {
     companion object {
 
         fun areAllPermissionsGranted(context: Context, permissions: Array<out PermissionsSpec>): Boolean =
-            permissions.all { permissions -> isPermissionGranted(context, permissions) }
+            permissions.all { p -> isPermissionGranted(context, p) }
 
         fun isPermissionGranted(context: Context, permissions: PermissionsSpec): Boolean {
             return permissions.getPermissionsTextArray().all { permission ->
@@ -25,10 +25,10 @@ class PermissionManager(private val permissionListener: PermissionListener) {
     }
 
     fun requestAllPermissions(activity: PermissionActivity, activityRequirements: ActivityRequirements) {
-        val permissions = activityRequirements.getPermissionsArray()
+        val permissions = activityRequirements.getSpecsArray()
             .flatMap { it.getPermissionsTextArray().asSequence() }
             .toTypedArray()
-        val requestCode = activityRequirements.getPermissionsArray().sumOf { it.request }
+        val requestCode = activityRequirements.getSpecsArray().sumOf { it.requestCode }
         ActivityCompat.requestPermissions(activity, permissions, requestCode)
     }
 
@@ -42,13 +42,13 @@ class PermissionManager(private val permissionListener: PermissionListener) {
         if (deniedPermissions.isEmpty()) {
             permissionListener.permissionsGranted(activityRequirements)
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && areAllPermissionsGranted(activity, activityRequirements.getPermissionsArray())) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && areAllPermissionsGranted(activity, activityRequirements.getSpecsArray())) {
                 permissionListener.permissionsGranted(activityRequirements)
             } else {
                 if (shouldShowRationale(activity, deniedPermissions)) {
                     showPermissionRationaleDialog(activity, activityRequirements)
                 } else {
-                    showPermissionPermanentDenialDialog(activity, activityRequirements, deniedPermissions)
+                    showPermissionPermanentDenialDialog(activity, activityRequirements)
                 }
             }
         }
@@ -108,7 +108,7 @@ class PermissionManager(private val permissionListener: PermissionListener) {
         }
     }
 
-    private fun showPermissionPermanentDenialDialog(activity: Activity, activityRequirements: ActivityRequirements, deniedPermissions: ArrayList<String>) {
+    private fun showPermissionPermanentDenialDialog(activity: Activity, activityRequirements: ActivityRequirements) {
         if (!activity.isFinishing) {
             val message = activityRequirements.getMessageForPermanentDenial()
 

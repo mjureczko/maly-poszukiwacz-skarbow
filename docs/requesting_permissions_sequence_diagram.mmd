@@ -1,8 +1,8 @@
 sequenceDiagram
     Start ->>+ XyzActivity: onCreate()
     XyzActivity ->>+ PermissionActivity: assurePermissionsAreGranted(:PermissionsSpec)
-    PermissionActivity ->>+ PermissionsSpec: getPermissionWithCodeArray()
-    PermissionsSpec -->>- PermissionActivity: x
+    PermissionActivity ->>+ ActivityRequirements: getSpecsArray()
+    ActivityRequirements -->>- PermissionActivity: x
     PermissionActivity ->>+ PermissionManager: areAllPermissionsGranted(:Array<PermissionWithCode>)
     PermissionManager -->>- PermissionActivity: x
     alt all permissions granted
@@ -10,8 +10,8 @@ sequenceDiagram
         XyzActivity -->>- PermissionActivity: x
     else
         PermissionActivity ->>+ PermissionManager: requestAllPermissions(:PermissionsSpec)
-        PermissionManager ->>+ PermissionsSpec: getPermissionWithCodeArray()
-        PermissionsSpec -->>- PermissionManager: x
+        PermissionManager ->>+ ActivityRequirements: getSpecsArray()
+        ActivityRequirements -->>- PermissionManager: x
         PermissionManager ->>+ ActivityCompat: requestPermissions(permissions,requestCode)
         ActivityCompat -->>- PermissionManager: x
         PermissionManager -->>- PermissionActivity: x
