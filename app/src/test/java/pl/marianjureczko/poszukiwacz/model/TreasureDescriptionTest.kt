@@ -2,16 +2,16 @@ package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class)
 class TreasureDescriptionTest {
 
     @Mock

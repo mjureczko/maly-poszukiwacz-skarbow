@@ -1,7 +1,7 @@
 classDiagram
-    class PermissionsSpec{
+    class ActivityRequirements{
         <<interface>>
-        getPermissionWithCodeArray()
+        getSpecsArray()
         getMessage()
         getMessageForPermanentDenial()
     }
@@ -9,9 +9,9 @@ classDiagram
         <<abstract>>
         assurePermissionsAreGranted()
     }
-    class PermissionWithCode{
+    class PermissionsSpec{
         <<enum>>
-        request: Int
+        requestCode: Int
         getPermissionsTextArray()
     }
     class PermissionListener{

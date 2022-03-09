@@ -11,8 +11,8 @@ import android.os.Handler
 import android.util.Log
 import androidx.activity.viewModels
 import com.google.zxing.integration.android.IntentIntegrator
-import kotlinx.android.synthetic.main.activity_searching.*
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
@@ -40,29 +40,31 @@ class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
 
     private val TAG = javaClass.simpleName
     private val model: SearchingActivityViewModel by viewModels()
+    private lateinit var binding: ActivitySearchingBinding
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(TAG, "########> onCreate")
         super.onCreate(savedInstanceState)
+        binding = ActivitySearchingBinding.inflate(layoutInflater)
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_searching)
         restoreState(savedInstanceState)
 
-        scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
-        changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
-        playTipBtn.setOnClickListener(PlayTipButtonListener(model, this))
-        mapBtn.setOnClickListener { errorTone() }
-        photoBtn.setOnClickListener(PhotoButtonListener(this, model))
+        binding.scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
+        binding.changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
+        binding.playTipBtn.setOnClickListener(PlayTipButtonListener(model, this))
+        binding.mapBtn.setOnClickListener { errorTone() }
+        binding.photoBtn.setOnClickListener(PhotoButtonListener(this, model))
 
         val locationListener = CompassBasedLocationListener(
             model,
-            CompassPresenter(findViewById(R.id.stepsToDo), findViewById(R.id.arrowImg))
+            CompassPresenter(binding.stepsToDo, binding.arrowImg)
         )
         val handler = Handler()
         val locationRequester = LocationRequester(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
         handler.post(locationRequester)
+        setContentView(binding.root)
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
@@ -118,7 +120,7 @@ class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
 
     private fun restoreState(savedInstanceState: Bundle?) {
         if (model.routeXml == null) {
-            model.setup(intent.getStringExtra(SELECTED_ROUTE))
+            model.setup(intent.getStringExtra(SELECTED_ROUTE)!!)
         }
         savedInstanceState?.getString(SELECTED_ROUTE_KEY)?.let { model.setup(it) }
         savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { model.selectTreasure(it) }
@@ -142,13 +144,13 @@ class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
     }
 
     private fun add(treasure: Treasure) {
-        model.treasureBag!!.collect(treasure)
+        model.treasureBag.collect(treasure)
         showCollectedTreasures()
     }
 
     private fun showCollectedTreasures() {
-        goldTxt.text = model.treasureBag!!.golds.toString()
-        rubyTxt.text = model.treasureBag!!.rubies.toString()
-        diamondTxt.text = model.treasureBag!!.diamonds.toString()
+        binding.goldTxt.text = model.treasureBag.golds.toString()
+        binding.rubyTxt.text = model.treasureBag.rubies.toString()
+        binding.diamondTxt.text = model.treasureBag.diamonds.toString()
     }
 }

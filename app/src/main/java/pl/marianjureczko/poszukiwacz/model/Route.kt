@@ -26,7 +26,7 @@ data class Route(
         return if (treasures.isEmpty()) {
             1
         } else {
-            1 + treasures.map { it.id }.max()!!
+            1 + treasures.map { it.id }.maxOrNull()!!
         }
     }
 
@@ -36,7 +36,7 @@ data class Route(
     }
 
     fun addPrefixToFilesPaths(prefix: String) {
-        treasures.forEach { treasure ->
+        treasures.iterator().forEach { treasure ->
             treasure.photoFileName?.let {
                 treasure.photoFileName = prefix + treasure.photoFileName
             }

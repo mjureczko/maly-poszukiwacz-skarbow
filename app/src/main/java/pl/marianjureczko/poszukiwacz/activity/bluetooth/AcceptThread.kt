@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.bluetooth
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.content.Context
@@ -8,6 +9,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
 import java.io.IOException
 
+@SuppressLint("MissingPermission")
 class AcceptThread(
     memoConsole: MemoConsole,
     private val bluetooth: Bluetooth,
@@ -21,7 +23,6 @@ class AcceptThread(
     }
 
     override fun run() {
-//        memoConsole.print("AcceptThread started")
         if (serverSocket == null) {
             printInConsole(context.getString(R.string.no_bluetooth_to_receive_route))
             return
@@ -43,7 +44,6 @@ class AcceptThread(
                 shouldLoop = false
             }
         }
-//        memoConsole.print("AcceptThread finished")
     }
 
     override fun cancel() {

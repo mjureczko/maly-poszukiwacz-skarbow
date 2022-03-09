@@ -14,20 +14,20 @@ class TextViewBasedLocationListener(
     private val TAG = javaClass.simpleName
     private val formatter = CoordinatesFormatter()
 
-    override fun onLocationChanged(location: Location?) {
-        latValue.text = formatter.format(location?.latitude)
-        longValue.text = formatter.format(location?.longitude)
+    override fun onLocationChanged(location: Location) {
+        latValue.text = formatter.format(location.latitude)
+        longValue.text = formatter.format(location.longitude)
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
         Log.d(TAG, "onStatusChanged - provider: $provider")
     }
 
-    override fun onProviderEnabled(provider: String?) {
+    override fun onProviderEnabled(provider: String) {
         Log.d(TAG, "onProviderEnabled - provider: $provider")
     }
 
-    override fun onProviderDisabled(provider: String?) {
+    override fun onProviderDisabled(provider: String) {
         Log.d(TAG, "onProviderDisabled - provider: $provider")
     }
 

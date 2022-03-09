@@ -10,12 +10,14 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.PermissionsManager
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForPhotoAndAudioTip
+import pl.marianjureczko.poszukiwacz.permissions.PermissionManager
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 private const val RECORD_TIP_DIALOG = "RecordTipDialog"
@@ -25,7 +27,6 @@ class TreasureHolder(
     private val activity: FragmentActivity,
     private val treasureRemover: TreasureRemover,
     private val treasurePhotoMaker: TreasurePhotoMaker,
-    private val permissions: PermissionsManager,
     private val storageHelper: StorageHelper
 ) : RecyclerView.ViewHolder(view) {
 
@@ -48,7 +49,7 @@ class TreasureHolder(
 
     private fun setupRecordTipBtn(treasure: TreasureDescription, route: Route) {
         recordTipBtn.setOnClickListener {
-            if (permissions.recordingGranted()) {
+            if (PermissionManager.isPermissionGranted(activity, RequirementsForPhotoAndAudioTip.microphone) ) {
                 if (treasure.tipFileName != null) {
                     AlertDialog.Builder(activity)
                         .setMessage(R.string.overwritting_tip)
@@ -74,7 +75,7 @@ class TreasureHolder(
 
     private fun setupPhotoBtn(treasure: TreasureDescription, route: Route) {
         photoBtn.setOnClickListener {
-            if (thereIsActivityCapableOfCapturingPhoto && permissions.capturingPhotoGranted()) {
+            if (thereIsActivityCapableOfCapturingPhoto && PermissionManager.isPermissionGranted(activity, RequirementsForPhotoAndAudioTip.camera)) {
                 if (treasure.hasPhoto()) {
                     AlertDialog.Builder(activity)
                         .setMessage(R.string.overwritting_photo)
@@ -96,6 +97,7 @@ class TreasureHolder(
 
     private fun operationNotPermitted(message: String) {
         Log.w(TAG, message)
+        Toast.makeText(activity, R.string.operation_not_permitted, Toast.LENGTH_SHORT).show()
         ToneGenerator(AudioManager.STREAM_NOTIFICATION, 90).startTone(ToneGenerator.TONE_PROP_BEEP)
     }
 }

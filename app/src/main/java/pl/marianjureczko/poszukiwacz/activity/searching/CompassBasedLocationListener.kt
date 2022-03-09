@@ -17,7 +17,7 @@ class CompassBasedLocationListener(
 ) : LocationListener {
     private val TAG = javaClass.simpleName
 
-    override fun onLocationChanged(location: Location?) {
+    override fun onLocationChanged(location: Location) {
         Log.d(TAG, "onLocationChanged - location: $location")
         dataStorageWrapper.setCurrentLocation(location)
         compassPresenter.adjustCompassToCurrentLocationAndTreasure(location, dataStorageWrapper.getTreasure())
@@ -27,11 +27,11 @@ class CompassBasedLocationListener(
         Log.d(TAG, "onStatusChanged - provider: $provider")
     }
 
-    override fun onProviderEnabled(provider: String?) {
+    override fun onProviderEnabled(provider: String) {
         Log.d(TAG, "onProviderEnabled - provider: $provider")
     }
 
-    override fun onProviderDisabled(provider: String?) {
+    override fun onProviderDisabled(provider: String) {
         Log.d(TAG, "onProviderDisabled - provider: $provider")
     }
 

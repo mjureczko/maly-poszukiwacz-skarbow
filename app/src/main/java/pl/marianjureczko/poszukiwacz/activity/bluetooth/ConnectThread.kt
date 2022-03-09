@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.bluetooth
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Context
@@ -11,6 +12,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.concurrent.atomic.AtomicReference
 
+@SuppressLint("MissingPermission")
 class ConnectThread(
     selectedDevice: BluetoothDevice,
     private val route: ByteArrayOutputStream,
@@ -26,13 +28,17 @@ class ConnectThread(
         try {
             selectedDevice.createRfcommSocketToServiceRecord(MY_BLUETOOTH_UUID)
         } catch (e: Exception) {
-            memoConsole.print(context.getString(R.string.bluetooth_connecting_error) + e.message)
-            null
+            reportException(memoConsole, e)
         }
     }
 
+    private fun reportException(memoConsole: MemoConsole, e: Exception): Nothing? {
+        printInConsole(context.getString(R.string.bluetooth_connecting_error) + e.message)
+        return null
+    }
+
+    @SuppressLint("MissingPermission")
     override fun run() {
-//        memoConsole.print("ConnectThread started")
         // Cancel discovery because it slows down the connection, requires android.permission.BLUETOOTH_SCAN.
         bluetooth.adapter?.cancelDiscovery()
 
@@ -41,13 +47,12 @@ class ConnectThread(
                 socket.connect()
                 printInConsole(context.getString(R.string.bluetooth_connection_created))
                 writeRouteToSocket(socket)
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 Log.e(TAG, "Error occurred when creating connection", e)
                 printInConsole(context.getString(R.string.error_when_creating_connection) + e.message)
             }
         }
         done.set(true)
-//        memoConsole.print("ConnectThread finished")
     }
 
     private fun writeRouteToSocket(socket: BluetoothSocket) {

@@ -3,10 +3,12 @@
     package="pl.marianjureczko.poszukiwacz">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -23,10 +25,10 @@
         android:name="android.hardware.microphone"
         android:required="false" />
     <uses-feature
-        android:name="android.hardware.bluetooth"
+        android:name="android.hardware.bluetooth_le"
         android:required="false" />
     <uses-feature
-        android:name="android.hardware.bluetooth_le"
+        android:name="android.hardware.bluetooth"
         android:required="false" />
 
     <application
@@ -45,7 +47,8 @@
             android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".activity.main.MainActivity"
-            android:theme="@style/FullscreenTheme">
+            android:theme="@style/FullscreenTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,7 +58,8 @@
         <activity
             android:name=".activity.searching.SearchingActivity"
             android:label="@string/searching_activity_title"
-            android:theme="@style/FullscreenTheme">
+            android:theme="@style/FullscreenTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
 

@@ -3,34 +3,31 @@ package pl.marianjureczko.poszukiwacz.model
 import com.ocadotechnology.gembus.test.some
 import org.apache.commons.io.FileUtils
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.TestContext
 import java.io.File
 
-@RunWith(value = Parameterized::class)
-class RouteTestParametrized(
-    val ids: List<Int>,
-    val expectedNextId: Int
-) {
+class RouteTestParametrized() {
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "SHOULD give {0} as nextId WHEN {1} treasures are in the route")
-        fun data(): Iterable<Array<Any>> {
-            return arrayListOf(
-                arrayOf(emptyList<Int>(), 1),
-                arrayOf(listOf(2), 3),
-                arrayOf(listOf(2, 5, 6), 7)
-            ).toList()
+        fun data(): List<Arguments> {
+            return listOf(
+                Arguments.of(emptyList<Int>(), 1),
+                Arguments.of(listOf(2), 3),
+                Arguments.of(listOf(2, 5, 6), 7)
+            )
         }
     }
 
-    @Test
-    fun nextId() {
+    @ParameterizedTest(name = "SHOULD give {0} as nextId WHEN {1} treasures are in the route")
+    @MethodSource("data")
+    fun nextId(ids: List<Int>, expectedNextId: Int) {
         //given
         val treasures = ids.map { some<TreasureDescription>().copy(id = it) }.toMutableList()
         val route = some<Route>().copy(treasures = treasures)
@@ -47,7 +44,7 @@ class RouteTest {
     private val context = TestContext()
     private val storageHelper = StorageHelper(context)
 
-    @Before
+    @BeforeEach
     fun cleanup() {
         FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.routesDirectory))
     }

@@ -1,8 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
-import org.junit.Assert.*
-import org.junit.Test
-import pl.marianjureczko.poszukiwacz.model.TreasureType
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 class TreasureBagTest {
 

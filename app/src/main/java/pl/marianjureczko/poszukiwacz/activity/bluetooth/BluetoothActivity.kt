@@ -9,16 +9,19 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_bluetooth.*
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
 import pl.marianjureczko.poszukiwacz.activity.main.BluetoothException
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetooth
+import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.shared.*
 import java.util.*
 
@@ -34,7 +37,7 @@ interface BluetoothConnectionManager {
 
 //TODO: handle full activity lifecycle
 //TODO: extend bluetooth capabilities: is Connected & look for Bluetooth devices (https://developer.android.com/guide/topics/connectivity/bluetooth/permissions)
-class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnectionManager {
+class BluetoothActivity : PermissionActivity(), MemoConsole, BluetoothConnectionManager {
 
     enum class Mode {
         SENDING, ACCEPTING
@@ -55,26 +58,28 @@ class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnec
     }
 
     private lateinit var devicesRecyclerView: RecyclerView
-    private val permissionsManager = PermissionsManager(this)
-    private val bluetooth: Bluetooth = Bluetooth(permissionsManager)
+//    private val permissionsManager = PermissionsManager(this)
+    private val bluetooth: Bluetooth = Bluetooth()//permissionsManager)
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
 
     private val model: BluetoothViewModel by viewModels()
+
+    override fun onPermissionsGranted(activityRequirements: ActivityRequirements) {
+        Toast.makeText(this, "granted", Toast.LENGTH_LONG).show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
         setContentView(R.layout.activity_bluetooth)
-        setTitle(R.string.sending_route)
+        assurePermissionsAreGranted(RequirementsForBluetooth, true)
 
+        setTitle(R.string.sending_route)
         val memo: EditText = configureMemo()
-//        requestAccessBluetoothDrivenLocationPermission()
-//        permissionsManager.requestBluetoothPermission()
         val mode = intent.getStringExtra(MODE)
         if (Mode.SENDING.toString() == mode) {
-            model.setup(intent.getStringExtra(ROUTE))
+            model.setup(intent.getStringExtra(ROUTE)!!)
             devicesRecyclerView = findViewById(R.id.devices)
             devicesRecyclerView.layoutManager = LinearLayoutManager(this)
             try {
@@ -123,6 +128,7 @@ class BluetoothActivity : ActivityWithBackButton(), MemoConsole, BluetoothConnec
     override fun print(msg: String) {
         val handler = Handler(Looper.getMainLooper())
         handler.post {
+            val memo: EditText = findViewById(R.id.memo)
             val text = memo.text
             text.insert(text.length, "\n> $msg")
             memo.setSelection(text.length)
