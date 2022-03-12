@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito.given
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
@@ -34,7 +34,7 @@ class TreasureDescriptionTest {
         //given
         val given = some<TreasureDescription>().copy(photoFileName = null)
         val photoFile = some<String>()
-        Mockito.`when`(storageHelper.newPhotoFile()).thenReturn(photoFile)
+        given(storageHelper.newPhotoFile()).willReturn(photoFile)
 
         //when
         val actual = given.instantiatePhotoFile(storageHelper)

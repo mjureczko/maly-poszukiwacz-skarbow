@@ -4,21 +4,36 @@ import com.ocadotechnology.gembus.test.some
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
 class XmlHelperTest {
 
     @Test
-    fun should_writeToAndLoadFromString() {
+    fun should_writeToAndLoadFromStringRoute() {
         //given
         val xmlHelper = XmlHelper()
         val route = some<Route>()
 
         //when
         val xml = xmlHelper.writeToString(route)
-        val actual = xmlHelper.loadFromString(xml)
+        val actual = xmlHelper.loadRouteFromString(xml)
 
         //then
         assertEquals(route, actual)
+    }
+
+    @Test
+    fun should_writeToAndLoadFromStringTreasureDescription() {
+        //given
+        val xmlHelper = XmlHelper()
+        val treasureDescription = some<TreasureDescription>()
+
+        //when
+        val xml = xmlHelper.writeToString(treasureDescription)
+        val actual = xmlHelper.loadTreasureDescriptionFromString(xml)
+
+        //then
+        assertEquals(treasureDescription, actual)
     }
 
     @Test
@@ -31,7 +46,7 @@ class XmlHelperTest {
 
         //when
         val xml = xmlHelper.writeToString(route)
-        val actual = xmlHelper.loadFromString(xml)
+        val actual = xmlHelper.loadRouteFromString(xml)
 
         //then
         assertEquals(route, actual)

@@ -2,7 +2,6 @@ package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +14,6 @@ import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
 import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
 /**
  * Routes creation and selection activity
@@ -24,7 +22,6 @@ class MainActivity : PermissionActivity() {
 
     private val TAG = javaClass.simpleName
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
-//    private val permissionsManager = PermissionsManager(this)
     private lateinit var routesRecyclerView: RecyclerView
     private lateinit var binding: ActivityMainBinding
 
@@ -34,9 +31,7 @@ class MainActivity : PermissionActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "########> onCreate")
         binding = ActivityMainBinding.inflate(layoutInflater)
-        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
         assurePermissionsAreGranted(RequirementsForNavigation, true)
@@ -54,7 +49,6 @@ class MainActivity : PermissionActivity() {
             fetchRouteFromBluetooth()
         }
         setTitle(R.string.main_activity_title)
-//        permissionsManager.requestBluetoothPermissions()
         setContentView(binding.root)
     }
 

@@ -58,19 +58,16 @@ class BluetoothActivity : PermissionActivity(), MemoConsole, BluetoothConnection
     }
 
     private lateinit var devicesRecyclerView: RecyclerView
-//    private val permissionsManager = PermissionsManager(this)
-    private val bluetooth: Bluetooth = Bluetooth()//permissionsManager)
+    private val bluetooth: Bluetooth = Bluetooth()
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
 
     private val model: BluetoothViewModel by viewModels()
 
     override fun onPermissionsGranted(activityRequirements: ActivityRequirements) {
-        Toast.makeText(this, "granted", Toast.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_bluetooth)
         assurePermissionsAreGranted(RequirementsForBluetooth, true)

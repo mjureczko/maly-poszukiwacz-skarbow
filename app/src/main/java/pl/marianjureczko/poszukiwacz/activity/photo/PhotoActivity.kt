@@ -8,7 +8,6 @@ import android.os.Bundle
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityPhotoBinding
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithBackButton
-import pl.marianjureczko.poszukiwacz.shared.addIconToActionBar
 
 class PhotoActivity : ActivityWithBackButton() {
     companion object {
@@ -26,7 +25,6 @@ class PhotoActivity : ActivityWithBackButton() {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoBinding.inflate(layoutInflater)
 
-        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_photo)
         val photo = intent.getStringExtra(PHOTO)
