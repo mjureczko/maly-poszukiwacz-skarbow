@@ -5,9 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import pl.marianjureczko.poszukiwacz.shared.ActivityWithBackButton
+import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 
-abstract class PermissionActivity : ActivityWithBackButton() {
+abstract class PermissionActivity : ActivityWithAdsAndBackButton() {
 
     private lateinit var permissionManager: PermissionManager
     private lateinit var activityRequirements: ActivityRequirements

@@ -93,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.60" />
+        app:layout_constraintGuide_percent="0.55" />
 
     <TextView
         android:id="@+id/stepsToDo"
@@ -125,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.70" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/leftGuideLine"
@@ -151,7 +151,7 @@
         android:background="@null"
         app:srcCompat="@drawable/chest"
         app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideLine"
         app:layout_constraintStart_toEndOf="@+id/leftGuideLine" />
 
@@ -164,7 +164,7 @@
         android:padding="1dp"
         android:scaleType="fitCenter"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintTop_toBottomOf="@+id/mapBtn"
         app:layout_constraintEnd_toStartOf="@+id/leftGuideLine"
         app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +181,7 @@
         android:background="@null"
         app:srcCompat="@drawable/megaphone"
         app:layout_constraintTop_toBottomOf="@+id/photoBtn"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/rightGuideLine" />
 
@@ -213,5 +213,17 @@
         app:layout_constraintTop_toBottomOf="@+id/footerGuideLine"
         app:srcCompat="@drawable/show_photo" />
 
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintTop_toBottomOf="@+id/scanBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/searching_ad">
+    </com.google.android.gms.ads.AdView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

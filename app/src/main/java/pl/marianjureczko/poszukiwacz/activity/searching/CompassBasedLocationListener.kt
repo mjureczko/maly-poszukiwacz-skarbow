@@ -18,7 +18,6 @@ class CompassBasedLocationListener(
     private val TAG = javaClass.simpleName
 
     override fun onLocationChanged(location: Location) {
-        Log.d(TAG, "onLocationChanged - location: $location")
         dataStorageWrapper.setCurrentLocation(location)
         compassPresenter.adjustCompassToCurrentLocationAndTreasure(location, dataStorageWrapper.getTreasure())
     }

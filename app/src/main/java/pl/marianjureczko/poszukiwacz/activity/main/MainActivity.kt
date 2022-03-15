@@ -50,6 +50,8 @@ class MainActivity : PermissionActivity() {
         }
         setTitle(R.string.main_activity_title)
         setContentView(binding.root)
+
+        setUpAds(binding.adView)
     }
 
     override fun onResume() {
