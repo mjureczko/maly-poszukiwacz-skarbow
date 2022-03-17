@@ -17,10 +17,8 @@ class ReaderThread(
     private val inStream: InputStream = socket.inputStream
     private val storageHelper = StorageHelper(context)
     override fun run() {
-        memoConsole.print("ReaderThread started")
         val progressPrinter = ProgressPrinter(memoConsole, context)
         storageHelper.extractZipStream(inStream, progressPrinter)
         memoConsole.print(context.getString(R.string.extracted_everything))
-        memoConsole.print("ReaderThread finished")
     }
 }

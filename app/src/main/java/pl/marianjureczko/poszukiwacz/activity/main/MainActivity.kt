@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.activity.main
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
@@ -26,7 +27,6 @@ class MainActivity : PermissionActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onPermissionsGranted(activityRequirements: ActivityRequirements) {
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

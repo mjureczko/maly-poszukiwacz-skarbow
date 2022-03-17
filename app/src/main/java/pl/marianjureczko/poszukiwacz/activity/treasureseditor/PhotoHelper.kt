@@ -39,7 +39,7 @@ class PhotoHelper(private val storageHelper: StorageHelper?) {
                 resized.compress(Bitmap.CompressFormat.JPEG, 95, out)
             }
         } catch (e: IOException) {
-            Log.d(TAG, e.message, e)
+            Log.e(TAG, e.message, e)
             return false
         }
         return true
