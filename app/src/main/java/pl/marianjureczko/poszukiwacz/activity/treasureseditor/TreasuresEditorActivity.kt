@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
@@ -68,29 +67,10 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         assurePermissionsAreGranted(RequirementsForPhotoAndAudioTip, false)
 
         binding.treasures.layoutManager = LinearLayoutManager(this)
-        val existingList = intent.getStringExtra(SELECTED_LIST)
-        if(savedInstanceState != null) {
-            savedInstanceState.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadRouteFromString(it)) }
-            savedInstanceState.getInt(TREASURE_NEEDING_PHOTO_KEY)?.let { model.setupTreasureNeedingPhotoById(it) }
-            if (isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState)) {
-                showRouteNameDialog()
-                savedInstanceState?.putBoolean(SETUP_DIALOG_SHOWN_KEY, true)
-            }
-        }
-        else { //isInEditExistingRouteMode
-            setupTreasureView(xmlHelper.loadRouteFromString(existingList!!))
-        }
 
-        binding.addTreasure.setOnClickListener {
-            val treasure = TreasureDescription(
-                id = model.route.nextId(),
-                latitude = binding.editorLatValue.text.toString().toDouble(),
-                longitude = binding.editorLongValue.text.toString().toDouble()
-            )
-            model.route.treasures.add(treasure)
-            treasureAdapter.notifyDataSetChanged()
-            storageHelper.save(model.route)
-        }
+        restoreState(savedInstanceState)
+
+        binding.addTreasure.setOnClickListener { addTreasureListener() }
 
         val locationListener = TextViewBasedLocationListener(binding.editorLatValue, binding.editorLongValue)
         val handler = Handler()
@@ -115,7 +95,11 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         if (storageHelper.routeAlreadyExists(route)) {
             AlertDialog.Builder(this)
                 .setMessage(R.string.overwritting_route)
-                .setPositiveButton(R.string.no) { _, _ -> showRouteNameDialog() }
+                .setPositiveButton(R.string.no) { _, _ ->
+                    RouteNameDialog.newInstance().apply {
+                        show(supportFragmentManager, ROUTE_NAME_DIALOG)
+                    }
+                }
                 .setNegativeButton(R.string.yes) { _, _ ->
                     storageHelper.removeRouteByName(name)
                     setupTreasureView(route)
@@ -138,9 +122,6 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
                 } else {
                     Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                //TODO: change message to "Photo will not be saved"...
-                Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -161,6 +142,17 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         startActivityForResult(captureImage, REQUEST_PHOTO)
     }
 
+    private fun addTreasureListener() {
+        val treasure = TreasureDescription(
+            id = model.route.nextId(),
+            latitude = binding.editorLatValue.text.toString().toDouble(),
+            longitude = binding.editorLongValue.text.toString().toDouble()
+        )
+        model.route.treasures.add(treasure)
+        treasureAdapter.notifyDataSetChanged()
+        storageHelper.save(model.route)
+    }
+
     private fun createPhotoUri(): Uri {
         val photoFile = getPhotoTempFile()
         if (!photoFile.exists()) {
@@ -168,6 +160,38 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         }
         return FileProvider.getUriForFile(this, "pl.marianjureczko.poszukiwacz.fileprovider", photoFile)
     }
+
+    private fun restoreState(savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) {
+            savedInstanceState.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadRouteFromString(it)) }
+            val noPhoto = -1
+            savedInstanceState.getInt(TREASURE_NEEDING_PHOTO_KEY, noPhoto).let {
+                if (it != noPhoto) {
+                    model.setupTreasureNeedingPhotoById(it)
+                }
+            }
+            if (wasDuringAskingForRouteName(savedInstanceState)) {
+                showRouteNameDialog(savedInstanceState)
+            }
+        } else {
+            val existingList = intent.getStringExtra(SELECTED_LIST)
+            if (isInEditExistingRouteMode(existingList)) {
+                setupTreasureView(xmlHelper.loadRouteFromString(existingList!!))
+            } else {
+                showRouteNameDialog(savedInstanceState)
+            }
+        }
+    }
+
+    private fun showRouteNameDialog(savedInstanceState: Bundle?) {
+        RouteNameDialog.newInstance().apply {
+            show(supportFragmentManager, ROUTE_NAME_DIALOG)
+        }
+        savedInstanceState?.putBoolean(SETUP_DIALOG_SHOWN_KEY, true)
+    }
+
+    private fun isInEditExistingRouteMode(existingList: String?) =
+        existingList != null
 
     private fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + TMP_PICTURE_FILE)
 
@@ -180,12 +204,6 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         supportActionBar?.title = "${App.getResources().getString(R.string.route)} ${route.name}"
     }
 
-    private fun isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState: Bundle?): Boolean =
+    private fun wasDuringAskingForRouteName(savedInstanceState: Bundle?): Boolean =
         savedInstanceState?.getBoolean(SETUP_DIALOG_SHOWN_KEY) == null
-
-    private fun showRouteNameDialog() =
-        RouteNameDialog.newInstance().apply {
-            show(this@TreasuresEditorActivity.supportFragmentManager, ROUTE_NAME_DIALOG)
-        }
 }
-
