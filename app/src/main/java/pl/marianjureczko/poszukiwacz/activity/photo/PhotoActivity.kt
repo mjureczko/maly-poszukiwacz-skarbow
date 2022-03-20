@@ -7,9 +7,9 @@ import android.net.Uri
 import android.os.Bundle
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityPhotoBinding
-import pl.marianjureczko.poszukiwacz.shared.ActivityWithBackButton
+import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 
-class PhotoActivity : ActivityWithBackButton() {
+class PhotoActivity : ActivityWithAdsAndBackButton() {
     companion object {
         private const val PHOTO = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
 
@@ -31,5 +31,7 @@ class PhotoActivity : ActivityWithBackButton() {
         val uri = Uri.parse(photo)
         binding.photoImg.setImageURI(uri)
         setContentView(binding.root)
+
+        setUpAds(binding.adView)
     }
 }

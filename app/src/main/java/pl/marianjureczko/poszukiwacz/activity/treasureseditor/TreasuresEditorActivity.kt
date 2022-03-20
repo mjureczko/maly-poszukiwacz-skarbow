@@ -69,17 +69,16 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
         binding.treasures.layoutManager = LinearLayoutManager(this)
         val existingList = intent.getStringExtra(SELECTED_LIST)
-        if (isInEditExistingRouteMode(existingList)) {
-            setupTreasureView(xmlHelper.loadRouteFromString(existingList!!))
-        } else {
-            savedInstanceState?.let { state ->
-                state.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadRouteFromString(it)) }
-                state.getString(TREASURE_NEEDING_PHOTO_KEY)?.let { model.treasureNeedingPhoto = xmlHelper.loadTreasureDescriptionFromString(it) }
-            }
+        if(savedInstanceState != null) {
+            savedInstanceState.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadRouteFromString(it)) }
+            savedInstanceState.getInt(TREASURE_NEEDING_PHOTO_KEY)?.let { model.setupTreasureNeedingPhotoById(it) }
             if (isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState)) {
                 showRouteNameDialog()
                 savedInstanceState?.putBoolean(SETUP_DIALOG_SHOWN_KEY, true)
             }
+        }
+        else { //isInEditExistingRouteMode
+            setupTreasureView(xmlHelper.loadRouteFromString(existingList!!))
         }
 
         binding.addTreasure.setOnClickListener {
@@ -105,7 +104,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         if (model.route != Route.nullObject()) {
             outState.putString(ROUTE_KEY, xmlHelper.writeToString(model.route))
             model.treasureNeedingPhoto?.let {
-                outState.putString(TREASURE_NEEDING_PHOTO_KEY, xmlHelper.writeToString(it))
+                outState.putInt(TREASURE_NEEDING_PHOTO_KEY, it.id)
             }
         }
         super.onSaveInstanceState(outState)
@@ -128,7 +127,6 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d(TAG, "########> onActivityResult")
         if (requestCode == REQUEST_PHOTO) {
             if (Activity.RESULT_OK == resultCode) {
                 Toast.makeText(applicationContext, R.string.photo_saving, Toast.LENGTH_SHORT).show()
@@ -141,6 +139,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
                     Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
                 }
             } else {
+                //TODO: change message to "Photo will not be saved"...
                 Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
             }
         } else {
@@ -183,9 +182,6 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     private fun isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState: Bundle?): Boolean =
         savedInstanceState?.getBoolean(SETUP_DIALOG_SHOWN_KEY) == null
-
-    private fun isInEditExistingRouteMode(existingList: String?) =
-        existingList != null
 
     private fun showRouteNameDialog() =
         RouteNameDialog.newInstance().apply {

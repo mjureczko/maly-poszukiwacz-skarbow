@@ -21,7 +21,7 @@ import pl.marianjureczko.poszukiwacz.shared.*
 
 private const val RESULTS_DIALOG = "ResultsDialog"
 
-class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
+class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
 
     companion object {
         private val xmlHelper = XmlHelper()
@@ -64,6 +64,8 @@ class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
         val locationRequester = LocationRequester(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
         handler.post(locationRequester)
         setContentView(binding.root)
+
+        setUpAds(binding.adView)
     }
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
