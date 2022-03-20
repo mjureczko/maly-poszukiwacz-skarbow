@@ -10,22 +10,24 @@ GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
 Można wygenerować własne na podstawie instrukcji [poniżej](#markdown-header-skarby) albo użyć dostępnych na dole strony.
 
 2. Przygotowanie do poszukiwań wymaga ukrycia skarbów:
-	* Należy wybierać `NOWA TRASA DLA POSZUKIWACZY` i wprowadzić jej nazwę, dowolną.
+	* Należy wybierać `Nowa trasa` i wprowadzić jej nazwę, dowolną.
     * Trzeba ukryć skarby, czyli wydrukowane wcześniej kody QR.
     * W miejscu ukrycia skarbu należy wcisnąć przycisk z wizerunkiem skrzyni ![picture](/app/src/main/res/drawable/chest_small.png).
 Dzięki temu gra zapamięta współrzędne skarbu.
-    * Dodatkowo można nagrać podpowiedź dla poszukiwaczy po naciśnięciu przycisku z symbolem mikrofonu.
+    * Dodatkowo można nagrać podpowiedź dla poszukiwaczy przez naciśnięciu przycisku z symbolem mikrofonu lub zrobić sugerujące lokazliację skarbu zdjęcie naciskając przycisk z symbolem aparatu.
 
 3. Gdy już wszystkie skarby są ukryte należy wycofać się do głównego ekranu gry, wybrać właśnie utworzoną trasę i przekazać telefon poszukiwaczom.
 
-4. Poszukiwacze szukają na podstawie informacji o odległości wyrażonej w liczbą kroków do skarbu i kompasu.
+4. Poszukiwacze szukają na podstawie informacji o odległości wyrażonej liczbą kroków do skarbu i kompasu.
 Kompas wskazuje kierunek, którym trzeba podążać aby dotrzeć do skarbu.
 Jest to kierunek świata, poszukiwacz musi samodzielnie ustalić gdzie jest północ żeby pójść we właściwą stronę.
 
 5. Podczas poszukiwań można skorzystać z podpowiedzi nagranej wcześniej przez ukrywającego skarby naciskając przycisk
-![picture](/app/src/main/res/drawable/megaphone_small.png).
+![picture](/app/src/main/res/drawable/megaphone_small.png) lub obejrzeć zdjęcie wybierając przycisk
+![picture](/app/src/main/res/drawable/show_photo_small.png).
 
-6. Poszukiwacz po znalezieniu skarbu używa aplikacji do zeskanowania kodu QR naciskając przycisk ![picture](/app/src/main/res/drawable/chest_small.png) i dzięki temu dowiaduje się co znalazł.
+6. Poszukiwacz po znalezieniu skarbu używa aplikacji do zeskanowania kodu QR naciskając przycisk
+![picture](/app/src/main/res/drawable/chest_small.png) i dzięki temu dowiaduje się co znalazł.
 
 7. Po znalezieniu skarbu można wybrać do poszukiwań kolejny przy pomocy przycisku
 ![picture](/app/src/main/res/drawable/change_chest_small.png).

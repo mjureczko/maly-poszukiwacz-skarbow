@@ -31,6 +31,7 @@ class AcceptThread(
         var shouldLoop = true
         while (shouldLoop) {
             val socket: BluetoothSocket? = try {
+                printInConsole(context.getString(R.string.bluetooth_waiting_to_accept))
                 serverSocket?.accept()
             } catch (e: IOException) {
                 printInConsole(context.getString(R.string.accepting_bluetooth_connection_error) + e.message)

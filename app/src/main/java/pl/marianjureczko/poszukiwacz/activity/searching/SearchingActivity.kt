@@ -46,7 +46,6 @@ class SearchingActivity : ActivityWithBackButton(), TreasureSelectorView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchingBinding.inflate(layoutInflater)
-        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_searching)
         restoreState(savedInstanceState)

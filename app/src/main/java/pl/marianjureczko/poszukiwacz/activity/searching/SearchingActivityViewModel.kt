@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
-import android.content.Context
 import android.location.Location
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -32,7 +31,7 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasureLoca
 
     fun setup(routeXml: String) {
         this.routeXml = routeXml
-        route = xmlHelper.loadFromString(routeXml)
+        route = xmlHelper.loadRouteFromString(routeXml)
     }
 
     override fun selectTreasure(which: Int) {

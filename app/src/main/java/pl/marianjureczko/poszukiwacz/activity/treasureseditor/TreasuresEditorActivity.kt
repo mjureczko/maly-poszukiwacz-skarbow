@@ -28,7 +28,6 @@ import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.shared.*
 import java.io.File
 
-
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
 class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, TreasurePhotoMaker {
@@ -50,6 +49,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     private val TAG = javaClass.simpleName
     private val SETUP_DIALOG_SHOWN_KEY: String = "SETUP_DIALOG_SHOWN"
     private val ROUTE_KEY: String = "ROUTE"
+    private val TREASURE_NEEDING_PHOTO_KEY: String = "TREASURE_NEEDING_PHOTO"
 
     private val storageHelper = StorageHelper(this)
     lateinit var treasureAdapter: TreasureAdapter
@@ -64,16 +64,18 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTreasuresEditorBinding.inflate(layoutInflater)
-        addIconToActionBar(supportActionBar)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         assurePermissionsAreGranted(RequirementsForPhotoAndAudioTip, false)
 
         binding.treasures.layoutManager = LinearLayoutManager(this)
         val existingList = intent.getStringExtra(SELECTED_LIST)
         if (isInEditExistingRouteMode(existingList)) {
-            setupTreasureView(xmlHelper.loadFromString(existingList!!))
+            setupTreasureView(xmlHelper.loadRouteFromString(existingList!!))
         } else {
-            savedInstanceState?.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadFromString(it)) }
+            savedInstanceState?.let { state ->
+                state.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadRouteFromString(it)) }
+                state.getString(TREASURE_NEEDING_PHOTO_KEY)?.let { model.treasureNeedingPhoto = xmlHelper.loadTreasureDescriptionFromString(it) }
+            }
             if (isInCreateRouteModeAndDidNotAskForNameYet(savedInstanceState)) {
                 showRouteNameDialog()
                 savedInstanceState?.putBoolean(SETUP_DIALOG_SHOWN_KEY, true)
@@ -100,9 +102,11 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.d(TAG, "########> onSaveInstanceState")
         if (model.route != Route.nullObject()) {
             outState.putString(ROUTE_KEY, xmlHelper.writeToString(model.route))
+            model.treasureNeedingPhoto?.let {
+                outState.putString(TREASURE_NEEDING_PHOTO_KEY, xmlHelper.writeToString(it))
+            }
         }
         super.onSaveInstanceState(outState)
     }

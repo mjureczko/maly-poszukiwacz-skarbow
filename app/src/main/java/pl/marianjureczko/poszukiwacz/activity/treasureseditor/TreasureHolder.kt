@@ -75,7 +75,9 @@ class TreasureHolder(
 
     private fun setupPhotoBtn(treasure: TreasureDescription, route: Route) {
         photoBtn.setOnClickListener {
-            if (thereIsActivityCapableOfCapturingPhoto && PermissionManager.isPermissionGranted(activity, RequirementsForPhotoAndAudioTip.camera)) {
+            val a = thereIsActivityCapableOfCapturingPhoto
+            val permissionGranted = PermissionManager.isPermissionGranted(activity, RequirementsForPhotoAndAudioTip.camera)
+            if (a && permissionGranted) {
                 if (treasure.hasPhoto()) {
                     AlertDialog.Builder(activity)
                         .setMessage(R.string.overwritting_photo)

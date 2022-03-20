@@ -85,7 +85,7 @@ open class StorageHelper(val context: Context) {
         val stringWriter = StringWriter()
         IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
         val routeXml = stringWriter.toString()
-        var route = xmlHelper.loadFromString(routeXml)
+        var route = xmlHelper.loadRouteFromString(routeXml)
         route.addPrefixToFilesPaths(routesDir)
         save(route)
         actualZip.closeEntry()
@@ -111,7 +111,7 @@ open class StorageHelper(val context: Context) {
             .filter { it.name.toLowerCase().endsWith(".xml") }
             .mapNotNull {
                 try {
-                    xmlHelper.loadFromFile(it)
+                    xmlHelper.loadRouteFromFile(it)
                 } catch (e: Exception) {
                     Log.d(TAG, "Error when loading ${it.name}:" + e.message)
                     null

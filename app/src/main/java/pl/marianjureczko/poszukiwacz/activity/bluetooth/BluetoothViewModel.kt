@@ -12,6 +12,6 @@ class BluetoothViewModel : ViewModel() {
     var thread: CancellableThread? = null
 
     fun setup(routeXml: String) {
-        route = xmlHelper.loadFromString(routeXml)
+        route = xmlHelper.loadRouteFromString(routeXml)
     }
 }

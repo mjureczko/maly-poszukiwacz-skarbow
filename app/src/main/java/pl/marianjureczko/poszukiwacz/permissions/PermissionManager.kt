@@ -9,7 +9,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import pl.marianjureczko.poszukiwacz.R
 
-class PermissionManager(private val permissionListener: PermissionListener) {
+class PermissionManager(
+    private val permissionListener: PermissionListener,
+    private val dialogs: Dialogs = Dialogs()
+) {
 
     companion object {
 
@@ -45,10 +48,10 @@ class PermissionManager(private val permissionListener: PermissionListener) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && areAllPermissionsGranted(activity, activityRequirements.getSpecsArray())) {
                 permissionListener.permissionsGranted(activityRequirements)
             } else {
-                if (shouldShowRationale(activity, deniedPermissions)) {
-                    showPermissionRationaleDialog(activity, activityRequirements)
+                if (dialogs.shouldShowRationale(activity, deniedPermissions)) {
+                    dialogs.showPermissionRationaleDialog(activity, activityRequirements, permissionListener)
                 } else {
-                    showPermissionPermanentDenialDialog(activity, activityRequirements)
+                    dialogs.showPermissionPermanentDenialDialog(activity, activityRequirements, permissionListener)
                 }
             }
         }
@@ -60,25 +63,9 @@ class PermissionManager(private val permissionListener: PermissionListener) {
      */
     fun handleResume(activity: Activity) {
         if (!activity.isFinishing) {
-            AlertDialog.Builder(activity)
-                .setTitle(R.string.retry)
-                .setMessage(R.string.retry_details)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yes) { _, _ -> permissionListener.retry() }
-                .setNegativeButton(R.string.no) { dialog, _ ->
-                    if (!activity.isFinishing) {
-                        dialog.dismiss()
-                        permissionListener.deny()
-                    }
-                }
-                .show()
+            dialogs.showResumeDialog(activity, permissionListener)
         }
     }
-
-    private fun shouldShowRationale(activity: Activity, deniedPermissions: ArrayList<String>): Boolean =
-        deniedPermissions.any { deniedPermission ->
-            ActivityCompat.shouldShowRequestPermissionRationale(activity, deniedPermission)
-        }
 
     private fun getDeniedPermissions(grantResults: IntArray, permissions: Array<out String>): ArrayList<String> {
         val deniedPermissions = ArrayList<String>()
@@ -90,8 +77,31 @@ class PermissionManager(private val permissionListener: PermissionListener) {
         }
         return deniedPermissions
     }
+}
 
-    private fun showPermissionRationaleDialog(activity: Activity, activityRequirements: ActivityRequirements) {
+open class Dialogs {
+
+    fun showResumeDialog(activity: Activity, permissionListener: PermissionListener) {
+        AlertDialog.Builder(activity)
+            .setTitle(R.string.retry)
+            .setMessage(R.string.retry_details)
+            .setCancelable(false)
+            .setPositiveButton(R.string.yes) { _, _ -> permissionListener.retry() }
+            .setNegativeButton(R.string.no) { dialog, _ ->
+                if (!activity.isFinishing) {
+                    dialog.dismiss()
+                    permissionListener.deny()
+                }
+            }
+            .show()
+    }
+
+    open fun shouldShowRationale(activity: Activity, deniedPermissions: List<String>): Boolean =
+        deniedPermissions.any { deniedPermission ->
+            ActivityCompat.shouldShowRequestPermissionRationale(activity, deniedPermission)
+        }
+
+    open fun showPermissionRationaleDialog(activity: Activity, activityRequirements: ActivityRequirements, permissionListener: PermissionListener) {
         if (!activity.isFinishing) {
             AlertDialog.Builder(activity)
                 .setTitle(R.string.permission_retry_dialog_title)
@@ -108,7 +118,7 @@ class PermissionManager(private val permissionListener: PermissionListener) {
         }
     }
 
-    private fun showPermissionPermanentDenialDialog(activity: Activity, activityRequirements: ActivityRequirements) {
+    open fun showPermissionPermanentDenialDialog(activity: Activity, activityRequirements: ActivityRequirements, permissionListener: PermissionListener) {
         if (!activity.isFinishing) {
             val message = activityRequirements.getMessageForPermanentDenial()
 

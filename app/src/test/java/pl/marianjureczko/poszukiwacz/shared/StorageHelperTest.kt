@@ -168,7 +168,7 @@ class StorageHelperTest {
             if (zipEntry!!.name == route.name + ".xml") {
                 val stringWriter = StringWriter()
                 IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
-                actualRoute = xmlHelper.loadFromString(stringWriter.toString())
+                actualRoute = xmlHelper.loadRouteFromString(stringWriter.toString())
             } else {
                 actualFiles.add(zipEntry!!.name)
             }

@@ -24,7 +24,7 @@
         android:layout_width="@android:dimen/app_icon_size"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
-        android:src="@drawable/share" />
+        android:src="@android:drawable/ic_menu_share" />
 
     <ImageButton
         android:id="@+id/delete_route"
