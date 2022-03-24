@@ -1,9 +1,11 @@
 package pl.marianjureczko.poszukiwacz.shared
 
 import com.ocadotechnology.gembus.test.some
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
 class XmlHelperTest {
@@ -16,7 +18,7 @@ class XmlHelperTest {
 
         //when
         val xml = xmlHelper.writeToString(route)
-        val actual = xmlHelper.loadRouteFromString(xml)
+        val actual = xmlHelper.loadFromString<Route>(xml)
 
         //then
         assertEquals(route, actual)
@@ -30,7 +32,7 @@ class XmlHelperTest {
 
         //when
         val xml = xmlHelper.writeToString(treasureDescription)
-        val actual = xmlHelper.loadTreasureDescriptionFromString(xml)
+        val actual = xmlHelper.loadFromString<TreasureDescription>(xml)
 
         //then
         assertEquals(treasureDescription, actual)
@@ -46,9 +48,23 @@ class XmlHelperTest {
 
         //when
         val xml = xmlHelper.writeToString(route)
-        val actual = xmlHelper.loadRouteFromString(xml)
+        val actual = xmlHelper.loadFromString<Route>(xml)
 
         //then
         assertEquals(route, actual)
+    }
+
+    @Test
+    fun should_writeToAndLoadFromStringTreasureBag() {
+        //given
+        val xmlHelper = XmlHelper()
+        var bag = some<TreasureBag>()
+
+        //when
+        val xml = xmlHelper.writeToString(bag)
+        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+
+        //then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
     }
 }

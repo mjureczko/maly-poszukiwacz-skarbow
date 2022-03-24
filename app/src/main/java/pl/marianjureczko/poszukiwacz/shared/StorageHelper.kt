@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import org.apache.commons.io.IOUtils
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import java.io.*
 import java.nio.charset.StandardCharsets
@@ -24,11 +25,26 @@ open class StorageHelper(val context: Context) {
 
     companion object {
         const val routesDirectory = "/treasures_lists"
+        const val progressDirectory = "/progress"
     }
 
     fun newSoundFile(): String = newFile("sound_", ".3gp")
 
     open fun newPhotoFile(): String = newFile("photo_", ".jpg")
+
+    fun save(bag: TreasureBag) {
+        val file = getProgressFile(bag.routeName)
+        xmlHelper.writeToFile(bag, file)
+    }
+
+    fun load(routeName: String): TreasureBag? {
+        val file = getProgressFile(routeName)
+        return if(file.exists()) {
+            xmlHelper.loadProgressFromFile(file)
+        } else {
+            null
+        }
+    }
 
     fun save(route: Route) {
         val xmlFile = getRouteFile(route)
@@ -74,33 +90,6 @@ open class StorageHelper(val context: Context) {
         actualZip.close()
     }
 
-    private fun extractFile(zipEntry: ZipEntry, actualZip: ZipInputStream, routesDir: String) {
-        FileOutputStream("${routesDir}${zipEntry.name}").use {
-            IOUtils.copy(actualZip, it)
-            actualZip.closeEntry()
-        }
-    }
-
-    private fun extractRoute(actualZip: ZipInputStream, routesDir: String): Route {
-        val stringWriter = StringWriter()
-        IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
-        val routeXml = stringWriter.toString()
-        var route = xmlHelper.loadRouteFromString(routeXml)
-        route.addPrefixToFilesPaths(routesDir)
-        save(route)
-        actualZip.closeEntry()
-        return route
-    }
-
-    private fun addFileToZipStream(zipOut: ZipOutputStream, fileName: String?) {
-        if (fileName != null) {
-            val zipEntry = ZipEntry(toRelativePath(fileName))
-            zipOut.putNextEntry(zipEntry)
-            zipOut.write(File(fileName).readBytes())
-            zipOut.closeEntry()
-        }
-    }
-
     fun routeAlreadyExists(route: Route): Boolean =
         getRouteFile(route).exists()
 
@@ -144,6 +133,34 @@ open class StorageHelper(val context: Context) {
 
     fun pathToRoutesDir(): String = getRoutesDir().absolutePath
 
+
+    private fun extractFile(zipEntry: ZipEntry, actualZip: ZipInputStream, routesDir: String) {
+        FileOutputStream("${routesDir}${zipEntry.name}").use {
+            IOUtils.copy(actualZip, it)
+            actualZip.closeEntry()
+        }
+    }
+
+    private fun extractRoute(actualZip: ZipInputStream, routesDir: String): Route {
+        val stringWriter = StringWriter()
+        IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
+        val routeXml = stringWriter.toString()
+        val route = xmlHelper.loadFromString<Route>(routeXml)
+        route.addPrefixToFilesPaths(routesDir)
+        save(route)
+        actualZip.closeEntry()
+        return route
+    }
+
+    private fun addFileToZipStream(zipOut: ZipOutputStream, fileName: String?) {
+        if (fileName != null) {
+            val zipEntry = ZipEntry(toRelativePath(fileName))
+            zipOut.putNextEntry(zipEntry)
+            zipOut.write(File(fileName).readBytes())
+            zipOut.closeEntry()
+        }
+    }
+
     private fun newFile(prefix: String, extension: String) =
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
@@ -152,8 +169,17 @@ open class StorageHelper(val context: Context) {
         return File("${dir.absolutePath}/${route.fileName()}.xml")
     }
 
-    private fun getRoutesDir(): File {
-        val dir = File(context.filesDir.absolutePath + routesDirectory)
+    private fun getRoutesDir(): File = getDir(routesDirectory)
+
+    private fun getProgressFile(routeName: String): File {
+        val dir = getProgressDir()
+        return File("${dir.absolutePath}/$routeName.xml")
+    }
+
+    private fun getProgressDir(): File = getDir(progressDirectory)
+
+    private fun getDir(dirName: String): File {
+        val dir = File(context.filesDir.absolutePath + dirName)
         if (!dir.exists()) {
             dir.mkdir()
         }

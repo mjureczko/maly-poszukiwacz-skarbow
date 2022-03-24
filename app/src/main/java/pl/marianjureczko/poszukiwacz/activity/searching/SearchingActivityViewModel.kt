@@ -15,8 +15,8 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasureLoca
     var selectedTreasure: TreasureDescription? = null
     var treasureIndex: Int? = null
     var treasureSelectionInitialized = false
+    lateinit var treasureBag: TreasureBag
     private var currentLocation: Location? = null
-    var treasureBag: TreasureBag = TreasureBag()
 
     override fun getTreasure(): TreasureDescription? {
         return selectedTreasure
@@ -31,7 +31,8 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasureLoca
 
     fun setup(routeXml: String) {
         this.routeXml = routeXml
-        route = xmlHelper.loadRouteFromString(routeXml)
+        route = xmlHelper.loadFromString<Route>(routeXml)
+//        treasureBag = TreasureBag(route.name)
     }
 
     override fun selectTreasure(which: Int) {

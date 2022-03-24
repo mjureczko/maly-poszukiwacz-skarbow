@@ -28,7 +28,6 @@
     <string name="overwritting_route">Trasa o takiej nazwie już istnieje, czy chcesz ją nadpisać?</string>
     <string name="overwritting_tip">Istnieje już podpowiedź, czy chcesz ją nadpisać?</string>
     <string name="overwritting_photo">Zrobiono już zdjęcie, czy chcesz je nadpisać?</string>
-    <string name="leaving_warning">Powrót do tras spowoduje utratę informacji o znalezionych wcześniej skarbach, czy na pewno chcesz kontynuować?</string>
     <string name="route_from_bluetooth_button">Pobierz trasę przez Bluetooth</string>
     <string name="sending_route">Przesyłanie trasy</string>
     <string name="select_bluetooth_device">> Wybierz urządzenie, na które chcesz wysłać trasę. Wysyłanie uda się tylko jeżeli istnieje aktywne połączenie z wybranym urządzeniem.\n> Lista sparowanych urządzeń:\n</string>

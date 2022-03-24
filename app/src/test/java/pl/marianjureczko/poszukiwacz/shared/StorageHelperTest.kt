@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.RouteArranger
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.StringWriter
@@ -168,7 +169,7 @@ class StorageHelperTest {
             if (zipEntry!!.name == route.name + ".xml") {
                 val stringWriter = StringWriter()
                 IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
-                actualRoute = xmlHelper.loadRouteFromString(stringWriter.toString())
+                actualRoute = xmlHelper.loadFromString<Route>(stringWriter.toString())
             } else {
                 actualFiles.add(zipEntry!!.name)
             }
@@ -230,6 +231,31 @@ class StorageHelperTest {
         assertThat(loggedFiles).contains(treasure2Photo)
         assertThat(loggedFiles).contains(treasure2Sound)
         assertThat(loggedFiles).contains(treasure3Photo)
+    }
+
+    @Test
+    fun `SHOULD save progress to file and load it back`() {
+        //given
+        val bag = some<TreasureBag>()
+
+        //when
+        storageHelper.save(bag)
+        val actual = storageHelper.load(bag.routeName)
+
+        //then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
+    }
+
+    @Test
+    fun `SHOULD return null WHEN loading missing progress`() {
+        //given
+        val someRouteName = some<String>()
+
+        //when
+        val actual = storageHelper.load(someRouteName)
+
+        //then
+        assertThat(actual).isNull()
     }
 
     private fun assertRoute(actual: Route, expected: Route) {

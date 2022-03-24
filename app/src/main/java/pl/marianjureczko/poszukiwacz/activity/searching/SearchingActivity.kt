@@ -29,7 +29,6 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
         private val SELECTED_ROUTE_KEY = "ROUTE"
         private val SELECTED_TREASURE_INDEX_KEY = "TREASURE"
         private val INITIALIZED_KEY = "INITIALIZED"
-        private val BAG_KEY = "BAG"
         private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_selected_to_searching";
 
         fun intent(packageContext: Context, route: Route) =
@@ -39,6 +38,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
     }
 
     private val TAG = javaClass.simpleName
+    private val storageHelper = StorageHelper(this)
     private val model: SearchingActivityViewModel by viewModels()
     private lateinit var binding: ActivitySearchingBinding
 
@@ -74,7 +74,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
         outState.run {
             putString(SELECTED_ROUTE_KEY, model.routeXml)
             model.treasureIndex?.let { putInt(SELECTED_TREASURE_INDEX_KEY, it) }
-            putSerializable(BAG_KEY, model.treasureBag)
+            storageHelper.save(model.treasureBag)
             putBoolean(INITIALIZED_KEY, model.treasureSelectionInitialized)
         }
         // call superclass to save any view hierarchy
@@ -111,22 +111,14 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
         }
     }
 
-    override fun onBackPressed() {
-        AlertDialog.Builder(this)
-            .setMessage(R.string.leaving_warning)
-            .setPositiveButton(R.string.no) { _, _ -> }
-            .setNegativeButton(R.string.yes) { _, _ -> super.onBackPressed() }
-            .show()
-    }
-
     private fun restoreState(savedInstanceState: Bundle?) {
         if (model.routeXml == null) {
             model.setup(intent.getStringExtra(SELECTED_ROUTE)!!)
         }
         savedInstanceState?.getString(SELECTED_ROUTE_KEY)?.let { model.setup(it) }
         savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { model.selectTreasure(it) }
-        savedInstanceState?.getSerializable(BAG_KEY)?.let { model.treasureBag = it as TreasureBag }
         savedInstanceState?.getBoolean(INITIALIZED_KEY)?.let { model.treasureSelectionInitialized = it }
+        model.treasureBag = storageHelper.load(model.route.name) ?: TreasureBag(model.route.name)
         showCollectedTreasures()
     }
 

@@ -3,28 +3,19 @@ package pl.marianjureczko.poszukiwacz.shared
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import java.io.File
 import java.io.StringWriter
 
 class XmlHelper {
-    private val serializer: Serializer = Persister()
+    val serializer: Serializer = Persister()
 
     fun writeToFile(route: Route, outputFile: File) {
         serializer.write(route, outputFile)
     }
 
-    fun writeToString(route: Route): String {
-        val stringWriter = StringWriter()
-        serializer.write(route, stringWriter)
-        return stringWriter.toString()
-    }
-
-    fun writeToString(treasureDescription: TreasureDescription): String {
-        return writeObjectToString(treasureDescription)
-    }
-
-    private fun writeObjectToString(o: Any): String {
+    fun writeToString(o: Any): String {
         val stringWriter = StringWriter()
         serializer.write(o, stringWriter)
         return stringWriter.toString()
@@ -35,11 +26,15 @@ class XmlHelper {
         return serializer.read(Route::class.java, xml)
     }
 
-    fun loadRouteFromString(xml: String): Route {
-        return serializer.read(Route::class.java, xml)
+    inline fun <reified T> loadFromString(xml: String): T {
+        return serializer.read(T::class.java, xml)
     }
 
-    fun loadTreasureDescriptionFromString(xml: String): TreasureDescription {
-        return serializer.read(TreasureDescription::class.java, xml)
+    fun writeToFile(bag: TreasureBag, outputFile: File) =
+        serializer.write(bag, outputFile)
+
+    fun loadProgressFromFile(xmlFile: File): TreasureBag {
+        val xml = xmlFile.readText()
+        return serializer.read(TreasureBag::class.java, xml)
     }
 }

@@ -163,7 +163,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     private fun restoreState(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
-            savedInstanceState.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadRouteFromString(it)) }
+            savedInstanceState.getString(ROUTE_KEY)?.let { setupTreasureView(xmlHelper.loadFromString<Route>(it)) }
             val noPhoto = -1
             savedInstanceState.getInt(TREASURE_NEEDING_PHOTO_KEY, noPhoto).let {
                 if (it != noPhoto) {
@@ -176,7 +176,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         } else {
             val existingList = intent.getStringExtra(SELECTED_LIST)
             if (isInEditExistingRouteMode(existingList)) {
-                setupTreasureView(xmlHelper.loadRouteFromString(existingList!!))
+                setupTreasureView(xmlHelper.loadFromString<Route>(existingList!!))
             } else {
                 showRouteNameDialog(savedInstanceState)
             }

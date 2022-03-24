@@ -1,7 +1,11 @@
 package pl.marianjureczko.poszukiwacz.model
 
+import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someString
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
 class TreasureBagTest {
 
@@ -39,7 +43,7 @@ class TreasureBagTest {
     @Test
     fun addGoldToBag() {
         //given
-        val bag = TreasureBag()
+        val bag = TreasureBag(someString())
 
         //when
         bag.collect(gold7)
@@ -54,7 +58,7 @@ class TreasureBagTest {
     @Test
     fun addDiamondsToBag() {
         //given
-        val bag = TreasureBag()
+        val bag = TreasureBag(someString())
 
         //when
         bag.collect(diamond17)
@@ -69,7 +73,7 @@ class TreasureBagTest {
     @Test
     fun addRubiesToBag() {
         //given
-        val bag = TreasureBag()
+        val bag = TreasureBag(someString())
 
         //when
         bag.collect(ruby27)
@@ -84,11 +88,33 @@ class TreasureBagTest {
     @Test
     fun detectAlreadyCollectedTreasures() {
         //given
-        val bag = TreasureBag()
+        val bag = TreasureBag(someString())
         bag.collect(gold9)
 
         //then
         assertFalse(bag.contains(gold7))
         assertTrue(bag.contains(gold9))
+    }
+
+    @Test
+    fun shouldBeSerializableToXml() {
+        //given
+        val xmlHelper = XmlHelper()
+        val routeName = someString()
+        val treasureBag = TreasureBag(routeName)
+        val treasure = some<Treasure>().copy(type = TreasureType.DIAMOND)
+        treasureBag.collect(treasure)
+        val description = some<TreasureDescription>()
+        treasureBag.collect(description)
+
+        //when
+        val xml = xmlHelper.writeToString(treasureBag)
+        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+
+        //then
+        assertThat(actual.routeName).isEqualTo(routeName)
+        assertThat(actual.contains(treasure)).isTrue()
+        assertThat(actual.diamonds).isEqualTo(treasure.quantity)
+        assertThat(actual.collectedTreasuresDescriptionId).containsExactly(description.id)
     }
 }

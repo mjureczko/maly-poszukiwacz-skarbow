@@ -27,7 +27,6 @@
     <string name="overwritting_route">"A route with that name already exists, do you want to overwrite it? "</string>
     <string name="overwritting_tip">"There is already a hint, do you want to overwrite it? "</string>
     <string name="overwritting_photo">"A photo has already been taken, do you want to overwrite it? "</string>
-    <string name="leaving_warning">Returning to the routes will result in losing information about previously discovered treasures; are you sure you want to continue?</string>
     <string name="route_from_bluetooth_button">Get a route via Bluetooth</string>
     <string name="sending_route">Sending a route</string>
     <string name="device_was_selected">%s was selected.\n</string>
