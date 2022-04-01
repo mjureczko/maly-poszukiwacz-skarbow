@@ -1,3 +1,7 @@
+# Activities flow
+
+[State machine](activities_flow.mmd)
+
 # Permissions
 
 ## Structure
