@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -9,9 +8,14 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import com.google.zxing.integration.android.IntentIntegrator
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureOutputData
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.TreasureSelectorActivity
 import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
@@ -21,7 +25,7 @@ import pl.marianjureczko.poszukiwacz.shared.*
 
 private const val RESULTS_DIALOG = "ResultsDialog"
 
-class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
+class SearchingActivity : ActivityWithAdsAndBackButton() {
 
     companion object {
         private val xmlHelper = XmlHelper()
@@ -41,6 +45,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
     private val storageHelper = StorageHelper(this)
     private val model: SearchingActivityViewModel by viewModels()
     private lateinit var binding: ActivitySearchingBinding
+    private lateinit var treasureSelectorLauncher: ActivityResultLauncher<SelectTreasureInputData>
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +56,8 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
         restoreState(savedInstanceState)
 
         binding.scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
-        binding.changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(this))
+        treasureSelectorLauncher = createSelectTreasureLauncher()
+        binding.changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(treasureSelectorLauncher, model))
         binding.playTipBtn.setOnClickListener(PlayTipButtonListener(model, this))
         binding.mapBtn.setOnClickListener { errorTone() }
         binding.photoBtn.setOnClickListener(PhotoButtonListener(this, model))
@@ -86,14 +92,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
         super.onPostResume()
         if (!model.treasureSelectionInitialized) {
             model.treasureSelectionInitialized = true
-            showTreasureSelectionDialog()
-        }
-    }
-
-    override fun showTreasureSelectionDialog() {
-        TreasureSelectionDialog.newInstance(model.route).apply {
-            show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
-            this.treasureLocationStorage = model
+            treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData())
         }
     }
 
@@ -145,5 +144,16 @@ class SearchingActivity : ActivityWithAdsAndBackButton(), TreasureSelectorView {
         binding.goldTxt.text = model.treasureBag.golds.toString()
         binding.rubyTxt.text = model.treasureBag.rubies.toString()
         binding.diamondTxt.text = model.treasureBag.diamonds.toString()
+    }
+
+    private fun createSelectTreasureLauncher(): ActivityResultLauncher<SelectTreasureInputData> {
+        return registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData ->
+            result.selectedTreasureId?.let {
+                if(it != TreasureSelectorActivity.NON_SELECTED) {
+                    model.selectTreasure(it)
+                }
+            }
+            model.treasureBag = result.progress
+        }
     }
 }

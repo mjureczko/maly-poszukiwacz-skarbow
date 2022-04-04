@@ -35,13 +35,13 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         private val xmlHelper = XmlHelper()
         const val REQUEST_PHOTO = 2
         const val TMP_PICTURE_FILE = "/tmp.jpg"
-        private const val SELECTED_LIST = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
+        private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
 
         fun intent(packageContext: Context) = Intent(packageContext, TreasuresEditorActivity::class.java)
 
         fun intent(packageContext: Context, route: Route) =
             Intent(packageContext, TreasuresEditorActivity::class.java).apply {
-                putExtra(SELECTED_LIST, xmlHelper.writeToString(route))
+                putExtra(SELECTED_ROUTE, xmlHelper.writeToString(route))
             }
     }
 
@@ -174,7 +174,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
                 showRouteNameDialog(savedInstanceState)
             }
         } else {
-            val existingList = intent.getStringExtra(SELECTED_LIST)
+            val existingList = intent.getStringExtra(SELECTED_ROUTE)
             if (isInEditExistingRouteMode(existingList)) {
                 setupTreasureView(xmlHelper.loadFromString<Route>(existingList!!))
             } else {
