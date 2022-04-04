@@ -4,15 +4,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.TreasureBag
 
 class TreasureProgressAdapter(
     private val activity: FragmentActivity,
     private val model: SelectorViewModel,
-    private val activityTerminator: ActivityTerminator
+    private val activityTerminator: ActivityTerminator,
+    private val progress: TreasureBag
 ): RecyclerView.Adapter<TreasureProgressHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreasureProgressHolder {
         val view = activity.layoutInflater.inflate(R.layout.treasureprogres_item, parent, false)
-        return TreasureProgressHolder(view, activity, model.userLocation, activityTerminator)
+        return TreasureProgressHolder(view, activity, model.userLocation, activityTerminator, progress)
     }
 
     override fun onBindViewHolder(holder: TreasureProgressHolder, position: Int) {

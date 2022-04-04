@@ -1,20 +1,16 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureselector
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.location.Location
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasureAdapter
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasureSelectorBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
@@ -30,7 +26,8 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
 
     companion object {
         const val NON_SELECTED = -1
-        const val RESULT = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_result"
+        const val RESULT_SELECTED = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_result_selected"
+        const val RESULT_PROGRESS = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_result_progress"
         internal const val ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_to_select_from"
         internal const val PROGRESS = "pl.marianjureczko.poszukiwacz.activity.route_progress"
         internal const val SELECTED_TREASURE = "pl.marianjureczko.poszukiwacz.activity.selected_treasure"
@@ -50,7 +47,7 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
         model.selectedTreasure = intent.getIntExtra(SELECTED_TREASURE, NON_SELECTED)
         model.userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?
 
-        adapter = TreasureProgressAdapter(this, model, this)
+        adapter = TreasureProgressAdapter(this, model, this, model.progress)
         binding.treasuresToSelect.adapter = adapter
         supportActionBar?.title = "${App.getResources().getString(R.string.select_treasure_dialog_title)}"
 
@@ -59,7 +56,8 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
 
     override fun finishWithResult(treasureId: Int) {
         val data = Intent()
-        data.putExtra(RESULT, treasureId)
+        data.putExtra(RESULT_SELECTED, treasureId)
+        data.putExtra(RESULT_PROGRESS, xmlHelper.writeToString(model.progress))
         setResult(Activity.RESULT_OK, data)
         finish()
     }

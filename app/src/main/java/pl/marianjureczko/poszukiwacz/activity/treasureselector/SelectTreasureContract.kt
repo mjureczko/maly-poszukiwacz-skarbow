@@ -18,7 +18,12 @@ data class SelectTreasureInputData(
 
 }
 
-class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, Int?>() {
+data class SelectTreasureOutputData(
+    val progress: TreasureBag,
+    val selectedTreasureId: Int?
+)
+
+class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, SelectTreasureOutputData>() {
     companion object {
         private val xmlHelper = XmlHelper()
     }
@@ -35,10 +40,13 @@ class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, I
         }
     }
 
-    override fun parseResult(resultCode: Int, result: Intent?): Int? {
+    override fun parseResult(resultCode: Int, result: Intent?): SelectTreasureOutputData? {
         if (resultCode != Activity.RESULT_OK) {
             return null
         }
-        return result?.getIntExtra(TreasureSelectorActivity.RESULT, TreasureSelectorActivity.NON_SELECTED)
+        val id = result?.getIntExtra(TreasureSelectorActivity.RESULT_SELECTED, TreasureSelectorActivity.NON_SELECTED)
+        val progressAsXml = result?.getStringExtra(TreasureSelectorActivity.RESULT_PROGRESS)!!
+        val progress = xmlHelper.loadFromString<TreasureBag>(progressAsXml)
+        return SelectTreasureOutputData(progress, id)
     }
 }

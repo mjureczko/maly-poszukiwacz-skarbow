@@ -14,6 +14,7 @@ import com.google.zxing.integration.android.IntentIntegrator
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureOutputData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.TreasureSelectorActivity
 import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -146,12 +147,13 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     }
 
     private fun createSelectTreasureLauncher(): ActivityResultLauncher<SelectTreasureInputData> {
-        return registerForActivityResult(SelectTreasureContract()) { selectedTreasureId: Int? ->
-            selectedTreasureId?.let {
-                if(selectedTreasureId != TreasureSelectorActivity.NON_SELECTED) {
+        return registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData ->
+            result.selectedTreasureId?.let {
+                if(it != TreasureSelectorActivity.NON_SELECTED) {
                     model.selectTreasure(it)
                 }
             }
+            model.treasureBag = result.progress
         }
     }
 }
