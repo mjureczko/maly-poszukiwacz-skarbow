@@ -4,9 +4,14 @@ import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 
-class SelectorViewModel() : ViewModel() {
+class SelectorViewModel : ViewModel() {
     lateinit var route: Route
     lateinit var progress: TreasureBag
     var userLocation: Coordinates? = null
-    var selectedTreasure: Int = TreasureSelectorActivity.NON_SELECTED
+
+    fun selectTreasureById(treasureId: Int) {
+        route.treasures.asSequence()
+            .find { it.id == treasureId }
+            ?.let { progress.selectedTreasure = it }
+    }
 }

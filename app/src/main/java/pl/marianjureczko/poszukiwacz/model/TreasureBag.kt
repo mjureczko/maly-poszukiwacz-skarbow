@@ -33,6 +33,9 @@ class TreasureBag() {
     var diamonds: Int = 0
         private set
 
+    @field:Element(required = false)
+    var selectedTreasure: TreasureDescription? = null
+
     fun contains(treasure: Treasure): Boolean =
         collectedQrCodes.contains(treasure.id)
 

@@ -13,18 +13,16 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasuresSto
     private val xmlHelper = XmlHelper()
     lateinit var route: Route
     var routeXml: String? = null
-    var selectedTreasure: TreasureDescription? = null
-    var treasureIndex: Int? = null
     var treasureSelectionInitialized = false
     lateinit var treasureBag: TreasureBag
     private var currentLocation: Location? = null
 
     override fun getTreasure(): TreasureDescription? {
-        return selectedTreasure
+        return treasureBag.selectedTreasure
     }
 
     override fun getTreasureSelectorActivityInputData(): SelectTreasureInputData =
-        SelectTreasureInputData(route, treasureBag, selectedTreasure, currentLocation)
+        SelectTreasureInputData(route, treasureBag, currentLocation)
 
     override fun setCurrentLocation(location: Location?) {
         currentLocation = location
@@ -33,15 +31,13 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasuresSto
     fun setup(routeXml: String) {
         this.routeXml = routeXml
         route = xmlHelper.loadFromString<Route>(routeXml)
-//        treasureBag = TreasureBag(route.name)
     }
 
     fun selectTreasure(treasureId: Int) {
         run loop@{
             route.treasures.forEachIndexed { index, treasure ->
                 if (treasure.id == treasureId) {
-                    treasureIndex = index
-                    selectedTreasure = treasure
+                    treasureBag.selectedTreasure = treasure
                     return@loop
                 }
             }
@@ -49,5 +45,5 @@ class SearchingActivityViewModel : ViewModel(), DataStorageWrapper, TreasuresSto
     }
 
     override fun tipName(): String? =
-        selectedTreasure?.tipFileName
+        treasureBag.selectedTreasure?.tipFileName
 }

@@ -40,7 +40,12 @@ open class StorageHelper(val context: Context) {
     fun load(routeName: String): TreasureBag? {
         val file = getProgressFile(routeName)
         return if(file.exists()) {
-            xmlHelper.loadProgressFromFile(file)
+            try {
+                xmlHelper.loadProgressFromFile(file)
+            } catch (e:Exception) {
+                Log.e(TAG, e.message, e)
+                null
+            }
         } else {
             null
         }

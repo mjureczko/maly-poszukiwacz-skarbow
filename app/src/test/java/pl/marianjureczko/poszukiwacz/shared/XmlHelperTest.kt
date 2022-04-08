@@ -67,4 +67,20 @@ class XmlHelperTest {
         //then
         assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
     }
+
+    @Test
+    fun should_writeToAndLoadFromStringTreasureBagWithoutSelectedTreasure() {
+        //given
+        val xmlHelper = XmlHelper()
+        var bag = some<TreasureBag> {
+            selectedTreasure = null
+        }
+
+        //when
+        val xml = xmlHelper.writeToString(bag)
+        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+
+        //then
+        assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
+    }
 }

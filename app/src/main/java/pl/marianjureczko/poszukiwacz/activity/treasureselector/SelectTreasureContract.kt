@@ -13,17 +13,14 @@ import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 data class SelectTreasureInputData(
     val route: Route,
     val progress: TreasureBag,
-    val selectedTreasure: TreasureDescription?,
-    val location: Location?){
-
-}
+    val location: Location?
+)
 
 data class SelectTreasureOutputData(
     val progress: TreasureBag,
-    val selectedTreasureId: Int?
 )
 
-class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, SelectTreasureOutputData>() {
+class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, SelectTreasureOutputData?>() {
     companion object {
         private val xmlHelper = XmlHelper()
     }
@@ -32,21 +29,18 @@ class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, S
         return Intent(context, TreasureSelectorActivity::class.java).apply {
             putExtra(TreasureSelectorActivity.ROUTE, xmlHelper.writeToString(input.route))
             putExtra(TreasureSelectorActivity.PROGRESS, xmlHelper.writeToString(input.progress))
-            val selected = input.selectedTreasure?.id ?: TreasureSelectorActivity.NON_SELECTED
-            putExtra(TreasureSelectorActivity.SELECTED_TREASURE, selected)
-            input.location?.let{
+            input.location?.let {
                 putExtra(TreasureSelectorActivity.LOCATION, Coordinates(it.latitude, it.longitude))
             }
         }
     }
 
     override fun parseResult(resultCode: Int, result: Intent?): SelectTreasureOutputData? {
-        if (resultCode != Activity.RESULT_OK) {
-            return null
+        if (resultCode == Activity.RESULT_OK || resultCode == Activity.RESULT_CANCELED) {
+            result?.getStringExtra(TreasureSelectorActivity.RESULT_PROGRESS)?.let {
+                return SelectTreasureOutputData(xmlHelper.loadFromString<TreasureBag>(it))
+            }
         }
-        val id = result?.getIntExtra(TreasureSelectorActivity.RESULT_SELECTED, TreasureSelectorActivity.NON_SELECTED)
-        val progressAsXml = result?.getStringExtra(TreasureSelectorActivity.RESULT_PROGRESS)!!
-        val progress = xmlHelper.loadFromString<TreasureBag>(progressAsXml)
-        return SelectTreasureOutputData(progress, id)
+        return null
     }
 }

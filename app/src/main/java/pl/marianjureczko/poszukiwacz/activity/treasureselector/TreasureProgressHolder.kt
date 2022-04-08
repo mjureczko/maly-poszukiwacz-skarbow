@@ -27,6 +27,7 @@ class TreasureProgressHolder(
     private val locationCalculator = LocationCalculator()
     private val selectBtn: Button = itemView.findViewById(R.id.treasure_info)
     private val collectedBtn: ImageButton = itemView.findViewById(R.id.markCollected)
+    private val previouslySelectedTreasurePrefix = "-> "
 
     fun setup(treasure: TreasureDescription) {
         if (isCollected(treasure)) {

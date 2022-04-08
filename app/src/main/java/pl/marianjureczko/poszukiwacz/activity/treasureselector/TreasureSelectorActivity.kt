@@ -20,17 +20,15 @@ import pl.marianjureczko.poszukiwacz.shared.XmlHelper
  */
 class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTerminator {
 
+    private val TAG = javaClass.simpleName
     private lateinit var binding: ActivityTreasureSelectorBinding
     private val model: SelectorViewModel by viewModels()
     private lateinit var adapter: TreasureProgressAdapter
 
     companion object {
-        const val NON_SELECTED = -1
-        const val RESULT_SELECTED = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_result_selected"
         const val RESULT_PROGRESS = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_result_progress"
         internal const val ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_to_select_from"
         internal const val PROGRESS = "pl.marianjureczko.poszukiwacz.activity.route_progress"
-        internal const val SELECTED_TREASURE = "pl.marianjureczko.poszukiwacz.activity.selected_treasure"
         internal const val LOCATION = "pl.marianjureczko.poszukiwacz.activity.user_coordinates"
         private val xmlHelper = XmlHelper()
     }
@@ -44,7 +42,6 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
 
         model.route = xmlHelper.loadFromString<Route>(intent.getStringExtra(ROUTE)!!)
         model.progress = xmlHelper.loadFromString<TreasureBag>(intent.getStringExtra(PROGRESS)!!)
-        model.selectedTreasure = intent.getIntExtra(SELECTED_TREASURE, NON_SELECTED)
         model.userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?
 
         adapter = TreasureProgressAdapter(this, model, this, model.progress)
@@ -55,11 +52,22 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
     }
 
     override fun finishWithResult(treasureId: Int) {
-        val data = Intent()
-        data.putExtra(RESULT_SELECTED, treasureId)
-        data.putExtra(RESULT_PROGRESS, xmlHelper.writeToString(model.progress))
+        model.selectTreasureById(treasureId)
+        val data = intentResultWithProgress()
         setResult(Activity.RESULT_OK, data)
         finish()
+    }
+
+    override fun onBackPressed() {
+        val data = intentResultWithProgress()
+        setResult(Activity.RESULT_CANCELED, data)
+        super.onBackPressed()
+    }
+
+    private fun intentResultWithProgress(): Intent {
+        val data = Intent()
+        data.putExtra(RESULT_PROGRESS, xmlHelper.writeToString(model.progress))
+        return data
     }
 
 }

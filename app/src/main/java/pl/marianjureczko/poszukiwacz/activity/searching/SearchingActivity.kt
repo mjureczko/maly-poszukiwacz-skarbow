@@ -76,10 +76,8 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
 
     // invoked when the activity may be temporarily destroyed, save the instance state here
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.d(TAG, "########> onSaveInstanceState")
         outState.run {
             putString(SELECTED_ROUTE_KEY, model.routeXml)
-            model.treasureIndex?.let { putInt(SELECTED_TREASURE_INDEX_KEY, it) }
             storageHelper.save(model.treasureBag)
             putBoolean(INITIALIZED_KEY, model.treasureSelectionInitialized)
         }
@@ -88,7 +86,6 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     }
 
     override fun onPostResume() {
-        Log.d(TAG, "########> onPostResume")
         super.onPostResume()
         if (!model.treasureSelectionInitialized) {
             model.treasureSelectionInitialized = true
@@ -147,13 +144,10 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     }
 
     private fun createSelectTreasureLauncher(): ActivityResultLauncher<SelectTreasureInputData> {
-        return registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData ->
-            result.selectedTreasureId?.let {
-                if(it != TreasureSelectorActivity.NON_SELECTED) {
-                    model.selectTreasure(it)
-                }
+        return registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData? ->
+            if (result != null) {
+                model.treasureBag = result.progress
             }
-            model.treasureBag = result.progress
         }
     }
 }
