@@ -115,6 +115,23 @@ class StorageHelperTest {
     }
 
     @Test
+    fun `SHOULD remove progress WHEN removing its route`() {
+        //given
+        val route = some<Route>()
+        storageHelper.save(route)
+        val progress = some<TreasureBag>() {
+            routeName = route.name
+        }
+        storageHelper.save(progress)
+
+        //when
+        storageHelper.remove(route)
+
+        //then
+        assertThat(storageHelper.load(route.name)).isNull()
+    }
+
+    @Test
     fun `SHOULD recognize route WHEN the route already exists`() {
         //given
         val route = some<Route>()

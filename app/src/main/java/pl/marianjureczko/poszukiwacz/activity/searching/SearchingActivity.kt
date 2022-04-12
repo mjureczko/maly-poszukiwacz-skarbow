@@ -12,28 +12,21 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import com.google.zxing.integration.android.IntentIntegrator
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.result.ResultActivity
+import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityInput
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureOutputData
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.TreasureSelectorActivity
 import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
-import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
-import pl.marianjureczko.poszukiwacz.model.TreasureParser
+import pl.marianjureczko.poszukiwacz.model.*
 import pl.marianjureczko.poszukiwacz.shared.*
-
-private const val RESULTS_DIALOG = "ResultsDialog"
 
 class SearchingActivity : ActivityWithAdsAndBackButton() {
 
     companion object {
         private val xmlHelper = XmlHelper()
         private val treasureParser = TreasureParser()
-        private val SELECTED_ROUTE_KEY = "ROUTE"
-        private val SELECTED_TREASURE_INDEX_KEY = "TREASURE"
-        private val INITIALIZED_KEY = "INITIALIZED"
-        private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_selected_to_searching";
+        private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_selected_to_searching"
 
         fun intent(packageContext: Context, route: Route) =
             Intent(packageContext, SearchingActivity::class.java).apply {
@@ -53,7 +46,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         binding = ActivitySearchingBinding.inflate(layoutInflater)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_searching)
-        restoreState(savedInstanceState)
+        restoreState()
 
         binding.scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
         treasureSelectorLauncher = createSelectTreasureLauncher()
@@ -74,21 +67,9 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
-    // invoked when the activity may be temporarily destroyed, save the instance state here
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.run {
-            putString(SELECTED_ROUTE_KEY, model.routeXml)
-            storageHelper.save(model.treasureBag)
-            putBoolean(INITIALIZED_KEY, model.treasureSelectionInitialized)
-        }
-        // call superclass to save any view hierarchy
-        super.onSaveInstanceState(outState)
-    }
-
     override fun onPostResume() {
         super.onPostResume()
-        if (!model.treasureSelectionInitialized) {
-            model.treasureSelectionInitialized = true
+        if (!model.treasureSelectionInitialized()) {
             treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData())
         }
     }
@@ -98,55 +79,46 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         Log.d(TAG, "########> onActivityResult")
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
-            var dialogToShow = processSearchingResult(result.contents)
-            SearchResultDialog.newInstance(dialogToShow).apply {
-                show(this@SearchingActivity.supportFragmentManager, RESULTS_DIALOG)
-            }
+            startActivity(ResultActivity.intent(this, processSearchingResult(result.contents)))
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
-    private fun restoreState(savedInstanceState: Bundle?) {
-        if (model.routeXml == null) {
-            model.setup(intent.getStringExtra(SELECTED_ROUTE)!!)
-        }
-        savedInstanceState?.getString(SELECTED_ROUTE_KEY)?.let { model.setup(it) }
-        savedInstanceState?.getInt(SELECTED_TREASURE_INDEX_KEY)?.let { model.selectTreasure(it) }
-        savedInstanceState?.getBoolean(INITIALIZED_KEY)?.let { model.treasureSelectionInitialized = it }
-        model.treasureBag = storageHelper.load(model.route.name) ?: TreasureBag(model.route.name)
+    private fun restoreState() {
+        model.initialize(intent.getStringExtra(SELECTED_ROUTE)!!, storageHelper)
         showCollectedTreasures()
     }
 
-    private fun processSearchingResult(result: String): DialogData {
+    private fun processSearchingResult(result: String): ResultActivityInput {
         try {
-            val treasure = treasureParser.parse(result)
-            return if (model.treasureBag!!.contains(treasure)) {
-                DialogData(resources.getString(R.string.treasure_already_taken_msg), null)
+            val treasure: Treasure = treasureParser.parse(result)
+            return if (model.treasureIsAlreadyCollected(treasure)) {
+                ResultActivityInput(resources.getString(R.string.treasure_already_taken_msg))
             } else {
                 add(treasure)
-                DialogData(treasure.quantity.toString(), treasure.type.image())
+                ResultActivityInput(treasure)
             }
         } catch (ex: IllegalArgumentException) {
-            return DialogData(resources.getString(R.string.not_a_treasure_msg), null)
+            return ResultActivityInput(resources.getString(R.string.not_a_treasure_msg))
         }
     }
 
     private fun add(treasure: Treasure) {
-        model.treasureBag.collect(treasure)
+        model.collectTreasure(treasure, storageHelper)
         showCollectedTreasures()
     }
 
     private fun showCollectedTreasures() {
-        binding.goldTxt.text = model.treasureBag.golds.toString()
-        binding.rubyTxt.text = model.treasureBag.rubies.toString()
-        binding.diamondTxt.text = model.treasureBag.diamonds.toString()
+        binding.goldTxt.text = model.getGolds()
+        binding.rubyTxt.text = model.getRubies()
+        binding.diamondTxt.text = model.getDiamonds()
     }
 
     private fun createSelectTreasureLauncher(): ActivityResultLauncher<SelectTreasureInputData> {
         return registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData? ->
             if (result != null) {
-                model.treasureBag = result.progress
+                model.replaceTreasureBag(result.progress, storageHelper)
             }
         }
     }

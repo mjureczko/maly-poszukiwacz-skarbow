@@ -3,7 +3,6 @@ package pl.marianjureczko.poszukiwacz.activity.main
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R

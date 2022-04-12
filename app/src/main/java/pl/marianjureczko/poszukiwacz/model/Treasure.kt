@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import pl.marianjureczko.poszukiwacz.R
+import java.io.Serializable
 
 enum class TreasureType {
     GOLD {
@@ -27,7 +28,7 @@ enum class TreasureType {
     abstract fun image(): Int
 }
 
-data class Treasure(val id: String, val quantity: Int, val type: TreasureType)
+data class Treasure(val id: String, val quantity: Int, val type: TreasureType): Serializable
 
 class TreasureParser {
     fun parse(content: String): Treasure =

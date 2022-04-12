@@ -11,7 +11,7 @@ import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 
 class PhotoActivity : ActivityWithAdsAndBackButton() {
     companion object {
-        private const val PHOTO = "pl.marianjureczko.poszukiwacz.activity.list_select_to_edit";
+        private const val PHOTO = "pl.marianjureczko.poszukiwacz.activity.photo";
 
         fun intent(packageContext: Context, photo: String) =
             Intent(packageContext, PhotoActivity::class.java).apply {

@@ -40,11 +40,12 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         binding.treasuresToSelect.layoutManager = LinearLayoutManager(this)
 
-        model.route = xmlHelper.loadFromString<Route>(intent.getStringExtra(ROUTE)!!)
-        model.progress = xmlHelper.loadFromString<TreasureBag>(intent.getStringExtra(PROGRESS)!!)
-        model.userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?
-
-        adapter = TreasureProgressAdapter(this, model, this, model.progress)
+        model.initialize(
+            route = xmlHelper.loadFromString<Route>(intent.getStringExtra(ROUTE)!!),
+            progress = xmlHelper.loadFromString<TreasureBag>(intent.getStringExtra(PROGRESS)!!),
+            userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?
+        )
+        adapter = TreasureProgressAdapter(this, model, this)
         binding.treasuresToSelect.adapter = adapter
         supportActionBar?.title = "${App.getResources().getString(R.string.select_treasure_dialog_title)}"
 
@@ -66,7 +67,7 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
 
     private fun intentResultWithProgress(): Intent {
         val data = Intent()
-        data.putExtra(RESULT_PROGRESS, xmlHelper.writeToString(model.progress))
+        data.putExtra(RESULT_PROGRESS, model.progressToString(xmlHelper))
         return data
     }
 

@@ -7,7 +7,7 @@ import android.util.Log
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
 interface DataStorageWrapper {
-    fun getTreasure(): TreasureDescription?
+    fun getSelectedForHuntTreasure(): TreasureDescription?
     fun setCurrentLocation(location: Location?)
 }
 
@@ -19,7 +19,7 @@ class CompassBasedLocationListener(
 
     override fun onLocationChanged(location: Location) {
         dataStorageWrapper.setCurrentLocation(location)
-        compassPresenter.adjustCompassToCurrentLocationAndTreasure(location, dataStorageWrapper.getTreasure())
+        compassPresenter.adjustCompassToCurrentLocationAndTreasure(location, dataStorageWrapper.getSelectedForHuntTreasure())
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {

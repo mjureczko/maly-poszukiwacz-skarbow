@@ -12,8 +12,8 @@ class PhotoButtonListener(
     private val data: DataStorageWrapper
 ) : View.OnClickListener {
     override fun onClick(v: View?) {
-        if (data.getTreasure() != null && data.getTreasure()!!.hasPhoto()) {
-            context.startActivity(PhotoActivity.intent(context, data.getTreasure()!!.photoFileName!!))
+        if (data.getSelectedForHuntTreasure() != null && data.getSelectedForHuntTreasure()!!.hasPhoto()) {
+            context.startActivity(PhotoActivity.intent(context, data.getSelectedForHuntTreasure()!!.photoFileName!!))
         } else {
             Toast.makeText(context, R.string.no_photo_to_show, Toast.LENGTH_SHORT).show()
             errorTone()

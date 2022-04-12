@@ -117,9 +117,11 @@ open class StorageHelper(val context: Context) {
         toRemove.treasures.iterator().forEach {
             removeTipFiles(it)
         }
+        getProgressFile(toRemove.name).delete()
         val fileToRemove = getRouteFile(toRemove)
         fileToRemove.delete()
     }
+
 
     fun removeTipFiles(treasureDescription: TreasureDescription) {
         if (treasureDescription.tipFileName != null) {
