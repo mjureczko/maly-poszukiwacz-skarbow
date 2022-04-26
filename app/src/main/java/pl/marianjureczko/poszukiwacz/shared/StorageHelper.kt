@@ -37,12 +37,12 @@ open class StorageHelper(val context: Context) {
         xmlHelper.writeToFile(bag, file)
     }
 
-    fun load(routeName: String): TreasureBag? {
+    fun loadProgress(routeName: String): TreasureBag? {
         val file = getProgressFile(routeName)
-        return if(file.exists()) {
+        return if (file.exists()) {
             try {
                 xmlHelper.loadProgressFromFile(file)
-            } catch (e:Exception) {
+            } catch (e: Exception) {
                 Log.e(TAG, e.message, e)
                 null
             }
@@ -52,7 +52,7 @@ open class StorageHelper(val context: Context) {
     }
 
     fun save(route: Route) {
-        val xmlFile = getRouteFile(route)
+        val xmlFile = getRouteFile(route.fileName())
         xmlHelper.writeToFile(route, xmlFile)
     }
 
@@ -96,7 +96,7 @@ open class StorageHelper(val context: Context) {
     }
 
     fun routeAlreadyExists(route: Route): Boolean =
-        getRouteFile(route).exists()
+        getRouteFile(route.fileName()).exists()
 
 
     fun loadAll(): MutableList<Route> {
@@ -113,12 +113,18 @@ open class StorageHelper(val context: Context) {
             }.toMutableList()
     }
 
+    @Throws(FileNotFoundException::class)
+    fun loadRoute(name: String): Route {
+        val routeFile = getRouteFile(name)
+        return xmlHelper.loadRouteFromFile(routeFile)
+    }
+
     fun remove(toRemove: Route) {
         toRemove.treasures.iterator().forEach {
             removeTipFiles(it)
         }
         getProgressFile(toRemove.name).delete()
-        val fileToRemove = getRouteFile(toRemove)
+        val fileToRemove = getRouteFile(toRemove.fileName())
         fileToRemove.delete()
     }
 
@@ -171,9 +177,9 @@ open class StorageHelper(val context: Context) {
     private fun newFile(prefix: String, extension: String) =
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
-    private fun getRouteFile(route: Route): File {
+    private fun getRouteFile(routeName: String): File {
         val dir = getRoutesDir()
-        return File("${dir.absolutePath}/${route.fileName()}.xml")
+        return File("${dir.absolutePath}/$routeName.xml")
     }
 
     private fun getRoutesDir(): File = getDir(routesDirectory)

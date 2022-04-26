@@ -155,13 +155,13 @@ data class SearchingActivityViewModelFixture(
     val xml: String = xmlHelper.writeToString(route)
 ) {
     fun setupMockForEmptyTreasureBag(storageHelper: StorageHelper) {
-        given(storageHelper.load(route.name))
+        given(storageHelper.loadProgress(route.name))
             .willReturn(null)
         model.initialize(xml, storageHelper)
     }
 
     fun setupMockForGivenTreasureBag(storageHelper: StorageHelper, treasureBag: TreasureBag) {
-        given(storageHelper.load(route.name))
+        given(storageHelper.loadProgress(route.name))
             .willReturn(treasureBag)
         model.initialize(xml, storageHelper)
     }

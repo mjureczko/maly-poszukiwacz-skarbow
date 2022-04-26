@@ -26,14 +26,13 @@ class PhotoHelper(private val storageHelper: StorageHelper?) {
         }
     }
 
-    fun rescaleImageAndSaveInTreasure(photoFile: File, treasureDescription: TreasureDescription): Boolean {
+    fun rescaleImageAndSaveInTreasure(photoFile: File, destinationPhotoFile: File): Boolean {
         val bm: Bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
         val width: Int = bm.width
         val height: Int = bm.height
         val matrix = createScalingMatrix(width, height)
         val resized = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
 
-        val destinationPhotoFile = treasureDescription.instantiatePhotoFile(storageHelper!!)
         try {
             FileOutputStream(destinationPhotoFile.absolutePath).use { out ->
                 resized.compress(Bitmap.CompressFormat.JPEG, 95, out)

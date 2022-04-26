@@ -12,9 +12,10 @@ data class Route(
     @field:ElementList var treasures: MutableList<TreasureDescription>
 ) : Serializable {
     constructor() : this("", ArrayList())
+    constructor(name: String) : this(name, ArrayList())
 
     companion object {
-        fun nullObject(): Route = Route("???", ArrayList())
+        fun nullObject(): Route = Route("???")
     }
 
     //todo: validate name
@@ -26,7 +27,7 @@ data class Route(
         return if (treasures.isEmpty()) {
             1
         } else {
-            1 + treasures.map { it.id }.maxOrNull()!!
+            1 + treasures.maxOf { it.id }
         }
     }
 

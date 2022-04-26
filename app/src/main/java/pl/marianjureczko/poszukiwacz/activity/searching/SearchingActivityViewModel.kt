@@ -42,7 +42,7 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
 
     fun initialize(routeXml: String, storageHelper: StorageHelper) {
         route = xmlHelper.loadFromString<Route>(routeXml)
-        treasureBag = storageHelper.load(route.name) ?: TreasureBag(route.name)
+        treasureBag = storageHelper.loadProgress(route.name) ?: TreasureBag(route.name)
     }
 
     override fun tipName(): String? =

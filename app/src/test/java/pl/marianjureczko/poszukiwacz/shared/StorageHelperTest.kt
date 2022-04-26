@@ -128,7 +128,7 @@ class StorageHelperTest {
         storageHelper.remove(route)
 
         //then
-        assertThat(storageHelper.load(route.name)).isNull()
+        assertThat(storageHelper.loadProgress(route.name)).isNull()
     }
 
     @Test
@@ -257,7 +257,7 @@ class StorageHelperTest {
 
         //when
         storageHelper.save(bag)
-        val actual = storageHelper.load(bag.routeName)
+        val actual = storageHelper.loadProgress(bag.routeName)
 
         //then
         assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
@@ -269,7 +269,7 @@ class StorageHelperTest {
         val someRouteName = some<String>()
 
         //when
-        val actual = storageHelper.load(someRouteName)
+        val actual = storageHelper.loadProgress(someRouteName)
 
         //then
         assertThat(actual).isNull()

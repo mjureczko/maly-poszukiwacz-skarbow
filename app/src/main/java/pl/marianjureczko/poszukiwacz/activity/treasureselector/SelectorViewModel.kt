@@ -2,7 +2,6 @@ package pl.marianjureczko.poszukiwacz.activity.treasureselector
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureBag

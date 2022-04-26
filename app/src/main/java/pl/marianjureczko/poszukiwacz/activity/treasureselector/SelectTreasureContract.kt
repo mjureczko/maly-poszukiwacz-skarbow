@@ -7,7 +7,6 @@ import android.location.Location
 import androidx.activity.result.contract.ActivityResultContract
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
 data class SelectTreasureInputData(

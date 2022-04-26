@@ -29,7 +29,7 @@ class RouteHolder(
         shareBtn.setOnClickListener {
             activity.startActivity(BluetoothActivity.intent(activity, BluetoothActivity.Mode.SENDING, route))
         }
-        editBtn.setOnClickListener { activity.startActivity(TreasuresEditorActivity.intent(activity, route)) }
+        editBtn.setOnClickListener { activity.startActivity(TreasuresEditorActivity.intent(activity, route.name)) }
 
         deleteBtn.setOnClickListener {
             AlertDialog.Builder(activity)
