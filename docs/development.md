@@ -2,6 +2,23 @@
 
 [State machine](activities_flow.mmd)
 
+# Persistence management
+
+There are three levels of state persistence.
+
+1. **View Model level.** There is ViewModel class that allows data to survive configuration changes such as screen rotations. Each stateful activity has a view model class (a class
+   extending the `ViewModel`).
+
+2. **Saved instance state.** Data saved this way survives system initiated process death (e.g. removing the process due to lack of memory). Saving instance state should be done
+   through view model. The view model class aggregates an instance of the `SavedStateHandle`. When the data is changed, the view model should
+   call `SavedStateHandle.set(variable, value)` (
+   the map syntax can be used too).  
+   When initializing the view model, available data should be loaded from `SavedStateHandle.get()`.
+
+3. **Persistent storage.** To save data that should remain available till the user decides to remove it. It should by done through serialization to XML and then saving to disc
+   using the `StorageHelper` class. The data that supposed to be saved should be wrapped by the view model, and the view model should handle its lifecycle. The view model should be
+   aware of changes in such data and persist it immediately after the change.
+
 # Permissions
 
 ## Structure
