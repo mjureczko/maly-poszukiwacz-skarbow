@@ -62,4 +62,5 @@
     <string name="missing_location_permission">Location permission is essential for gameplay.</string>
     <string name="missing_bluetooth_permission">The permission to access Bluetooth is needed to transfer routes between devices.</string>
     <string name="select_bluetooth_device">"> Select the device to which you want to send the route. Sending will only be successful if there is an active connection to the selected device.\n > List of paired devices: \n"</string>
+    <string name="help_path">https://bitbucket.org/MarianJureczko/maly-poszukiwacz-skarbow/src/master/README_en.md</string>
 </resources>
