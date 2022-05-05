@@ -1,18 +1,15 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts.TakePicture
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,7 +30,6 @@ private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, TreasurePhotoMaker {
 
     companion object {
-        const val REQUEST_PHOTO = 2
         const val TMP_PICTURE_FILE = "/tmp.jpg"
         private const val SELECTED_ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_selected_to_edit";
 
@@ -47,6 +43,12 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     private val TAG = javaClass.simpleName
     private val storageHelper = StorageHelper(this)
+    private val doPhotoLauncher = registerForActivityResult(TakePicture()) { result ->
+        if (result) {
+            savePhotoInRoute()
+        }
+    }
+
     lateinit var treasureAdapter: TreasureAdapter
     private lateinit var binding: ActivityTreasuresEditorBinding
 
@@ -96,36 +98,9 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_PHOTO) {
-            if (Activity.RESULT_OK == resultCode) {
-                Toast.makeText(applicationContext, R.string.photo_saving, Toast.LENGTH_SHORT).show()
-                val photoTempFile = getPhotoTempFile()
-                val photoHelper = PhotoHelper(storageHelper)
-                val fileForPhoto = model.photoFileForTreasureNeedingPhoto(storageHelper)
-                if (fileForPhoto != null && photoHelper.rescaleImageAndSaveInTreasure(photoTempFile, fileForPhoto)) {
-                    Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
     override fun doPhotoForTreasure(treasure: TreasureDescription) {
         model.setupTreasureNeedingPhotoById(treasure.id)
-        val photoUri = createPhotoUri()
-
-        val captureImage = capturePhotoIntent()
-        captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-
-        val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
-        for (cameraActivity in cameraActivities) {
-            grantUriPermission(cameraActivity.activityInfo.packageName, photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        }
-        startActivityForResult(captureImage, REQUEST_PHOTO)
+        doPhotoLauncher.launch(createPhotoUri())
     }
 
     private fun addTreasureListener() {
@@ -136,6 +111,19 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         )
         model.addTreasure(treasure, storageHelper)
         treasureAdapter.notifyDataSetChanged()
+    }
+
+    private fun savePhotoInRoute() {
+        Toast.makeText(applicationContext, R.string.photo_saving, Toast.LENGTH_SHORT).show()
+        val photoTempFile = getPhotoTempFile()
+        val photoHelper = PhotoHelper(storageHelper)
+        val fileForPhoto = model.photoFileForTreasureNeedingPhoto(storageHelper)
+        if (fileForPhoto != null && photoHelper.rescaleImageAndSaveInTreasure(photoTempFile, fileForPhoto)) {
+            model.saveRoute(storageHelper)
+            Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun createPhotoUri(): Uri {
@@ -174,8 +162,6 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         existingRouteName != null
 
     private fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + TMP_PICTURE_FILE)
-
-    private fun capturePhotoIntent() = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
     private fun setupRouteInViewAndModel(route: Route) {
         model.setRoute(route)

@@ -58,4 +58,7 @@ class TreasuresEditorViewModel(private val state: SavedStateHandle) : ViewModel(
 
     fun routeNameWasInitialized(): Boolean =
         route != Route.nullObject()
+
+    fun saveRoute(storageHelper: StorageHelper) =
+        storageHelper.save(route)
 }
