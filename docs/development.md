@@ -33,5 +33,24 @@ There are three levels of state persistence.
 
 [Sequence diagram](handling_request_result.mmd)
 
-Rejecting required permissions should result in a dialog where user can change his/her mind.
-Permissions can be rejected "permanently", then the settings need to be visited to grant permissions.
+Rejecting required permissions should result in a dialog where user can change his/her mind. Permissions can be rejected "permanently", then the settings need to be visited to
+grant permissions.
+
+# Releasing
+
+You need to push a tag to create a release. Execute:
+
+```
+git tag
+```
+
+to check existing tags (only the local ones will be printed).
+
+To create a new release execute:
+
+```
+git tag -a X.Y -m "comment"
+git push origin --tags
+```
+
+It will launch a pipeline instance that creates a new release.
