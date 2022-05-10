@@ -98,7 +98,7 @@ class StorageHelperTest {
     @Test
     fun `SHOULD remove tip files WHEN removing route`() {
         //given
-        val route = RouteArranger.savedWithFiles(storageHelper)
+        val route = RouteArranger.savedWithTipFiles(storageHelper)
 
         //when
         storageHelper.remove(route)
@@ -153,7 +153,7 @@ class StorageHelperTest {
     @Test
     fun `SHOULD remove tip files WHEN removing route by name`() {
         //given
-        val route = RouteArranger.savedWithFiles(storageHelper)
+        val route = RouteArranger.savedWithTipFiles(storageHelper)
 
         //when
         storageHelper.removeRouteByName(route.name)
@@ -172,7 +172,7 @@ class StorageHelperTest {
     @Test
     fun `SHOULD convert route to a zip stream WHEN the route is already saved`() {
         //given
-        val route = RouteArranger.savedWithFiles(storageHelper)
+        val route = RouteArranger.savedWithTipFiles(storageHelper)
 
         //when
         val actual = storageHelper.routeToZipOutputStream(route)

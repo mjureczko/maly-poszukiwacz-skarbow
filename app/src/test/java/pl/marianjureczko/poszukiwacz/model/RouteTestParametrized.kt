@@ -52,7 +52,7 @@ class RouteTest {
     @Test
     fun `SHOULD remove treasureDescription files WHEN removing the TreasureDescription from Route`() {
         //given
-        val route = RouteArranger.savedWithFiles(storageHelper)
+        val route = RouteArranger.savedWithTipFiles(storageHelper)
         val toRemove = route.treasures[0]
 
         //when
@@ -63,6 +63,34 @@ class RouteTest {
         assertThat(File(toRemove.photoFileName).exists()).isFalse()
         assertThat(File(toRemove.tipFileName).exists()).isFalse()
     }
+
+    @Test
+    fun `SHOULD remove selected treasure from progress WHEN the removed TreasureDescription was selected`() {
+        //given
+        val fixture = RouteAndProgressFixture.savedWithSelectedTreasure(storageHelper)
+
+        //when
+        fixture.route.remove(fixture.selectedTreasure()!!, storageHelper)
+
+        //then
+        val actualProgress = storageHelper.loadProgress(fixture.route.name)!!
+        assertThat(actualProgress.selectedTreasure).isNull()
+    }
+
+    @Test
+    fun `SHOULD not alter the progress WHEN the removed TreasureDescription was not selected`() {
+        //given
+        val fixture = RouteAndProgressFixture.savedWithoutSelectedTreasure(storageHelper)
+        val toRemove = fixture.route.treasures[0]
+
+        //when
+        fixture.route.remove(toRemove, storageHelper)
+
+        //then
+        val actualProgress = storageHelper.loadProgress(fixture.route.name)
+        assertThat(actualProgress).usingRecursiveComparison().isEqualTo(fixture.progress)
+    }
+
 
     @Test
     fun `SHOULD add prefix to each photo and sound file`() {

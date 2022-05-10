@@ -8,7 +8,7 @@ import java.io.File
 
 class RouteArranger : CustomArranger<Route>() {
     companion object {
-        fun savedWithFiles(storageHelper: StorageHelper): Route {
+        fun savedWithTipFiles(storageHelper: StorageHelper): Route {
             val route = some<Route>()
             route.treasures.forEach { t ->
                 t.instantiatePhotoFile(storageHelper).createNewFile()
@@ -16,6 +16,15 @@ class RouteArranger : CustomArranger<Route>() {
                 File(t.tipFileName).createNewFile()
             }
             storageHelper.save(route)
+            return route
+        }
+
+        fun routeWithoutTipFiles(): Route {
+            val route = some<Route>()
+            route.treasures.forEach { t ->
+                t.photoFileName = null
+                t.tipFileName = null
+            }
             return route
         }
     }

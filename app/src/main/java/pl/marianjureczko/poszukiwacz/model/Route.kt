@@ -34,6 +34,13 @@ data class Route(
     fun remove(td: TreasureDescription, storageHelper: StorageHelper) {
         treasures.remove(td)
         storageHelper.removeTipFiles(td)
+
+        storageHelper.loadProgress(name)?.let {
+            if (it.selectedTreasure?.id == td.id) {
+                it.selectedTreasure = null
+                storageHelper.save(it)
+            }
+        }
     }
 
     fun addPrefixToFilesPaths(prefix: String) {
