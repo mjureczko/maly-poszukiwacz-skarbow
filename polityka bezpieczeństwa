@@ -1,21 +1,13 @@
 Polityka Bezpieczeństwa
-szanuje prawo użytkowników aplikacji przez nią stworzonych  do prywatności i oświadcza, że aplikacja nie zbiera i nie gromadzi żadnych danych osobowych użuytkowników. 
+szanuje prawo użytkowników aplikacji przez nią stworzonych  do prywatności i oświadcza, że aplikacja nie zbiera i nie gromadzi żadnych danych osobowych użytkowników. 
 
 
 
-2. Amistad sp. z o.o. informuje, iż podczas użytkowania aplikacji zapisywane są tylko tymczasowe dane na urządzeniu klienta.
+1. Amistad sp. z o.o. informuje, iż podczas użytkowania aplikacji są zapisywane dane na urządzeniu klienta 
+   (dane odnośnie tras: podpowiedzi słowne oraz głosowe, współrzędne ukrytych skarków; informacja o odnalezionych skarbach: oznaczenie skarbów już odnalezionych oraz ilości odnalezionych diamentów, rubinów i złota).
+    Wszystkie dane mogą zostać usunięte przez użytkownika z poziomu aplikacji.
 
-3. Aplikacja anonimowo zbiera dane statystyczne udostępniane przez system. Za zbieranie tych danych oraz sposobu użytkowania aplikacji odpowiedzialne są następujące usługi:
-
-    usługa Google Analytics, której właścicielem jest firma Google inc. Polityka bezpieczeństwa usługi Google Analytics.
-    usługa Crashlytics firmy Fabric. Polityka prywatności Fabric.
-
-4. W aplikacji za wysyłanie komunikatów push odpowiedzialna jest zewnętrzna usługa Firebase Cloud Messaging. Polityka prywatności usługi.
-
-5. Aplikacja korzysta z podkładów mapowych dostarczanych prez system (Google Maps API. Polityka prywatności Google inc., Apple Maps Polityka prywatności firmy Apple)
-1. 
-
-1. Aplikacja może korzystać z następujących uprawnień:
+2. Aplikacja może korzystać z następujących uprawnień:
 
     Lokalizacja – umożliwia wyświetlenie pozycji użytkownika na mapach, dostosowania wyników punktów POI do jego pozycji, nawigowania względem trasy,
     Pamięć – dzięki temu uprawnieniu aplikacja może zapisywać dane w pamięci urządzenia dzięki czemu użycie wielu funkcjonalności staje się możliwe,
