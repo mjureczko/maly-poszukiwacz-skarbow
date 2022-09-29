@@ -76,6 +76,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         val presenter = LocationRequester(this, locationListener, handler, location)
         handler.post(presenter)
         setContentView(binding.root)
+        setUpAds(binding.adView)
     }
 
     override fun onNameEntered(name: String) {

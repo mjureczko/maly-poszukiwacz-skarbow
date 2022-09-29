@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.*
 import pl.marianjureczko.poszukiwacz.R
@@ -62,7 +61,7 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
-                Toast.makeText(this@ActivityWithAdsAndBackButton, adError.toString(), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@ActivityWithAdsAndBackButton, adError.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onAdOpened() {

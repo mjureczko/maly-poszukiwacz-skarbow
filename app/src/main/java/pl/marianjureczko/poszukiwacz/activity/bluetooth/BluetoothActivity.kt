@@ -18,10 +18,11 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
 import pl.marianjureczko.poszukiwacz.activity.main.BluetoothException
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetooth
-import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
-import pl.marianjureczko.poszukiwacz.shared.*
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import java.util.*
 
 interface MemoConsole {
@@ -96,6 +97,7 @@ class BluetoothActivity : PermissionActivity(), MemoConsole, BluetoothConnection
         } else {
             tryToAcceptConnection()
         }
+        setUpAds(findViewById(R.id.adView))
     }
 
     override fun onBackPressed() {
