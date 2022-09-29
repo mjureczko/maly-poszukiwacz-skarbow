@@ -50,6 +50,7 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
         supportActionBar?.title = "${App.getResources().getString(R.string.select_treasure_dialog_title)}"
 
         setContentView(binding.root)
+        setUpAds(binding.adView)
     }
 
     override fun finishWithResult(treasureId: Int) {
