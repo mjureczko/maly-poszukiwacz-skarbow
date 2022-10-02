@@ -7,10 +7,9 @@ import android.content.pm.ActivityInfo
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
-import com.google.zxing.integration.android.IntentIntegrator
+import com.journeyapps.barcodescanner.ScanContract
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivity
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityInput
@@ -18,7 +17,9 @@ import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureCon
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureOutputData
 import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
-import pl.marianjureczko.poszukiwacz.model.*
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.shared.*
 
 class SearchingActivity : ActivityWithAdsAndBackButton() {
@@ -48,7 +49,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         setContentView(R.layout.activity_searching)
         restoreState()
 
-        binding.scanBtn.setOnClickListener(ScanButtonListener(IntentIntegrator(this)))
+        binding.scanBtn.setOnClickListener(ScanButtonListener(createScanTreasureLauncher(), resources.getString(R.string.qr_scanner_msg)))
         treasureSelectorLauncher = createSelectTreasureLauncher()
         binding.changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(treasureSelectorLauncher, model))
         binding.playTipBtn.setOnClickListener(PlayTipButtonListener(model, this))
@@ -67,21 +68,18 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
+    private fun createScanTreasureLauncher() =
+        registerForActivityResult(ScanContract()) { scanResult ->
+            if (scanResult != null && scanResult.contents != null) {
+                startActivity(ResultActivity.intent(this, processSearchingResult(scanResult.contents)))
+            }
+        }
+
+
     override fun onPostResume() {
         super.onPostResume()
         if (!model.treasureSelectionInitialized()) {
             treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData())
-        }
-    }
-
-    /** Result of scanning treasure qr code*/
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d(TAG, "########> onActivityResult")
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null && result.contents != null) {
-            startActivity(ResultActivity.intent(this, processSearchingResult(result.contents)))
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 

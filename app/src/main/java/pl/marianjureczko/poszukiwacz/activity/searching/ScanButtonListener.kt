@@ -1,10 +1,17 @@
 package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.view.View
-import com.google.zxing.integration.android.IntentIntegrator
+import androidx.activity.result.ActivityResultLauncher
+import com.journeyapps.barcodescanner.ScanOptions
 
-class ScanButtonListener(private val qrScan: IntentIntegrator) : View.OnClickListener {
+class ScanButtonListener(
+    private val scannerLauncher: ActivityResultLauncher<ScanOptions>,
+    private val message: String
+) : View.OnClickListener {
+
     override fun onClick(v: View?) {
-        qrScan.initiateScan()
+        val scanOptions = ScanOptions()
+        scanOptions.setPrompt(message)
+        scannerLauncher.launch(scanOptions)
     }
 }
