@@ -11,8 +11,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import com.journeyapps.barcodescanner.ScanContract
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.result.ResultActivity
-import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityInput
+import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityContract
+import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureOutputData
@@ -40,6 +40,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     private val model: SearchingActivityViewModel by viewModels()
     private lateinit var binding: ActivitySearchingBinding
     private lateinit var treasureSelectorLauncher: ActivityResultLauncher<SelectTreasureInputData>
+    private lateinit var showResultLauncher: ActivityResultLauncher<ResultActivityData>
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +52,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
 
         binding.scanBtn.setOnClickListener(ScanButtonListener(createScanTreasureLauncher(), resources.getString(R.string.qr_scanner_msg)))
         treasureSelectorLauncher = createSelectTreasureLauncher()
+        showResultLauncher = createShowResultLauncher()
         binding.changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(treasureSelectorLauncher, model))
         binding.playTipBtn.setOnClickListener(PlayTipButtonListener(model, this))
         binding.mapBtn.setOnClickListener { errorTone() }
@@ -68,18 +70,10 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
-    private fun createScanTreasureLauncher() =
-        registerForActivityResult(ScanContract()) { scanResult ->
-            if (scanResult != null && scanResult.contents != null) {
-                startActivity(ResultActivity.intent(this, processSearchingResult(scanResult.contents)))
-            }
-        }
-
-
     override fun onPostResume() {
         super.onPostResume()
         if (!model.treasureSelectionInitialized()) {
-            treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData())
+            treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(null))
         }
     }
 
@@ -88,17 +82,17 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         showCollectedTreasures()
     }
 
-    private fun processSearchingResult(result: String): ResultActivityInput {
+    private fun processSearchingResult(result: String): ResultActivityData {
         try {
             val treasure: Treasure = treasureParser.parse(result)
             return if (model.treasureIsAlreadyCollected(treasure)) {
-                ResultActivityInput(resources.getString(R.string.treasure_already_taken_msg))
+                ResultActivityData(resources.getString(R.string.treasure_already_taken_msg))
             } else {
                 add(treasure)
-                ResultActivityInput(treasure)
+                ResultActivityData(treasure)
             }
         } catch (ex: IllegalArgumentException) {
-            return ResultActivityInput(resources.getString(R.string.not_a_treasure_msg))
+            return ResultActivityData(resources.getString(R.string.not_a_treasure_msg))
         }
     }
 
@@ -113,11 +107,26 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         binding.diamondTxt.text = model.getDiamonds()
     }
 
-    private fun createSelectTreasureLauncher(): ActivityResultLauncher<SelectTreasureInputData> {
-        return registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData? ->
+    private fun createScanTreasureLauncher() =
+        registerForActivityResult(ScanContract()) { scanResult ->
+            if (scanResult != null && scanResult.contents != null) {
+                showResultLauncher.launch(processSearchingResult(scanResult.contents))
+            }
+        }
+
+    private fun createSelectTreasureLauncher(): ActivityResultLauncher<SelectTreasureInputData> =
+        registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData? ->
             if (result != null) {
                 model.replaceTreasureBag(result.progress, storageHelper)
             }
         }
-    }
+
+    private fun createShowResultLauncher(): ActivityResultLauncher<ResultActivityData> =
+        registerForActivityResult(ResultActivityContract()) { result: ResultActivityData? ->
+            result?.let {
+                if (!it.isError()) {
+                    treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(it.treasure))
+                }
+            }
+        }
 }

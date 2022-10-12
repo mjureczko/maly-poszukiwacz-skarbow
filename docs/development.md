@@ -6,7 +6,7 @@
 
 There are three levels of state persistence.
 
-1. **View Model level.** There is ViewModel class that allows data to survive configuration changes such as screen rotations. Each stateful activity has a view model class (a class
+1. **View Model level.** There is the ViewModel class that allows data to survive configuration changes such as screen rotations. Each stateful activity has a view model class (a class
    extending the `ViewModel`).
 
 2. **Saved instance state.** Data saved this way survives system initiated process death (e.g. removing the process due to lack of memory). Saving instance state should be done

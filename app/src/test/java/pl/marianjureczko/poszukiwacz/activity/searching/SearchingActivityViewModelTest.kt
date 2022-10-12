@@ -85,7 +85,7 @@ class SearchingActivityViewModelTest {
     fun `SHOULD say initialized WHEN the flag was set by calling getTreasureSelectorActivityInputData`() {
         //given
         val model = some<SearchingActivityViewModel>()
-        model.getTreasureSelectorActivityInputData()
+        model.getTreasureSelectorActivityInputData(null)
 
         //when
         val actual = model.treasureSelectionInitialized()
@@ -139,7 +139,7 @@ class SearchingActivityViewModelTest {
         assertThat(fixture.model.getSelectedForHuntTreasure()).isNotNull()
 
         //when
-        val actual = fixture.model.getTreasureSelectorActivityInputData()
+        val actual = fixture.model.getTreasureSelectorActivityInputData(null)
 
         //then
         then(state).should().set(SearchingActivityViewModel.TREASURE_SELECTION_INITIALIZED, true)

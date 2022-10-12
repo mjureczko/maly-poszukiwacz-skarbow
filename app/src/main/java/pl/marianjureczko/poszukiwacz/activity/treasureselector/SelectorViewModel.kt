@@ -1,9 +1,11 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureselector
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
@@ -17,15 +19,18 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
         const val IDS_OF_COLLECTED = "ids"
     }
 
+    private val TAG = javaClass.simpleName
     private lateinit var route: Route
     private lateinit var progress: TreasureBag
     private var userLocation: Coordinates? = null
+    private var justFoundTreasure: Treasure? = null
     private val locationCalculator = LocationCalculator()
 
-    fun initialize(route: Route, progress: TreasureBag, userLocation: Coordinates?) {
+    fun initialize(route: Route, progress: TreasureBag, userLocation: Coordinates?, justFound: Treasure?) {
         this.route = route
         this.progress = progress
         this.userLocation = userLocation
+        this.justFoundTreasure = justFound
         state.get<Set<Int>>(IDS_OF_COLLECTED)?.let {
             this.progress.collectedTreasuresDescriptionId.clear()
             this.progress.collectedTreasuresDescriptionId.addAll(it)
@@ -78,4 +83,16 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
 
     fun getUserLocation(): Coordinates? =
         userLocation?.copy()
+
+    fun getJustFound(): Treasure? =
+        justFoundTreasure
+
+    fun treasureIsNotFarAwayFromUser(): Boolean =
+        if (getSelectedTreasure() != null && getUserLocation() != null) {
+            val distance = LocationCalculator().distanceInSteps(getSelectedTreasure()!!, getUserLocation()!!)
+            Log.i(TAG, "Distance is $distance")
+            distance < 60;
+        } else {
+            false
+        }
 }
