@@ -4,12 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasureSelectorBinding
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
@@ -30,6 +34,7 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
         internal const val ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_to_select_from"
         internal const val PROGRESS = "pl.marianjureczko.poszukiwacz.activity.route_progress"
         internal const val LOCATION = "pl.marianjureczko.poszukiwacz.activity.user_coordinates"
+        internal const val TREASURE = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_treasure"
         private val xmlHelper = XmlHelper()
     }
 
@@ -43,11 +48,14 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
         model.initialize(
             route = xmlHelper.loadFromString<Route>(intent.getStringExtra(ROUTE)!!),
             progress = xmlHelper.loadFromString<TreasureBag>(intent.getStringExtra(PROGRESS)!!),
-            userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?
+            userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?,
+            justFound = intent.getSerializableExtra(TREASURE) as Treasure?
         )
         adapter = TreasureProgressAdapter(this, model, this)
         binding.treasuresToSelect.adapter = adapter
         supportActionBar?.title = "${App.getResources().getString(R.string.select_treasure_dialog_title)}"
+
+        Handler(Looper.getMainLooper()).postDelayed({ markTreasureIfFound() }, 1000)
 
         setContentView(binding.root)
         setUpAds(binding.adView)
@@ -65,6 +73,19 @@ class TreasureSelectorActivity : ActivityWithAdsAndBackButton(), ActivityTermina
         setResult(Activity.RESULT_CANCELED, data)
         super.onBackPressed()
     }
+
+    private fun markTreasureIfFound() =
+        model.getJustFound()?.let {
+            if (model.treasureIsNotFarAwayFromUser()) {
+                model.collect(model.getSelectedTreasure()!!)
+                adapter.notifyDataSetChanged()
+                val id = model.getSelectedTreasure()!!.id.toString()
+                Toast.makeText(this, this.getString(R.string.treasure_marked_as_collected, id), Toast.LENGTH_LONG).show()
+            } else {
+                //TODO: in case the toast is too quick - https://www.geeksforgeeks.org/display-toast-for-a-specific-time-in-android/
+                Toast.makeText(this, R.string.treasure_nor_marked, Toast.LENGTH_LONG).show()
+            }
+        }
 
     private fun intentResultWithProgress(): Intent {
         val data = Intent()

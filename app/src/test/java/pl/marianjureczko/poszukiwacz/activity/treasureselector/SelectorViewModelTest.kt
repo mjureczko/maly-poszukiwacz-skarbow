@@ -29,7 +29,7 @@ class SelectorViewModelStateTest {
             .willReturn(collectedIds)
 
         //when
-        selectorViewModel.initialize(some<Route>(), some<TreasureBag>(), null)
+        selectorViewModel.initialize(some<Route>(), some<TreasureBag>(), null, null)
 
         //then
         assertThat(selectorViewModel.getIdsOfCollectedTreasures()).containsExactlyInAnyOrderElementsOf(collectedIds)
@@ -46,7 +46,7 @@ class SelectorViewModelStateTest {
         val collectedIds = progress.collectedTreasuresDescriptionId.toSet()
 
         //when
-        selectorViewModel.initialize(some<Route>(), progress, null)
+        selectorViewModel.initialize(some<Route>(), progress, null, null)
 
         //then
         assertThat(selectorViewModel.getIdsOfCollectedTreasures()).containsExactlyInAnyOrderElementsOf(collectedIds)
@@ -139,7 +139,7 @@ internal class SelectorViewModelTest {
     fun `SHOULD use treasure pretty name WHEN user location is null`() {
         //given
         val model = some<SelectorViewModel>()
-        model.initialize(some<Route>(), some<TreasureBag>(), null)
+        model.initialize(some<Route>(), some<TreasureBag>(), null, null)
         assertThat(model.getUserLocation()).isNull()
         val treasureDescription = some<TreasureDescription>()
 

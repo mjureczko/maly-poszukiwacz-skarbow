@@ -10,6 +10,8 @@ stateDiagram-v2
     TreasureSelectorActivity --> SearchingActivity
     SearchingActivity --> PhotoActivity : show photo hint
     PhotoActivity --> SearchingActivity
+    SearchingActivity --> ResultActivity : show treasure
+    ResultActivity --> SearchingActivity
     SearchingActivity --> QrScanIntent : scan found treasure
     QrScanIntent --> SearchingActivity
     TreasuresEditorActivity --> CapturePhotoIntent : make photo\n with a hint

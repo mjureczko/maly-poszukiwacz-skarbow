@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.activity.searching
 import android.location.Location
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
@@ -14,6 +15,7 @@ import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewModel(), DataStorageWrapper, TreasuresStorage, TipNameProvider {
     companion object {
         const val TREASURE_SELECTION_INITIALIZED = "initialized"
+        const val CURRENT_COORDINATES = "coordinates"
     }
 
     private val TAG = javaClass.simpleName
@@ -21,6 +23,7 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
     private lateinit var route: Route
     private lateinit var treasureBag: TreasureBag
     private var currentLocation: Location? = null
+    private var currentCoordinates: Coordinates? = state.get<Coordinates?>(CURRENT_COORDINATES)
     private var treasureSelectionInitialized: Boolean = state.get<Boolean>(TREASURE_SELECTION_INITIALIZED) ?: false
         private set(value) {
             field = value
@@ -31,13 +34,17 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
         return treasureBag.selectedTreasure
     }
 
-    override fun getTreasureSelectorActivityInputData(): SelectTreasureInputData {
+    override fun getTreasureSelectorActivityInputData(justFoundTreasure: Treasure?): SelectTreasureInputData {
         treasureSelectionInitialized = true
-        return SelectTreasureInputData(route, treasureBag, currentLocation)
+        return SelectTreasureInputData(route, treasureBag, currentCoordinates, justFoundTreasure)
     }
 
     override fun setCurrentLocation(location: Location?) {
         currentLocation = location
+        location?.let {
+            currentCoordinates = Coordinates(it.latitude, it.longitude)
+            state[CURRENT_COORDINATES] = currentCoordinates
+        }
     }
 
     fun initialize(routeXml: String, storageHelper: StorageHelper) {

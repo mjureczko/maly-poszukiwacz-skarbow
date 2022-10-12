@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.result
 
-import android.content.Context
-import android.content.Intent
+import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
@@ -12,12 +11,7 @@ import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 class ResultActivity : ActivityWithAdsAndBackButton() {
 
     companion object {
-        private const val RESULT = "pl.marianjureczko.poszukiwacz.activity.result";
-
-        fun intent(packageContext: Context, treasure: ResultActivityInput) =
-            Intent(packageContext, ResultActivity::class.java).apply {
-                putExtra(RESULT, treasure)
-            }
+        const val RESULT = "pl.marianjureczko.poszukiwacz.activity.result";
     }
 
     private lateinit var binding: ActivityResultBinding
@@ -30,7 +24,7 @@ class ResultActivity : ActivityWithAdsAndBackButton() {
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_result)
-        val input = intent.getSerializableExtra(RESULT) as ResultActivityInput
+        val input = intent.getSerializableExtra(RESULT) as ResultActivityData
         if (input.isError()) {
             binding.resultDescription.text = input.error
             binding.resultImg.visibility = View.GONE
@@ -39,5 +33,10 @@ class ResultActivity : ActivityWithAdsAndBackButton() {
             binding.resultImg.setImageResource(input.treasure.type.image())
         }
         setContentView(binding.root)
+    }
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_OK, intent)
+        super.onBackPressed()
     }
 }
