@@ -63,7 +63,7 @@
     <string name="operation_not_permitted">Operacja nie jest dozwolona</string>
     <string name="missing_location_permission">Pozwolenie na dostęp do lokalizacji jest niezbędne do rozgrywki.</string>
     <string name="missing_bluetooth_permission">Pozwolenie na dostęp do Bluetooth jest potrzebne do przekazywania tras pomiędzy urządzeniami.</string>
-    <string name="help_path">https://bitbucket.org/MarianJureczko/maly-poszukiwacz-skarbow/src/master/README.md</string>
+    <string name="help_path">https://little-treasure-hunter.netlify.app/#/</string>
     <string name="qr_scanner_msg">Zeskanuj kod QR reprezentujący skarb.</string>
     <string name="treasure_marked_as_collected">Skarb [%s] oznaczono jako zabrany.</string>
     <string name="treasure_nor_marked">Wskazania GPS nie pozwalają na ustalenie który skarb został znaleziony. Oznacz go ręcznie.</string>
