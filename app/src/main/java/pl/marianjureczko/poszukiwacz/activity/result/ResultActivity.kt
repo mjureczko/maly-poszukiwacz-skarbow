@@ -23,7 +23,6 @@ class ResultActivity : ActivityWithAdsAndBackButton() {
         binding = ActivityResultBinding.inflate(layoutInflater)
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        setContentView(R.layout.activity_result)
         val input = intent.getSerializableExtra(RESULT) as ResultActivityData
         if (input.isError()) {
             binding.resultDescription.text = input.error
@@ -33,6 +32,7 @@ class ResultActivity : ActivityWithAdsAndBackButton() {
             binding.resultImg.setImageResource(input.treasure.type.image())
         }
         setContentView(binding.root)
+        setUpAds(binding.adView)
     }
 
     override fun onBackPressed() {

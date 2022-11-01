@@ -16,6 +16,8 @@ stateDiagram-v2
     QrScanIntent --> SearchingActivity
     TreasuresEditorActivity --> CapturePhotoIntent : make photo\n with a hint
     CapturePhotoIntent --> TreasuresEditorActivity
+    SearchingActivity --> MapActivity : show map
+    MapActivity --> SearchingActivity
 
     note right of QrScanIntent: INTENT
     note right of CapturePhotoIntent: INTENT

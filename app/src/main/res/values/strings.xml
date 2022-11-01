@@ -1,4 +1,5 @@
 <resources>
+    <string name="mapbox_access_token" translatable="false">pk.eyJ1IjoibWFyaWFuanVyZWN6a28iLCJhIjoiY2w5aGJkZnA4MWJncDNwbDl6NWU5ZmI0byJ9.55910AZH-1fwb9pC4-XX5A</string>
     <string name="app_name">Little Treasure Hunter</string>
     <string name="new_route_button">New route</string>
     <string name="tip_recorded">The hint has been recorded</string>
@@ -66,4 +67,5 @@
     <string name="qr_scanner_msg">Scan the QR code representing the treasure.</string>
     <string name="treasure_marked_as_collected">The treasure [%s] was marked as collected.</string>
     <string name="treasure_nor_marked">The GPS did not let to identify which treasure was found. Mark it manually.</string>
+    <string name="map_activity_title">Treasures map</string>
 </resources>
