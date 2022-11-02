@@ -67,4 +67,5 @@
     <string name="qr_scanner_msg">Zeskanuj kod QR reprezentujący skarb.</string>
     <string name="treasure_marked_as_collected">Skarb [%s] oznaczono jako zabrany.</string>
     <string name="treasure_nor_marked">Wskazania GPS nie pozwalają na ustalenie który skarb został znaleziony. Oznacz go ręcznie.</string>
+    <string name="map_activity_title">Mapa skarbów</string>
 </resources>

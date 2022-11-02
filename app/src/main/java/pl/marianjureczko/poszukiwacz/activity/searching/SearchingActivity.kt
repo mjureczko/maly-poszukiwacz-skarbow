@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import com.journeyapps.barcodescanner.ScanContract
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.map.MapActivityContract
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityContract
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
@@ -20,7 +21,10 @@ import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
-import pl.marianjureczko.poszukiwacz.shared.*
+import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
+import pl.marianjureczko.poszukiwacz.shared.LocationRequester
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
 class SearchingActivity : ActivityWithAdsAndBackButton() {
 
@@ -41,6 +45,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     private lateinit var binding: ActivitySearchingBinding
     private lateinit var treasureSelectorLauncher: ActivityResultLauncher<SelectTreasureInputData>
     private lateinit var showResultLauncher: ActivityResultLauncher<ResultActivityData>
+    private lateinit var showMapLauncher: ActivityResultLauncher<Route>
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +58,10 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         binding.scanBtn.setOnClickListener(ScanButtonListener(createScanTreasureLauncher(), resources.getString(R.string.qr_scanner_msg)))
         treasureSelectorLauncher = createSelectTreasureLauncher()
         showResultLauncher = createShowResultLauncher()
+        showMapLauncher = createShowMapLauncher()
         binding.changeTreasureBtn.setOnClickListener(ChangeTreasureButtonListener(treasureSelectorLauncher, model))
         binding.playTipBtn.setOnClickListener(PlayTipButtonListener(model, this))
-        binding.mapBtn.setOnClickListener { errorTone() }
+        binding.mapBtn.setOnClickListener(ShowMapButtonListener(showMapLauncher, model))
         binding.photoBtn.setOnClickListener(PhotoButtonListener(this, model))
 
         val locationListener = CompassBasedLocationListener(
@@ -129,4 +135,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
                 }
             }
         }
+
+    private fun createShowMapLauncher(): ActivityResultLauncher<Route> =
+        registerForActivityResult(MapActivityContract()) { }
 }

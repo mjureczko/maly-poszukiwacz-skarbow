@@ -71,6 +71,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'commons-io:commons-io:2.11.0'
+    implementation 'com.mapbox.maps:android:10.8.1'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:'5.8.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.8.2'
