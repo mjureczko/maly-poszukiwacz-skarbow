@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.activity.map
 import com.mapbox.geojson.Point
 import pl.marianjureczko.poszukiwacz.model.Route
 
-class LocationHelper(private val route: Route) {
+class LocationHelper(route: Route) {
 
     data class Borders(var minLng: Double, var maxLng: Double, var minLat: Double, var maxLat: Double)
 
