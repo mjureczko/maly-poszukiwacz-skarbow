@@ -56,6 +56,11 @@ class TreasuresEditorViewModel(private val state: SavedStateHandle) : ViewModel(
         storageHelper.save(route)
     }
 
+    fun removeTreasure(treasureToRemove: TreasureDescription, storageHelper: StorageHelper) {
+        route.remove(treasureToRemove, storageHelper)
+        storageHelper.save(route)
+    }
+
     fun routeNameWasInitialized(): Boolean =
         route != Route.nullObject()
 

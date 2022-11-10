@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts.TakePicture
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mapbox.maps.MapView
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasuresEditorBinding
@@ -22,12 +23,13 @@ import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForPhotoAndAudioTip
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
+import pl.marianjureczko.poszukiwacz.shared.MapHelper
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import java.io.File
 
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
-class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, TreasurePhotoMaker {
+class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, TreasurePhotoMaker, TreasureRemover {
 
     companion object {
         const val TMP_PICTURE_FILE = "/tmp.jpg"
@@ -51,6 +53,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     lateinit var treasureAdapter: TreasureAdapter
     private lateinit var binding: ActivityTreasuresEditorBinding
+    private lateinit var mapView: MapView
 
     private val model: TreasuresEditorViewModel by viewModels()
 
@@ -75,8 +78,17 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         val location = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val presenter = LocationRequester(this, locationListener, handler, location)
         handler.post(presenter)
+
+        mapView = binding.mapView
+        MapHelper.renderTreasures(model.getRoute(), mapView, this.resources)
+
         setContentView(binding.root)
         setUpAds(binding.adView)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MapHelper.positionMapOnTreasures(model.getRoute(), mapView, 200.0)
     }
 
     override fun onNameEntered(name: String) {
@@ -112,6 +124,8 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         )
         model.addTreasure(treasure, storageHelper)
         treasureAdapter.notifyDataSetChanged()
+        MapHelper.addTreasureToMap(treasure, mapView, this.resources)
+        MapHelper.positionMapOnTreasures(model.getRoute(), mapView, 0.0)
     }
 
     private fun savePhotoInRoute() {
@@ -170,8 +184,15 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     }
 
     private fun setupTreasureView(route: Route) {
-        treasureAdapter = TreasureAdapter(this, route, storageHelper, this)
+        treasureAdapter = TreasureAdapter(this, route, storageHelper, this, this)
         binding.treasures.adapter = treasureAdapter
         supportActionBar?.title = "${App.getResources().getString(R.string.route)} ${route.name}"
+    }
+
+    override fun remove(treasureToRemove: TreasureDescription) {
+        model.removeTreasure(treasureToRemove, storageHelper)
+        treasureAdapter.notifyDataSetChanged()
+        MapHelper.renderTreasures(model.getRoute(), mapView, this.resources)
+        MapHelper.positionMapOnTreasures(model.getRoute(), mapView, 0.0)
     }
 }
