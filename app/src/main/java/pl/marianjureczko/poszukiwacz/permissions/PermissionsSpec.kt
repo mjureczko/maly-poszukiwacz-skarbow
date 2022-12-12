@@ -19,9 +19,9 @@ enum class PermissionsSpec(val requestCode: Int) {
                 if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)) {
                     permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//                    permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+//                }
                 permissions.toTypedArray()
             }
         }
