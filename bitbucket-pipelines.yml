@@ -5,7 +5,7 @@ pipelines:
     - step:
         script:
           - export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64/"
-          - bash ./gradlew -PMAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN check
+          - bash ./gradlew -PMAPBOX_DOWNLOADS_TOKEN=$MAPBOX_DOWNLOADS_TOKEN -PFACEBOOK_TOKEN=$FACEBOOK_TOKEN check
   tags:
     '*':
       - step:
