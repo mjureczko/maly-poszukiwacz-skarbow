@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
+import java.io.File
 
 interface TreasureDescriptionTemplateProvider {
     fun provide(treasureId: Int, distanceInSteps: Int): String
@@ -17,16 +18,20 @@ interface TreasureDescriptionTemplateProvider {
 class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
     companion object {
         const val IDS_OF_COLLECTED = "ids"
+        const val COMMEMORATIVE_PHOTOS = "photos"
+        const val TREASURE_DESCRIPTION_ID = "td_id"
     }
 
     private val TAG = javaClass.simpleName
     private lateinit var route: Route
-    private lateinit var progress: TreasureBag
+    lateinit var progress: TreasuresProgress
+        private set
     private var userLocation: Coordinates? = null
     private var justFoundTreasure: Treasure? = null
+    private var treasureDescriptionSelectedForPhoto: Int? = null
     private val locationCalculator = LocationCalculator()
 
-    fun initialize(route: Route, progress: TreasureBag, userLocation: Coordinates?, justFound: Treasure?) {
+    fun initialize(route: Route, progress: TreasuresProgress, userLocation: Coordinates?, justFound: Treasure?) {
         this.route = route
         this.progress = progress
         this.userLocation = userLocation
@@ -34,6 +39,13 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
         state.get<Set<Int>>(IDS_OF_COLLECTED)?.let {
             this.progress.collectedTreasuresDescriptionId.clear()
             this.progress.collectedTreasuresDescriptionId.addAll(it)
+        }
+        state.get<Map<Int, String>>(COMMEMORATIVE_PHOTOS)?.let {
+            this.progress.commemorativePhotosByTreasuresDescriptionIds.clear()
+            this.progress.commemorativePhotosByTreasuresDescriptionIds.putAll(it)
+        }
+        state.get<Int?>(TREASURE_DESCRIPTION_ID)?.let {
+            this.treasureDescriptionSelectedForPhoto = it
         }
     }
 
@@ -56,6 +68,20 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
         state[IDS_OF_COLLECTED] = progress.collectedTreasuresDescriptionId
     }
 
+    fun selectForCommemorativePhoto(treasureDescription: TreasureDescription) {
+        treasureDescriptionSelectedForPhoto = treasureDescription.id
+        state[TREASURE_DESCRIPTION_ID] = treasureDescriptionSelectedForPhoto
+    }
+
+    fun setCommemorativePhotoOnSelectedTreasureDescription(photoLocation: String) {
+        if (progress.commemorativePhotosByTreasuresDescriptionIds.contains(treasureDescriptionSelectedForPhoto)) {
+            File(progress.commemorativePhotosByTreasuresDescriptionIds[treasureDescriptionSelectedForPhoto]).delete()
+            progress.commemorativePhotosByTreasuresDescriptionIds[treasureDescriptionSelectedForPhoto]
+        }
+        progress.commemorativePhotosByTreasuresDescriptionIds[treasureDescriptionSelectedForPhoto!!] = photoLocation
+        state[COMMEMORATIVE_PHOTOS] = progress.commemorativePhotosByTreasuresDescriptionIds
+    }
+
     fun getTreasureDescriptionByPosition(position: Int): TreasureDescription =
         route.treasures[position]
 
@@ -70,6 +96,9 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
 
     fun getIdsOfCollectedTreasures(): Set<Int> =
         progress.collectedTreasuresDescriptionId.toSet()
+
+    fun getCommemorativePhoto(treasureDescription: TreasureDescription) =
+        progress.getCommemorativePhoto(treasureDescription)
 
     fun generateTreasureDesription(treasure: TreasureDescription, treasureDescriptionTemplate: TreasureDescriptionTemplateProvider): String {
         return if (userLocation != null) {

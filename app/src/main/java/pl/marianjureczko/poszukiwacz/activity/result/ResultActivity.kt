@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityResultBinding
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 
 class ResultActivity : ActivityWithAdsAndBackButton() {
@@ -33,6 +34,10 @@ class ResultActivity : ActivityWithAdsAndBackButton() {
         }
         setContentView(binding.root)
         setUpAds(binding.adView)
+    }
+
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return null
     }
 
     override fun onBackPressed() {

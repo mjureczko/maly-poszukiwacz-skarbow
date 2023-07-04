@@ -5,8 +5,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 class XmlHelperTest {
 
@@ -58,11 +58,11 @@ class XmlHelperTest {
     fun should_writeToAndLoadFromStringTreasureBag() {
         //given
         val xmlHelper = XmlHelper()
-        var bag = some<TreasureBag>()
+        var bag = some<TreasuresProgress>()
 
         //when
         val xml = xmlHelper.writeToString(bag)
-        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+        val actual = xmlHelper.loadFromString<TreasuresProgress>(xml)
 
         //then
         assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
@@ -72,13 +72,13 @@ class XmlHelperTest {
     fun should_writeToAndLoadFromStringTreasureBagWithoutSelectedTreasure() {
         //given
         val xmlHelper = XmlHelper()
-        var bag = some<TreasureBag> {
+        var bag = some<TreasuresProgress> {
             selectedTreasure = null
         }
 
         //when
         val xml = xmlHelper.writeToString(bag)
-        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+        val actual = xmlHelper.loadFromString<TreasuresProgress>(xml)
 
         //then
         assertThat(actual).usingRecursiveComparison().isEqualTo(bag)

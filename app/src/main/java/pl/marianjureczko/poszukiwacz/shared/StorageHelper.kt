@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import org.apache.commons.io.IOUtils
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -30,14 +30,16 @@ open class StorageHelper(val context: Context) {
 
     fun newSoundFile(): String = newFile("sound_", ".3gp")
 
-    open fun newPhotoFile(): String = newFile("photo_", ".jpg")
+    fun newPhotoFile(): String = newFile("photo_", ".jpg")
 
-    fun save(bag: TreasureBag) {
+    fun newCommemorativePhotoFile(): String = newFile("commemorativephoto_", ".jpg")
+
+    fun save(bag: TreasuresProgress) {
         val file = getProgressFile(bag.routeName)
         xmlHelper.writeToFile(bag, file)
     }
 
-    fun loadProgress(routeName: String): TreasureBag? {
+    fun loadProgress(routeName: String): TreasuresProgress? {
         val file = getProgressFile(routeName)
         return if (file.exists()) {
             try {

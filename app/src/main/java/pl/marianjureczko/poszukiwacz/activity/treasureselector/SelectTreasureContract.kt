@@ -6,19 +6,19 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import java.io.Serializable
 
 data class SelectTreasureInputData(
     val route: Route,
-    val progress: TreasureBag,
+    val progress: TreasuresProgress,
     val currentCoordinates: Coordinates?,
     val justFoundTreasure: Treasure?
 ) : Serializable
 
 data class SelectTreasureOutputData(
-    val progress: TreasureBag,
+    val progress: TreasuresProgress,
 )
 
 class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, SelectTreasureOutputData?>() {
@@ -42,7 +42,7 @@ class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, S
     override fun parseResult(resultCode: Int, result: Intent?): SelectTreasureOutputData? {
         if (resultCode == Activity.RESULT_OK || resultCode == Activity.RESULT_CANCELED) {
             result?.getStringExtra(TreasureSelectorActivity.RESULT_PROGRESS)?.let {
-                return SelectTreasureOutputData(xmlHelper.loadFromString<TreasureBag>(it))
+                return SelectTreasureOutputData(xmlHelper.loadFromString<TreasuresProgress>(it))
             }
         }
         return null

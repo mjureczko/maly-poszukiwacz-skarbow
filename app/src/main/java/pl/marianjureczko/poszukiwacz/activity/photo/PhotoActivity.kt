@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityPhotoBinding
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 
 class PhotoActivity : ActivityWithAdsAndBackButton() {
@@ -33,5 +34,9 @@ class PhotoActivity : ActivityWithAdsAndBackButton() {
         setContentView(binding.root)
 
         setUpAds(binding.adView)
+    }
+
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return null
     }
 }

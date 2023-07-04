@@ -10,6 +10,7 @@ import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityMapBinding
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 import pl.marianjureczko.poszukiwacz.shared.MapHelper
 
@@ -39,6 +40,10 @@ class MapActivity : ActivityWithAdsAndBackButton() {
 
         setContentView(binding.root)
         setUpAds(binding.adView)
+    }
+
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return null
     }
 
     override fun onResume() {

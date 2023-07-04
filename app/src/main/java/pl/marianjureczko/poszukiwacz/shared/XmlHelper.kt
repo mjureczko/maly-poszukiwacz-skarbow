@@ -3,8 +3,7 @@ package pl.marianjureczko.poszukiwacz.shared
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.io.File
 import java.io.StringWriter
 
@@ -30,11 +29,11 @@ class XmlHelper {
         return serializer.read(T::class.java, xml)
     }
 
-    fun writeToFile(bag: TreasureBag, outputFile: File) =
+    fun writeToFile(bag: TreasuresProgress, outputFile: File) =
         serializer.write(bag, outputFile)
 
-    fun loadProgressFromFile(xmlFile: File): TreasureBag {
+    fun loadProgressFromFile(xmlFile: File): TreasuresProgress {
         val xml = xmlFile.readText()
-        return serializer.read(TreasureBag::class.java, xml)
+        return serializer.read(TreasuresProgress::class.java, xml)
     }
 }

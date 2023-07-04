@@ -2,10 +2,11 @@ package pl.marianjureczko.poszukiwacz.model
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
+import org.simpleframework.xml.ElementMap
 import org.simpleframework.xml.Root
 
 @Root
-class TreasureBag() {
+class TreasuresProgress() {
 
     constructor(routeName: String) : this() {
         this.routeName = routeName
@@ -19,6 +20,11 @@ class TreasureBag() {
 
     @field:ElementList
     var collectedTreasuresDescriptionId: MutableSet<Int> = mutableSetOf()
+        private set
+
+    //TODO: remove files on remove tresure bag (restart) and on removing route
+    @field:ElementMap
+    var commemorativePhotosByTreasuresDescriptionIds: MutableMap<Int, String> = mutableMapOf()
         private set
 
     @field:Element
@@ -51,4 +57,12 @@ class TreasureBag() {
     fun collect(treasureDescription: TreasureDescription) =
         collectedTreasuresDescriptionId.add(treasureDescription.id)
 
+    fun addCommemorativePhoto(treasureDescription: TreasureDescription, commemorativePhoto: String) {
+        commemorativePhotosByTreasuresDescriptionIds[treasureDescription.id] = commemorativePhoto
+    }
+
+    fun getCommemorativePhoto(treasureDescription: TreasureDescription): String? =
+        commemorativePhotosByTreasuresDescriptionIds[treasureDescription.id]
+
+    fun numberOfCollectedTreasures(): Int = collectedQrCodes.size
 }

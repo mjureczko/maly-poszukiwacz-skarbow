@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.facebook.CallbackManager
+import com.facebook.share.widget.ShareDialog
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.bluetooth.BluetoothActivity
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 import pl.marianjureczko.poszukiwacz.databinding.ActivityMainBinding
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
-import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 /**
@@ -21,9 +24,16 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 class MainActivity : PermissionActivity() {
 
     private val TAG = javaClass.simpleName
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return null
+    }
+
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
     private lateinit var routesRecyclerView: RecyclerView
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var callbackManager: CallbackManager
+    private lateinit var shareDialog: ShareDialog
 
     override fun onPermissionsGranted(activityRequirements: ActivityRequirements) {
     }

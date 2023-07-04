@@ -18,12 +18,13 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
 import pl.marianjureczko.poszukiwacz.activity.main.BluetoothException
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetooth
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
-import java.util.*
+import java.util.UUID
 
 interface MemoConsole {
     fun print(msg: String)
@@ -98,6 +99,10 @@ class BluetoothActivity : PermissionActivity(), MemoConsole, BluetoothConnection
             tryToAcceptConnection()
         }
         setUpAds(findViewById(R.id.adView))
+    }
+
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return null
     }
 
     override fun onBackPressed() {

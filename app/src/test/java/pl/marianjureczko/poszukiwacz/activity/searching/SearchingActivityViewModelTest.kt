@@ -11,8 +11,8 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureType
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
@@ -35,35 +35,35 @@ class SearchingActivityViewModelTest {
 
         //then
         assertThat(fixture.model.getRoute()).isEqualTo(fixture.route)
-        assertThat(fixture.model.getTreasureBag()).usingRecursiveComparison().isEqualTo(TreasureBag(fixture.route.name))
+        assertThat(fixture.model.getTreasureBag()).usingRecursiveComparison().isEqualTo(TreasuresProgress(fixture.route.name))
     }
 
     @Test
     fun `SHOULD load treasure bag from storage WHEN storage helper loads a one`() {
         //given
-        val treasureBag = some<TreasureBag>()
+        val treasuresProgress = some<TreasuresProgress>()
         val fixture = SearchingActivityViewModelFixture(state)
-        fixture.setupMockForGivenTreasureBag(storageHelper, treasureBag)
+        fixture.setupMockForGivenTreasureBag(storageHelper, treasuresProgress)
 
         //when initialize model (in fixture)
 
         //then
         assertThat(fixture.model.getRoute()).isEqualTo(fixture.route)
-        assertThat(fixture.model.getTreasureBag()).usingRecursiveComparison().isEqualTo(treasureBag)
+        assertThat(fixture.model.getTreasureBag()).usingRecursiveComparison().isEqualTo(treasuresProgress)
     }
 
     @Test
     fun `SHOULD save new treasure bag WHEN the treasure bag is replace`() {
         //given
         val model = SearchingActivityViewModel(state)
-        val treasureBag = some<TreasureBag>()
+        val treasuresProgress = some<TreasuresProgress>()
 
         //when
-        model.replaceTreasureBag(treasureBag, storageHelper)
+        model.replaceTreasureBag(treasuresProgress, storageHelper)
 
         //then
-        then(storageHelper).should().save(treasureBag)
-        assertThat(model.getTreasureBag()).usingRecursiveComparison().isEqualTo(treasureBag)
+        then(storageHelper).should().save(treasuresProgress)
+        assertThat(model.getTreasureBag()).usingRecursiveComparison().isEqualTo(treasuresProgress)
     }
 
     @Test
@@ -112,7 +112,7 @@ class SearchingActivityViewModelTest {
     fun `SHOULD say initialized WHEN the flag is not set ie getTreasureSelectorActivityInputData was never called but selected is set`() {
         //given
         val fixture = SearchingActivityViewModelFixture(state)
-        fixture.setupMockForGivenTreasureBag(storageHelper, some<TreasureBag>())
+        fixture.setupMockForGivenTreasureBag(storageHelper, some<TreasuresProgress>())
         assertThat(fixture.model.getSelectedForHuntTreasure()).isNotNull()
 
         //when
@@ -135,7 +135,7 @@ class SearchingActivityViewModelTest {
     fun `SHOULD persist state WHEN getting data from treasure selector launcher TO not reexecute the selection second time`() {
         //given
         val fixture = SearchingActivityViewModelFixture(state)
-        fixture.setupMockForGivenTreasureBag(storageHelper, some<TreasureBag>())
+        fixture.setupMockForGivenTreasureBag(storageHelper, some<TreasuresProgress>())
         assertThat(fixture.model.getSelectedForHuntTreasure()).isNotNull()
 
         //when
@@ -160,9 +160,9 @@ data class SearchingActivityViewModelFixture(
         model.initialize(xml, storageHelper)
     }
 
-    fun setupMockForGivenTreasureBag(storageHelper: StorageHelper, treasureBag: TreasureBag) {
+    fun setupMockForGivenTreasureBag(storageHelper: StorageHelper, treasuresProgress: TreasuresProgress) {
         given(storageHelper.loadProgress(route.name))
-            .willReturn(treasureBag)
+            .willReturn(treasuresProgress)
         model.initialize(xml, storageHelper)
     }
 

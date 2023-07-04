@@ -21,6 +21,7 @@ import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -76,11 +77,20 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return model.getTreasureBag()
+    }
+
     override fun onPostResume() {
         super.onPostResume()
         if (!model.treasureSelectionInitialized()) {
             treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(null))
         }
+    }
+
+    override fun onDestroy() {
+        model.releaseMediaPlayer()
+        super.onDestroy()
     }
 
     private fun restoreState() {

@@ -7,12 +7,15 @@ import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.withinPercentage
 import org.assertj.core.api.ThrowingConsumer
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.RouteArranger
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.StringWriter
@@ -119,7 +122,7 @@ class StorageHelperTest {
         //given
         val route = some<Route>()
         storageHelper.save(route)
-        val progress = some<TreasureBag>() {
+        val progress = some<TreasuresProgress>() {
             routeName = route.name
         }
         storageHelper.save(progress)
@@ -253,7 +256,7 @@ class StorageHelperTest {
     @Test
     fun `SHOULD save progress to file and load it back`() {
         //given
-        val bag = some<TreasureBag>()
+        val bag = some<TreasuresProgress>()
 
         //when
         storageHelper.save(bag)

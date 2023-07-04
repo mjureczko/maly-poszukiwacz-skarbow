@@ -1,3 +1,15 @@
+# Development environment configuration
+
+To ~/.gradle/gradle.properties add:
+
+```
+MAPBOX_DOWNLOADS_TOKEN = <token>
+FACEBOOK_TOKEN = <token>
+```
+
+Both tokens can be obtained from KeePass.
+When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_DOWNLOADS_TOKEN=<token>` or `-PFACEBOOK_TOKEN=<token>`.
+
 # Activities flow
 
 [State machine](activities_flow.mmd)
@@ -6,7 +18,8 @@
 
 There are three levels of state persistence.
 
-1. **View Model level.** There is the ViewModel class that allows data to survive configuration changes such as screen rotations. Each stateful activity has a view model class (a class
+1. **View Model level.** There is the ViewModel class that allows data to survive configuration changes such as screen rotations. Each stateful activity has a view model class (a
+   class
    extending the `ViewModel`).
 
 2. **Saved instance state.** Data saved this way survives system initiated process death (e.g. removing the process due to lack of memory). Saving instance state should be done
@@ -37,6 +50,22 @@ Rejecting required permissions should result in a dialog where user can change h
 grant permissions.
 
 # Releasing
+
+To build aab file execute:
+
+```
+./gradlew bundle -PFACEBOOK_TOKEN=<token> -PMAPBOX_DOWNLOADS_TOKEN=<token> -PRELEASE_KEY_PASSWORD=<pass> -PRELEASE_STORE_PASSWORD=<pass>
+```
+
+To build apk file execute:
+
+```
+./gradlew assembleRelease -PFACEBOOK_TOKEN=<token> -PMAPBOX_DOWNLOADS_TOKEN=<token> -PRELEASE_KEY_PASSWORD=<pass> -PRELEASE_STORE_PASSWORD=<pass>
+```
+
+All tokens and passwords available in KeePass.
+
+## Old releasing procedure
 
 You need to push a tag to create a release. Execute:
 
