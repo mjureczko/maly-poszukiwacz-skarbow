@@ -1,7 +1,8 @@
-package pl.marianjureczko.poszukiwacz.shared
+package pl.marianjureczko.poszukiwacz.activity.facebook
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Test
@@ -11,11 +12,11 @@ import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 @RunWith(AndroidJUnit4::class)
-class FacebookReportTest {
+class ReportGeneratorTest {
     @Test
     fun shouldCreateImage() {
         //given
-        val report = FacebookReport()
+        val report = ReportGenerator()
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val treasuresProgress = TreasuresProgress("123456789 123456789 123456789 123456789 12345")
         val treasure = Treasure("1", 7, TreasureType.DIAMOND)
@@ -42,7 +43,9 @@ class FacebookReportTest {
         )
 
         //when
-        val actual = report.create(context, treasuresProgress)
+        val model = FacebookViewModel(SavedStateHandle(mapOf()))
+        model.initialize(treasuresProgress)
+        val actual = report.create(context, model)
 
         //then
         val fileName = "TEST_REPORT.jpeg"

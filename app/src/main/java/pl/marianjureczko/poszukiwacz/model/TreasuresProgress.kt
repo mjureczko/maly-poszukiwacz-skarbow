@@ -26,6 +26,7 @@ class TreasuresProgress() {
     @field:ElementMap
     var commemorativePhotosByTreasuresDescriptionIds: MutableMap<Int, String> = mutableMapOf()
         private set
+        public get
 
     @field:Element
     var golds: Int = 0

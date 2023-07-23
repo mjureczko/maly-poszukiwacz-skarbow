@@ -74,4 +74,7 @@
     <string name="map_activity_title">Mapa skarbów</string>
     <string name="menu_help">Instrukcja obsługi</string>
     <string name="menu_facebook">Opublikuj na Facebook</string>
+    <string name="title_activity_facebook">Opublikuj na Facebook</string>
+    <string name="facebook_activity_header">Wybierz elementy do opublikowania</string>
+    <string name="share_button">Opublikuj</string>
 </resources>

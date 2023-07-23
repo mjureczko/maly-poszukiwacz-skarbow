@@ -14,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorAct
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.max
+import kotlin.math.min
 
 class PhotoHelper(
     val context: Context,
@@ -23,6 +24,21 @@ class PhotoHelper(
     companion object {
         private val TAG = javaClass.simpleName
         const val TMP_PICTURE_FILE = "/tmp_commemorative_photo.jpg"
+
+        //TODO: merge with other functions
+        /**
+         * Scales the photo, but keeps the aspect ratio
+         * @param maxHeight - the maximum height after scaling
+         * @param maxWidth - the maximum width after scaling
+         */
+        fun scalePhotoKeepRatio(photo: Bitmap, maxHeight: Float, maxWidth: Float): Bitmap {
+            val widthFactor = maxWidth / photo.width
+            val heightFactor = maxHeight / photo.height
+            val factor = min(widthFactor, heightFactor)
+            val matrix = Matrix()
+            matrix.postScale(factor, factor)
+            return Bitmap.createBitmap(photo, 0, 0, photo.width, photo.height, matrix, false)
+        }
 
         fun calculateScalingFactor(width: Int, height: Int): Float {
             val greater = max(width, height).toFloat()

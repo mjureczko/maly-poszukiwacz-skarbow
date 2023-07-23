@@ -85,13 +85,19 @@
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.commemorative.CommemorativeActivity"
             android:exported="false"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".activity.facebook.FacebookActivity"
+            android:exported="false"
+            android:label="@string/title_activity_facebook"
+            android:theme="@style/FullscreenTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
