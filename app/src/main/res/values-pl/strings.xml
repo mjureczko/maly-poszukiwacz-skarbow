@@ -77,4 +77,12 @@
     <string name="title_activity_facebook">Opublikuj na Facebook</string>
     <string name="facebook_activity_header">Wybierz elementy do opublikowania</string>
     <string name="share_button">Opublikuj</string>
+    <string name="facebook_share_cancel">Zrezygnowano z publikacji</string>
+    <string name="facebook_share_success">Opublikowano</string>
+    <string name="facebook_share_impossible">Udostępnienie jest niemożliwe. Proszę, sprawdź czy aplikacja Facebook jest zainstalowana i czy przyznane są uprawnienia.</string>
+    <string name="facebook_share_error">"Wystąpił błąd podczas publikowania. Aplikacja Facebook odpowiedziała: "</string>
+    <string name="select_treasure_progress_to_share">Wybierz trasę do udostępnienia</string>
+    <string name="facebook_invalid_roote">Nie można opublikować tej trasy</string>
+    <string name="facebook_nothing_to_share">Aktualnie nie ma nic do opublikowania. Publikować można tylko trasy na których przynajmniej zaczęły się poszukiwania.</string>
+
 </resources>

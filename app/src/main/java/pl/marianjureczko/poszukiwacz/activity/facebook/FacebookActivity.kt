@@ -13,6 +13,7 @@ import com.facebook.share.Sharer
 import com.facebook.share.model.SharePhoto
 import com.facebook.share.model.SharePhotoContent
 import com.facebook.share.widget.ShareDialog
+import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityFacebookBinding
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
@@ -53,19 +54,10 @@ class FacebookActivity : ActivityWithAdsAndBackButton() {
 
             val reportImage = ReportGenerator().create(this, model)
             shareDialog.registerCallback(callbackManager, object : FacebookCallback<Sharer.Result> {
-                override fun onSuccess(result: Sharer.Result) {
-                    Toast.makeText(this@FacebookActivity, "Share successful", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onCancel() {
-                    // Handle sharing cancellation
-                    Toast.makeText(this@FacebookActivity, "Share cancelled", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onError(error: FacebookException) {
-                    // Handle sharing error
-                    Toast.makeText(this@FacebookActivity, "Share error: ${error.message}", Toast.LENGTH_SHORT).show()
-                }
+                override fun onSuccess(result: Sharer.Result) = Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_success), Toast.LENGTH_SHORT).show()
+                override fun onCancel() = Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_cancel), Toast.LENGTH_SHORT).show()
+                override fun onError(error: FacebookException) =
+                    Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_error) + error.localizedMessage, Toast.LENGTH_LONG).show()
             })
             val sharePhoto = SharePhoto.Builder()
                 .setBitmap(reportImage)
@@ -76,7 +68,7 @@ class FacebookActivity : ActivityWithAdsAndBackButton() {
                     .build()
                 shareDialog.show(sharePhotoContent)
             } else {
-                Toast.makeText(this, "Cannot share!!??? ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.facebook_share_impossible), Toast.LENGTH_SHORT).show()
             }
         }
 

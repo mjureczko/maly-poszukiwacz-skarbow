@@ -34,12 +34,28 @@ class ReportSummary(
                 typeface = font
             }
 
-            canvas.drawText(summaryText(model.progress), ReportGenerator.margin, currentTop + 50, textPaint)
+            val summarySize = textPaint.measureText(summaryText(model.progress))
+            val textY = currentTop + 50
+            var x = ReportGenerator.margin
+            canvas.drawText(summaryText(model.progress), x, textY, textPaint)
             val gold = iconHelper.loadTreasureTypeIcon(R.drawable.gold)
-            canvas.drawBitmap(gold, 425f, currentTop + 20, null);
+            x += summarySize
+            canvas.drawBitmap(gold, x, currentTop + 20, null)
+
+            val diamonds = "${model.progress.diamonds}"
+            val diamondsSize = textPaint.measureText(diamonds)
+            x += gold.width + 20
+            canvas.drawText(diamonds, x, textY, textPaint)
             val diamond = iconHelper.loadTreasureTypeIcon(R.drawable.diamond)
-            canvas.drawBitmap(diamond, 495f, currentTop + 10, null);
+            x += diamondsSize
+            canvas.drawBitmap(diamond, x, currentTop + 10, null)
+
+            val rubies = "${model.progress.rubies}"
+            val rubiesSize = textPaint.measureText(rubies)
+            x += diamond.width + 20
+            canvas.drawText(rubies, x, textY, textPaint)
             val ruby = iconHelper.loadTreasureTypeIcon(R.drawable.ruby)
+            x += rubiesSize
             canvas.drawBitmap(ruby, 565f, currentTop + 10, null);
         }
     }
@@ -49,7 +65,7 @@ class ReportSummary(
         var treasures = "skarbów"
         if (count == 1) treasures = "skarb"
         else if (count in 2..4) treasures = "skarby"
-        return "Wynik poszukiwań to $count $treasures: ${progress.golds}       ${progress.diamonds}        ${progress.rubies}"
+        return "Wynik poszukiwań to $count $treasures: ${progress.golds}"
     }
 }
 

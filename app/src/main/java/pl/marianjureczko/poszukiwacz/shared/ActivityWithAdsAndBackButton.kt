@@ -22,13 +22,14 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookOutputData
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 
-abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
+abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasureProgressDialog.Callback {
 
     private val TAG = javaClass.simpleName
     private lateinit var callbackManager: CallbackManager
     private lateinit var shareDialog: ShareDialog
 
     private lateinit var facebookLauncher: ActivityResultLauncher<FacebookInputData>
+    private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,12 +64,32 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
             if (getCurrentTreasuresProgress() != null) {
                 facebookLauncher.launch(FacebookInputData(getCurrentTreasuresProgress()!!))
             } else {
-                Toast.makeText(this, "Nothing to share", Toast.LENGTH_SHORT).show()
+                val progresses = storageHelper.loadAll()
+                    .mapNotNull { route -> storageHelper.loadProgress(route.name) }
+                    .toList()
+                if (progresses.isEmpty()) {
+                    Toast.makeText(this, R.string.facebook_nothing_to_share, Toast.LENGTH_SHORT).show()
+                } else {
+                    if (progresses.size == 1) {
+                        facebookLauncher.launch(FacebookInputData(progresses[0]))
+                    } else {
+                        SelectTreasureProgressDialog.newInstance(progresses).apply {
+                            show(supportFragmentManager, "SelectTreasureProgressDialog")
+                        }
+                    }
+                }
             }
-
-//            shareImage()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onTreasureProgressSelected(routeName: String) {
+        val progresses = storageHelper.loadProgress(routeName)
+        if (progresses == null) {
+            Toast.makeText(this, R.string.facebook_invalid_roote, Toast.LENGTH_SHORT).show()
+        } else {
+            facebookLauncher.launch(FacebookInputData(progresses))
+        }
     }
 
     protected abstract fun getCurrentTreasuresProgress(): TreasuresProgress?
@@ -77,41 +98,6 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
         registerForActivityResult(FacebookContract()) { result: FacebookOutputData? ->
             Log.d(TAG, "Sharing on facebook result: ${result?.result}")
         }
-
-    private fun shareImage() {
-//        val progress = getCurrentTreasuresProgress()
-//        if (progress != null) {
-//            shareDialog.registerCallback(callbackManager, object : FacebookCallback<Sharer.Result> {
-//                override fun onSuccess(result: Sharer.Result) {
-//                    // Handle successful sharing
-//                    println("Share successful")
-//                }
-//
-//                override fun onCancel() {
-//                    // Handle sharing cancellation
-//                    println("Share cancelled")
-//                }
-//
-//                override fun onError(error: FacebookException) {
-//                    // Handle sharing error
-//                    println("Share error: ${error.message}")
-//                }
-//            })
-//            val image = ReportGenerator().create(this, progress)
-//            val sharePhoto = SharePhoto.Builder()
-//                .setBitmap(image)
-//                .build()
-//            if (ShareDialog.canShow(SharePhotoContent::class.java)) {
-//                var sharePhotoContent = SharePhotoContent.Builder()
-//                    .addPhoto(sharePhoto)
-//                    .build()
-//                shareDialog.show(sharePhotoContent)
-//            }
-//            //TODO: else
-//        } else {
-//            errorTone()
-//        }
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -137,7 +123,6 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
-//                Toast.makeText(this@ActivityWithAdsAndBackButton, adError.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onAdOpened() {

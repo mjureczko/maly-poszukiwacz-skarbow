@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.CallbackManager
-import com.facebook.share.widget.ShareDialog
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.bluetooth.BluetoothActivity
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
@@ -31,9 +29,6 @@ class MainActivity : PermissionActivity() {
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
     private lateinit var routesRecyclerView: RecyclerView
     private lateinit var binding: ActivityMainBinding
-
-    private lateinit var callbackManager: CallbackManager
-    private lateinit var shareDialog: ShareDialog
 
     override fun onPermissionsGranted(activityRequirements: ActivityRequirements) {
     }

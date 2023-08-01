@@ -4,19 +4,24 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Typeface
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import java.io.File
 import java.io.FileInputStream
+import java.lang.System.currentTimeMillis
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.random.Random
 
 class ReportCommemorativePhotos(
     model: FacebookViewModel,
-    private val font: Typeface
+    private val font: Typeface,
+    private val rotationSeed: Long = currentTimeMillis()
 ) : ReportPart {
     private val photos = model.getCommemorativePhotoElements().filter { it.isSelected }
+    private val random = Random(rotationSeed)
     lateinit var canvas: Canvas
     private val textPaint = Paint().apply {
         color = Color.BLACK
@@ -101,7 +106,10 @@ class ReportCommemorativePhotos(
     private fun renderPhotoWithCaption(image: Bitmap, description: String, whichPhoto: PhotoPosition, y: Float) {
         val y1 = calculatePhotoY(image.height, y)
         val x1 = calculatePhotoX(whichPhoto, image.width)
-        canvas.drawBitmap(image, x1, y1, null)
+        val rotator = Matrix()
+        rotator.postRotate(random.nextFloat() * 10 - 5)
+        rotator.postTranslate(x1, y1)
+        canvas.drawBitmap(image, rotator, null)
         val x1caption = calculateCaptionX(whichPhoto, image.width)
         val y1caption = calculateCaptionY(image.height, y)
         canvas.drawText(description, x1caption, y1caption, textPaint)
@@ -125,7 +133,7 @@ class ReportCommemorativePhotos(
     }
 
     private fun calculateCaptionY(photoHeight: Int, currentY: Float): Float {
-        val imageBottom = calculatePhotoY(photoHeight, currentY) + IMAGE_PLACEHOLDER_HEIGHT
+        val imageBottom = calculatePhotoY(photoHeight, currentY) + photoHeight
         return imageBottom + IMAGE_CAPTION_PLACEHOLDER_HEIGHT / 2
     }
 
