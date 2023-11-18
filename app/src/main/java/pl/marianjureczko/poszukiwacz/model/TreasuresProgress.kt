@@ -43,6 +43,10 @@ class TreasuresProgress() {
     @field:Element(required = false)
     var selectedTreasure: TreasureDescription? = null
 
+    /** set is required for restoring state */
+    @field:Element
+    var hunterPath = HunterPath()
+
     fun contains(treasure: Treasure): Boolean =
         collectedQrCodes.contains(treasure.id)
 

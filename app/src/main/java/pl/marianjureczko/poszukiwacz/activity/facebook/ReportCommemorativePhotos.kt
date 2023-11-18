@@ -3,7 +3,6 @@ package pl.marianjureczko.poszukiwacz.activity.facebook
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -18,23 +17,13 @@ import kotlin.random.Random
 class ReportCommemorativePhotos(
     model: FacebookViewModel,
     private val font: Typeface,
-    private val rotationSeed: Long = currentTimeMillis()
+    rotationSeed: Long = currentTimeMillis()
 ) : ReportPart {
     private val photos = model.getCommemorativePhotoElements().filter { it.isSelected }
     private val random = Random(rotationSeed)
     lateinit var canvas: Canvas
-    private val textPaint = Paint().apply {
-        color = Color.BLACK
-        textSize = 26f
-        textAlign = Paint.Align.CENTER
-        typeface = font
-    }
-    private val headerPaint = Paint().apply {
-        color = Color.BLACK
-        textSize = HEADER_FONT_SIZE
-        textAlign = Paint.Align.CENTER
-        typeface = font
-    }
+    private val textPaint = ReportCommons.getTextPaint(font, Paint.Align.CENTER)
+    private val headerPaint = ReportCommons.getHeaderPaint(font)
 
     enum class PhotoPosition(val x: Int) {
         SINGLE(ReportGenerator.margin() + IMAGE_PLACEHOLDER_WIDTH.toInt() + VERTICAL_SPACING),
@@ -46,7 +35,6 @@ class ReportCommemorativePhotos(
     }
 
     companion object {
-        private const val HEADER_FONT_SIZE = 36f
         private const val HORIZONTAL_SPACING = 10f
 
         private const val VERTICAL_SPACING = 25
@@ -60,19 +48,19 @@ class ReportCommemorativePhotos(
         if (photos.isEmpty()) {
             0f
         } else {
-            heightOfAllPhotos(photos) + HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING
+            heightOfAllPhotos(photos) + ReportCommons.HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING
         }
 
     fun draw(canvas: Canvas, currentTop: Float) {
         if (photos.isNotEmpty()) {
             this.canvas = canvas
             photosHeader(currentTop)
-            photos(currentTop + HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING)
+            photos(currentTop + ReportCommons.HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING)
         }
     }
 
     private fun photosHeader(y: Float) {
-        canvas.drawText("Nasze przygody na wyprawie", ReportGenerator.width() / 2, y + HEADER_FONT_SIZE + HORIZONTAL_SPACING, headerPaint)
+        canvas.drawText("Nasze przygody na wyprawie", ReportGenerator.width() / 2, y + ReportCommons.HEADER_FONT_SIZE + HORIZONTAL_SPACING, headerPaint)
     }
 
     private fun photos(y: Float) {

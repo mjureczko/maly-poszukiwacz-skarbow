@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook
 
 import android.content.pm.ActivityInfo
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -38,6 +39,7 @@ class FacebookActivity : ActivityWithAdsAndBackButton() {
 
         model.initialize(
             progress = xmlHelper.loadFromString(intent.getStringExtra(TREASURE_PROGRESS)!!),
+            this
         )
         //TODO: deprecated
         FacebookSdk.sdkInitialize(applicationContext)
@@ -52,28 +54,35 @@ class FacebookActivity : ActivityWithAdsAndBackButton() {
         binding.elements.adapter = adapter
         binding.shareOnFacebook.setOnClickListener {
 
-            val reportImage = ReportGenerator().create(this, model)
-            shareDialog.registerCallback(callbackManager, object : FacebookCallback<Sharer.Result> {
-                override fun onSuccess(result: Sharer.Result) = Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_success), Toast.LENGTH_SHORT).show()
-                override fun onCancel() = Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_cancel), Toast.LENGTH_SHORT).show()
-                override fun onError(error: FacebookException) =
-                    Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_error) + error.localizedMessage, Toast.LENGTH_LONG).show()
+            ReportGenerator().create(this, model, object : ReportPublisher {
+                override fun publish(bitmap: Bitmap) {
+                    forwardReportToFacebook(bitmap)
+                }
             })
-            val sharePhoto = SharePhoto.Builder()
-                .setBitmap(reportImage)
-                .build()
-            if (ShareDialog.canShow(SharePhotoContent::class.java)) {
-                var sharePhotoContent = SharePhotoContent.Builder()
-                    .addPhoto(sharePhoto)
-                    .build()
-                shareDialog.show(sharePhotoContent)
-            } else {
-                Toast.makeText(this, getString(R.string.facebook_share_impossible), Toast.LENGTH_SHORT).show()
-            }
         }
 
         setContentView(binding.root)
         setUpAds(binding.adView)
+    }
+
+    private fun forwardReportToFacebook(reportImage: Bitmap) {
+        shareDialog.registerCallback(callbackManager, object : FacebookCallback<Sharer.Result> {
+            override fun onSuccess(result: Sharer.Result) = Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_success), Toast.LENGTH_SHORT).show()
+            override fun onCancel() = Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_cancel), Toast.LENGTH_SHORT).show()
+            override fun onError(error: FacebookException) =
+                Toast.makeText(this@FacebookActivity, getString(R.string.facebook_share_error) + error.localizedMessage, Toast.LENGTH_LONG).show()
+        })
+        val sharePhoto = SharePhoto.Builder()
+            .setBitmap(reportImage)
+            .build()
+        if (ShareDialog.canShow(SharePhotoContent::class.java)) {
+            var sharePhotoContent = SharePhotoContent.Builder()
+                .addPhoto(sharePhoto)
+                .build()
+            shareDialog.show(sharePhotoContent)
+        } else {
+            Toast.makeText(this, getString(R.string.facebook_share_impossible), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getCurrentTreasuresProgress(): TreasuresProgress? = null

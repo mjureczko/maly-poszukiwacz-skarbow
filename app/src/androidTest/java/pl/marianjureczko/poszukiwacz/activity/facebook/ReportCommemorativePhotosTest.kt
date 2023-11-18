@@ -8,6 +8,8 @@ import junit.framework.TestCase.assertTrue
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import java.io.File
 import java.util.UUID
 
@@ -33,7 +35,9 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         canvas.drawColor(Color.WHITE)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, tempPhoto(800, 400))
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, tempPhoto(600, 600))
-        model.initialize(treasuresProgress)
+
+        StorageHelper(context).save(Route(treasuresProgress.routeName))
+        model.initialize(treasuresProgress, context)
         val reportPhotos = ReportCommemorativePhotos(model, font, seed)
 
         //when
@@ -55,7 +59,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, tempPhoto(600, 600))
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, tempPhoto(400, 800))
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(4, tempPhoto(600, 500))
-        model.initialize(treasuresProgress)
+        model.initialize(treasuresProgress, context)
         val reportPhotos = ReportCommemorativePhotos(model, font, seed)
 
         //when

@@ -113,7 +113,11 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasur
             .build()
         MobileAds.setRequestConfiguration(requestConfiguration)
 
-        MobileAds.initialize(this) { Log.d(TAG, "Ads initialized") }
+        try {
+            MobileAds.initialize(this) { Log.d(TAG, "Ads initialized") }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ads initialization error: ${e.message}")
+        }
 
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)

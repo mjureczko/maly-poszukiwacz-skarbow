@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -18,6 +19,7 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
     companion object {
         const val TREASURE_SELECTION_INITIALIZED = "initialized"
         const val CURRENT_COORDINATES = "coordinates"
+        const val PATH = "path"
     }
 
     private val TAG = javaClass.simpleName
@@ -31,6 +33,14 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
             field = value
             state[TREASURE_SELECTION_INITIALIZED] = value
         }
+    private var hunterPath: HunterPath? = deserializeHunterPath(state.get<String>(PATH))
+        private set(value) {
+            if (value != null) {
+                field = value
+                state[PATH] = xmlHelper.writeToString(value)
+                treasuresProgress.hunterPath = value
+            }
+        }
     private var mediaPlayer: MediaPlayer? = null
 
     override fun getSelectedForHuntTreasure(): TreasureDescription? {
@@ -42,17 +52,23 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
         return SelectTreasureInputData(route, treasuresProgress, currentCoordinates, justFoundTreasure)
     }
 
-    override fun setCurrentLocation(location: Location?) {
+    override fun setCurrentLocation(location: Location?, storageHelper: StorageHelper) {
         currentLocation = location
         location?.let {
             currentCoordinates = Coordinates(it.latitude, it.longitude)
             state[CURRENT_COORDINATES] = currentCoordinates
+            if (treasuresProgress.hunterPath!!.addLocation(currentCoordinates!!)) {
+                storageHelper.save(this.treasuresProgress)
+            }
+            //to call setter
+            hunterPath = treasuresProgress.hunterPath
         }
     }
 
     fun initialize(routeXml: String, storageHelper: StorageHelper) {
         route = xmlHelper.loadFromString<Route>(routeXml)
         treasuresProgress = storageHelper.loadProgress(route.name) ?: TreasuresProgress(route.name)
+        hunterPath = treasuresProgress.hunterPath
     }
 
     override fun tipName(): String? =
@@ -109,5 +125,12 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
             else -> Log.e(TAG, "An unknown error occurred: $extra")
         }
         return true
+    }
+
+    private fun deserializeHunterPath(xml: String?): HunterPath? {
+        xml?.let {
+            return xmlHelper.loadFromString<HunterPath>(it)
+        }
+        return null
     }
 }

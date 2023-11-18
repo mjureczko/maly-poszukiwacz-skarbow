@@ -67,7 +67,8 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
 
         val locationListener = CompassBasedLocationListener(
             model,
-            CompassPresenter(binding.stepsToDo, binding.arrowImg)
+            CompassPresenter(binding.stepsToDo, binding.arrowImg),
+            storageHelper
         )
         val handler = Handler()
         val locationRequester = LocationRequester(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)

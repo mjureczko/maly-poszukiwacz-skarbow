@@ -1,8 +1,12 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
     private val TAG = javaClass.simpleName
@@ -11,7 +15,9 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
     lateinit var elements: List<ElementDescription>
         private set
 
-    fun initialize(progress: TreasuresProgress) {
+    lateinit var route: Route
+
+    fun initialize(progress: TreasuresProgress, context: Context) {
         this.progress = progress
         val elements = mutableListOf<ElementDescription>()
         //TODO use string.xml
@@ -19,6 +25,9 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
         progress.commemorativePhotosByTreasuresDescriptionIds.forEach { (id, photo) ->
             elements.add(ElementDescription(Type.COMMEMORATIVE_PHOTO, true, "Skarb $id", orderNumber = id, photo = photo))
         }
+        elements.add(ElementDescription(Type.MAP, true, context.getString(R.string.treasures_map)))
+        elements.add(ElementDescription(Type.MAP_SUMMARY, true, context.getString(R.string.treasures_map_summary)))
+        this.route = StorageHelper(context).loadRoute(progress.routeName)
         this.elements = elements
     }
 
@@ -29,4 +38,8 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun getSummaryElement(): ElementDescription = elements[0]
 
     fun getCommemorativePhotoElements(): List<ElementDescription> = elements.filter { it.type == Type.COMMEMORATIVE_PHOTO }
+
+    fun getMap(): ElementDescription? = elements.find { it.type == Type.MAP }
+
+    fun getMapSummary(): ElementDescription? = elements.find { it.type == Type.MAP_SUMMARY }
 }

@@ -1,13 +1,8 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Typeface
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
@@ -15,8 +10,6 @@ class ReportSummary(
     private val model: FacebookViewModel,
     private val font: Typeface
 ) : ReportPart {
-
-    val iconHelper = IconHelper()
 
     override fun height(): Float =
         if (model.getSummaryElement().isSelected) {
@@ -27,18 +20,13 @@ class ReportSummary(
 
     fun draw(canvas: Canvas, currentTop: Float) {
         if (model.getSummaryElement().isSelected) {
-            val textPaint = Paint().apply {
-                color = Color.BLACK
-                textSize = 26f
-                textAlign = Paint.Align.LEFT
-                typeface = font
-            }
+            val textPaint = ReportCommons.getTextPaint(font, Paint.Align.LEFT)
 
             val summarySize = textPaint.measureText(summaryText(model.progress))
             val textY = currentTop + 50
             var x = ReportGenerator.margin
             canvas.drawText(summaryText(model.progress), x, textY, textPaint)
-            val gold = iconHelper.loadTreasureTypeIcon(R.drawable.gold)
+            val gold = IconHelper.loadIcon(R.drawable.gold, 40)
             x += summarySize
             canvas.drawBitmap(gold, x, currentTop + 20, null)
 
@@ -46,7 +34,7 @@ class ReportSummary(
             val diamondsSize = textPaint.measureText(diamonds)
             x += gold.width + 20
             canvas.drawText(diamonds, x, textY, textPaint)
-            val diamond = iconHelper.loadTreasureTypeIcon(R.drawable.diamond)
+            val diamond = IconHelper.loadIcon(R.drawable.diamond, 50)
             x += diamondsSize
             canvas.drawBitmap(diamond, x, currentTop + 10, null)
 
@@ -54,7 +42,7 @@ class ReportSummary(
             val rubiesSize = textPaint.measureText(rubies)
             x += diamond.width + 20
             canvas.drawText(rubies, x, textY, textPaint)
-            val ruby = iconHelper.loadTreasureTypeIcon(R.drawable.ruby)
+            val ruby = IconHelper.loadIcon(R.drawable.ruby, 50)
             x += rubiesSize
             canvas.drawBitmap(ruby, 565f, currentTop + 10, null);
         }
@@ -69,17 +57,3 @@ class ReportSummary(
     }
 }
 
-class IconHelper() {
-
-    private val matrix = Matrix()
-
-    init {
-        matrix.postScale(0.03f, 0.03f)
-    }
-
-    fun loadTreasureTypeIcon(resource: Int): Bitmap {
-        val icon: Bitmap = BitmapFactory.decodeResource(App.getResources(), resource)
-        return Bitmap.createBitmap(icon, 0, 0, icon.width, icon.height, matrix, false)
-    }
-
-}

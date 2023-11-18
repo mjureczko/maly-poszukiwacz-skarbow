@@ -7,9 +7,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 @RunWith(AndroidJUnit4::class)
 class ReportGeneratorTest {
@@ -41,11 +43,18 @@ class ReportGeneratorTest {
             0,
             "/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/photo_0a182204-c56a-4a19-9d69-bc5d9e48ccb6.jpg"
         )
+        StorageHelper(context).save(Route(treasuresProgress.routeName))
 
         //when
         val model = FacebookViewModel(SavedStateHandle(mapOf()))
-        model.initialize(treasuresProgress)
-        val actual = report.create(context, model)
+        model.initialize(treasuresProgress, context)
+        //MapBox doesn't work in tests
+        model.getMap()?.isSelected = false
+        val actual = report.create(context, model, object : ReportPublisher {
+            override fun publish(bitmap: Bitmap) {
+                // do nothing
+            }
+        })
 
         //then
         val fileName = "TEST_REPORT.jpeg"

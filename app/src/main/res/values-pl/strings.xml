@@ -84,5 +84,7 @@
     <string name="select_treasure_progress_to_share">Wybierz trasę do udostępnienia</string>
     <string name="facebook_invalid_roote">Nie można opublikować tej trasy</string>
     <string name="facebook_nothing_to_share">Aktualnie nie ma nic do opublikowania. Publikować można tylko trasy na których przynajmniej zaczęły się poszukiwania.</string>
-
+    <string name="treasures_map">Mapa skarbów</string>
+    <string name="treasures_map_summary">Podsumowanie mapy skarbów</string>
+    <string name="expedition_map">Nasza wyprawa</string>
 </resources>

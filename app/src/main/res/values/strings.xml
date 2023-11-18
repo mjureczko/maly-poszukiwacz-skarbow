@@ -85,5 +85,7 @@
     <string name="select_treasure_progress_to_share">Please select the route you would like to share</string>
     <string name="facebook_invalid_roote">It is not possible to share shit route</string>
     <string name="facebook_nothing_to_share">There is currently nothing to share. You can only share routes where the searching has already begun.</string>
-
+    <string name="treasures_map">Treasures map</string>
+    <string name="treasures_map_summary">Summary of the treasures map</string>
+    <string name="expedition_map">Our expedition</string>
 </resources>
