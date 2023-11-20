@@ -26,6 +26,7 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
             elements.add(ElementDescription(Type.COMMEMORATIVE_PHOTO, true, "Skarb $id", orderNumber = id, photo = photo))
         }
         elements.add(ElementDescription(Type.MAP, true, context.getString(R.string.treasures_map)))
+        elements.add(ElementDescription(Type.MAP_ROUTE, true, context.getString(R.string.route_on_map)))
         elements.add(ElementDescription(Type.MAP_SUMMARY, true, context.getString(R.string.treasures_map_summary)))
         this.route = StorageHelper(context).loadRoute(progress.routeName)
         this.elements = elements
@@ -42,4 +43,6 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
     fun getMap(): ElementDescription? = elements.find { it.type == Type.MAP }
 
     fun getMapSummary(): ElementDescription? = elements.find { it.type == Type.MAP_SUMMARY }
+
+    fun getMapRoute(): ElementDescription? = elements.find { it.type == Type.MAP_ROUTE }
 }

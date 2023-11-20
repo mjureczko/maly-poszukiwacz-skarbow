@@ -11,7 +11,8 @@ class ElementsAdapter(
 ) : RecyclerView.Adapter<ElementHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementHolder {
         val view = activity.layoutInflater.inflate(R.layout.element_item, parent, false)
-        return ElementHolder(activity, view)
+        model.getMap()?.isSelected ?: false
+        return ElementHolder(activity, view, model, this)
     }
 
     override fun getItemCount(): Int = model.getElementsCount()

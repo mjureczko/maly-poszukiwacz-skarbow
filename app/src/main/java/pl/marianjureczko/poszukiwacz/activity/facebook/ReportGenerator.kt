@@ -27,14 +27,14 @@ class ReportGenerator {
     /**
      * @return it is returned for testing purposes
      */
-    fun create(context: Context, model: FacebookViewModel, reportPublisher: ReportPublisher): Bitmap {
+    fun create(context: Context, model: FacebookViewModel, reportPublisher: (Bitmap) -> Unit): Bitmap {
         //TODO: handle missing font
         val typeface = ResourcesCompat.getFont(context, R.font.akaya_telivigala)!!
         val title = ReportTitle(model, typeface)
         val summary = ReportSummary(model, typeface)
         val commemorativePhotos = ReportCommemorativePhotos(model, typeface)
         val mapHeader = ReportMapHeader(model, typeface)
-        val map = ReportMap(model, typeface)
+        val map = ReportMap(model)
         val height = title.height() + summary.height() + commemorativePhotos.height() + mapHeader.height() + map.height()
         val bitmap = Bitmap.createBitmap(reportWidth, height.toInt(), Bitmap.Config.ARGB_8888)
 
@@ -54,7 +54,7 @@ class ReportGenerator {
         mapHeader.draw(context, canvas, currentTop)
         currentTop += mapHeader.height()
 
-        map.draw(context, canvas, currentTop, reportPublisher, bitmap)
+        map.draw(context, canvas, currentTop) { reportPublisher(bitmap) }
         currentTop += map.height()
 
         return bitmap

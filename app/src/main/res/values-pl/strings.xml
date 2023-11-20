@@ -87,4 +87,5 @@
     <string name="treasures_map">Mapa skarbów</string>
     <string name="treasures_map_summary">Podsumowanie mapy skarbów</string>
     <string name="expedition_map">Nasza wyprawa</string>
+    <string name="route_on_map">Trasa na mapie</string>
 </resources>

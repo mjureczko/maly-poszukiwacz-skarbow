@@ -88,4 +88,5 @@
     <string name="treasures_map">Treasures map</string>
     <string name="treasures_map_summary">Summary of the treasures map</string>
     <string name="expedition_map">Our expedition</string>
+    <string name="route_on_map">Route on map</string>
 </resources>

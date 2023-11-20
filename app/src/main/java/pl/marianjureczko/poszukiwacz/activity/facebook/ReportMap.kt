@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Typeface
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.EdgeInsets
@@ -23,12 +22,10 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 
 class ReportMap(
-    private val model: FacebookViewModel,
-    private val font: Typeface
+    private val model: FacebookViewModel
 ) : ReportPart {
 
     companion object {
-        private const val TEMP_FILE = "SNAP.png"
         private const val MAP_WIDTH = 950f
         private const val MAP_HEIGHT = 450f
         private const val MAP_MARGIN = 10f
@@ -42,43 +39,48 @@ class ReportMap(
         }
     }
 
-    fun draw(context: Context, canvas: Canvas, currentTop: Float, reportPublisher: ReportPublisher, reportBitmap: Bitmap) {
+    fun draw(context: Context, reportCanvas: Canvas, currentTop: Float, publishReport: () -> Unit) {
         if (mapSelected()) {
-            drawMapOnReport(context, canvas, currentTop, reportPublisher, reportBitmap)
+            var snapshotter = configureSnapshotter(context, model.route)
+            snapshotter.start { snapshot ->
+                snapshot?.bitmap()?.let { bitmap ->
+                    val mapCanvas = Canvas(bitmap)
+                    drawChests(model.route, snapshot, model.progress, mapCanvas)
+                    if (showRouteSelected()) {
+                        drawRoute(snapshot, mapCanvas)
+                    }
+                    drawMapOnReportCanvas(reportCanvas, bitmap, currentTop)
+                    publishReport()
+                }
+            }
         }
     }
 
-    private fun drawMapOnReport(context: Context, reportCanvas: Canvas, currentTop: Float, reportPublisher: ReportPublisher, reportBitmap: Bitmap) {
-        var snapshotter = configureSnapshotter(context, model.route)
-        snapshotter.start { snapshot ->
+    private fun drawMapOnReportCanvas(reportCanvas: Canvas, bitmap: Bitmap, currentTop: Float) {
+        val marginX = (reportCanvas.width - MAP_WIDTH) / 2
+        reportCanvas.drawBitmap(bitmap, marginX, currentTop + MAP_MARGIN, Paint())
+    }
 
-            snapshot?.bitmap()?.let { bitmap ->
-                val mapCanvas = Canvas(bitmap)
-                drawChests(model.route, snapshot, model.progress, mapCanvas)
-
-                val locations = model.progress.hunterPath.pathAsCoordinates().toList()
-                if (locations.size > 1) {
-                    var previousXY = snapshot.screenCoordinate(Point.fromLngLat(locations[0].longitude, locations[0].latitude))
-                    locations.asSequence()
-                        .drop(1)
-                        .forEach {
-                            val xy = snapshot.screenCoordinate(Point.fromLngLat(it.longitude, it.latitude))
-                            mapCanvas.drawLine(
-                                previousXY.x.toFloat(), previousXY.y.toFloat(), xy.x.toFloat(), xy.y.toFloat(),
-                                Paint().apply { color = Color.RED }
-                            )
-                            previousXY = xy
-                        }
+    private fun drawRoute(snapshot: MapSnapshotInterface, mapCanvas: Canvas) {
+        val locations = model.progress.hunterPath.pathAsCoordinates().toList()
+        if (locations.size > 1) {
+            var previousXY = snapshot.screenCoordinate(Point.fromLngLat(locations[0].longitude, locations[0].latitude))
+            locations.asSequence()
+                .drop(1)
+                .forEach {
+                    val xy = snapshot.screenCoordinate(Point.fromLngLat(it.longitude, it.latitude))
+                    mapCanvas.drawLine(
+                        previousXY.x.toFloat(), previousXY.y.toFloat(), xy.x.toFloat(), xy.y.toFloat(),
+                        Paint().apply { color = Color.RED }
+                    )
+                    previousXY = xy
                 }
-
-                reportCanvas.drawBitmap(bitmap, MAP_MARGIN, currentTop + MAP_MARGIN, Paint())
-                reportPublisher.publish(reportBitmap)
-            }
         }
     }
 
     private fun mapSelected() = model.getMap()?.isSelected == true
 
+    private fun showRouteSelected() = model.getMapRoute()?.isSelected == true
 
     private fun configureSnapshotter(context: Context, route: Route): Snapshotter {
         var snapshotter = Snapshotter(

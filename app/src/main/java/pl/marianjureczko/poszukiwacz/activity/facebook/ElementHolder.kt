@@ -6,6 +6,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,9 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 
 class ElementHolder(
     private val activity: FragmentActivity,
-    private val view: View
+    private val view: View,
+    private val model: FacebookViewModel,
+    private val adapter: ElementsAdapter
 ) : RecyclerView.ViewHolder(view) {
 
     private val selected: ImageButton = itemView.findViewById(R.id.selected)
@@ -29,9 +32,16 @@ class ElementHolder(
         } else {
             selected.setImageResource(R.drawable.checkbox_empty)
         }
-        addListener(selected, element)
-        addPhotoWidgets(elementLayout, element.photo)
+        addListener(selected, element, elementLayout)
+        if (hasOnlyChildrenDefinedInXml()) {
+            addPhotoWidgets(elementLayout, element.photo)
+        }
+        if (element.type == Type.MAP_ROUTE) {
+            elementLayout.isVisible = model.getMap()?.isSelected == true
+        }
     }
+
+    private fun hasOnlyChildrenDefinedInXml() = elementLayout.childCount < 3
 
     private fun addPhotoWidgets(elementLayout: LinearLayout, photoFile: String?) {
         photoFile?.let { photoFile ->
@@ -64,7 +74,7 @@ class ElementHolder(
 
     private fun toPx(dp: Int): Int = (dp * view.context.resources.displayMetrics.density).toInt()
 
-    private fun addListener(selected: ImageButton, element: ElementDescription) {
+    private fun addListener(selected: ImageButton, element: ElementDescription, elementLayout: LinearLayout) {
         selected.setOnClickListener {
             if (element.isSelected) {
                 element.isSelected = false
@@ -72,6 +82,9 @@ class ElementHolder(
             } else {
                 element.isSelected = true
                 selected.setImageResource(R.drawable.checkbox_checked)
+            }
+            if (element.type == Type.MAP) {
+                adapter.notifyDataSetChanged()
             }
         }
     }

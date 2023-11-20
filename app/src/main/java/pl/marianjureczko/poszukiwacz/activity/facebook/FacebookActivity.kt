@@ -54,11 +54,9 @@ class FacebookActivity : ActivityWithAdsAndBackButton() {
         binding.elements.adapter = adapter
         binding.shareOnFacebook.setOnClickListener {
 
-            ReportGenerator().create(this, model, object : ReportPublisher {
-                override fun publish(bitmap: Bitmap) {
-                    forwardReportToFacebook(bitmap)
-                }
-            })
+            ReportGenerator().create(this, model) {
+                forwardReportToFacebook(it)
+            }
         }
 
         setContentView(binding.root)
