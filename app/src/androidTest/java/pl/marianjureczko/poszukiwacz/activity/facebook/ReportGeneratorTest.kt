@@ -7,11 +7,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class ReportGeneratorTest {
@@ -43,6 +45,9 @@ class ReportGeneratorTest {
             0,
             "/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/photo_0a182204-c56a-4a19-9d69-bc5d9e48ccb6.jpg"
         )
+        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
+        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
+        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
         StorageHelper(context).save(Route(treasuresProgress.routeName))
 
         //when
@@ -50,11 +55,9 @@ class ReportGeneratorTest {
         model.initialize(treasuresProgress, context)
         //MapBox doesn't work in tests
         model.getMap()?.isSelected = false
-        val actual = report.create(context, model, object : ReportPublisher {
-            override fun publish(bitmap: Bitmap) {
-                // do nothing
-            }
-        })
+        val actual = report.create(context, model) {
+            // do nothing
+        }
 
         //then
         val fileName = "TEST_REPORT.jpeg"

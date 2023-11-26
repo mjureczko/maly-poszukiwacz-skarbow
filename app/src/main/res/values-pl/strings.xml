@@ -88,4 +88,7 @@
     <string name="treasures_map_summary">Podsumowanie mapy skarbów</string>
     <string name="expedition_map">Nasza wyprawa</string>
     <string name="route_on_map">Trasa na mapie</string>
+    <string name="walked_route">Przeszliśmy około</string>
+    <string name="expedition_started">Wyprawa rozpoczęła się</string>
+    <string name="expedition_ended">a skończyła</string>
 </resources>

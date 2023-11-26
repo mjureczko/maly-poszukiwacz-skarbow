@@ -89,4 +89,7 @@
     <string name="treasures_map_summary">Summary of the treasures map</string>
     <string name="expedition_map">Our expedition</string>
     <string name="route_on_map">Route on map</string>
+    <string name="walked_route">We walked about</string>
+    <string name="expedition_started">The expedition started on</string>
+    <string name="expedition_ended">and ended on</string>
 </resources>

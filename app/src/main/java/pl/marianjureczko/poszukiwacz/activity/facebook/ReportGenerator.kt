@@ -35,7 +35,8 @@ class ReportGenerator {
         val commemorativePhotos = ReportCommemorativePhotos(model, typeface)
         val mapHeader = ReportMapHeader(model, typeface)
         val map = ReportMap(model)
-        val height = title.height() + summary.height() + commemorativePhotos.height() + mapHeader.height() + map.height()
+        val mapSummary = ReportMapSummary(model, typeface)
+        val height = title.height() + summary.height() + commemorativePhotos.height() + mapHeader.height() + map.height() + mapSummary.height()
         val bitmap = Bitmap.createBitmap(reportWidth, height.toInt(), Bitmap.Config.ARGB_8888)
 
         val canvas = Canvas(bitmap)
@@ -56,6 +57,9 @@ class ReportGenerator {
 
         map.draw(context, canvas, currentTop) { reportPublisher(bitmap) }
         currentTop += map.height()
+
+        mapSummary.draw(context, canvas, currentTop)
+        currentTop += mapSummary.height()
 
         return bitmap
     }

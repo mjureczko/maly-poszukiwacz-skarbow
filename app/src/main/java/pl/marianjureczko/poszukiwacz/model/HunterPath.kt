@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.model
 import org.apache.commons.math3.stat.StatUtils
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
+import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import java.util.Date
 
@@ -47,6 +48,17 @@ class HunterPath {
         establishEnd(date)
         establishStart(date)
         return establishLocations(newLocation, date)
+    }
+
+    fun pathLengthInKm(): Double {
+        val calculator = LocationCalculator()
+        var result = 0.0
+        chunkedCoordinates.forEachIndexed { index, location ->
+            if (index > 0) {
+                result += calculator.distanceInKm(chunkedCoordinates[index - 1], location)
+            }
+        }
+        return result
     }
 
     fun pathAsCoordinates(): List<Coordinates> = chunkedCoordinates.map { Coordinates(it.latitude, it.longitude) }

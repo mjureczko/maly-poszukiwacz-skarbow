@@ -42,7 +42,7 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
 
     fun getMap(): ElementDescription? = elements.find { it.type == Type.MAP }
 
-    fun getMapSummary(): ElementDescription? = elements.find { it.type == Type.MAP_SUMMARY }
-
     fun getMapRoute(): ElementDescription? = elements.find { it.type == Type.MAP_ROUTE }
+
+    fun getMapSummary(): ElementDescription? = elements.find { it.type == Type.MAP_SUMMARY }
 }
