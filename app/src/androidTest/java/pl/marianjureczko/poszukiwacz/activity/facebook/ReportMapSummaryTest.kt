@@ -15,7 +15,7 @@ import java.util.Date
 class ReportMapSummaryTest : ReportAbstractTest() {
 
     @Test
-    fun should_writeSummaryWithLengthAndTimestamps() {
+    fun should_drawSummaryWithLengthAndTimestamps() {
         //given
         val reportMapHeader = ReportMapSummary(model, font)
         val bitmap = Bitmap.createBitmap(ReportGenerator.reportWidth, 200, Bitmap.Config.ARGB_8888)

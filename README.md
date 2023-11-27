@@ -16,10 +16,10 @@ TODO:
 - ~~wyznaczać pozycje poszukiwaczy jako mediany z grupy zapisanych pozycji~~
 - ~~dodać mapę do eksportu~~
 - ~~dodać pozycje poszukiwaczy do mapy~~
-- wyliczyć przebytą odległość i dodać do eksportu
+- ~~wyliczyć przebytą odległość i dodać do eksportu~~
 - ~~aktywność (FacebookActivity) do wyboru elementów do eksportu (przy pamiątkowych zdjęciach możliwość obracania)~~
 - ~~poprawić ikonę do obracania zdjęć~~
 - przyciski na PhotoActivity nie działają
 - internacjonalizacj tekstów
 - //TODO: deprecated -> FacebookSdk.sdkInitialize(applicationContext)
-- stopka z odnośnikiem do sklepu play
+- ~~stopka z odnośnikiem do sklepu play~~
