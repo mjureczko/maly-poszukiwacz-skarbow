@@ -3,9 +3,9 @@ package pl.marianjureczko.poszukiwacz.activity.facebook
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import androidx.core.content.res.ResourcesCompat
 import pl.marianjureczko.poszukiwacz.R
+import java.util.Collections
 
 interface ReportPublisher {
     fun publish(bitmap: Bitmap)
@@ -41,7 +41,7 @@ class ReportGenerator {
         val bitmap = Bitmap.createBitmap(reportWidth, height.toInt(), Bitmap.Config.ARGB_8888)
 
         val canvas = Canvas(bitmap)
-        canvas.drawColor(Color.WHITE)
+        createBackground(canvas, height)
 
         var currentTop = 0f
         title.draw(context, canvas)
@@ -65,6 +65,24 @@ class ReportGenerator {
         footer.draw(canvas, currentTop)
 
         return bitmap
+    }
+
+    private fun createBackground(canvas: Canvas, height: Float) {
+        val backgroundHeight = 1127
+        val background = IconHelper.loadIcon(R.drawable.background, backgroundHeight)
+        canvas.drawBitmap(background, 0f, 0f, null)
+        if (height > backgroundHeight) {
+            val partHeight = 138
+            val background1 = IconHelper.loadIcon(R.drawable.background_1, partHeight)
+            val background2 = IconHelper.loadIcon(R.drawable.background_2, partHeight)
+            val parts = mutableListOf(background1, background2)
+            var currentY = backgroundHeight.toFloat()
+            while (currentY < height) {
+                canvas.drawBitmap(parts[0], 0f, currentY, null)
+                currentY += partHeight
+                Collections.swap(parts, 0, 1)
+            }
+        }
     }
 
 }

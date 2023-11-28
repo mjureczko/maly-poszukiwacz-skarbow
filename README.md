@@ -4,7 +4,7 @@ GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
 
 TODO:
 
-- obrazek tła
+- ~~obrazek tła~~
 - ~~-GitHub copilot~~
 - ~~-wyciągnąć token do "propertisów"~~
 - ~~podpisy pod poziomymi obrazkami są na złej wysokości (pod ostatnią linią wypada poza raport)~~
