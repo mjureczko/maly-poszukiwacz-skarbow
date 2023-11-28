@@ -44,13 +44,13 @@ class ReportGenerator {
         canvas.drawColor(Color.WHITE)
 
         var currentTop = 0f
-        title.draw(canvas)
+        title.draw(context, canvas)
         currentTop += title.height()
 
-        summary.draw(canvas, currentTop)
+        summary.draw(context, canvas, currentTop)
         currentTop += summary.height()
 
-        commemorativePhotos.draw(canvas, currentTop)
+        commemorativePhotos.draw(context, canvas, currentTop)
         currentTop += commemorativePhotos.height()
 
         mapHeader.draw(context, canvas, currentTop)

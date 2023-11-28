@@ -91,4 +91,12 @@
     <string name="walked_route">Przeszliśmy około</string>
     <string name="expedition_started">Wyprawa rozpoczęła się</string>
     <string name="expedition_ended">a skończyła</string>
+    <string name="report_from_expedition">Raport z wyprawy, trasa</string>
+    <string name="we_found">Znaleźliśmy</string>
+    <string name="treasure1">skarb</string>
+    <string name="treasure2">skarby</string>
+    <string name="treasure_many">skarbów</string>
+    <string name="our_adventures">Nasze przygody na wyprawie</string>
+    <string name="treasure">Skarb</string>
+    <string name="collected_treasures">Zebrane skarby</string>
 </resources>

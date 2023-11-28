@@ -1,11 +1,13 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Typeface
+import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import java.io.File
 import java.io.FileInputStream
@@ -51,16 +53,17 @@ class ReportCommemorativePhotos(
             heightOfAllPhotos(photos) + ReportCommons.HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING
         }
 
-    fun draw(canvas: Canvas, currentTop: Float) {
+    fun draw(context: Context, canvas: Canvas, currentTop: Float) {
         if (photos.isNotEmpty()) {
             this.canvas = canvas
-            photosHeader(currentTop)
+            photosHeader(context, currentTop)
             photos(currentTop + ReportCommons.HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING)
         }
     }
 
-    private fun photosHeader(y: Float) {
-        canvas.drawText("Nasze przygody na wyprawie", ReportGenerator.width() / 2, y + ReportCommons.HEADER_FONT_SIZE + HORIZONTAL_SPACING, headerPaint)
+    private fun photosHeader(context: Context, y: Float) {
+        val headerTxt = context.getString(R.string.our_adventures)
+        canvas.drawText(headerTxt, ReportGenerator.width() / 2, y + ReportCommons.HEADER_FONT_SIZE + HORIZONTAL_SPACING, headerPaint)
     }
 
     private fun photos(y: Float) {

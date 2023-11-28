@@ -10,7 +10,6 @@ import pl.marianjureczko.poszukiwacz.model.HunterPath
 import java.text.DateFormat
 import java.util.Locale
 
-
 class ReportMapSummary(
     private val model: FacebookViewModel,
     private val font: Typeface

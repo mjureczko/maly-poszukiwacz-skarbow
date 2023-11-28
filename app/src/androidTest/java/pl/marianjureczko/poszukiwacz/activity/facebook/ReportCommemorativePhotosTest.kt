@@ -16,6 +16,7 @@ import java.util.UUID
 @RunWith(AndroidJUnit4::class)
 internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
 
+    //TODO t uniform tmp file management across all tests, do not delete ???
     private val tmpFile = "/bitmap.png"
     private val filesToDelete = mutableListOf<String>()
     private val seed = 1L
@@ -41,7 +42,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         val reportPhotos = ReportCommemorativePhotos(model, font, seed)
 
         //when
-        reportPhotos.draw(canvas, 0f)
+        reportPhotos.draw(context, canvas, 0f)
 
         //then
         //save to hava a reference in case of failing test
@@ -63,7 +64,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         val reportPhotos = ReportCommemorativePhotos(model, font, seed)
 
         //when
-        reportPhotos.draw(canvas, 0f)
+        reportPhotos.draw(context, canvas, 0f)
 
         //then
         //save to hava a reference in case of failing test

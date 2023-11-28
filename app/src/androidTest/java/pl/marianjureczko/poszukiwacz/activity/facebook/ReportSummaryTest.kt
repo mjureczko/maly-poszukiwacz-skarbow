@@ -27,11 +27,11 @@ internal class ReportSummaryTest : ReportAbstractTest() {
         model.initialize(treasuresProgress, context)
 
         //when
-        reportSummary.draw(canvas, 0f)
+        reportSummary.draw(context, canvas, 0f)
 
         //then
         //save to hava a reference in case of failing test, image available at /data/data/pl.marianjureczko.poszukiwacz/files/map_summary.png
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, File(context.getFilesDir(), "/map_summary.png").outputStream())
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, File(context.getFilesDir(), "/summary.png").outputStream())
         assertTrue(bitmap.sameAs(expected("summary.png")))
     }
 }

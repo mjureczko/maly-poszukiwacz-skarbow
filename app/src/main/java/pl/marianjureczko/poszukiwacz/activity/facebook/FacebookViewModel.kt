@@ -21,9 +21,10 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
         this.progress = progress
         val elements = mutableListOf<ElementDescription>()
         //TODO use string.xml
-        elements.add(ElementDescription(Type.TREASURES_SUMMARY, true, "Zebrane skarby"))
+        elements.add(ElementDescription(Type.TREASURES_SUMMARY, true, context.getString(R.string.collected_treasures)))
+        val treasure = context.getString(R.string.treasure)
         progress.commemorativePhotosByTreasuresDescriptionIds.forEach { (id, photo) ->
-            elements.add(ElementDescription(Type.COMMEMORATIVE_PHOTO, true, "Skarb $id", orderNumber = id, photo = photo))
+            elements.add(ElementDescription(Type.COMMEMORATIVE_PHOTO, true, "$treasure $id", orderNumber = id, photo = photo))
         }
         elements.add(ElementDescription(Type.MAP, true, context.getString(R.string.treasures_map)))
         elements.add(ElementDescription(Type.MAP_ROUTE, true, context.getString(R.string.route_on_map)))

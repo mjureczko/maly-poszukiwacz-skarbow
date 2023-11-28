@@ -8,7 +8,7 @@ TODO:
 - ~~-GitHub copilot~~
 - ~~-wyciągnąć token do "propertisów"~~
 - ~~podpisy pod poziomymi obrazkami są na złej wysokości (pod ostatnią linią wypada poza raport)~~
-- ikony skarbów nachodzą na tekst
+- ~~ikony skarbów nachodzą na tekst~~
 - ~~komunikaty błędów przy eksporcie do facebooka (brak facebooka, brak sieci...)~~
 - ~~przekrzywić zdjęcia pamiątki ze skarbów (może razem z podpisami)~~
 - ~~dodać dialog do wyboru trasy do eksportu do facebooka dla akcji nie działających w konekście trasy~~
@@ -20,6 +20,7 @@ TODO:
 - ~~aktywność (FacebookActivity) do wyboru elementów do eksportu (przy pamiątkowych zdjęciach możliwość obracania)~~
 - ~~poprawić ikonę do obracania zdjęć~~
 - przyciski na PhotoActivity nie działają
-- internacjonalizacj tekstów
+- ~~internacjonalizacj tekstów~~
 - //TODO: deprecated -> FacebookSdk.sdkInitialize(applicationContext)
 - ~~stopka z odnośnikiem do sklepu play~~
+- refaktoryzacja (TODOs)

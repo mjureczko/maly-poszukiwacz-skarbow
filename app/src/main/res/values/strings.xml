@@ -92,4 +92,12 @@
     <string name="walked_route">We walked about</string>
     <string name="expedition_started">The expedition started on</string>
     <string name="expedition_ended">and ended on</string>
+    <string name="report_from_expedition">Report from the expedition, route</string>
+    <string name="we_found">We found</string>
+    <string name="treasure1">treasure</string>
+    <string name="treasure2">treasures</string>
+    <string name="treasure_many">treasures</string>
+    <string name="our_adventures">Our adventures on the expedition</string>
+    <string name="treasure">Treasure</string>
+    <string name="collected_treasures">Collected treasures</string>
 </resources>

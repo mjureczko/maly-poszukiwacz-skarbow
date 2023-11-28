@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook
 
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
@@ -18,14 +19,16 @@ class ReportSummary(
             0f
         }
 
-    fun draw(canvas: Canvas, currentTop: Float) {
+    fun draw(context: Context, canvas: Canvas, currentTop: Float) {
         if (model.getSummaryElement().isSelected) {
+            //TODO t: already defined (?)
             val textPaint = ReportCommons.getTextPaint(font, Paint.Align.LEFT)
 
-            val summarySize = textPaint.measureText(summaryText(model.progress))
+            val summaryText = summaryText(context, model.progress)
+            val summarySize = textPaint.measureText(summaryText)
             val textY = currentTop + 50
             var x = ReportGenerator.margin
-            canvas.drawText(summaryText(model.progress), x, textY, textPaint)
+            canvas.drawText(summaryText, x, textY, textPaint)
             val gold = IconHelper.loadIcon(R.drawable.gold, 40)
             x += summarySize
             canvas.drawBitmap(gold, x, currentTop + 20, null)
@@ -44,16 +47,26 @@ class ReportSummary(
             canvas.drawText(rubies, x, textY, textPaint)
             val ruby = IconHelper.loadIcon(R.drawable.ruby, 50)
             x += rubiesSize
-            canvas.drawBitmap(ruby, 565f, currentTop + 10, null);
+            canvas.drawBitmap(ruby, x, currentTop + 10, null)
         }
     }
 
-    private fun summaryText(progress: TreasuresProgress): String {
+    private fun summaryText(context: Context, progress: TreasuresProgress): String {
+        val treasure1 = context.getString(R.string.treasure1)
+        val treasure2 = context.getString(R.string.treasure2)
+        val treasureMany = context.getString(R.string.treasure_many)
         val count = progress.numberOfCollectedTreasures()
-        var treasures = "skarbów"
-        if (count == 1) treasures = "skarb"
-        else if (count in 2..4) treasures = "skarby"
-        return "Wynik poszukiwań to $count $treasures: ${progress.golds}"
+        var treasures = treasureAsWord(treasure1, treasure2, treasureMany, count)
+        return "${context.getString(R.string.we_found)} $count $treasures: ${progress.golds}"
     }
 }
 
+fun treasureAsWord(one: String, two: String, many: String, quantity: Int): String {
+    return if (quantity == 1) {
+        one;
+    } else if (quantity in 2..4) {
+        two;
+    } else {
+        many;
+    }
+}
