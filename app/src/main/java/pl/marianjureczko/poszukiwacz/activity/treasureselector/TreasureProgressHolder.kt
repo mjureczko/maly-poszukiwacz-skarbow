@@ -8,7 +8,7 @@ import android.widget.ImageButton
 import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.commemorative.CommemorativeActivity
+import pl.marianjureczko.poszukiwacz.activity.commemorative.CommemorativeInputData
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -22,7 +22,8 @@ class TreasureProgressHolder(
     private val context: Context,
     private val activityTerminator: ActivityTerminator,
     private val model: SelectorViewModel,
-    private val doPhotoLauncher: ActivityResultLauncher<Uri>
+    private val doPhotoLauncher: ActivityResultLauncher<Uri>,
+    private val showCommemorativeLauncher: ActivityResultLauncher<CommemorativeInputData>
 ) : RecyclerView.ViewHolder(view) {
 
     private val TAG = javaClass.simpleName
@@ -64,7 +65,8 @@ class TreasureProgressHolder(
                 model.selectForCommemorativePhoto(treasure)
                 doPhotoLauncher.launch(photoHelper.createCommemorativePhotoTempUri())
             } else {
-                context.startActivity(CommemorativeActivity.intent(context, commemorativePhoto))
+                showCommemorativeLauncher.launch(CommemorativeInputData(commemorativePhoto, model.progress))
+//                context.startActivity(CommemorativeActivity.intent(context, commemorativePhoto))
             }
         }
     }

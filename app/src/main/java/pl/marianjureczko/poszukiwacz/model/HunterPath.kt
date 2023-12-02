@@ -5,9 +5,10 @@ import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import java.io.Serializable
 import java.util.Date
 
-class HunterPath {
+class HunterPath : Serializable {
 
     /**
      * Measurements for the next chunk. When te chunk creation criteria are met, the measurements are used to produce the chunk and are remove.

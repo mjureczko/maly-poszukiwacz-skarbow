@@ -4,9 +4,10 @@ import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.ElementMap
 import org.simpleframework.xml.Root
+import java.io.Serializable
 
 @Root
-class TreasuresProgress() {
+class TreasuresProgress() : Serializable {
 
     constructor(routeName: String) : this() {
         this.routeName = routeName

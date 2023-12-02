@@ -1,7 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.commemorative
 
-import android.content.Context
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
@@ -21,12 +19,7 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 class CommemorativeActivity : ActivityWithAdsAndBackButton() {
 
     companion object {
-        const val PHOTO = "pl.marianjureczko.poszukiwacz.activity.commemorative"
-
-        fun intent(packageContext: Context, photo: String) =
-            Intent(packageContext, CommemorativeActivity::class.java).apply {
-                putExtra(PHOTO, photo)
-            }
+        const val INPUT = "pl.marianjureczko.poszukiwacz.activity.commemorative"
     }
 
     private lateinit var binding: ActivityCommemorativeBinding
@@ -50,12 +43,12 @@ class CommemorativeActivity : ActivityWithAdsAndBackButton() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_commemorative)
 
-        val photoFullPath = intent.getStringExtra(PHOTO)!!
-        model.commemorativePhotoAbsolutePath = photoFullPath
+        val input = intent.getSerializableExtra(INPUT) as CommemorativeInputData
+        model.initialize(input.progress, input.photoAbsolutePath)
 
         binding.photoImg.setImageURI(model.commemorativePhotoUri())
         binding.rotatePhotoBtn.setOnClickListener {
-            rotatePhoto(photoFullPath, model.commemorativePhotoUri())
+            rotatePhoto(input.photoAbsolutePath, model.commemorativePhotoUri())
         }
         binding.doPhotoBtn.setOnClickListener {
             doPhotoLauncher.launch(photoHelper.createCommemorativePhotoTempUri())
@@ -65,9 +58,7 @@ class CommemorativeActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
-        return null
-    }
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? = model.progress
 
     private fun rotatePhoto(photoFullPath: String, uri: Uri) {
         lifecycleScope.launch {

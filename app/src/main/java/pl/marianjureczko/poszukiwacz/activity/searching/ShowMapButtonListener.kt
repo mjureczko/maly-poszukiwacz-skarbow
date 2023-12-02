@@ -2,13 +2,13 @@ package pl.marianjureczko.poszukiwacz.activity.searching
 
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
-import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.activity.map.MapInputData
 
 class ShowMapButtonListener(
-    private val activityLauncher: ActivityResultLauncher<Route>,
+    private val activityLauncher: ActivityResultLauncher<MapInputData>,
     private val model: SearchingActivityViewModel
 ) : View.OnClickListener {
     override fun onClick(v: View?) {
-        activityLauncher.launch(model.getRoute())
+        activityLauncher.launch(MapInputData(model.getRoute(), model.getTreasureTreasuresProgress()))
     }
 }

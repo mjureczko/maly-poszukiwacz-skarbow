@@ -2,11 +2,12 @@ package pl.marianjureczko.poszukiwacz.model
 
 import org.simpleframework.xml.Element
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import java.io.Serializable
 
 /**
  * Serializable to xml version of Coordinates
  */
-class HunterLocation {
+class HunterLocation : Serializable {
 
     constructor(longitude: Double, latitude: Double) {
         this.longitude = longitude

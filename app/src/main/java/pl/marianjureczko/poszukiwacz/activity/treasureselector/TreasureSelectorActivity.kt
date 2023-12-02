@@ -14,6 +14,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.commemorative.CommemorativeContract
+import pl.marianjureczko.poszukiwacz.activity.commemorative.CommemorativeInputData
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasureSelectorBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
@@ -51,6 +53,7 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
             Toast.makeText(this, R.string.photo_not_saved, Toast.LENGTH_SHORT).show()
         }
     }
+    private val commemorativeLauncher: ActivityResultLauncher<CommemorativeInputData> = registerForActivityResult(CommemorativeContract()) {}
 
     companion object {
         const val RESULT_PROGRESS = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_result_progress"
@@ -78,7 +81,7 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
             userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?,
             justFound = intent.getSerializableExtra(TREASURE) as Treasure?
         )
-        adapter = TreasureProgressAdapter(this, model, this, doPhotoLauncher)
+        adapter = TreasureProgressAdapter(this, model, this, doPhotoLauncher, commemorativeLauncher)
         binding.treasuresToSelect.adapter = adapter
         supportActionBar?.title = "${App.getResources().getString(R.string.select_treasure_dialog_title)}"
 

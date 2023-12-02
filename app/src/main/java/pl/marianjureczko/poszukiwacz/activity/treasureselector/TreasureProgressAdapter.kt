@@ -6,16 +6,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.commemorative.CommemorativeInputData
 
 class TreasureProgressAdapter(
     private val activity: FragmentActivity,
     private val model: SelectorViewModel,
     private val activityTerminator: ActivityTerminator,
-    private val doPhotoLauncher: ActivityResultLauncher<Uri>
+    private val doPhotoLauncher: ActivityResultLauncher<Uri>,
+    private val showCommemorativeLauncher: ActivityResultLauncher<CommemorativeInputData>
 ) : RecyclerView.Adapter<TreasureProgressHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreasureProgressHolder {
         val view = activity.layoutInflater.inflate(R.layout.treasureprogres_item, parent, false)
-        return TreasureProgressHolder(view, activity, activityTerminator, model, doPhotoLauncher)
+        return TreasureProgressHolder(view, activity, activityTerminator, model, doPhotoLauncher, showCommemorativeLauncher)
     }
 
     override fun onBindViewHolder(holder: TreasureProgressHolder, position: Int) {

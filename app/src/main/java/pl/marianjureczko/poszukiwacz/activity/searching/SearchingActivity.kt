@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import com.journeyapps.barcodescanner.ScanContract
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.map.MapActivityContract
+import pl.marianjureczko.poszukiwacz.activity.map.MapInputData
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityContract
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
@@ -46,7 +47,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     private lateinit var binding: ActivitySearchingBinding
     private lateinit var treasureSelectorLauncher: ActivityResultLauncher<SelectTreasureInputData>
     private lateinit var showResultLauncher: ActivityResultLauncher<ResultActivityData>
-    private lateinit var showMapLauncher: ActivityResultLauncher<Route>
+    private lateinit var showMapLauncher: ActivityResultLauncher<MapInputData>
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,6 +148,6 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
             }
         }
 
-    private fun createShowMapLauncher(): ActivityResultLauncher<Route> =
+    private fun createShowMapLauncher(): ActivityResultLauncher<MapInputData> =
         registerForActivityResult(MapActivityContract()) { }
 }
