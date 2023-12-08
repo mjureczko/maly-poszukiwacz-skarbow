@@ -30,7 +30,7 @@ internal class ReportSummaryTest : ReportAbstractTest() {
         reportSummary.draw(context, canvas, 0f)
 
         //then
-        //save to hava a reference in case of failing test, image available at /data/data/pl.marianjureczko.poszukiwacz/files/map_summary.png
+        //save to hava a reference in case of failing test, image available at /data/data/pl.marianjureczko.poszukiwacz/files/summary.png
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, File(context.getFilesDir(), "/summary.png").outputStream())
         assertTrue(bitmap.sameAs(expected("summary.png")))
     }

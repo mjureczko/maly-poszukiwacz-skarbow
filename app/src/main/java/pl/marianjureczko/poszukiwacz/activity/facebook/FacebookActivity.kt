@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.activity.facebook
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,6 +43,7 @@ class FacebookActivity : ActivityWithAdsAndBackButton() {
             this
         )
         //TODO: deprecated
+        //TODO: duplicated in ActivityWithAdsAndBackButton
         FacebookSdk.sdkInitialize(applicationContext)
         callbackManager = CallbackManager.Factory.create()
         shareDialog = ShareDialog(this)

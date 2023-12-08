@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.activity.facebook
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -13,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import java.io.File
 import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
@@ -22,29 +24,15 @@ class ReportGeneratorTest {
         //given
         val report = ReportGenerator()
         val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val photos = arrangePhotos(context)
         val treasuresProgress = TreasuresProgress("123456789 123456789 123456789 123456789 12345")
         val treasure = Treasure("1", 7, TreasureType.DIAMOND)
         treasuresProgress.collect(treasure)
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(
-            1,
-            "/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/commemorativephoto_b0746921-c67e-47e9-b98c-ef9b260dc8d2.jpg"
-        )
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(
-            2,
-            "/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/commemorativephoto_e846d747-6029-402b-878e-0de057719cb2.jpg"
-        )
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(
-            3,
-            "/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/photo_0a182204-c56a-4a19-9d69-bc5d9e48ccb6.jpg"
-        )
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(
-            13,
-            "/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/photo_0a182204-c56a-4a19-9d69-bc5d9e48ccb6.jpg"
-        )
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(
-            0,
-            "/data/data/pl.marianjureczko.poszukiwacz/files/treasures_lists/photo_0a182204-c56a-4a19-9d69-bc5d9e48ccb6.jpg"
-        )
+        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, photos[0])
+        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, photos[1])
+        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, photos[2])
+        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(13, photos[4])
+        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(0, photos[5])
         treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
         treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
         treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
@@ -67,5 +55,16 @@ class ReportGeneratorTest {
         stream.close()
 
         //TODO: check the image at /data/data/pl.marianjureczko.poszukiwacz/files/TEST_REPORT.jpeg
+    }
+
+    private fun arrangePhotos(context: Context) : List<String>{
+        val input = InstrumentationRegistry.getInstrumentation().context.resources.assets.open("tmp.jpg")
+        val source = BitmapFactory.decodeStream(input)
+        return (0..5).map {
+            val scaled = Bitmap.createScaledBitmap(source, 250, 350 - (50 * it), false)
+            val file: File = File(context.getFilesDir(), "tmp_$it.png")
+            scaled.compress(Bitmap.CompressFormat.PNG, 100, file.outputStream())
+            file.absolutePath
+        }.toList()
     }
 }

@@ -25,7 +25,7 @@ class ReportMapHeaderTest : ReportAbstractTest() {
 
         //then
         //save to hava a reference in case of failing test
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, File(context.getFilesDir(), "/map_summary.png").outputStream())
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, File(context.getFilesDir(), "/map_header.png").outputStream())
         TestCase.assertTrue(bitmap.sameAs(expected("map_header.png")))
     }
 }

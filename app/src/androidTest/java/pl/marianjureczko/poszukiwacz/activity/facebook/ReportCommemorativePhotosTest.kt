@@ -17,16 +17,10 @@ import java.util.UUID
 internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
 
     //TODO t uniform tmp file management across all tests, do not delete ???
-    private val tmpFile = "/bitmap.png"
+    //TODO t there are temp images with uiid like names
+    private val tmpFile = "/commemorative.png"
     private val filesToDelete = mutableListOf<String>()
     private val seed = 1L
-
-    @After
-    fun tearDown() {
-        context.deleteFile(tmpFile.replace("/", ""))
-        filesToDelete.forEach { context.deleteFile(it.replace("/", "")) }
-        filesToDelete.clear()
-    }
 
     @Test
     fun shouldDrawCommemorativePhotosInSingleLine_when2() {

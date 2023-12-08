@@ -24,3 +24,5 @@ TODO:
 - //TODO: deprecated -> FacebookSdk.sdkInitialize(applicationContext)
 - ~~stopka z odnośnikiem do sklepu play~~
 - refaktoryzacja (TODOs)
+- save to file when facebook not available
+- 
