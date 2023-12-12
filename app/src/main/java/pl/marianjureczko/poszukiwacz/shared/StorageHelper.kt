@@ -180,6 +180,7 @@ open class StorageHelper(val context: Context) {
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
     private fun getRouteFile(routeName: String): File {
+        //TODO: what about invalid characters in name?
         val dir = getRoutesDir()
         return File("${dir.absolutePath}/$routeName.xml")
     }

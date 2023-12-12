@@ -100,4 +100,9 @@
     <string name="our_adventures">Our adventures on the expedition</string>
     <string name="treasure">Treasure</string>
     <string name="collected_treasures">Collected treasures</string>
+    <string name="missing_external_storage_permission">External storage permission is required for exporting game progress into an image.</string>
+    <string name="export_to_file">Export to file</string>
+    <string name="image_saved">The file has been saved successfully. You can locate it in images</string>
+    <string name="image_saved_under_name">under the name</string>
+    <string name="save_failed">Save failed.</string>
 </resources>

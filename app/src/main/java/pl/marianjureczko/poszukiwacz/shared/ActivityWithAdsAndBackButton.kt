@@ -12,7 +12,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import com.facebook.CallbackManager
-import com.facebook.FacebookSdk
 import com.facebook.share.widget.ShareDialog
 import com.google.android.gms.ads.*
 import pl.marianjureczko.poszukiwacz.R
@@ -33,8 +32,6 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasur
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //TODO: deprecated
-        FacebookSdk.sdkInitialize(applicationContext)
         callbackManager = CallbackManager.Factory.create()
         shareDialog = ShareDialog(this)
 

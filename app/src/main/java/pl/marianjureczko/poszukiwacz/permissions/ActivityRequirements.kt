@@ -40,3 +40,11 @@ object RequirementsForBluetooth: ActivityRequirements {
     override fun getMessage(): Int = R.string.missing_bluetooth_permission
     override fun getMessageForPermanentDenial(): Int = R.string.missing_bluetooth_permission
 }
+
+object RequirementsForExternalStorage: ActivityRequirements {
+    val externalStorage = PermissionsSpec.EXTERNAL_STORAGE
+
+    override fun getSpecsArray(): Array<PermissionsSpec> = arrayOf(externalStorage)
+    override fun getMessage(): Int = R.string.missing_external_storage_permission
+    override fun getMessageForPermanentDenial(): Int = R.string.missing_external_storage_permission
+}
