@@ -23,6 +23,6 @@ TODO:
 - ~~internacjonalizacj tekstów~~
 - //TODO: deprecated -> FacebookSdk.sdkInitialize(applicationContext)
 - ~~stopka z odnośnikiem do sklepu play~~
-- refaktoryzacja (TODOs)
+- ~~refaktoryzacja (TODOs)~~
 - ~~save to file when facebook not available~~
 - 

@@ -11,7 +11,7 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 interface DataStorageWrapper {
     fun getSelectedForHuntTreasure(): TreasureDescription?
     fun setCurrentLocation(location: Location?, storageHelper: StorageHelper)
-    fun getTreasureTreasuresProgress(): TreasuresProgress
+    fun getTreasuresProgress(): TreasuresProgress
 }
 
 class CompassBasedLocationListener(

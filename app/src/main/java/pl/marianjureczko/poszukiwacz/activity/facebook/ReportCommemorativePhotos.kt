@@ -28,17 +28,15 @@ class ReportCommemorativePhotos(
     private val headerPaint = ReportCommons.getHeaderPaint(font)
 
     enum class PhotoPosition(val x: Int) {
-        SINGLE(ReportGenerator.margin() + IMAGE_PLACEHOLDER_WIDTH.toInt() + VERTICAL_SPACING),
+        SINGLE(ReportCommons.reportMarginAsFloat() + IMAGE_PLACEHOLDER_WIDTH.toInt() + VERTICAL_SPACING),
         LEFT_OF_2(VERTICAL_SPACING_FOR_TWO),
         RIGHT_OF_2(2 * VERTICAL_SPACING_FOR_TWO + IMAGE_PLACEHOLDER_WIDTH.toInt()),
-        FIRST_OF_3(ReportGenerator.margin()),
-        SECOND_OF_3(ReportGenerator.margin() + IMAGE_PLACEHOLDER_WIDTH.toInt() + VERTICAL_SPACING),
-        THIRD_OF_3(ReportGenerator.margin() + 2 * IMAGE_PLACEHOLDER_WIDTH.toInt() + 2 * VERTICAL_SPACING)
+        FIRST_OF_3(ReportCommons.reportMarginAsFloat()),
+        SECOND_OF_3(ReportCommons.reportMarginAsFloat() + IMAGE_PLACEHOLDER_WIDTH.toInt() + VERTICAL_SPACING),
+        THIRD_OF_3(ReportCommons.reportMarginAsFloat() + 2 * IMAGE_PLACEHOLDER_WIDTH.toInt() + 2 * VERTICAL_SPACING)
     }
 
     companion object {
-        private const val HORIZONTAL_SPACING = 10f
-
         private const val VERTICAL_SPACING = 25
         private const val VERTICAL_SPACING_FOR_TWO = 145
         private const val IMAGE_PLACEHOLDER_WIDTH = 283f
@@ -50,20 +48,20 @@ class ReportCommemorativePhotos(
         if (photos.isEmpty()) {
             0f
         } else {
-            heightOfAllPhotos(photos) + ReportCommons.HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING
+            heightOfAllPhotos(photos) + ReportCommons.HEADER_FONT_SIZE + 2 * ReportCommons.HEADER_HORIZONTAL_SPACING
         }
 
     fun draw(context: Context, canvas: Canvas, currentTop: Float) {
         if (photos.isNotEmpty()) {
             this.canvas = canvas
             photosHeader(context, currentTop)
-            photos(currentTop + ReportCommons.HEADER_FONT_SIZE + 2 * HORIZONTAL_SPACING)
+            photos(currentTop + ReportCommons.HEADER_FONT_SIZE + 2 * ReportCommons.HEADER_HORIZONTAL_SPACING)
         }
     }
 
     private fun photosHeader(context: Context, y: Float) {
         val headerTxt = context.getString(R.string.our_adventures)
-        canvas.drawText(headerTxt, ReportGenerator.width() / 2, y + ReportCommons.HEADER_FONT_SIZE + HORIZONTAL_SPACING, headerPaint)
+        canvas.drawText(headerTxt, ReportCommons.reportWidthAsFloat() / 2, y + ReportCommons.HEADER_FONT_SIZE + ReportCommons.HEADER_HORIZONTAL_SPACING, headerPaint)
     }
 
     private fun photos(y: Float) {

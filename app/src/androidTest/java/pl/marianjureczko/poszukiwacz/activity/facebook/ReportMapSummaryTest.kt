@@ -11,6 +11,7 @@ import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import java.io.File
 import java.util.Date
 
+// Requires phone with API 34
 @RunWith(AndroidJUnit4::class)
 class ReportMapSummaryTest : ReportAbstractTest() {
 
@@ -18,7 +19,7 @@ class ReportMapSummaryTest : ReportAbstractTest() {
     fun should_drawSummaryWithLengthAndTimestamps() {
         //given
         val reportMapHeader = ReportMapSummary(model, font)
-        val bitmap = Bitmap.createBitmap(ReportGenerator.reportWidth, 200, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))

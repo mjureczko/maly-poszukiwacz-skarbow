@@ -13,19 +13,24 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import java.io.File
 import java.util.UUID
 
+// Requires phone with API 34
 @RunWith(AndroidJUnit4::class)
 internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
 
-    //TODO t uniform tmp file management across all tests, do not delete ???
-    //TODO t there are temp images with uiid like names
     private val tmpFile = "/commemorative.png"
     private val filesToDelete = mutableListOf<String>()
     private val seed = 1L
 
+    @After
+    fun tearDown() {
+        filesToDelete.forEach { context.deleteFile(it.replace("/", "")) }
+        filesToDelete.clear()
+    }
+
     @Test
     fun shouldDrawCommemorativePhotosInSingleLine_when2() {
         //given
-        val bitmap = Bitmap.createBitmap(ReportGenerator.reportWidth, 800, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, tempPhoto(800, 400))
@@ -47,7 +52,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
     @Test
     fun shouldDrawCommemorativePhotosIn2Lines_when4() {
         //given
-        val bitmap = Bitmap.createBitmap(ReportGenerator.reportWidth, 800, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, tempPhoto(800, 400))

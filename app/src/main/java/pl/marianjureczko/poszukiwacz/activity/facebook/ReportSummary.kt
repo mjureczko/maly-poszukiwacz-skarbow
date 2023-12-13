@@ -21,13 +21,12 @@ class ReportSummary(
 
     fun draw(context: Context, canvas: Canvas, currentTop: Float) {
         if (model.getSummaryElement().isSelected) {
-            //TODO t: already defined (?)
             val textPaint = ReportCommons.getTextPaint(font, Paint.Align.LEFT)
 
             val summaryText = summaryText(context, model.progress)
             val summarySize = textPaint.measureText(summaryText)
             val textY = currentTop + 50
-            var x = ReportGenerator.margin
+            var x = ReportCommons.REPORT_MARGIN
             canvas.drawText(summaryText, x, textY, textPaint)
             val gold = IconHelper.loadIcon(R.drawable.gold, 40)
             x += summarySize

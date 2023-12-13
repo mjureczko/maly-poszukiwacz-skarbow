@@ -9,6 +9,6 @@ class ShowMapButtonListener(
     private val model: SearchingActivityViewModel
 ) : View.OnClickListener {
     override fun onClick(v: View?) {
-        activityLauncher.launch(MapInputData(model.getRoute(), model.getTreasureTreasuresProgress()))
+        activityLauncher.launch(MapInputData(model.getRoute(), model.getTreasuresProgress()))
     }
 }

@@ -11,6 +11,7 @@ import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import java.io.File
 
+// Requires phone with API 34
 @RunWith(AndroidJUnit4::class)
 internal class ReportSummaryTest : ReportAbstractTest() {
 
@@ -18,7 +19,7 @@ internal class ReportSummaryTest : ReportAbstractTest() {
     fun shouldDrawSummary() {
         //given
         val reportSummary = ReportSummary(model, font)
-        val bitmap = Bitmap.createBitmap(ReportGenerator.reportWidth, 200, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
 

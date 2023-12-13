@@ -9,7 +9,7 @@ class ReportFooter() : ReportPart {
 
     fun draw(canvas: Canvas, currentTop: Float) {
         val footerImg = IconHelper.loadIcon(R.drawable.facebook_report_footer, 41)
-        val x = (ReportGenerator.reportWidth.toFloat() - footerImg.width) / 2
+        val x = (ReportCommons.REPORT_WIDTH.toFloat() - footerImg.width) / 2
         canvas.drawBitmap(footerImg, x, currentTop + 50f, Paint())
     }
 }

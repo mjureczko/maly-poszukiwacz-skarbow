@@ -26,10 +26,9 @@ class ReportMapSummary(
     fun draw(context: Context, canvas: Canvas, currentTop: Float) {
         if (model.getSummaryElement().isSelected) {
             userLocale = userLocale(context)
-            //todo t: textPaint reused
             val textPaint = ReportCommons.getTextPaint(font, Paint.Align.LEFT)
             var textY = currentTop + 50
-            var x = ReportGenerator.margin
+            var x = ReportCommons.REPORT_MARGIN
             canvas.drawText(distanceText(context, model.progress.hunterPath), x, textY, textPaint)
             textY += 40
             canvas.drawText(timeText(context, model.progress.hunterPath), x, textY, textPaint)

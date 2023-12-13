@@ -9,13 +9,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
 
+// Requires phone with API 34
 @RunWith(AndroidJUnit4::class)
 class ReportMapHeaderTest : ReportAbstractTest() {
     @Test
     fun shouldDrawSummary() {
         //given
         val reportMapHeader = ReportMapHeader(model, font)
-        val bitmap = Bitmap.createBitmap(ReportGenerator.reportWidth, 200, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         model.initialize(treasuresProgress, context)

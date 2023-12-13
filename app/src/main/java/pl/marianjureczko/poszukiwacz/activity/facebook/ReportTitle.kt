@@ -15,19 +15,14 @@ class ReportTitle(
     override fun height(): Float = 150f
 
     fun draw(context: Context, canvas: Canvas) {
-        val titlePaint = Paint().apply {
-            color = Color.BLUE
-            textSize = 46f
-            textAlign = Paint.Align.CENTER
-            typeface = font
-        }
+        val titlePaint = ReportCommons.getTitlePaint(font)
         title(context, canvas, titlePaint, model.progress)
     }
 
     private fun title(context: Context, canvas: Canvas, titlePaint: Paint, progress: TreasuresProgress) {
-        canvas.drawText(context.getString(R.string.app_name), ReportGenerator.width() / 2, 100f, titlePaint)
+        canvas.drawText(context.getString(R.string.app_name), ReportCommons.reportWidthAsFloat() / 2, 100f, titlePaint)
         val maxTitleLength = 20
         val routeName = if (progress.routeName.length > maxTitleLength) "${progress.routeName.subSequence(0, maxTitleLength)}..." else progress.routeName
-        canvas.drawText("${context.getString(R.string.report_from_expedition)} \"$routeName\"", ReportGenerator.width() / 2, 150f, titlePaint)
+        canvas.drawText("${context.getString(R.string.report_from_expedition)} \"$routeName\"", ReportCommons.reportWidthAsFloat() / 2, 150f, titlePaint)
     }
 }

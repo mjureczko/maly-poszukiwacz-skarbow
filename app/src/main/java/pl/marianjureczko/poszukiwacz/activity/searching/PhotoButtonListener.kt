@@ -18,7 +18,7 @@ class PhotoButtonListener(
 
     override fun onClick(v: View?) {
         if (data.getSelectedForHuntTreasure() != null && data.getSelectedForHuntTreasure()!!.hasPhoto()) {
-            photoLauncher.launch(PhotoInputData(data.getSelectedForHuntTreasure()!!.photoFileName!!, data.getTreasureTreasuresProgress()))
+            photoLauncher.launch(PhotoInputData(data.getSelectedForHuntTreasure()!!.photoFileName!!, data.getTreasuresProgress()))
         } else {
             Toast.makeText(context, R.string.no_photo_to_show, Toast.LENGTH_SHORT).show()
             errorTone()

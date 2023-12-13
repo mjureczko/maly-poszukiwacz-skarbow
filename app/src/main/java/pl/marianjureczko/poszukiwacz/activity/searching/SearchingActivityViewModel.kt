@@ -65,8 +65,7 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
         }
     }
 
-    //TODO t: why not getTreasureProgress??
-    override fun getTreasureTreasuresProgress(): TreasuresProgress = treasuresProgress
+    override fun getTreasuresProgress(): TreasuresProgress = treasuresProgress
 
     fun initialize(routeXml: String, storageHelper: StorageHelper) {
         route = xmlHelper.loadFromString<Route>(routeXml)

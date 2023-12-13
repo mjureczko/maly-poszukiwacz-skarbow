@@ -9,9 +9,6 @@ class ReportMapHeader(
     private val model: FacebookViewModel,
     private val font: Typeface
 ) : ReportPart {
-
-    //TODO: ReportCommemorativePhotos has the same, maybe a header abstraction...
-    private val HORIZONTAL_SPACING = 10f
     override fun height(): Float {
         return if (mapData()) {
             50f
@@ -24,8 +21,8 @@ class ReportMapHeader(
         if (mapData()) {
             val headerPaint = ReportCommons.getHeaderPaint(font)
             val txt = context.getString(R.string.expedition_map)
-            val y = currentTop + ReportCommons.HEADER_FONT_SIZE + HORIZONTAL_SPACING
-            canvas.drawText(txt, ReportGenerator.width() / 2, y, headerPaint)
+            val y = currentTop + ReportCommons.HEADER_FONT_SIZE + ReportCommons.HEADER_HORIZONTAL_SPACING
+            canvas.drawText(txt, ReportCommons.reportWidthAsFloat() / 2, y, headerPaint)
         }
     }
 
