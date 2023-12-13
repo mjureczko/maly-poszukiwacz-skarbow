@@ -53,8 +53,6 @@ class FacebookActivity : PermissionActivity() {
             progress = xmlHelper.loadFromString(intent.getStringExtra(TREASURE_PROGRESS)!!),
             this
         )
-        //TODO: deprecated
-        FacebookSdk.sdkInitialize(applicationContext)
         callbackManager = CallbackManager.Factory.create()
         shareDialog = ShareDialog(this)
 
