@@ -7,17 +7,21 @@ import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
+import org.mockito.BDDMockito.*
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import java.io.File
+import java.nio.file.Files
 
 @ExtendWith(MockitoExtension::class)
 class SelectorViewModelStateTest {
-    @Mock
+
+    @Mock(lenient = true)
     lateinit var state: SavedStateHandle
 
     @Test
@@ -29,7 +33,7 @@ class SelectorViewModelStateTest {
             .willReturn(collectedIds)
 
         //when
-        selectorViewModel.initialize(some<Route>(), some<TreasureBag>(), null, null)
+        selectorViewModel.initialize(some<Route>(), some<TreasuresProgress>(), null, null)
 
         //then
         assertThat(selectorViewModel.getIdsOfCollectedTreasures()).containsExactlyInAnyOrderElementsOf(collectedIds)
@@ -41,7 +45,7 @@ class SelectorViewModelStateTest {
         val selectorViewModel = SelectorViewModel(state)
         given(state.get<Set<Int>>(SelectorViewModel.IDS_OF_COLLECTED))
             .willReturn(null)
-        val progress = some<TreasureBag>()
+        val progress = some<TreasuresProgress>()
         progress.collectedTreasuresDescriptionId.add(someInt())
         val collectedIds = progress.collectedTreasuresDescriptionId.toSet()
 
@@ -139,7 +143,7 @@ internal class SelectorViewModelTest {
     fun `SHOULD use treasure pretty name WHEN user location is null`() {
         //given
         val model = some<SelectorViewModel>()
-        model.initialize(some<Route>(), some<TreasureBag>(), null, null)
+        model.initialize(some<Route>(), some<TreasuresProgress>(), null, null)
         assertThat(model.getUserLocation()).isNull()
         val treasureDescription = some<TreasureDescription>()
 
@@ -174,4 +178,29 @@ internal class SelectorViewModelTest {
         assertThat(actual).isEqualTo(expected)
     }
 
+    @Test
+    internal fun `SHOULD replace commemorative file in treasure description`() {
+        //given
+        val state = Mockito.mock(SavedStateHandle::class.java)
+        val selectorViewModel = SelectorViewModel(state)
+        val treasure = some<TreasureDescription>()
+        val route = some<Route>().copy(treasures = mutableListOf(treasure))
+        selectorViewModel.initialize(route, TreasuresProgress(), null, null)
+        selectorViewModel.selectForCommemorativePhoto(treasure)
+        Mockito.reset(state)
+        val firstPhoto = Files.createTempFile("test", ".test").toAbsolutePath().toString()
+        selectorViewModel.setCommemorativePhotoOnSelectedTreasureDescription(firstPhoto)
+        verify(state).set(SelectorViewModel.COMMEMORATIVE_PHOTOS, mutableMapOf(treasure.id to firstPhoto))
+
+        //when
+        Mockito.reset(state)
+        val secondPhoto = Files.createTempFile("test2", ".test").toAbsolutePath().toString()
+        selectorViewModel.setCommemorativePhotoOnSelectedTreasureDescription(secondPhoto)
+
+        //then
+        val actualPhoto = selectorViewModel.getCommemorativePhoto(treasure)
+        assertThat(actualPhoto).isEqualTo(secondPhoto)
+        assertThat(File(firstPhoto).exists()).`as`("the old commemorative photo should be deleted").isFalse()
+        verify(state).set(SelectorViewModel.COMMEMORATIVE_PHOTOS, mutableMapOf(treasure.id to secondPhoto))
+    }
 }

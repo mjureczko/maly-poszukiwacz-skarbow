@@ -1,25 +1,21 @@
 package pl.marianjureczko.poszukiwacz.activity.photo
 
-import android.content.Context
-import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.viewModels
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityPhotoBinding
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 
 class PhotoActivity : ActivityWithAdsAndBackButton() {
     companion object {
-        private const val PHOTO = "pl.marianjureczko.poszukiwacz.activity.photo";
-
-        fun intent(packageContext: Context, photo: String) =
-            Intent(packageContext, PhotoActivity::class.java).apply {
-                putExtra(PHOTO, photo)
-            }
+        const val INPUT = "pl.marianjureczko.poszukiwacz.activity.photo";
     }
 
     private lateinit var binding: ActivityPhotoBinding
+    private val model: PhotoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,11 +23,17 @@ class PhotoActivity : ActivityWithAdsAndBackButton() {
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_photo)
-        val photo = intent.getStringExtra(PHOTO)
-        val uri = Uri.parse(photo)
+        val input = intent.getSerializableExtra(INPUT) as PhotoInputData
+        val uri = Uri.parse(input.photo)
         binding.photoImg.setImageURI(uri)
         setContentView(binding.root)
 
+        model.initialize(input.progress)
+
         setUpAds(binding.adView)
     }
+
+    override fun getCurrentTreasuresProgress(): TreasuresProgress =
+        model.progress
+
 }

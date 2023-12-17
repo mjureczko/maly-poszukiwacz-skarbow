@@ -28,6 +28,7 @@ enum class TreasureType {
     abstract fun image(): Int
 }
 
+/** QR code is the id */
 data class Treasure(val id: String, val quantity: Int, val type: TreasureType): Serializable
 
 class TreasureParser {

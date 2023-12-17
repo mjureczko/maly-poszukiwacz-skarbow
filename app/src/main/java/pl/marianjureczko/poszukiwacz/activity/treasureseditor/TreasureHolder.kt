@@ -32,9 +32,6 @@ class TreasureHolder(
 
     private val TAG = javaClass.simpleName
     private val packageManager: PackageManager by lazy { activity.packageManager }
-    private val thereIsActivityCapableOfCapturingPhoto: Boolean by lazy {
-        packageManager.resolveActivity(capturePhotoIntent(), PackageManager.MATCH_DEFAULT_ONLY) != null
-    }
     private val treasureNameLabel: TextView = itemView.findViewById((R.id.treasure_name))
     private val recordTipBtn: ImageButton = itemView.findViewById(R.id.record_tip)
     private val photoBtn: ImageButton = itemView.findViewById(R.id.photo_tip)
@@ -75,9 +72,7 @@ class TreasureHolder(
 
     private fun setupPhotoBtn(treasure: TreasureDescription, route: Route) {
         photoBtn.setOnClickListener {
-            val a = thereIsActivityCapableOfCapturingPhoto
-            val permissionGranted = PermissionManager.isPermissionGranted(activity, RequirementsForPhotoAndAudioTip.camera)
-            if (a && permissionGranted) {
+            if (PermissionManager.isPermissionGranted(activity, RequirementsForPhotoAndAudioTip.camera)) {
                 if (treasure.hasPhoto()) {
                     AlertDialog.Builder(activity)
                         .setMessage(R.string.overwritting_photo)

@@ -8,7 +8,15 @@ interface ActivityRequirements {
     fun getMessageForPermanentDenial(): Int
 }
 
-object RequirementsForPhotoAndAudioTip: ActivityRequirements {
+object RequirementsForDoingPhoto : ActivityRequirements {
+    val camera = PermissionsSpec.CAMERA
+
+    override fun getSpecsArray(): Array<PermissionsSpec> = arrayOf(camera)
+    override fun getMessage(): Int = R.string.missing_photo_permission
+    override fun getMessageForPermanentDenial(): Int = R.string.missing_photo_permission
+}
+
+object RequirementsForPhotoAndAudioTip : ActivityRequirements {
     val camera = PermissionsSpec.CAMERA
     val microphone = PermissionsSpec.MICROPHONE
 
@@ -31,4 +39,12 @@ object RequirementsForBluetooth: ActivityRequirements {
     override fun getSpecsArray(): Array<PermissionsSpec> = arrayOf(bluetooth)
     override fun getMessage(): Int = R.string.missing_bluetooth_permission
     override fun getMessageForPermanentDenial(): Int = R.string.missing_bluetooth_permission
+}
+
+object RequirementsForExternalStorage: ActivityRequirements {
+    val externalStorage = PermissionsSpec.EXTERNAL_STORAGE
+
+    override fun getSpecsArray(): Array<PermissionsSpec> = arrayOf(externalStorage)
+    override fun getMessage(): Int = R.string.missing_external_storage_permission
+    override fun getMessageForPermanentDenial(): Int = R.string.missing_external_storage_permission
 }

@@ -8,11 +8,13 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-<!--    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+<!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<!--    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />-->
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -45,15 +47,20 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6283649742373707~4262923887" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="${facebookToken}" />
 
         <activity
             android:name=".activity.result.ResultActivity"
             android:exported="false" />
-
         <activity
             android:name=".activity.map.MapActivity"
-            android:theme="@style/FullscreenTheme"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/FullscreenTheme" />
         <activity
             android:name=".activity.treasureselector.TreasureSelectorActivity"
             android:theme="@style/FullscreenTheme" />
@@ -85,6 +92,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.commemorative.CommemorativeActivity"
+            android:exported="false"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".activity.facebook.FacebookActivity"
+            android:exported="false"
+            android:label="@string/title_activity_facebook"
+            android:theme="@style/FullscreenTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -95,6 +111,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/files" />
         </provider>
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider732722584920929"
+            android:exported="true" />
     </application>
 
 </manifest>

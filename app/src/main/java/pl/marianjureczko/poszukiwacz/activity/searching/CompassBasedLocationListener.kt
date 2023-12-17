@@ -5,20 +5,24 @@ import android.location.LocationListener
 import android.os.Bundle
 import android.util.Log
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 interface DataStorageWrapper {
     fun getSelectedForHuntTreasure(): TreasureDescription?
-    fun setCurrentLocation(location: Location?)
+    fun setCurrentLocation(location: Location?, storageHelper: StorageHelper)
+    fun getTreasuresProgress(): TreasuresProgress
 }
 
 class CompassBasedLocationListener(
     private val dataStorageWrapper: DataStorageWrapper,
-    private val compassPresenter: CompassPresenter
+    private val compassPresenter: CompassPresenter,
+    private val storageHelper: StorageHelper
 ) : LocationListener {
     private val TAG = javaClass.simpleName
 
     override fun onLocationChanged(location: Location) {
-        dataStorageWrapper.setCurrentLocation(location)
+        dataStorageWrapper.setCurrentLocation(location, storageHelper)
         compassPresenter.adjustCompassToCurrentLocationAndTreasure(location, dataStorageWrapper.getSelectedForHuntTreasure())
     }
 

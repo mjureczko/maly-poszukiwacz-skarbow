@@ -1,29 +1,53 @@
 package pl.marianjureczko.poszukiwacz.shared
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
+import com.facebook.CallbackManager
+import com.facebook.share.widget.ShareDialog
 import com.google.android.gms.ads.*
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookContract
+import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookInputData
+import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookOutputData
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 
-abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
+abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasureProgressDialog.Callback {
 
     private val TAG = javaClass.simpleName
+    private lateinit var callbackManager: CallbackManager
+    private lateinit var shareDialog: ShareDialog
+
+    private lateinit var facebookLauncher: ActivityResultLauncher<FacebookInputData>
+    private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        callbackManager = CallbackManager.Factory.create()
+        shareDialog = ShareDialog(this)
+
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setIcon(R.drawable.chest_very_small)
+
+        facebookLauncher = createShareOnFacebookLauncher()
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        if (menu is MenuBuilder) {
+            menu.setOptionalIconsVisible(true)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -33,9 +57,44 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
         if (id == R.id.helpbutton) {
             val url = this.getString(R.string.help_path)
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } else if (id == R.id.facebook) {
+            if (getCurrentTreasuresProgress() != null) {
+                facebookLauncher.launch(FacebookInputData(getCurrentTreasuresProgress()!!))
+            } else {
+                val progresses = storageHelper.loadAll()
+                    .mapNotNull { route -> storageHelper.loadProgress(route.name) }
+                    .toList()
+                if (progresses.isEmpty()) {
+                    Toast.makeText(this, R.string.facebook_nothing_to_share, Toast.LENGTH_SHORT).show()
+                } else {
+                    if (progresses.size == 1) {
+                        facebookLauncher.launch(FacebookInputData(progresses[0]))
+                    } else {
+                        SelectTreasureProgressDialog.newInstance(progresses).apply {
+                            show(supportFragmentManager, "SelectTreasureProgressDialog")
+                        }
+                    }
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onTreasureProgressSelected(routeName: String) {
+        val progresses = storageHelper.loadProgress(routeName)
+        if (progresses == null) {
+            Toast.makeText(this, R.string.facebook_invalid_roote, Toast.LENGTH_SHORT).show()
+        } else {
+            facebookLauncher.launch(FacebookInputData(progresses))
+        }
+    }
+
+    protected abstract fun getCurrentTreasuresProgress(): TreasuresProgress?
+
+    private fun createShareOnFacebookLauncher(): ActivityResultLauncher<FacebookInputData> =
+        registerForActivityResult(FacebookContract()) { result: FacebookOutputData? ->
+            Log.d(TAG, "Sharing on facebook result: ${result?.result}")
+        }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -51,7 +110,11 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
             .build()
         MobileAds.setRequestConfiguration(requestConfiguration)
 
-        MobileAds.initialize(this) { Log.d(TAG, "Ads initialized") }
+        try {
+            MobileAds.initialize(this) { Log.d(TAG, "Ads initialized") }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ads initialization error: ${e.message}")
+        }
 
         val adRequest = AdRequest.Builder().build()
         mAdView.loadAd(adRequest)
@@ -61,7 +124,6 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity() {
             }
 
             override fun onAdFailedToLoad(adError: LoadAdError) {
-//                Toast.makeText(this@ActivityWithAdsAndBackButton, adError.toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onAdOpened() {

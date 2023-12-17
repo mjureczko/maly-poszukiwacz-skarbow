@@ -3,11 +3,13 @@ package pl.marianjureczko.poszukiwacz.model
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
-class TreasureBagTest {
+class TreasuresProgressTest {
 
     val gold7 = Treasure(
         "a",
@@ -43,7 +45,7 @@ class TreasureBagTest {
     @Test
     fun addGoldToBag() {
         //given
-        val bag = TreasureBag(someString())
+        val bag = TreasuresProgress(someString())
 
         //when
         bag.collect(gold7)
@@ -58,7 +60,7 @@ class TreasureBagTest {
     @Test
     fun addDiamondsToBag() {
         //given
-        val bag = TreasureBag(someString())
+        val bag = TreasuresProgress(someString())
 
         //when
         bag.collect(diamond17)
@@ -73,7 +75,7 @@ class TreasureBagTest {
     @Test
     fun addRubiesToBag() {
         //given
-        val bag = TreasureBag(someString())
+        val bag = TreasuresProgress(someString())
 
         //when
         bag.collect(ruby27)
@@ -88,7 +90,7 @@ class TreasureBagTest {
     @Test
     fun detectAlreadyCollectedTreasures() {
         //given
-        val bag = TreasureBag(someString())
+        val bag = TreasuresProgress(someString())
         bag.collect(gold9)
 
         //then
@@ -101,15 +103,15 @@ class TreasureBagTest {
         //given
         val xmlHelper = XmlHelper()
         val routeName = someString()
-        val treasureBag = TreasureBag(routeName)
+        val treasuresProgress = TreasuresProgress(routeName)
         val treasure = some<Treasure>().copy(type = TreasureType.DIAMOND)
-        treasureBag.collect(treasure)
+        treasuresProgress.collect(treasure)
         val description = some<TreasureDescription>()
-        treasureBag.collect(description)
+        treasuresProgress.collect(description)
 
         //when
-        val xml = xmlHelper.writeToString(treasureBag)
-        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+        val xml = xmlHelper.writeToString(treasuresProgress)
+        val actual = xmlHelper.loadFromString<TreasuresProgress>(xml)
 
         //then
         assertThat(actual.routeName).isEqualTo(routeName)

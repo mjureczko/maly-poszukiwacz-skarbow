@@ -9,7 +9,7 @@ import com.mapbox.maps.MapView
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityMapBinding
-import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 import pl.marianjureczko.poszukiwacz.shared.MapHelper
 
@@ -32,7 +32,7 @@ class MapActivity : ActivityWithAdsAndBackButton() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         supportActionBar?.title = "${App.getResources().getString(R.string.map_activity_title)}"
 
-        model.setup(intent.getSerializableExtra(MAP) as Route)
+        model.setup(intent.getSerializableExtra(MAP) as MapInputData)
         mapView = binding.mapView
         MapHelper.renderTreasures(model.route, mapView, this.resources)
         hideRoads()
@@ -40,6 +40,8 @@ class MapActivity : ActivityWithAdsAndBackButton() {
         setContentView(binding.root)
         setUpAds(binding.adView)
     }
+
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? = model.progress
 
     override fun onResume() {
         super.onResume()

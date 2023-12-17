@@ -4,9 +4,16 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import java.io.Serializable
 
-class MapActivityContract : ActivityResultContract<Route, Void>() {
-    override fun createIntent(context: Context, input: Route): Intent {
+data class MapInputData(
+    val route: Route,
+    val progress: TreasuresProgress
+) : Serializable
+
+class MapActivityContract : ActivityResultContract<MapInputData, Void>() {
+    override fun createIntent(context: Context, input: MapInputData): Intent {
         return Intent(context, MapActivity::class.java).apply {
             putExtra(MapActivity.MAP, input)
         }

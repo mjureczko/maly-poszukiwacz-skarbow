@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import com.journeyapps.barcodescanner.ScanContract
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.map.MapActivityContract
+import pl.marianjureczko.poszukiwacz.activity.map.MapInputData
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityContract
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
@@ -21,6 +22,7 @@ import pl.marianjureczko.poszukiwacz.databinding.ActivitySearchingBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -45,7 +47,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     private lateinit var binding: ActivitySearchingBinding
     private lateinit var treasureSelectorLauncher: ActivityResultLauncher<SelectTreasureInputData>
     private lateinit var showResultLauncher: ActivityResultLauncher<ResultActivityData>
-    private lateinit var showMapLauncher: ActivityResultLauncher<Route>
+    private lateinit var showMapLauncher: ActivityResultLauncher<MapInputData>
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +68,8 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
 
         val locationListener = CompassBasedLocationListener(
             model,
-            CompassPresenter(binding.stepsToDo, binding.arrowImg)
+            CompassPresenter(binding.stepsToDo, binding.arrowImg),
+            storageHelper
         )
         val handler = Handler()
         val locationRequester = LocationRequester(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
@@ -76,11 +79,20 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return model.getTreasureBag()
+    }
+
     override fun onPostResume() {
         super.onPostResume()
         if (!model.treasureSelectionInitialized()) {
             treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(null))
         }
+    }
+
+    override fun onDestroy() {
+        model.releaseMediaPlayer()
+        super.onDestroy()
     }
 
     private fun restoreState() {
@@ -136,6 +148,6 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
             }
         }
 
-    private fun createShowMapLauncher(): ActivityResultLauncher<Route> =
+    private fun createShowMapLauncher(): ActivityResultLauncher<MapInputData> =
         registerForActivityResult(MapActivityContract()) { }
 }

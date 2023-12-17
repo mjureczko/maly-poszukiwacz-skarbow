@@ -3,7 +3,13 @@ package pl.marianjureczko.poszukiwacz.shared
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import com.mapbox.geojson.Point
-import com.mapbox.maps.*
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.CoordinateBounds
+import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.MapView
+import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.Style
+import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
@@ -17,6 +23,8 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
 class MapHelper {
+
+    private val TAG = javaClass.simpleName
 
     private class TreasureOnMapHelper(mapView: MapView, resources: Resources) {
         private val iconBitmap = BitmapFactory.decodeResource(resources, R.drawable.chest_closed_small)

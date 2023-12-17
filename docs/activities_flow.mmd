@@ -19,5 +19,24 @@ stateDiagram-v2
     SearchingActivity --> MapActivity : show map
     MapActivity --> SearchingActivity
 
+    MainActivity --> FacebookActivity
+    FacebookActivity --> MainActivity
+    TreasuresEditorActivity --> FacebookActivity
+    FacebookActivity --> TreasuresEditorActivity
+    BluetoothActivity --> FacebookActivity
+    FacebookActivity --> BluetoothActivity
+    SearchingActivity --> FacebookActivity
+    FacebookActivity --> SearchingActivity
+    TreasureSelectorActivity --> FacebookActivity
+    FacebookActivity --> TreasureSelectorActivity
+    PhotoActivity --> FacebookActivity
+    FacebookActivity --> PhotoActivity
+    ResultActivity --> FacebookActivity
+    FacebookActivity --> ResultActivity
+    TreasuresEditorActivity --> FacebookActivity
+    FacebookActivity --> TreasuresEditorActivity
+    MapActivity --> FacebookActivity
+    FacebookActivity --> MapActivity
+
     note right of QrScanIntent: INTENT
     note right of CapturePhotoIntent: INTENT

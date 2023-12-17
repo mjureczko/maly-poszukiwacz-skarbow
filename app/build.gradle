@@ -4,15 +4,17 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'de.mannodermaus.android-junit5'
 
+
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
     defaultConfig {
         applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [facebookToken: FACEBOOK_TOKEN]
     }
     signingConfigs {
         release {
@@ -47,7 +49,9 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests {
+            returnDefaultValues = true
+        }
     }
 
     buildFeatures {
@@ -72,18 +76,24 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.mapbox.maps:android:10.8.1'
+    implementation 'com.facebook.android:facebook-share:latest.release'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version:'5.8.2'
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version:'5.8.2'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version:'5.8.2'
-    testImplementation group: 'com.ocadotechnology.gembus', name: 'test-arranger', version: '1.4.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
+    testImplementation group: 'com.ocadotechnology.gembus', name: 'test-arranger', version: '1.4.9'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.4.0'
 
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-//    androidTestImplementation 'androidx.test:core:1.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test:core:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
+    androidTestImplementation 'org.mockito:mockito-inline:2.13.0'
 }
 
 configurations {

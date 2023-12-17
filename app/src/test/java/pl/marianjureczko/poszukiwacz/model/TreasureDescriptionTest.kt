@@ -11,6 +11,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
+//FIXME: clean files created during tests
 @ExtendWith(MockitoExtension::class)
 class TreasureDescriptionTest {
 

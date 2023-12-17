@@ -2,7 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/helpbutton"
-        android:title=""
-        app:showAsAction="always"
-        android:icon="@android:drawable/ic_menu_help" />
+        android:title="@string/menu_help"
+        app:showAsAction="withText"
+        android:icon="@drawable/question_mark" />
+    <item
+        android:id="@+id/facebook"
+        android:title="@string/menu_facebook"
+        app:showAsAction="withText"
+        android:icon="@drawable/facebook" />
 </menu>

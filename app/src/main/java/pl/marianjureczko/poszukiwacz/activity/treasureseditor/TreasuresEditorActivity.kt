@@ -5,27 +5,28 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.location.LocationManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts.TakePicture
 import androidx.activity.viewModels
-import androidx.core.content.FileProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mapbox.maps.MapView
+import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasuresEditorBinding
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForPhotoAndAudioTip
 import pl.marianjureczko.poszukiwacz.shared.LocationRequester
 import pl.marianjureczko.poszukiwacz.shared.MapHelper
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
-import java.io.File
 
 private const val ROUTE_NAME_DIALOG = "RouteNameDialog"
 
@@ -44,7 +45,12 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     }
 
     private val TAG = javaClass.simpleName
+    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+        return null
+    }
+
     private val storageHelper = StorageHelper(this)
+    private val photoHelper = PhotoHelper(this, storageHelper)
     private val doPhotoLauncher = registerForActivityResult(TakePicture()) { result ->
         if (result) {
             savePhotoInRoute()
@@ -113,7 +119,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     override fun doPhotoForTreasure(treasure: TreasureDescription) {
         model.setupTreasureNeedingPhotoById(treasure.id)
-        doPhotoLauncher.launch(createPhotoUri())
+        doPhotoLauncher.launch(photoHelper.createTipPhotoUri())
     }
 
     private fun addTreasureListener() {
@@ -130,23 +136,26 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     private fun savePhotoInRoute() {
         Toast.makeText(applicationContext, R.string.photo_saving, Toast.LENGTH_SHORT).show()
-        val photoTempFile = getPhotoTempFile()
-        val photoHelper = PhotoHelper(storageHelper)
+        val photoTempFile = photoHelper.getPhotoTempFile()
         val fileForPhoto = model.photoFileForTreasureNeedingPhoto(storageHelper)
-        if (fileForPhoto != null && photoHelper.rescaleImageAndSaveInTreasure(photoTempFile, fileForPhoto)) {
-            model.saveRoute(storageHelper)
-            Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+        if (fileForPhoto != null) {
+            lifecycleScope.launch {
+                photoHelper.rescaleImageAndSaveInTreasure(
+                    photoTempFile,
+                    fileForPhoto,
+                    onSuccess = {
+                        model.saveRoute(storageHelper)
+                        Toast.makeText(applicationContext, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+                    },
+                    onFailure = { photoSavingError() })
+            }
         } else {
-            Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
+            photoSavingError()
         }
     }
 
-    private fun createPhotoUri(): Uri {
-        val photoFile = getPhotoTempFile()
-        if (!photoFile.exists()) {
-            photoFile.createNewFile()
-        }
-        return FileProvider.getUriForFile(this, "pl.marianjureczko.poszukiwacz.fileprovider", photoFile)
+    private fun photoSavingError() {
+        Toast.makeText(applicationContext, R.string.photo_failed, Toast.LENGTH_SHORT).show()
     }
 
     private fun restoreState(savedInstanceState: Bundle?) {
@@ -175,8 +184,6 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
 
     private fun isInEditExistingRouteMode(existingRouteName: String?) =
         existingRouteName != null
-
-    private fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + TMP_PICTURE_FILE)
 
     private fun setupRouteInViewAndModel(route: Route) {
         model.setRoute(route)

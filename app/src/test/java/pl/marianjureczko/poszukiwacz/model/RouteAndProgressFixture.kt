@@ -5,14 +5,14 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 class RouteAndProgressFixture(
     val route: Route,
-    val progress: TreasureBag
+    val progress: TreasuresProgress
 ) {
 
     companion object {
         fun savedWithSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
             val selected = someFrom(route.treasures)
-            val progress = TreasureBag(route.name)
+            val progress = TreasuresProgress(route.name)
             progress.selectedTreasure = selected
             saveBoth(storageHelper, route, progress)
             return RouteAndProgressFixture(route, progress)
@@ -20,12 +20,12 @@ class RouteAndProgressFixture(
 
         fun savedWithoutSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
-            val progress = TreasureBag(route.name)
+            val progress = TreasuresProgress(route.name)
             saveBoth(storageHelper, route, progress)
             return RouteAndProgressFixture(route, progress)
         }
 
-        private fun saveBoth(storageHelper: StorageHelper, route: Route, progress: TreasureBag) {
+        private fun saveBoth(storageHelper: StorageHelper, route: Route, progress: TreasuresProgress) {
             storageHelper.save(route)
             storageHelper.save(progress)
         }
