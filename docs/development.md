@@ -1,3 +1,5 @@
+
+
 # Development environment configuration
 
 To ~/.gradle/gradle.properties add:
@@ -12,7 +14,50 @@ When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_
 
 # Activities flow
 
-[State machine](activities_flow.mmd)
+```mermaid
+   stateDiagram-v2
+    [*] --> MainActivity
+    MainActivity --> TreasuresEditorActivity : create new route\n OR\n edit existing route
+    TreasuresEditorActivity --> MainActivity
+    MainActivity --> BluetoothActivity : send route\n OR\n receive route
+    BluetoothActivity --> MainActivity
+    MainActivity --> SearchingActivity : select route\n for searching
+    SearchingActivity --> MainActivity
+    SearchingActivity --> TreasureSelectorActivity : select treasure\n for searching
+    TreasureSelectorActivity --> SearchingActivity
+    SearchingActivity --> PhotoActivity : show photo hint
+    PhotoActivity --> SearchingActivity
+    SearchingActivity --> ResultActivity : show treasure
+    ResultActivity --> SearchingActivity
+    SearchingActivity --> QrScanIntent : scan found treasure
+    QrScanIntent --> SearchingActivity
+    TreasuresEditorActivity --> CapturePhotoIntent : make photo\n with a hint
+    CapturePhotoIntent --> TreasuresEditorActivity
+    SearchingActivity --> MapActivity : show map
+    MapActivity --> SearchingActivity
+
+    MainActivity --> FacebookActivity
+    FacebookActivity --> MainActivity
+    TreasuresEditorActivity --> FacebookActivity
+    FacebookActivity --> TreasuresEditorActivity
+    BluetoothActivity --> FacebookActivity
+    FacebookActivity --> BluetoothActivity
+    SearchingActivity --> FacebookActivity
+    FacebookActivity --> SearchingActivity
+    TreasureSelectorActivity --> FacebookActivity
+    FacebookActivity --> TreasureSelectorActivity
+    PhotoActivity --> FacebookActivity
+    FacebookActivity --> PhotoActivity
+    ResultActivity --> FacebookActivity
+    FacebookActivity --> ResultActivity
+    TreasuresEditorActivity --> FacebookActivity
+    FacebookActivity --> TreasuresEditorActivity
+    MapActivity --> FacebookActivity
+    FacebookActivity --> MapActivity
+
+    note right of QrScanIntent: INTENT
+    note right of CapturePhotoIntent: INTENT
+```
 
 # Persistence management
 
@@ -36,15 +81,107 @@ There are three levels of state persistence.
 
 ## Structure
 
-[Class diagram](permissions_class_diagram.mmd)
+```mermaid
+   classDiagram
+    class ActivityRequirements{
+        <<interface>>
+        getSpecsArray()
+        getMessage()
+        getMessageForPermanentDenial()
+    }
+    class PermissionActivity{
+        <<abstract>>
+        assurePermissionsAreGranted()
+    }
+    class PermissionsSpec{
+        <<enum>>
+        requestCode: Int
+        getPermissionsTextArray()
+    }
+    class PermissionListener{
+        <<interface>>
+        permissionsGranted()
+        navigateToSettings()
+        deny()
+        retry()
+    }
+    class PermissionManager{
+        areAllPermissionsGranted()$
+        isPermissionGranted()$
+        requestAllPermissions()
+        handleRequestPermissionsResult()
+        handleResume()
+    }
+    PermissionActivity <|-- XyzActivity
+    PermissionActivity --> PermissionManager
+    PermissionActivity --> PermissionsSpec
+    PermissionsSpec <|-- PermissionsForAbcd
+    PermissionsForAbcd --> "1..*" PermissionWithCode
+    PermissionManager --> PermissionListener
+    PermissionActivity *--> PermissionListener : inner class
+```
 
 ## Requesting permissions
 
-[Sequence diagram](requesting_permissions_sequence_diagram.mmd)
+```mermaid
+   sequenceDiagram
+    Start ->>+ XyzActivity: onCreate()
+    XyzActivity ->>+ PermissionActivity: assurePermissionsAreGranted(:PermissionsSpec)
+    PermissionActivity ->>+ ActivityRequirements: getSpecsArray()
+    ActivityRequirements -->>- PermissionActivity: x
+    PermissionActivity ->>+ PermissionManager: areAllPermissionsGranted(:Array<PermissionWithCode>)
+    PermissionManager -->>- PermissionActivity: x
+    alt all permissions granted
+        PermissionActivity ->>+ XyzActivity: onPermissionsGranted()
+        XyzActivity -->>- PermissionActivity: x
+    else
+        PermissionActivity ->>+ PermissionManager: requestAllPermissions(:PermissionsSpec)
+        PermissionManager ->>+ ActivityRequirements: getSpecsArray()
+        ActivityRequirements -->>- PermissionManager: x
+        PermissionManager ->>+ ActivityCompat: requestPermissions(permissions,requestCode)
+        ActivityCompat -->>- PermissionManager: x
+        PermissionManager -->>- PermissionActivity: x
+    end
+    PermissionActivity -->>- XyzActivity: x
+    XyzActivity -->>- Start: x
+```
 
 ## Handling request permission result
 
-[Sequence diagram](handling_request_result.mmd)
+```mermaid
+   sequenceDiagram
+    Start ->>+ PermissionActivity: onRequestPermissionsResult(requestCode,permissions,grantResults)
+    PermissionActivity ->>+ PermissionManager: handleRequestPermissionsResult(:PermissionsSpec,permissions,grantResults)
+    alt are all permissions granted
+        PermissionManager ->>+ PermissionListener: permissionsGranted(:PermissionsSpec)
+        PermissionListener ->>+ PermissionActivity: onPermissionsGranted(:PermissionsSpec)
+        PermissionActivity -->>- PermissionListener: x
+        PermissionListener -->>- PermissionManager: x
+    else
+        PermissionManager ->>+ ActivityCompat: shouldShowRequestPermissionRationale(deniedPermission)
+        ActivityCompat -->>- PermissionManager: x
+        alt should show rationale
+            PermissionManager ->>+ PermissionManager: showPermissionRationaleDialog(:PermissionsSpec)
+            PermissionManager ->>+  PermissionListener: retry()
+            PermissionListener -->>- PermissionManager: x
+            PermissionManager -->>- PermissionManager: x
+        else
+            PermissionManager ->>+ PermissionManager: showPermissionPermanentDenialDialog(:PermissionsSpec,deniedPermission)
+            opt user wants to change permissions in settings
+                PermissionManager ->>+ PermissionListener: navigateToSettings()
+                PermissionListener -) Settings: startActivity(intent)
+                PermissionListener -->>- PermissionManager: x
+            end
+            PermissionManager -->>- PermissionManager: x
+        end
+
+    end
+    PermissionManager -->>- PermissionActivity: x
+    PermissionActivity -->>- Start: x
+    Settings -)+ PermissionActivity: onResume()
+    PermissionActivity ->>+ PermissionManager: handleResume()
+    PermissionManager -->>- PermissionActivity: x
+```
 
 Rejecting required permissions should result in a dialog where user can change his/her mind. Permissions can be rejected "permanently", then the settings need to be visited to
 grant permissions.

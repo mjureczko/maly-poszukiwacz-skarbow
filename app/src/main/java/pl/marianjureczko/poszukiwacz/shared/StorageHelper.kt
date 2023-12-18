@@ -104,7 +104,7 @@ open class StorageHelper(val context: Context) {
     fun loadAll(): MutableList<Route> {
         val dir = getRoutesDir()
         return dir.listFiles()
-            .filter { it.name.toLowerCase().endsWith(".xml") }
+            .filter { it.name.lowercase().endsWith(".xml") }
             .mapNotNull {
                 try {
                     xmlHelper.loadRouteFromFile(it)
