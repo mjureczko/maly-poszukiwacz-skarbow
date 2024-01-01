@@ -16,6 +16,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [facebookToken: FACEBOOK_TOKEN]
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
     signingConfigs {
         release {
             storeFile file("../android.jks")
@@ -75,6 +78,10 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.activity:activity-compose:1.8.2'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.mapbox.maps:android:10.8.1'
     implementation 'com.facebook.android:facebook-share:latest.release'
@@ -95,6 +102,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
     androidTestImplementation 'org.mockito:mockito-inline:2.13.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 }
 
 configurations {

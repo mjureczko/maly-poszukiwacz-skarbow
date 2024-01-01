@@ -19,6 +19,7 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookContract
 import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookInputData
 import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookOutputData
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import java.util.Properties
 
 
 abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasureProgressDialog.Callback {
@@ -29,9 +30,12 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasur
 
     private lateinit var facebookLauncher: ActivityResultLauncher<FacebookInputData>
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
+    /** Initialized to be used by childs in onCreate()*/
+    protected val settings = Settings(assets)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         callbackManager = CallbackManager.Factory.create()
         shareDialog = ShareDialog(this)
 
