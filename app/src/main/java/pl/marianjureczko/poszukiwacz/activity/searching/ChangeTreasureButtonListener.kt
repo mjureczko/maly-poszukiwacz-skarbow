@@ -4,9 +4,10 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
 import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 
 interface TreasuresStorage {
-    fun getTreasureSelectorActivityInputData(justFoundTreasure: Treasure?): SelectTreasureInputData
+    fun getTreasureSelectorActivityInputData(justFoundTreasureDesc: TreasureDescription?): SelectTreasureInputData
 }
 
 class ChangeTreasureButtonListener (

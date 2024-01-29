@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookInputData
 import pl.marianjureczko.poszukiwacz.databinding.ActivityCommemorativeBinding
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
@@ -58,7 +59,7 @@ class CommemorativeActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? = model.progress
+    override fun getTreasureProgress(): TreasuresProgress? = model.progress
 
     private fun rotatePhoto(photoFullPath: String, uri: Uri) {
         lifecycleScope.launch {

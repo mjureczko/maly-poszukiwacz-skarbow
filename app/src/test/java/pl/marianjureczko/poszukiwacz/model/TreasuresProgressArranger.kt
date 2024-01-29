@@ -12,7 +12,7 @@ class TreasuresProgressArranger : CustomArranger<TreasuresProgress>() {
         instance.collect(treasureDescription)
         instance.collect(some<Treasure>())
         instance.addCommemorativePhoto(treasureDescription, someString())
-        instance.hunterPath.addLocation(Coordinates(some<Double>() % 180, some<Double>() % 90))
+//        instance.hunterPath.addLocation(Coordinates(some<Double>() % 180, some<Double>() % 90))
         return instance
     }
 }

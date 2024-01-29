@@ -35,7 +35,7 @@ class TreasureProgressHolder(
     private val photoHelper = PhotoHelper(context, storageHelper)
 
     fun setup(treasure: TreasureDescription, commemorativePhoto: String?) {
-        if (model.isCollected(treasure)) {
+        if (model.isCollected(treasure) && treasure != model.justFoundTreasureDescription) {
             showCollected()
         } else {
             showNotCollected()
@@ -66,7 +66,6 @@ class TreasureProgressHolder(
                 doPhotoLauncher.launch(photoHelper.createCommemorativePhotoTempUri())
             } else {
                 showCommemorativeLauncher.launch(CommemorativeInputData(commemorativePhoto, model.progress))
-//                context.startActivity(CommemorativeActivity.intent(context, commemorativePhoto))
             }
         }
     }

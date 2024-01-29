@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureselector
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
@@ -26,16 +25,20 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
     private lateinit var route: Route
     lateinit var progress: TreasuresProgress
         private set
-    private var userLocation: Coordinates? = null
-    private var justFoundTreasure: Treasure? = null
+    var userLocation: Coordinates? = null
+        private set
+    var justFoundTreasureDescription: TreasureDescription? = null
     private var treasureDescriptionSelectedForPhoto: Int? = null
     private val locationCalculator = LocationCalculator()
 
-    fun initialize(route: Route, progress: TreasuresProgress, userLocation: Coordinates?, justFound: Treasure?) {
+    fun initialize(route: Route,
+                   progress: TreasuresProgress,
+                   userLocation: Coordinates?,
+                   justFoundTreasureDescription: TreasureDescription?) {
         this.route = route
         this.progress = progress
         this.userLocation = userLocation
-        this.justFoundTreasure = justFound
+        this.justFoundTreasureDescription = justFoundTreasureDescription
         state.get<Set<Int>>(IDS_OF_COLLECTED)?.let {
             this.progress.collectedTreasuresDescriptionId.clear()
             this.progress.collectedTreasuresDescriptionId.addAll(it)
@@ -110,18 +113,6 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
         }
     }
 
-    fun getUserLocation(): Coordinates? =
-        userLocation?.copy()
+    fun treasureDescriptionHasBeenIdentified(): Boolean = this.justFoundTreasureDescription != null
 
-    fun getJustFound(): Treasure? =
-        justFoundTreasure
-
-    fun treasureIsNotFarAwayFromUser(): Boolean =
-        if (getSelectedTreasure() != null && getUserLocation() != null) {
-            val distance = LocationCalculator().distanceInSteps(getSelectedTreasure()!!, getUserLocation()!!)
-            Log.i(TAG, "Distance is $distance")
-            distance < 60;
-        } else {
-            false
-        }
 }

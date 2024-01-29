@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookInputData
 import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
 import pl.marianjureczko.poszukiwacz.activity.main.BluetoothException
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -101,7 +102,7 @@ class BluetoothActivity : PermissionActivity(), MemoConsole, BluetoothConnection
         setUpAds(findViewById(R.id.adView))
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+    override fun getTreasureProgress(): TreasuresProgress? {
         return null
     }
 

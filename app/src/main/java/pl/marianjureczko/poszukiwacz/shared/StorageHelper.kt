@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.shared
 import android.content.Context
 import android.util.Log
 import org.apache.commons.io.IOUtils
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
@@ -26,6 +27,7 @@ open class StorageHelper(val context: Context) {
     companion object {
         const val routesDirectory = "/treasures_lists"
         const val progressDirectory = "/progress"
+        const val hunterPathsDirectory = "/huner_paths"
     }
 
     fun newSoundFile(): String = newFile("sound_", ".3gp")
@@ -34,9 +36,14 @@ open class StorageHelper(val context: Context) {
 
     fun newCommemorativePhotoFile(): String = newFile("commemorativephoto_", ".jpg")
 
-    fun save(bag: TreasuresProgress) {
-        val file = getProgressFile(bag.routeName)
-        xmlHelper.writeToFile(bag, file)
+    fun save(progress: TreasuresProgress) {
+        val file = getProgressFile(progress.routeName)
+        xmlHelper.writeToFile(progress, file)
+    }
+
+    fun save(hunterPath: HunterPath) {
+        val file = getHunterPathFile(hunterPath.routeName)
+        xmlHelper.writeToFile(hunterPath, file)
     }
 
     fun loadProgress(routeName: String): TreasuresProgress? {
@@ -44,6 +51,20 @@ open class StorageHelper(val context: Context) {
         return if (file.exists()) {
             try {
                 xmlHelper.loadProgressFromFile(file)
+            } catch (e: Exception) {
+                Log.e(TAG, e.message, e)
+                null
+            }
+        } else {
+            null
+        }
+    }
+
+    fun loadHunterPath(routeName: String): HunterPath? {
+        val file = getHunterPathFile(routeName)
+        return if (file.exists()) {
+            try {
+                xmlHelper.loadHunterPathFromFile(file)
             } catch (e: Exception) {
                 Log.e(TAG, e.message, e)
                 null
@@ -192,7 +213,14 @@ open class StorageHelper(val context: Context) {
         return File("${dir.absolutePath}/$routeName.xml")
     }
 
+    //TODO t: code duplication with getProgressFile (possibly also in save)
+    private fun getHunterPathFile(routeName: String): File {
+        val dir = getHunterPathsDir()
+        return File("${dir.absolutePath}/$routeName.xml")
+    }
+
     private fun getProgressDir(): File = getDir(progressDirectory)
+    private fun getHunterPathsDir(): File = getDir(hunterPathsDirectory)
 
     private fun getDir(dirName: String): File {
         val dir = File(context.filesDir.absolutePath + dirName)
