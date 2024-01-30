@@ -56,7 +56,9 @@
 
         <activity
             android:name=".activity.result.ResultActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/FullscreenTheme"
+            />
         <activity
             android:name=".activity.map.MapActivity"
             android:exported="false"
@@ -67,10 +69,12 @@
         <activity android:name=".activity.bluetooth.BluetoothActivity" />
         <activity
             android:name=".activity.photo.PhotoActivity"
-            android:label="@string/photo_tip" />
+            android:label="@string/photo_tip"
+            android:theme="@style/FullscreenTheme"
+            />
         <activity
             android:name=".activity.treasureseditor.TreasuresEditorActivity"
-            android:theme="@style/FullscreenTheme" />
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.main.MainActivity"
             android:exported="true"

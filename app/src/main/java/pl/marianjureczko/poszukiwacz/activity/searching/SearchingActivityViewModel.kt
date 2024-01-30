@@ -25,6 +25,7 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
     private val TAG = javaClass.simpleName
     private val xmlHelper = XmlHelper()
     private lateinit var route: Route
+    //TODO: state should be employed as property is mutable
     private lateinit var treasuresProgress: TreasuresProgress
     private var currentLocation: Location? = null
     private var currentCoordinates: Coordinates? = state.get<Coordinates?>(CURRENT_COORDINATES)
@@ -33,45 +34,49 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
             field = value
             state[TREASURE_SELECTION_INITIALIZED] = value
         }
+
     private var hunterPath: HunterPath? = deserializeHunterPath(state.get<String>(PATH))
         private set(value) {
             if (value != null) {
                 field = value
                 state[PATH] = xmlHelper.writeToString(value)
-                treasuresProgress.hunterPath = value
             }
         }
     private var mediaPlayer: MediaPlayer? = null
+
+    fun initialize(routeXml: String, storageHelper: StorageHelper) {
+        route = xmlHelper.loadFromString<Route>(routeXml)
+        loadProgressFromStorage(storageHelper)
+    }
 
     override fun getSelectedForHuntTreasure(): TreasureDescription? {
         return treasuresProgress.selectedTreasure
     }
 
-    override fun getTreasureSelectorActivityInputData(justFoundTreasure: Treasure?): SelectTreasureInputData {
+    override fun getTreasureSelectorActivityInputData(justFoundTreasureDesc: TreasureDescription?): SelectTreasureInputData {
         treasureSelectionInitialized = true
-        return SelectTreasureInputData(route, treasuresProgress, currentCoordinates, justFoundTreasure)
+        return SelectTreasureInputData(route, treasuresProgress, currentCoordinates, justFoundTreasureDesc)
     }
+
+    fun tryToFindTreasureDescription(justFoundTreasure: Treasure?) =
+        JustFoundFinder(justFoundTreasure, getSelectedForHuntTreasure(), currentCoordinates)
+            .findTreasureDescription()
 
     override fun setCurrentLocation(location: Location?, storageHelper: StorageHelper) {
         currentLocation = location
         location?.let {
             currentCoordinates = Coordinates(it.latitude, it.longitude)
             state[CURRENT_COORDINATES] = currentCoordinates
-            if (treasuresProgress.hunterPath!!.addLocation(currentCoordinates!!)) {
-                storageHelper.save(this.treasuresProgress)
+            val hp = hunterPath!!
+            if (hp.addLocation(currentCoordinates!!)) {
+                storageHelper.save(hp)
             }
             //to call setter
-            hunterPath = treasuresProgress.hunterPath
+            hunterPath = hp
         }
     }
 
     override fun getTreasuresProgress(): TreasuresProgress = treasuresProgress
-
-    fun initialize(routeXml: String, storageHelper: StorageHelper) {
-        route = xmlHelper.loadFromString<Route>(routeXml)
-        treasuresProgress = storageHelper.loadProgress(route.name) ?: TreasuresProgress(route.name)
-        hunterPath = treasuresProgress.hunterPath
-    }
 
     override fun tipName(): String? =
         treasuresProgress.selectedTreasure?.tipFileName
@@ -91,9 +96,6 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
     fun treasureSelectionInitialized() =
         treasureSelectionInitialized || treasuresProgress.selectedTreasure != null
 
-    fun treasureIsAlreadyCollected(treasure: Treasure): Boolean =
-        treasuresProgress.contains(treasure)
-
     fun collectTreasure(treasure: Treasure, storageHelper: StorageHelper) {
         treasuresProgress.collect(treasure)
         storageHelper.save(this.treasuresProgress)
@@ -108,14 +110,28 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
     fun getDiamonds(): String =
         treasuresProgress.diamonds.toString()
 
-    fun replaceTreasureBag(treasuresProgress: TreasuresProgress, storageHelper: StorageHelper) {
+    fun replaceProgress(treasuresProgress: TreasuresProgress, storageHelper: StorageHelper) {
         this.treasuresProgress = treasuresProgress
         storageHelper.save(this.treasuresProgress)
     }
 
+    fun loadProgressFromStorage(storageHelper: StorageHelper) {
+        var loadedProgress = storageHelper.loadProgress(route.name)
+        if (loadedProgress == null) {
+            loadedProgress = TreasuresProgress(route.name)
+            storageHelper.save(loadedProgress)
+        }
+        treasuresProgress = loadedProgress
+        hunterPath = storageHelper.loadHunterPath(route.name)
+        if(hunterPath == null) {
+            hunterPath = HunterPath(route.name)
+            storageHelper.save(hunterPath!!)
+        }
+    }
+
     //visibility for tests
     internal fun getRoute() = route
-    internal fun getTreasureBag() = treasuresProgress
+    internal fun getProgress() = treasuresProgress
 
     private fun handleMediaPlayerError(what: Int, extra: Int): Boolean {
         when (what) {

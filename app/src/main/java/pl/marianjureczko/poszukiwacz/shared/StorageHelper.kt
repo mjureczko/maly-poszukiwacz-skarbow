@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.shared
 import android.content.Context
 import android.util.Log
 import org.apache.commons.io.IOUtils
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
@@ -26,6 +27,7 @@ open class StorageHelper(val context: Context) {
     companion object {
         const val routesDirectory = "/treasures_lists"
         const val progressDirectory = "/progress"
+        const val hunterPathsDirectory = "/huner_paths"
     }
 
     fun newSoundFile(): String = newFile("sound_", ".3gp")
@@ -34,9 +36,16 @@ open class StorageHelper(val context: Context) {
 
     fun newCommemorativePhotoFile(): String = newFile("commemorativephoto_", ".jpg")
 
-    fun save(bag: TreasuresProgress) {
-        val file = getProgressFile(bag.routeName)
-        xmlHelper.writeToFile(bag, file)
+    fun save(route: Route) {
+        xmlHelper.writeToFile(route, getRouteFile(route.fileName()))
+    }
+
+    fun save(progress: TreasuresProgress) {
+        xmlHelper.writeToFile(progress, getProgressFile(progress.routeName))
+    }
+
+    fun save(hunterPath: HunterPath) {
+        xmlHelper.writeToFile(hunterPath, getHunterPathFile(hunterPath.routeName))
     }
 
     fun loadProgress(routeName: String): TreasuresProgress? {
@@ -53,9 +62,18 @@ open class StorageHelper(val context: Context) {
         }
     }
 
-    fun save(route: Route) {
-        val xmlFile = getRouteFile(route.fileName())
-        xmlHelper.writeToFile(route, xmlFile)
+    fun loadHunterPath(routeName: String): HunterPath? {
+        val file = getHunterPathFile(routeName)
+        return if (file.exists()) {
+            try {
+                xmlHelper.loadHunterPathFromFile(file)
+            } catch (e: Exception) {
+                Log.e(TAG, e.message, e)
+                null
+            }
+        } else {
+            null
+        }
     }
 
     /** The route should be already saved */
@@ -179,20 +197,19 @@ open class StorageHelper(val context: Context) {
     private fun newFile(prefix: String, extension: String) =
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
-    private fun getRouteFile(routeName: String): File {
-        //TODO: what about invalid characters in name?
-        val dir = getRoutesDir()
-        return File("${dir.absolutePath}/$routeName.xml")
-    }
+    //TODO: what about invalid characters in name?
+    private fun getRouteFile(routeName: String): File = getFile(getRoutesDir(), routeName)
+
+    private fun getProgressFile(routeName: String): File = getFile(getProgressDir(), routeName)
+
+    private fun getHunterPathFile(routeName: String): File = getFile(getHunterPathsDir(), routeName)
+
+    private fun getFile(dir: File, routeName: String) = File("${dir.absolutePath}/$routeName.xml")
 
     private fun getRoutesDir(): File = getDir(routesDirectory)
 
-    private fun getProgressFile(routeName: String): File {
-        val dir = getProgressDir()
-        return File("${dir.absolutePath}/$routeName.xml")
-    }
-
     private fun getProgressDir(): File = getDir(progressDirectory)
+    private fun getHunterPathsDir(): File = getDir(hunterPathsDirectory)
 
     private fun getDir(dirName: String): File {
         val dir = File(context.filesDir.absolutePath + dirName)
@@ -204,7 +221,12 @@ open class StorageHelper(val context: Context) {
 
     private fun pathsToRelative(route: Route): Route {
         val relativeTreasures = route.treasures
-            .map { it.copy(tipFileName = toRelativePath(it.tipFileName), photoFileName = toRelativePath(it.photoFileName)) }
+            .map {
+                it.copy(
+                    tipFileName = toRelativePath(it.tipFileName),
+                    photoFileName = toRelativePath(it.photoFileName)
+                )
+            }
             .toMutableList()
         return route.copy(treasures = relativeTreasures)
     }

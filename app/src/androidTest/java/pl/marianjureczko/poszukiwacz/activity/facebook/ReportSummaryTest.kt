@@ -25,7 +25,7 @@ internal class ReportSummaryTest : ReportAbstractTest() {
 
         val treasure = Treasure("1", 17, TreasureType.GOLD)
         treasuresProgress.collect(treasure)
-        model.initialize(treasuresProgress, context)
+        model.initialize(context, null, treasuresProgress)
 
         //when
         reportSummary.draw(context, canvas, 0f)

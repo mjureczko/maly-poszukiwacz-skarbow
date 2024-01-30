@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
-import com.facebook.FacebookSdk
 import com.facebook.share.Sharer
 import com.facebook.share.model.SharePhoto
 import com.facebook.share.model.SharePhotoContent
@@ -36,7 +35,7 @@ class FacebookActivity : PermissionActivity() {
     private val model: FacebookViewModel by viewModels()
 
     companion object {
-        const val TREASURE_PROGRESS = "pl.marianjureczko.poszukiwacz.activity.facebook_treasure_progress"
+        const val INPUT = "pl.marianjureczko.poszukiwacz.activity.input"
         const val STORAGE_DO_NOT_REQUIRE_PERMISSONS = Build.VERSION_CODES.Q
         private val xmlHelper = XmlHelper()
     }
@@ -48,11 +47,8 @@ class FacebookActivity : PermissionActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
-        model.initialize(
-            progress = xmlHelper.loadFromString(intent.getStringExtra(TREASURE_PROGRESS)!!),
-            this
-        )
+        val input = intent.getSerializableExtra(INPUT) as FacebookInputData
+        model.initialize(this, hunterPath = input.hunterPath, progress = input.progress)
         callbackManager = CallbackManager.Factory.create()
         shareDialog = ShareDialog(this)
 
@@ -120,5 +116,5 @@ class FacebookActivity : PermissionActivity() {
         }
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? = null
+    override fun getTreasureProgress(): TreasuresProgress? = null
 }

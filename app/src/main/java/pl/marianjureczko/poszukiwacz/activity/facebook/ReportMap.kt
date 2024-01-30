@@ -62,19 +62,22 @@ class ReportMap(
     }
 
     private fun drawRoute(snapshot: MapSnapshotInterface, mapCanvas: Canvas) {
-        val locations = model.progress.hunterPath.pathAsCoordinates().toList()
-        if (locations.size > 1) {
-            var previousXY = snapshot.screenCoordinate(Point.fromLngLat(locations[0].longitude, locations[0].latitude))
-            locations.asSequence()
-                .drop(1)
-                .forEach {
-                    val xy = snapshot.screenCoordinate(Point.fromLngLat(it.longitude, it.latitude))
-                    mapCanvas.drawLine(
-                        previousXY.x.toFloat(), previousXY.y.toFloat(), xy.x.toFloat(), xy.y.toFloat(),
-                        Paint().apply { color = Color.RED }
-                    )
-                    previousXY = xy
-                }
+        model.hunterPath?.let {
+            val locations = it.pathAsCoordinates().toList()
+            if (locations.size > 1) {
+                var previousXY =
+                    snapshot.screenCoordinate(Point.fromLngLat(locations[0].longitude, locations[0].latitude))
+                locations.asSequence()
+                    .drop(1)
+                    .forEach {
+                        val xy = snapshot.screenCoordinate(Point.fromLngLat(it.longitude, it.latitude))
+                        mapCanvas.drawLine(
+                            previousXY.x.toFloat(), previousXY.y.toFloat(), xy.x.toFloat(), xy.y.toFloat(),
+                            Paint().apply { color = Color.RED }
+                        )
+                        previousXY = xy
+                    }
+            }
         }
     }
 

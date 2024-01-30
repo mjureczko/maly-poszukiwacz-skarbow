@@ -23,7 +23,7 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 class MainActivity : PermissionActivity() {
 
     private val TAG = javaClass.simpleName
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+    override fun getTreasureProgress(): TreasuresProgress? {
         return null
     }
 

@@ -144,7 +144,7 @@ internal class SelectorViewModelTest {
         //given
         val model = some<SelectorViewModel>()
         model.initialize(some<Route>(), some<TreasuresProgress>(), null, null)
-        assertThat(model.getUserLocation()).isNull()
+        assertThat(model.userLocation).isNull()
         val treasureDescription = some<TreasureDescription>()
 
         //when
@@ -170,7 +170,7 @@ internal class SelectorViewModelTest {
 
                 //then
                 assertThat(treasureId).isEqualTo(treasureDescription.id)
-                assertThat(distanceInSteps).isEqualTo(calculator.distanceInSteps(treasureDescription, model.getUserLocation()!!))
+                assertThat(distanceInSteps).isEqualTo(calculator.distanceInSteps(treasureDescription, model.userLocation!!))
                 return expected
             }
         })

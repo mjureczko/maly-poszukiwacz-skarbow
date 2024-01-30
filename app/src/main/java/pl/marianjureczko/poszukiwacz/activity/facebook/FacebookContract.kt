@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import java.io.Serializable
 
 data class FacebookInputData(
+    val hunterPath: HunterPath?,
     val progress: TreasuresProgress
 ) : Serializable
 
@@ -18,13 +20,9 @@ data class FacebookOutputData(
 
 class FacebookContract : ActivityResultContract<FacebookInputData, FacebookOutputData?>() {
 
-    companion object {
-        private val xmlHelper = XmlHelper()
-    }
-
     override fun createIntent(context: Context, input: FacebookInputData): Intent {
         return Intent(context, FacebookActivity::class.java).apply {
-            putExtra(FacebookActivity.TREASURE_PROGRESS, xmlHelper.writeToString(input.progress))
+            putExtra(FacebookActivity.INPUT, input)
         }
     }
 

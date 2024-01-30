@@ -18,7 +18,7 @@ import pl.marianjureczko.poszukiwacz.activity.commemorative.CommemorativeContrac
 import pl.marianjureczko.poszukiwacz.activity.commemorative.CommemorativeInputData
 import pl.marianjureczko.poszukiwacz.databinding.ActivityTreasureSelectorBinding
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.permissions.PermissionActivity
@@ -34,33 +34,35 @@ import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
 
     private val TAG = javaClass.simpleName
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+    override fun getTreasureProgress(): TreasuresProgress? {
         return model.progress
     }
 
     private lateinit var binding: ActivityTreasureSelectorBinding
     private val model: SelectorViewModel by viewModels()
     private lateinit var adapter: TreasureProgressAdapter
-    private val storageHelper = StorageHelper(this)
-    private val photoHelper = PhotoHelper(this, storageHelper)
-    private val doPhotoLauncher: ActivityResultLauncher<Uri> = registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
-        if (result) {
-            val newPhotoLocation = photoHelper.moveCommemorativePhotoToPermanentLocation()
-            model.setCommemorativePhotoOnSelectedTreasureDescription(newPhotoLocation)
-            adapter.notifyDataSetChanged()
-            Toast.makeText(this, R.string.photo_saved, Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, R.string.photo_not_saved, Toast.LENGTH_SHORT).show()
+    private val photoHelper = PhotoHelper(this, StorageHelper(this))
+    private val doPhotoLauncher: ActivityResultLauncher<Uri> =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
+            if (result) {
+                val newPhotoLocation = photoHelper.moveCommemorativePhotoToPermanentLocation()
+                model.setCommemorativePhotoOnSelectedTreasureDescription(newPhotoLocation)
+                adapter.notifyDataSetChanged()
+                Toast.makeText(this, R.string.photo_saved, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, R.string.photo_not_saved, Toast.LENGTH_SHORT).show()
+            }
         }
-    }
-    private val commemorativeLauncher: ActivityResultLauncher<CommemorativeInputData> = registerForActivityResult(CommemorativeContract()) {}
+    private val commemorativeLauncher: ActivityResultLauncher<CommemorativeInputData> =
+        registerForActivityResult(CommemorativeContract()) {}
 
     companion object {
         const val RESULT_PROGRESS = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_result_progress"
         internal const val ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_to_select_from"
         internal const val PROGRESS = "pl.marianjureczko.poszukiwacz.activity.route_progress"
         internal const val LOCATION = "pl.marianjureczko.poszukiwacz.activity.user_coordinates"
-        internal const val TREASURE = "pl.marianjureczko.poszukiwacz.activity.treasure_selector_treasure"
+        internal const val TREASURE_DESCRIPTION =
+            "pl.marianjureczko.poszukiwacz.activity.treasure_selector_treasure_description"
         private val xmlHelper = XmlHelper()
     }
 
@@ -79,7 +81,7 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
             route = xmlHelper.loadFromString<Route>(intent.getStringExtra(ROUTE)!!),
             progress = xmlHelper.loadFromString<TreasuresProgress>(intent.getStringExtra(PROGRESS)!!),
             userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?,
-            justFound = intent.getSerializableExtra(TREASURE) as Treasure?
+            justFoundTreasureDescription = intent.getSerializableExtra(TREASURE_DESCRIPTION) as TreasureDescription?
         )
         adapter = TreasureProgressAdapter(this, model, this, doPhotoLauncher, commemorativeLauncher)
         binding.treasuresToSelect.adapter = adapter
@@ -106,16 +108,14 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
     }
 
     private fun markTreasureIfFound() =
-        model.getJustFound()?.let {
-            if (model.treasureIsNotFarAwayFromUser()) {
-                model.collect(model.getSelectedTreasure()!!)
-                adapter.notifyDataSetChanged()
-                val id = model.getSelectedTreasure()!!.id.toString()
-                Toast.makeText(this, this.getString(R.string.treasure_marked_as_collected, id), Toast.LENGTH_LONG).show()
-            } else {
-                //TODO: in case the toast is too quick - https://www.geeksforgeeks.org/display-toast-for-a-specific-time-in-android/
-                Toast.makeText(this, R.string.treasure_nor_marked, Toast.LENGTH_LONG).show()
-            }
+        if (model.treasureDescriptionHasBeenIdentified()) {
+            val id = model.justFoundTreasureDescription!!.id.toString()
+            Toast.makeText(this, this.getString(R.string.treasure_marked_as_collected, id), Toast.LENGTH_LONG).show()
+            model.justFoundTreasureDescription = null
+            adapter.notifyDataSetChanged()
+        } else {
+            //TODO: in case the toast is too quick - https://www.geeksforgeeks.org/display-toast-for-a-specific-time-in-android/
+            Toast.makeText(this, R.string.treasure_nor_marked, Toast.LENGTH_LONG).show()
         }
 
     private fun intentResultWithProgress(): Intent {

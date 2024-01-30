@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -12,13 +13,16 @@ class FacebookViewModel(private val state: SavedStateHandle) : ViewModel() {
     private val TAG = javaClass.simpleName
     lateinit var progress: TreasuresProgress
         private set
+    var hunterPath: HunterPath? = null
+        private set
     lateinit var elements: List<ElementDescription>
         private set
 
     lateinit var route: Route
 
-    fun initialize(progress: TreasuresProgress, context: Context) {
+    fun initialize(context: Context, hunterPath: HunterPath?, progress: TreasuresProgress) {
         this.progress = progress
+        this.hunterPath = hunterPath
         val elements = mutableListOf<ElementDescription>()
         elements.add(ElementDescription(Type.TREASURES_SUMMARY, true, context.getString(R.string.collected_treasures)))
         val treasure = context.getString(R.string.treasure)

@@ -37,7 +37,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, tempPhoto(600, 600))
 
         StorageHelper(context).save(Route(treasuresProgress.routeName))
-        model.initialize(treasuresProgress, context)
+        model.initialize(context, null, treasuresProgress)
         val reportPhotos = ReportCommemorativePhotos(model, font, seed)
 
         //when
@@ -59,7 +59,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, tempPhoto(600, 600))
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, tempPhoto(400, 800))
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(4, tempPhoto(600, 500))
-        model.initialize(treasuresProgress, context)
+        model.initialize(context, null, treasuresProgress)
         val reportPhotos = ReportCommemorativePhotos(model, font, seed)
 
         //when
