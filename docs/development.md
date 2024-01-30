@@ -209,22 +209,3 @@ To build apk file execute:
 ```
 
 All tokens and passwords available in KeePass.
-
-## Old releasing procedure
-
-You need to push a tag to create a release. Execute:
-
-```
-git tag
-```
-
-to check existing tags (only the local ones will be printed).
-
-To create a new release execute:
-
-```
-git tag -a X.Y -m "comment"
-git push origin --tags
-```
-
-It will launch a pipeline instance that creates a new release.
