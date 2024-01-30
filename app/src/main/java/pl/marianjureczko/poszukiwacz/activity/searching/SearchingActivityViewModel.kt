@@ -34,7 +34,7 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
             field = value
             state[TREASURE_SELECTION_INITIALIZED] = value
         }
-    //TODO t: how it corresponds with reloading progress?
+
     private var hunterPath: HunterPath? = deserializeHunterPath(state.get<String>(PATH))
         private set(value) {
             if (value != null) {

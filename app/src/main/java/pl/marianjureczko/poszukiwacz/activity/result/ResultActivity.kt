@@ -34,7 +34,6 @@ class ResultActivity : ActivityWithAdsAndBackButton() {
     private val showCommemorativeLauncher: ActivityResultLauncher<CommemorativeInputData> =
         registerForActivityResult(CommemorativeContract()) {}
 
-    //TODO t: copied from CommemorativeActivity
     private val doPhotoLauncher: ActivityResultLauncher<Uri> =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
             if (result) {

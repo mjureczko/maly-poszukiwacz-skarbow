@@ -15,6 +15,12 @@ class XmlHelper {
         serializer.write(route, outputFile)
     }
 
+    fun writeToFile(progress: TreasuresProgress, outputFile: File) =
+        serializer.write(progress, outputFile)
+
+    fun writeToFile(hunterPath: HunterPath, outputFile: File) =
+        serializer.write(hunterPath, outputFile)
+
     fun writeToString(o: Any): String {
         val stringWriter = StringWriter()
         serializer.write(o, stringWriter)
@@ -29,12 +35,6 @@ class XmlHelper {
     inline fun <reified T> loadFromString(xml: String): T {
         return serializer.read(T::class.java, xml)
     }
-
-    fun writeToFile(progress: TreasuresProgress, outputFile: File) =
-        serializer.write(progress, outputFile)
-
-    fun writeToFile(hunterPath: HunterPath, outputFile: File) =
-        serializer.write(hunterPath, outputFile)
 
     fun loadProgressFromFile(xmlFile: File): TreasuresProgress {
         val xml = xmlFile.readText()

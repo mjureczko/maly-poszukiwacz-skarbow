@@ -27,7 +27,8 @@ class CommemorativeActivity : ActivityWithAdsAndBackButton() {
     private val model: CommemorativeViewModel by viewModels()
     private val storageHelper = StorageHelper(this)
     private val photoHelper = PhotoHelper(this, storageHelper)
-    private val doPhotoLauncher: ActivityResultLauncher<Uri> = registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
+    private val doPhotoLauncher: ActivityResultLauncher<Uri> =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
         if (result) {
             photoHelper.moveCommemorativePhotoToPermanentLocation(target = model.commemorativePhotoAbsolutePath)
             reloadImage(model.commemorativePhotoUri())

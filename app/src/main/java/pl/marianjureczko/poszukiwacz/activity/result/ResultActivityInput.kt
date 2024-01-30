@@ -5,7 +5,6 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.io.Serializable
 
-//TODO t: remove ?
 data class ResultActivityInput(
     val treasure: Treasure?,
     val treasureDescription: TreasureDescription?,

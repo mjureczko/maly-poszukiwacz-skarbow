@@ -9,6 +9,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
@@ -33,14 +34,15 @@ class ReportGeneratorTest {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, photos[2])
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(13, photos[4])
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(0, photos[5])
-        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
-        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
-        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
+        val hunterPath = HunterPath()
+        hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
+        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
+        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
         StorageHelper(context).save(Route(treasuresProgress.routeName))
 
         //when
         val model = FacebookViewModel(SavedStateHandle(mapOf()))
-        model.initialize(treasuresProgress, context)
+        model.initialize(context, hunterPath, treasuresProgress)
         //MapBox doesn't work in tests
         model.getMap()?.isSelected = false
         val actual = report.create(context, model) {

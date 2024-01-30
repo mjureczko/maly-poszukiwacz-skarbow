@@ -36,14 +36,16 @@ open class StorageHelper(val context: Context) {
 
     fun newCommemorativePhotoFile(): String = newFile("commemorativephoto_", ".jpg")
 
+    fun save(route: Route) {
+        xmlHelper.writeToFile(route, getRouteFile(route.fileName()))
+    }
+
     fun save(progress: TreasuresProgress) {
-        val file = getProgressFile(progress.routeName)
-        xmlHelper.writeToFile(progress, file)
+        xmlHelper.writeToFile(progress, getProgressFile(progress.routeName))
     }
 
     fun save(hunterPath: HunterPath) {
-        val file = getHunterPathFile(hunterPath.routeName)
-        xmlHelper.writeToFile(hunterPath, file)
+        xmlHelper.writeToFile(hunterPath, getHunterPathFile(hunterPath.routeName))
     }
 
     fun loadProgress(routeName: String): TreasuresProgress? {
@@ -72,11 +74,6 @@ open class StorageHelper(val context: Context) {
         } else {
             null
         }
-    }
-
-    fun save(route: Route) {
-        val xmlFile = getRouteFile(route.fileName())
-        xmlHelper.writeToFile(route, xmlFile)
     }
 
     /** The route should be already saved */
@@ -200,24 +197,16 @@ open class StorageHelper(val context: Context) {
     private fun newFile(prefix: String, extension: String) =
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
-    private fun getRouteFile(routeName: String): File {
-        //TODO: what about invalid characters in name?
-        val dir = getRoutesDir()
-        return File("${dir.absolutePath}/$routeName.xml")
-    }
+    //TODO: what about invalid characters in name?
+    private fun getRouteFile(routeName: String): File = getFile(getRoutesDir(), routeName)
+
+    private fun getProgressFile(routeName: String): File = getFile(getProgressDir(), routeName)
+
+    private fun getHunterPathFile(routeName: String): File = getFile(getHunterPathsDir(), routeName)
+
+    private fun getFile(dir: File, routeName: String) = File("${dir.absolutePath}/$routeName.xml")
 
     private fun getRoutesDir(): File = getDir(routesDirectory)
-
-    private fun getProgressFile(routeName: String): File {
-        val dir = getProgressDir()
-        return File("${dir.absolutePath}/$routeName.xml")
-    }
-
-    //TODO t: code duplication with getProgressFile (possibly also in save)
-    private fun getHunterPathFile(routeName: String): File {
-        val dir = getHunterPathsDir()
-        return File("${dir.absolutePath}/$routeName.xml")
-    }
 
     private fun getProgressDir(): File = getDir(progressDirectory)
     private fun getHunterPathsDir(): File = getDir(hunterPathsDirectory)
@@ -232,7 +221,12 @@ open class StorageHelper(val context: Context) {
 
     private fun pathsToRelative(route: Route): Route {
         val relativeTreasures = route.treasures
-            .map { it.copy(tipFileName = toRelativePath(it.tipFileName), photoFileName = toRelativePath(it.photoFileName)) }
+            .map {
+                it.copy(
+                    tipFileName = toRelativePath(it.tipFileName),
+                    photoFileName = toRelativePath(it.photoFileName)
+                )
+            }
             .toMutableList()
         return route.copy(treasures = relativeTreasures)
     }

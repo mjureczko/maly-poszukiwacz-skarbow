@@ -126,7 +126,6 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         registerForActivityResult(ScanContract()) { scanResult ->
             if (scanResult != null && scanResult.contents != null) {
                 showResultLauncher.launch(processSearchingResult(scanResult.contents))
-                //TODO t: treasure progress need to be reloaded when receiving activity result
             }
         }
 
@@ -139,11 +138,13 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
 
     private fun createShowResultLauncher(): ActivityResultLauncher<ResultActivityInput> =
         registerForActivityResult(ResultActivityContract()) { result: ResultActivityOutput? ->
-            result?.let {
-                model.loadProgressFromStorage(storageHelper)
-                showCollectedTreasures()
-                if (it.newTreasureCollected) {
-                    treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(it.justFoundTreasureDescription))
+            result?.let { resultActivityOutput ->
+                resultActivityOutput.progress?.let { progress ->
+                    model.replaceProgress(progress, storageHelper)
+                    showCollectedTreasures()
+                    if (resultActivityOutput.newTreasureCollected) {
+                        treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(resultActivityOutput.justFoundTreasureDescription))
+                    }
                 }
             }
         }
