@@ -3,12 +3,21 @@ package pl.marianjureczko.poszukiwacz.model
 import org.apache.commons.math3.stat.StatUtils
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
+import org.simpleframework.xml.Root
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import java.io.Serializable
 import java.util.Date
 
-class HunterPath : Serializable {
+@Root
+class HunterPath() : Serializable {
+
+    constructor(routeName: String) : this() {
+        this.routeName = routeName
+    }
+
+    @field:Element
+    lateinit var routeName: String
 
     /**
      * Measurements for the next chunk. When te chunk creation criteria are met, the measurements are used to produce the chunk and are remove.

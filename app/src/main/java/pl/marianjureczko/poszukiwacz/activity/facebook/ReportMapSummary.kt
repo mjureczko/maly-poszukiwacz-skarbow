@@ -29,9 +29,9 @@ class ReportMapSummary(
             val textPaint = ReportCommons.getTextPaint(font, Paint.Align.LEFT)
             var textY = currentTop + 50
             var x = ReportCommons.REPORT_MARGIN
-            canvas.drawText(distanceText(context, model.progress.hunterPath), x, textY, textPaint)
+            canvas.drawText(distanceText(context, model.hunterPath), x, textY, textPaint)
             textY += 40
-            canvas.drawText(timeText(context, model.progress.hunterPath), x, textY, textPaint)
+            canvas.drawText(timeText(context, model.hunterPath), x, textY, textPaint)
         }
     }
 
@@ -42,17 +42,18 @@ class ReportMapSummary(
             context.getResources().getConfiguration().locale
         }
 
-    private fun distanceText(context: Context, hunterPath: HunterPath): String {
-        val formattedDistance = "%.2f".format(hunterPath.pathLengthInKm())
+    private fun distanceText(context: Context, hunterPath: HunterPath?): String {
+        val distance = hunterPath?.pathLengthInKm() ?: 0.0
+        val formattedDistance = "%.2f".format(distance)
         return "${context.getString(R.string.walked_route)} $formattedDistance km."
     }
 
-    private fun timeText(context: Context, hunterPath: HunterPath): String {
+    private fun timeText(context: Context, hunterPath: HunterPath?): String {
         val loc = Locale("en", "US")
         val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, loc)
         val dateFormat: DateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, loc)
 
-        hunterPath.getStartTime()?.let { start ->
+        hunterPath?.getStartTime()?.let { start ->
             val startDate = dateFormat.format(start)
             val startTime = timeFormat.format(start)
             hunterPath.getEndTime()?.let { end ->

@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookInputData
 import pl.marianjureczko.poszukiwacz.databinding.ActivityCommemorativeBinding
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
@@ -26,7 +27,8 @@ class CommemorativeActivity : ActivityWithAdsAndBackButton() {
     private val model: CommemorativeViewModel by viewModels()
     private val storageHelper = StorageHelper(this)
     private val photoHelper = PhotoHelper(this, storageHelper)
-    private val doPhotoLauncher: ActivityResultLauncher<Uri> = registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
+    private val doPhotoLauncher: ActivityResultLauncher<Uri> =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
         if (result) {
             photoHelper.moveCommemorativePhotoToPermanentLocation(target = model.commemorativePhotoAbsolutePath)
             reloadImage(model.commemorativePhotoUri())
@@ -58,7 +60,7 @@ class CommemorativeActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? = model.progress
+    override fun getTreasureProgress(): TreasuresProgress? = model.progress
 
     private fun rotatePhoto(photoFullPath: String, uri: Uri) {
         lifecycleScope.launch {

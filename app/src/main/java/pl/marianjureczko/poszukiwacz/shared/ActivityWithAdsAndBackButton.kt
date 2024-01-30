@@ -62,8 +62,8 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasur
             val url = this.getString(R.string.help_path)
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         } else if (id == R.id.facebook) {
-            if (getCurrentTreasuresProgress() != null) {
-                facebookLauncher.launch(FacebookInputData(getCurrentTreasuresProgress()!!))
+            if (getTreasureProgress() != null) {
+                facebookLauncher.launch(createFacebookInputData(getTreasureProgress()!!))
             } else {
                 val progresses = storageHelper.loadAll()
                     .mapNotNull { route -> storageHelper.loadProgress(route.name) }
@@ -72,7 +72,7 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasur
                     Toast.makeText(this, R.string.facebook_nothing_to_share, Toast.LENGTH_SHORT).show()
                 } else {
                     if (progresses.size == 1) {
-                        facebookLauncher.launch(FacebookInputData(progresses[0]))
+                        facebookLauncher.launch(createFacebookInputData(progresses[0]))
                     } else {
                         SelectTreasureProgressDialog.newInstance(progresses).apply {
                             show(supportFragmentManager, "SelectTreasureProgressDialog")
@@ -84,16 +84,20 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasur
         return super.onOptionsItemSelected(item)
     }
 
+    private fun createFacebookInputData(treasureProgress: TreasuresProgress): FacebookInputData {
+        return FacebookInputData(storageHelper.loadHunterPath(treasureProgress.routeName), treasureProgress)
+    }
+
     override fun onTreasureProgressSelected(routeName: String) {
         val progresses = storageHelper.loadProgress(routeName)
         if (progresses == null) {
             Toast.makeText(this, R.string.facebook_invalid_roote, Toast.LENGTH_SHORT).show()
         } else {
-            facebookLauncher.launch(FacebookInputData(progresses))
+            facebookLauncher.launch(createFacebookInputData(progresses))
         }
     }
 
-    protected abstract fun getCurrentTreasuresProgress(): TreasuresProgress?
+    protected abstract fun getTreasureProgress(): TreasuresProgress?
 
     private fun createShareOnFacebookLauncher(): ActivityResultLauncher<FacebookInputData> =
         registerForActivityResult(FacebookContract()) { result: FacebookOutputData? ->

@@ -8,6 +8,7 @@ import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import java.io.File
 import java.util.Date
 
@@ -22,10 +23,11 @@ class ReportMapSummaryTest : ReportAbstractTest() {
         val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
-        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
-        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
-        treasuresProgress.hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
-        model.initialize(treasuresProgress, context)
+        val hunterPath = HunterPath()
+        hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
+        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
+        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
+        model.initialize(context, hunterPath, treasuresProgress)
 
         //when
         reportMapHeader.draw(context, canvas, 0f)

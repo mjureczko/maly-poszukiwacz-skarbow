@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.shared
 
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.io.File
@@ -13,6 +14,12 @@ class XmlHelper {
     fun writeToFile(route: Route, outputFile: File) {
         serializer.write(route, outputFile)
     }
+
+    fun writeToFile(progress: TreasuresProgress, outputFile: File) =
+        serializer.write(progress, outputFile)
+
+    fun writeToFile(hunterPath: HunterPath, outputFile: File) =
+        serializer.write(hunterPath, outputFile)
 
     fun writeToString(o: Any): String {
         val stringWriter = StringWriter()
@@ -29,11 +36,12 @@ class XmlHelper {
         return serializer.read(T::class.java, xml)
     }
 
-    fun writeToFile(bag: TreasuresProgress, outputFile: File) =
-        serializer.write(bag, outputFile)
-
     fun loadProgressFromFile(xmlFile: File): TreasuresProgress {
         val xml = xmlFile.readText()
         return serializer.read(TreasuresProgress::class.java, xml)
+    }
+    fun loadHunterPathFromFile(xmlFile: File): HunterPath {
+        val xml = xmlFile.readText()
+        return serializer.read(HunterPath::class.java, xml)
     }
 }

@@ -35,6 +35,14 @@ When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_
     CapturePhotoIntent --> TreasuresEditorActivity
     SearchingActivity --> MapActivity : show map
     MapActivity --> SearchingActivity
+    ResultActivity --> CapturePhotoIntent : make commemorative photo
+    CapturePhotoIntent --> ResultActivity
+    ResultActivity --> CommemorativeActivity : show commemorative photo
+    CommemorativeActivity --> ResultActivity
+    TreasureSelectorActivity --> CommemorativeActivity : show commemorative photo
+    CommemorativeActivity --> CapturePhotoIntent : replace\n commemorative photo
+    CapturePhotoIntent --> CommemorativeActivity
+    CommemorativeActivity --> TreasureSelectorActivity
 
     MainActivity --> FacebookActivity
     FacebookActivity --> MainActivity
@@ -55,6 +63,7 @@ When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_
     MapActivity --> FacebookActivity
     FacebookActivity --> MapActivity
 
+    
     note right of QrScanIntent: INTENT
     note right of CapturePhotoIntent: INTENT
 ```
@@ -64,8 +73,7 @@ When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_
 There are three levels of state persistence.
 
 1. **View Model level.** There is the ViewModel class that allows data to survive configuration changes such as screen rotations. Each stateful activity has a view model class (a
-   class
-   extending the `ViewModel`).
+   class extending the `ViewModel`).
 
 2. **Saved instance state.** Data saved this way survives system initiated process death (e.g. removing the process due to lack of memory). Saving instance state should be done
    through view model. The view model class aggregates an instance of the `SavedStateHandle`. When the data is changed, the view model should
@@ -201,22 +209,3 @@ To build apk file execute:
 ```
 
 All tokens and passwords available in KeePass.
-
-## Old releasing procedure
-
-You need to push a tag to create a release. Execute:
-
-```
-git tag
-```
-
-to check existing tags (only the local ones will be printed).
-
-To create a new release execute:
-
-```
-git tag -a X.Y -m "comment"
-git push origin --tags
-```
-
-It will launch a pipeline instance that creates a new release.

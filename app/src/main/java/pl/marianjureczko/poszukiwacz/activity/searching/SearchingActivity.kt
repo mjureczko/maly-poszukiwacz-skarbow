@@ -14,7 +14,8 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.map.MapActivityContract
 import pl.marianjureczko.poszukiwacz.activity.map.MapInputData
 import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityContract
-import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityData
+import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityInput
+import pl.marianjureczko.poszukiwacz.activity.result.ResultActivityOutput
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureContract
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureInputData
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.SelectTreasureOutputData
@@ -46,7 +47,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     private val model: SearchingActivityViewModel by viewModels()
     private lateinit var binding: ActivitySearchingBinding
     private lateinit var treasureSelectorLauncher: ActivityResultLauncher<SelectTreasureInputData>
-    private lateinit var showResultLauncher: ActivityResultLauncher<ResultActivityData>
+    private lateinit var showResultLauncher: ActivityResultLauncher<ResultActivityInput>
     private lateinit var showMapLauncher: ActivityResultLauncher<MapInputData>
 
     @SuppressLint("SourceLockedOrientationActivity")
@@ -57,7 +58,12 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         setContentView(R.layout.activity_searching)
         restoreState()
 
-        binding.scanBtn.setOnClickListener(ScanButtonListener(createScanTreasureLauncher(), resources.getString(R.string.qr_scanner_msg)))
+        binding.scanBtn.setOnClickListener(
+            ScanButtonListener(
+                createScanTreasureLauncher(),
+                resources.getString(R.string.qr_scanner_msg)
+            )
+        )
         treasureSelectorLauncher = createSelectTreasureLauncher()
         showResultLauncher = createShowResultLauncher()
         showMapLauncher = createShowMapLauncher()
@@ -72,15 +78,16 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
             storageHelper
         )
         val handler = Handler()
-        val locationRequester = LocationRequester(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
+        val locationRequester =
+            LocationRequester(this, locationListener, handler, getSystemService(LOCATION_SERVICE) as LocationManager)
         handler.post(locationRequester)
         setContentView(binding.root)
 
         setUpAds(binding.adView)
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
-        return model.getTreasureBag()
+    override fun getTreasureProgress(): TreasuresProgress? {
+        return model.getProgress()
     }
 
     override fun onPostResume() {
@@ -100,23 +107,13 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
         showCollectedTreasures()
     }
 
-    private fun processSearchingResult(result: String): ResultActivityData {
-        try {
+    private fun processSearchingResult(result: String): ResultActivityInput {
+        return try {
             val treasure: Treasure = treasureParser.parse(result)
-            return if (model.treasureIsAlreadyCollected(treasure)) {
-                ResultActivityData(resources.getString(R.string.treasure_already_taken_msg))
-            } else {
-                add(treasure)
-                ResultActivityData(treasure)
-            }
+            ResultActivityInput(treasure, model.tryToFindTreasureDescription(treasure), model.getTreasuresProgress())
         } catch (ex: IllegalArgumentException) {
-            return ResultActivityData(resources.getString(R.string.not_a_treasure_msg))
+            ResultActivityInput(null, null, model.getTreasuresProgress())
         }
-    }
-
-    private fun add(treasure: Treasure) {
-        model.collectTreasure(treasure, storageHelper)
-        showCollectedTreasures()
     }
 
     private fun showCollectedTreasures() {
@@ -135,15 +132,19 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     private fun createSelectTreasureLauncher(): ActivityResultLauncher<SelectTreasureInputData> =
         registerForActivityResult(SelectTreasureContract()) { result: SelectTreasureOutputData? ->
             if (result != null) {
-                model.replaceTreasureBag(result.progress, storageHelper)
+                model.replaceProgress(result.progress, storageHelper)
             }
         }
 
-    private fun createShowResultLauncher(): ActivityResultLauncher<ResultActivityData> =
-        registerForActivityResult(ResultActivityContract()) { result: ResultActivityData? ->
-            result?.let {
-                if (!it.isError()) {
-                    treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(it.treasure))
+    private fun createShowResultLauncher(): ActivityResultLauncher<ResultActivityInput> =
+        registerForActivityResult(ResultActivityContract()) { result: ResultActivityOutput? ->
+            result?.let { resultActivityOutput ->
+                resultActivityOutput.progress?.let { progress ->
+                    model.replaceProgress(progress, storageHelper)
+                    showCollectedTreasures()
+                    if (resultActivityOutput.newTreasureCollected) {
+                        treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(resultActivityOutput.justFoundTreasureDescription))
+                    }
                 }
             }
         }

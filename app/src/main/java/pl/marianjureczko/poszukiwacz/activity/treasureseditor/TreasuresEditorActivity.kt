@@ -45,7 +45,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     }
 
     private val TAG = javaClass.simpleName
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? {
+    override fun getTreasureProgress(): TreasuresProgress? {
         return null
     }
 

@@ -33,7 +33,7 @@ class PhotoActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress =
+    override fun getTreasureProgress(): TreasuresProgress =
         model.progress
 
 }

@@ -41,7 +41,7 @@ class MapActivity : ActivityWithAdsAndBackButton() {
         setUpAds(binding.adView)
     }
 
-    override fun getCurrentTreasuresProgress(): TreasuresProgress? = model.progress
+    override fun getTreasureProgress(): TreasuresProgress? = model.progress
 
     override fun onResume() {
         super.onResume()

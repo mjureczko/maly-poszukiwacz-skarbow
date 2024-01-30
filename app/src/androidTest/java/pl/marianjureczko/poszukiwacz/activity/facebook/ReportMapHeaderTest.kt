@@ -19,7 +19,7 @@ class ReportMapHeaderTest : ReportAbstractTest() {
         val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
-        model.initialize(treasuresProgress, context)
+        model.initialize(context, null, treasuresProgress)
 
         //when
         reportMapHeader.draw(context, canvas, 0f)
