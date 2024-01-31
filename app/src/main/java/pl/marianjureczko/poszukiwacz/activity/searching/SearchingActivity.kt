@@ -93,7 +93,7 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
     override fun onPostResume() {
         super.onPostResume()
         if (!model.treasureSelectionInitialized()) {
-            treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(null))
+            treasureSelectorLauncher.launch(model.getTreasureSelectorInputData(false, null))
         }
     }
 
@@ -143,7 +143,8 @@ class SearchingActivity : ActivityWithAdsAndBackButton() {
                     model.replaceProgress(progress, storageHelper)
                     showCollectedTreasures()
                     if (resultActivityOutput.newTreasureCollected) {
-                        treasureSelectorLauncher.launch(model.getTreasureSelectorActivityInputData(resultActivityOutput.justFoundTreasureDescription))
+                        val input = model.getTreasureSelectorInputData(true, resultActivityOutput.justFoundTreasureDescription);
+                        treasureSelectorLauncher.launch(input)
                     }
                 }
             }

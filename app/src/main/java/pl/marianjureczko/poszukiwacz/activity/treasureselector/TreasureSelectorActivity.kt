@@ -61,6 +61,7 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
         internal const val ROUTE = "pl.marianjureczko.poszukiwacz.activity.route_to_select_from"
         internal const val PROGRESS = "pl.marianjureczko.poszukiwacz.activity.route_progress"
         internal const val LOCATION = "pl.marianjureczko.poszukiwacz.activity.user_coordinates"
+        internal const val NEW_TREASURE_COLLECTED = "pl.marianjureczko.poszukiwacz.activity.new_treasure_collected"
         internal const val TREASURE_DESCRIPTION =
             "pl.marianjureczko.poszukiwacz.activity.treasure_selector_treasure_description"
         private val xmlHelper = XmlHelper()
@@ -80,6 +81,7 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
         model.initialize(
             route = xmlHelper.loadFromString<Route>(intent.getStringExtra(ROUTE)!!),
             progress = xmlHelper.loadFromString<TreasuresProgress>(intent.getStringExtra(PROGRESS)!!),
+            newTreasureCollected = intent.getBooleanExtra(NEW_TREASURE_COLLECTED, false),
             userLocation = intent.getSerializableExtra(LOCATION) as Coordinates?,
             justFoundTreasureDescription = intent.getSerializableExtra(TREASURE_DESCRIPTION) as TreasureDescription?
         )
@@ -107,16 +109,19 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
         super.onBackPressed()
     }
 
-    private fun markTreasureIfFound() =
+    private fun markTreasureIfFound() {
         if (model.treasureDescriptionHasBeenIdentified()) {
             val id = model.justFoundTreasureDescription!!.id.toString()
             Toast.makeText(this, this.getString(R.string.treasure_marked_as_collected, id), Toast.LENGTH_LONG).show()
             model.justFoundTreasureDescription = null
             adapter.notifyDataSetChanged()
         } else {
-            //TODO: in case the toast is too quick - https://www.geeksforgeeks.org/display-toast-for-a-specific-time-in-android/
-            Toast.makeText(this, R.string.treasure_nor_marked, Toast.LENGTH_LONG).show()
+            if (model.newTreasureCollected) {
+                //TODO: in case the toast is too quick - https://www.geeksforgeeks.org/display-toast-for-a-specific-time-in-android/
+                Toast.makeText(this, R.string.treasure_nor_marked, Toast.LENGTH_LONG).show()
+            }
         }
+    }
 
     private fun intentResultWithProgress(): Intent {
         val data = Intent()

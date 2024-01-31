@@ -33,7 +33,7 @@ class SelectorViewModelStateTest {
             .willReturn(collectedIds)
 
         //when
-        selectorViewModel.initialize(some<Route>(), some<TreasuresProgress>(), null, null)
+        selectorViewModel.initialize(some<Route>(), some<TreasuresProgress>(), false, null, null)
 
         //then
         assertThat(selectorViewModel.getIdsOfCollectedTreasures()).containsExactlyInAnyOrderElementsOf(collectedIds)
@@ -50,7 +50,7 @@ class SelectorViewModelStateTest {
         val collectedIds = progress.collectedTreasuresDescriptionId.toSet()
 
         //when
-        selectorViewModel.initialize(some<Route>(), progress, null, null)
+        selectorViewModel.initialize(some<Route>(), progress, false, null, null)
 
         //then
         assertThat(selectorViewModel.getIdsOfCollectedTreasures()).containsExactlyInAnyOrderElementsOf(collectedIds)
@@ -143,7 +143,7 @@ internal class SelectorViewModelTest {
     fun `SHOULD use treasure pretty name WHEN user location is null`() {
         //given
         val model = some<SelectorViewModel>()
-        model.initialize(some<Route>(), some<TreasuresProgress>(), null, null)
+        model.initialize(some<Route>(), some<TreasuresProgress>(), false, null, null)
         assertThat(model.userLocation).isNull()
         val treasureDescription = some<TreasureDescription>()
 
@@ -185,7 +185,7 @@ internal class SelectorViewModelTest {
         val selectorViewModel = SelectorViewModel(state)
         val treasure = some<TreasureDescription>()
         val route = some<Route>().copy(treasures = mutableListOf(treasure))
-        selectorViewModel.initialize(route, TreasuresProgress(), null, null)
+        selectorViewModel.initialize(route, TreasuresProgress(), false, null, null)
         selectorViewModel.selectForCommemorativePhoto(treasure)
         Mockito.reset(state)
         val firstPhoto = Files.createTempFile("test", ".test").toAbsolutePath().toString()

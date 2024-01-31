@@ -53,9 +53,12 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
         return treasuresProgress.selectedTreasure
     }
 
-    override fun getTreasureSelectorActivityInputData(justFoundTreasureDesc: TreasureDescription?): SelectTreasureInputData {
+    override fun getTreasureSelectorInputData(
+        treasureCollected: Boolean,
+        justFoundTreasureDesc: TreasureDescription?
+    ): SelectTreasureInputData {
         treasureSelectionInitialized = true
-        return SelectTreasureInputData(route, treasuresProgress, currentCoordinates, justFoundTreasureDesc)
+        return SelectTreasureInputData(treasureCollected, route, treasuresProgress, currentCoordinates, justFoundTreasureDesc)
     }
 
     fun tryToFindTreasureDescription(justFoundTreasure: Treasure?) =

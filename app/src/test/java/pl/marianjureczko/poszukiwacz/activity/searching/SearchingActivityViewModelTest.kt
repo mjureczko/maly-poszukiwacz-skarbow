@@ -6,14 +6,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.mockito.BDDMockito.mockingDetails
 import org.mockito.BDDMockito.reset
 import org.mockito.BDDMockito.then
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.verification.VerificationMode
-import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
@@ -91,7 +88,7 @@ class SearchingActivityViewModelTest {
     fun `SHOULD say initialized WHEN the flag was set by calling getTreasureSelectorActivityInputData`() {
         //given
         val model = some<SearchingActivityViewModel>()
-        model.getTreasureSelectorActivityInputData(null)
+        model.getTreasureSelectorInputData(false, null)
 
         //when
         val actual = model.treasureSelectionInitialized()
@@ -145,7 +142,7 @@ class SearchingActivityViewModelTest {
         assertThat(fixture.model.getSelectedForHuntTreasure()).isNotNull()
 
         //when
-        val actual = fixture.model.getTreasureSelectorActivityInputData(null)
+        val actual = fixture.model.getTreasureSelectorInputData(false, null)
 
         //then
         then(state).should().set(SearchingActivityViewModel.TREASURE_SELECTION_INITIALIZED, true)
