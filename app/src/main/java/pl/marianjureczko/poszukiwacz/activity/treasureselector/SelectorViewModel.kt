@@ -28,15 +28,18 @@ class SelectorViewModel(private val state: SavedStateHandle) : ViewModel() {
     var userLocation: Coordinates? = null
         private set
     var justFoundTreasureDescription: TreasureDescription? = null
+    var newTreasureCollected: Boolean = false
     private var treasureDescriptionSelectedForPhoto: Int? = null
     private val locationCalculator = LocationCalculator()
 
     fun initialize(route: Route,
                    progress: TreasuresProgress,
+                   newTreasureCollected: Boolean,
                    userLocation: Coordinates?,
                    justFoundTreasureDescription: TreasureDescription?) {
         this.route = route
         this.progress = progress
+        this.newTreasureCollected = newTreasureCollected
         this.userLocation = userLocation
         this.justFoundTreasureDescription = justFoundTreasureDescription
         state.get<Set<Int>>(IDS_OF_COLLECTED)?.let {

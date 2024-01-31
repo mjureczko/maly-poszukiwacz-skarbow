@@ -5,13 +5,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 import java.io.Serializable
 
 data class SelectTreasureInputData(
+    val newTreasureCollected: Boolean,
     val route: Route,
     val progress: TreasuresProgress,
     val currentCoordinates: Coordinates?,
@@ -34,6 +34,7 @@ class SelectTreasureContract : ActivityResultContract<SelectTreasureInputData, S
             }
             putExtra(TreasureSelectorActivity.ROUTE, xmlHelper.writeToString(input.route))
             putExtra(TreasureSelectorActivity.PROGRESS, xmlHelper.writeToString(input.progress))
+            putExtra(TreasureSelectorActivity.NEW_TREASURE_COLLECTED, input.newTreasureCollected)
             input.currentCoordinates?.let {
                 putExtra(TreasureSelectorActivity.LOCATION, it)
             }
