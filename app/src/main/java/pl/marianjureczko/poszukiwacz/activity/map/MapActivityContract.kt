@@ -12,7 +12,7 @@ data class MapInputData(
     val progress: TreasuresProgress
 ) : Serializable
 
-class MapActivityContract : ActivityResultContract<MapInputData, Void>() {
+class MapActivityContract : ActivityResultContract<MapInputData, Void?>() {
     override fun createIntent(context: Context, input: MapInputData): Intent {
         return Intent(context, MapActivity::class.java).apply {
             putExtra(MapActivity.MAP, input)

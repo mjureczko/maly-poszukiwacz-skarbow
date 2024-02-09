@@ -31,10 +31,12 @@ abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasur
     private lateinit var facebookLauncher: ActivityResultLauncher<FacebookInputData>
     private val storageHelper: StorageHelper by lazy { StorageHelper(this) }
     /** Initialized to be used by childs in onCreate()*/
-    protected val settings = Settings(assets)
+    protected lateinit var settings: Settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        settings = Settings(assets)
 
         callbackManager = CallbackManager.Factory.create()
         shareDialog = ShareDialog(this)

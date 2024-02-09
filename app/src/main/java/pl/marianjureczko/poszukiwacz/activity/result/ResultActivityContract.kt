@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 
 class ResultActivityContract : ActivityResultContract<ResultActivityInput, ResultActivityOutput>() {
-    override fun createIntent(context: Context, input: ResultActivityInput?): Intent {
+    override fun createIntent(context: Context, input: ResultActivityInput): Intent {
         return Intent(context, ResultActivity::class.java).apply {
             putExtra(ResultActivity.RESULT_IN, input)
         }

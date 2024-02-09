@@ -198,14 +198,22 @@ grant permissions.
 
 To build aab file execute:
 
-```
+```bash
 ./gradlew bundle -PFACEBOOK_TOKEN=<token> -PMAPBOX_DOWNLOADS_TOKEN=<token> -PRELEASE_KEY_PASSWORD=<pass> -PRELEASE_STORE_PASSWORD=<pass>
 ```
 
 To build apk file execute:
 
-```
+```bash
 ./gradlew assembleRelease -PFACEBOOK_TOKEN=<token> -PMAPBOX_DOWNLOADS_TOKEN=<token> -PRELEASE_KEY_PASSWORD=<pass> -PRELEASE_STORE_PASSWORD=<pass>
 ```
 
 All tokens and passwords available in KeePass.
+
+## Choosing version
+
+Execute `./gradlew copy_config -Pconfig_src=VERSION` where VERSION is one of directories containing version configuration files, located in `assets/`.
+E.g.:
+```bash
+./gradlew copy_config -Pconfig_src=kalinowice
+```

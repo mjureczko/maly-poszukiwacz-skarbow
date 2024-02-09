@@ -38,6 +38,7 @@ class MainActivity : PermissionActivity() {
         val splashScreen = installSplashScreen()
 
         super.onCreate(savedInstanceState)
+        val classicMode = settings.isClassicMode()
         binding = ActivityMainBinding.inflate(layoutInflater)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_main)
