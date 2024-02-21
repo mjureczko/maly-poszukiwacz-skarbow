@@ -19,7 +19,6 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookContract
 import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookInputData
 import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookOutputData
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import java.util.Properties
 
 
 abstract class ActivityWithAdsAndBackButton : AppCompatActivity(), SelectTreasureProgressDialog.Callback {

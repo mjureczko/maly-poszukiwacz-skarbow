@@ -4,7 +4,7 @@
     <string name="new_route_button">New route</string>
     <string name="tip_recorded">The hint has been recorded</string>
     <string name="tip_recording_failed">Hint recording failed</string>
-    <string name="route_name_prompt">Enter the route name:</string>
+    <string name="route_name_prompt">Enter route name:</string>
     <string name="ok">OK</string>
     <string name="stop_recording">Stop the recording</string>
     <string name="close">Close</string>
@@ -105,4 +105,11 @@
     <string name="image_saved">The file has been saved successfully. You can locate it in images</string>
     <string name="image_saved_under_name">under the name</string>
     <string name="save_failed">Save failed.</string>
+    <string name="custom_lets_start">Let\'s start the hunt</string>
+    <string name="custom_lead1">Zapraszamy na wyjątkową podróż po pozornie zwyczajnej opolskiej wiosce. Zabierze nas w nią mieszkaniec Kalinowic i pasjonat lokalnej historii Pan Andrzej Legrand. Dzięki niemu poznamy największe okoliczne tajemnice i odkryjemy bezcenne skarby wiedzy.</string>
+    <string name="custom_lead2">Dokładny przebieg trasy zależy od Twoich decyzji, ale możesz się spodziewać, że jej długość to będzie około X km.</string>
+    <string name="custom_lead3">W trakcie zabawy należy odszukać ukryte skarby reprezentowane przez kody QR. Aby poznać kryjące się za nimi tajemnice należy je zeskanować naciskając na</string>
+    <string name="custom_lead4">Gra będzie nam pomagać podając ile kroków w linii prostej pozostało do skarbu oraz wskazując czy trzeba pójść na północ, południe, wschód czy zachód. Kierunki trzeba jednak odnaleźć samodzielnie. Nie przejmuj się tym gdyż pod tymi przyciskami będziesz mógł znaleźć podpowiedzi</string>
+    <string name="custom_lead5">Do odnalezienia jest kilka skarbów. Ten aktualnie poszukiway można zmienić przyciskiem</string>
+    <string name="custom_title">Przygoda w Kalinowicach</string>
 </resources>

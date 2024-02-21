@@ -1,9 +1,23 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
+//    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
 
-apply plugin: 'kotlin-android'
-
-apply plugin: 'de.mannodermaus.android-junit5'
-
+//apply plugin: 'com.android.application'
+//
+//apply plugin: 'kotlin-android'
+//
+//apply plugin: 'de.mannodermaus.android-junit5'
+//
+//plugins {
+//    id 'com.android.application' apply false
+//    id 'com.android.library' apply false
+//    id 'org.jetbrains.kotlin.android' apply false
+//}
 
 android {
     compileSdkVersion 33
@@ -51,6 +65,14 @@ android {
         jvmTarget = "1.8"
     }
 
+    buildFeatures {
+        compose true
+    }
+    
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
+
     testOptions {
         unitTests {
             returnDefaultValues = true
@@ -82,13 +104,15 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation("androidx.activity:activity-compose:$compose_version")
+    implementation "androidx.activity:activity-compose:$compose_version"
+    implementation "androidx.navigation:navigation-compose:2.4.2"
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.mapbox.maps:android:10.8.1'
     implementation 'com.facebook.android:facebook-share:latest.release'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'org.apache.commons:commons-math3:3.6.1'
+
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
