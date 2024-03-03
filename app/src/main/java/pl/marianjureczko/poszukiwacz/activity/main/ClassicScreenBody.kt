@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,7 +36,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 @Composable
-fun ClassicScreenBody() {
+fun ClassicScreenBody(goToSearching: (String) -> Unit) {
     val viewModel: ClassicMainViewModel = viewModel()
     val state = viewModel.state.value
     Column(Modifier.background(PrimaryBackground)) {
@@ -46,7 +47,7 @@ fun ClassicScreenBody() {
                 .weight(0.99f)
         ) {
             items(state.routes) { route ->
-                RouteItem(route, viewModel) { viewModel.deleteRoute(route) }
+                RouteItem(route, viewModel, { viewModel.deleteRoute(route) }, goToSearching)
             }
         }
         Spacer(
@@ -77,8 +78,13 @@ fun ClassicScreenBody() {
 }
 
 @Composable
-fun RouteItem(item: Route, viewModel: ClassicMainViewModel, onDelete: () -> Unit) {
-    Card(elevation = 4.dp, modifier = Modifier.padding(4.dp)) {
+fun RouteItem(item: Route, viewModel: ClassicMainViewModel, onDelete: () -> Unit, goToSearching: (String) -> Unit) {
+    Card(
+        elevation = 4.dp,
+        modifier = Modifier
+            .padding(4.dp)
+            .clickable { goToSearching(item.name) }
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,

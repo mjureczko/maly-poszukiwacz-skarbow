@@ -32,7 +32,7 @@ import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 /** Kalinowice */
 @Composable
-fun CustomScreenBody() {
+fun CustomScreenBody(goToSearching: (String) -> Unit) {
     val viewModel: CustomMainViewModel = viewModel()
     val state = viewModel.state.value
     Column(Modifier.background(PrimaryBackground)) {

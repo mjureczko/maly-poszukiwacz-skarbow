@@ -3,21 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'de.mannodermaus.android-junit5'
-//    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
-
-//apply plugin: 'com.android.application'
-//
-//apply plugin: 'kotlin-android'
-//
-//apply plugin: 'de.mannodermaus.android-junit5'
-//
-//plugins {
-//    id 'com.android.application' apply false
-//    id 'com.android.library' apply false
-//    id 'org.jetbrains.kotlin.android' apply false
-//}
 
 android {
     compileSdkVersion 33
@@ -57,12 +44,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {
@@ -106,6 +93,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.activity:activity-compose:$compose_version"
     implementation "androidx.navigation:navigation-compose:2.4.2"
+    implementation "androidx.window:window-java:1.1.0"
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.mapbox.maps:android:10.8.1'
     implementation 'com.facebook.android:facebook-share:latest.release'

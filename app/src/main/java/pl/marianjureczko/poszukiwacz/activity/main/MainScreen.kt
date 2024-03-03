@@ -9,14 +9,14 @@ import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(isClassic: Boolean, onClickOnGuide: () -> Unit) {
+fun MainScreen(isClassic: Boolean, onClickOnGuide: () -> Unit, goToSearching: (String) -> Unit) {
     Scaffold(
         topBar = { TopBar(onClickOnGuide) },
         content = { _ ->
             if (isClassic) {
-                ClassicScreenBody()
+                ClassicScreenBody(goToSearching)
             } else {
-                CustomScreenBody()
+                CustomScreenBody(goToSearching)
             }
         }
     )
@@ -26,7 +26,7 @@ fun MainScreen(isClassic: Boolean, onClickOnGuide: () -> Unit) {
 @Composable
 fun DefaultPreview() {
     AppTheme {
-        MainScreen(false, {})
+        MainScreen(false, {}, {})
     }
 }
 
