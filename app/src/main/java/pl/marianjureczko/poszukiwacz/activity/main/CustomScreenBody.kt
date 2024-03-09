@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
+import android.content.res.Resources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import pl.marianjureczko.poszukiwacz.App
+import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
@@ -32,8 +32,8 @@ import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 /** Kalinowice */
 @Composable
-fun CustomScreenBody(goToSearching: (String) -> Unit) {
-    val viewModel: CustomMainViewModel = viewModel()
+fun CustomScreenBody(resources: Resources, goToSearching: (String) -> Unit) {
+    val viewModel: CustomMainViewModel = hiltViewModel()
     val state = viewModel.state.value
     Column(Modifier.background(PrimaryBackground)) {
         Column(
@@ -43,7 +43,7 @@ fun CustomScreenBody(goToSearching: (String) -> Unit) {
                 .weight(0.89f)
         ) {
             Text(
-                text = App.getResources().getString(R.string.custom_title),
+                text = resources.getString(R.string.custom_title),
                 style = MaterialTheme.typography.h3,
                 textAlign = TextAlign.Center
             )
@@ -71,18 +71,9 @@ fun CustomScreenBody(goToSearching: (String) -> Unit) {
                 .padding(20.dp),
             horizontalArrangement = Arrangement.End,
         ) {
-            OutlinedButton(
-                shape = RoundedCornerShape(50),
-                onClick = { viewModel.nextLeadMessage() },
-                content = {
-                    Image(
-                        imageVector = Icons.Rounded.ArrowForward,
-                        contentDescription = null,
-                        modifier = Modifier.background(color = Color.Transparent),
-                        colorFilter = ColorFilter.tint(PrimaryBackground)
-                    )
-                }
-            )
+            if (!state.isLastMessage()) {
+                NextButton(viewModel)
+            }
         }
         Spacer(
             modifier = Modifier
@@ -90,8 +81,24 @@ fun CustomScreenBody(goToSearching: (String) -> Unit) {
                 .background(PrimaryBackground)
         )
         LargeButton(R.string.custom_lets_start) {
-            // TODO: start searching activity
+            goToSearching.invoke("1") //TODO use real name
         }
         AdvertBanner()
     }
+}
+
+@Composable
+private fun NextButton(viewModel: CustomMainViewModel) {
+    OutlinedButton(
+        shape = RoundedCornerShape(50),
+        onClick = { viewModel.nextLeadMessage() },
+        content = {
+            Image(
+                imageVector = Icons.Rounded.ArrowForward,
+                contentDescription = null,
+                modifier = Modifier.background(color = Color.Transparent),
+                colorFilter = ColorFilter.tint(PrimaryBackground)
+            )
+        }
+    )
 }

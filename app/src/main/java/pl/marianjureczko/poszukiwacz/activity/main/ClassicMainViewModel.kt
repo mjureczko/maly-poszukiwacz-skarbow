@@ -1,14 +1,17 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import pl.marianjureczko.poszukiwacz.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
-import androidx.compose.runtime.State
+import javax.inject.Inject
 
-class ClassicMainViewModel : ViewModel() {
-    private val storageHelper = StorageHelper(App.getAppContext())
+@HiltViewModel
+class ClassicMainViewModel @Inject constructor(
+    private val storageHelper : StorageHelper
+) : ViewModel() {
 
     private var _state = mutableStateOf(ClassicMainState())
 

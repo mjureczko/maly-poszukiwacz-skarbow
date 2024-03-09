@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,30 +22,24 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.window.layout.WindowMetricsCalculator
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.main.MainScreen
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
-import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun SearchingScreen(onClickOnGuide: () -> Unit) {
+fun SearchingScreen(isClassicMode: Boolean, onClickOnGuide: () -> Unit) {
     Scaffold(
         topBar = { TopBar(onClickOnGuide) },
         content = {
             Column(Modifier.background(SecondaryBackground)) {
-                Scores()
+                Scores(isClassicMode)
                 Compass()
                 Steps()
                 Buttons()
@@ -62,14 +55,62 @@ fun SearchingScreen(onClickOnGuide: () -> Unit) {
 }
 
 @Composable
-fun Scores() {
+fun Scores(isClassicMode: Boolean) {
     Row(
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
             .height(0.05.dh),
     ) {
-        Text(color = Color.Black, text = "TODO")
+        if(isClassicMode) {
+            Image(
+                painterResource(R.drawable.gold),
+                contentDescription = "gold image",
+                contentScale = ContentScale.Inside,
+            )
+            Text(
+                color = Color.Gray,
+                text = "0",
+                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
+            )
+            Image(
+                painterResource(R.drawable.ruby),
+                contentDescription = "ruby image",
+                contentScale = ContentScale.Inside,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+            Text(
+                color = Color.Gray,
+                text = "0",
+                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
+            )
+            Image(
+                painterResource(R.drawable.diamond),
+                contentDescription = "diamond image",
+                contentScale = ContentScale.Inside,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+            Text(
+                color = Color.Gray,
+                text = "0",
+                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
+            )
+        } else {
+            Image(
+                painterResource(R.drawable.chest_small),
+                contentDescription = "tourist treasure image",
+                contentScale = ContentScale.Inside,
+                modifier = Modifier.padding(end = 5.dp)
+            )
+            Text(
+                color = Color.Gray,
+                text = "0",
+                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize,
+                modifier = Modifier.padding(end = 5.dp)
+            )
+        }
     }
 }
 
@@ -81,15 +122,14 @@ fun Compass() {
             .height(0.35.dh),
         contentAlignment = Alignment.Center
     ) {
-//Text("My minHeight is $minHeight while my maxWidth is $maxWidth")
         Image(
             painterResource(R.drawable.compass),
-            contentDescription = null,
+            contentDescription = "compass face",
             contentScale = ContentScale.Inside,
         )
         Image(
             painterResource(R.drawable.arrow),
-            contentDescription = null,
+            contentDescription = "compass needle",
             contentScale = ContentScale.Inside,
         )
     }
@@ -106,7 +146,8 @@ fun Steps() {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            modifier = Modifier.padding(start = 50.dp), fontSize = 56.sp,
+            modifier = Modifier.padding(start = 50.dp),
+            fontSize = 56.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Gray,
             text = "99"
@@ -131,48 +172,73 @@ fun Buttons() {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.width(0.2.dw)) {
-            Image(
-                painterResource(R.drawable.map),
-                modifier = Modifier.padding(10.dp),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-            )
-            Image(
-                painterResource(R.drawable.change_chest),
-                modifier = Modifier.padding(10.dp),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-            )
+            ShowMapButton()
+            ChangeTreasureButton()
         }
         Column(modifier = Modifier.width(0.6.dw)) {
-            Image(
-                painterResource(R.drawable.chest),
-                modifier = Modifier.padding(start = 20.dp),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-            )
+            ScanTreasureButton()
         }
         Column(modifier = Modifier.width(0.2.dw)) {
-            Image(
-                painterResource(R.drawable.show_photo),
-                modifier = Modifier.padding(10.dp),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-            )
-            Image(
-                painterResource(R.drawable.megaphone),
-                modifier = Modifier.padding(10.dp),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-            )
+            PhotoTipButton()
+            SoundTipButton()
         }
     }
+}
+
+@Composable
+private fun ShowMapButton() {
+    Image(
+        painterResource(R.drawable.map),
+        modifier = Modifier.padding(10.dp),
+        contentDescription = null,
+        contentScale = ContentScale.Inside,
+    )
+}
+
+@Composable
+private fun ChangeTreasureButton() {
+    Image(
+        painterResource(R.drawable.change_chest),
+        modifier = Modifier.padding(10.dp),
+        contentDescription = null,
+        contentScale = ContentScale.Inside,
+    )
+}
+
+@Composable
+private fun ScanTreasureButton() {
+    Image(
+        painterResource(R.drawable.chest),
+        modifier = Modifier.padding(start = 20.dp),
+        contentDescription = null,
+        contentScale = ContentScale.Inside,
+    )
+}
+
+@Composable
+private fun PhotoTipButton() {
+    Image(
+        painterResource(R.drawable.show_photo),
+        modifier = Modifier.padding(10.dp),
+        contentDescription = null,
+        contentScale = ContentScale.Inside,
+    )
+}
+
+@Composable
+private fun SoundTipButton() {
+    Image(
+        painterResource(R.drawable.megaphone),
+        modifier = Modifier.padding(10.dp),
+        contentDescription = null,
+        contentScale = ContentScale.Inside,
+    )
 }
 
 @Preview(showBackground = true, apiLevel = 31)
 @Composable
 fun DefaultPreview() {
     AppTheme {
-        SearchingScreen({})
+        SearchingScreen(false, {})
     }
 }

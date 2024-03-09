@@ -1,22 +1,24 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(isClassic: Boolean, onClickOnGuide: () -> Unit, goToSearching: (String) -> Unit) {
+fun MainScreen(isClassic: Boolean, resources: Resources, onClickOnGuide: () -> Unit, goToSearching: (String) -> Unit) {
     Scaffold(
         topBar = { TopBar(onClickOnGuide) },
         content = { _ ->
             if (isClassic) {
                 ClassicScreenBody(goToSearching)
             } else {
-                CustomScreenBody(goToSearching)
+                CustomScreenBody(resources, goToSearching)
             }
         }
     )
@@ -26,7 +28,7 @@ fun MainScreen(isClassic: Boolean, onClickOnGuide: () -> Unit, goToSearching: (S
 @Composable
 fun DefaultPreview() {
     AppTheme {
-        MainScreen(false, {}, {})
+        MainScreen(false, App.getResources(), {}, {})
     }
 }
 

@@ -24,7 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -37,7 +37,7 @@ import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 @Composable
 fun ClassicScreenBody(goToSearching: (String) -> Unit) {
-    val viewModel: ClassicMainViewModel = viewModel()
+    val viewModel: ClassicMainViewModel = hiltViewModel()
     val state = viewModel.state.value
     Column(Modifier.background(PrimaryBackground)) {
         LazyColumn(
