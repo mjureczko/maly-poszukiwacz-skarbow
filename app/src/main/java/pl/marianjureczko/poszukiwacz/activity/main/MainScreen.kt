@@ -5,15 +5,22 @@ import android.content.res.Resources
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(isClassic: Boolean, resources: Resources, onClickOnGuide: () -> Unit, goToSearching: (String) -> Unit) {
+fun MainScreen(
+    navController: NavController?,
+    isClassic: Boolean,
+    resources: Resources,
+    onClickOnGuide: () -> Unit,
+    goToSearching: (String) -> Unit
+) {
     Scaffold(
-        topBar = { TopBar(onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide) },
         content = { _ ->
             if (isClassic) {
                 ClassicScreenBody(goToSearching)
@@ -28,7 +35,7 @@ fun MainScreen(isClassic: Boolean, resources: Resources, onClickOnGuide: () -> U
 @Composable
 fun DefaultPreview() {
     AppTheme {
-        MainScreen(false, App.getResources(), {}, {})
+        MainScreen(null, false, App.getResources(), {}, {})
     }
 }
 

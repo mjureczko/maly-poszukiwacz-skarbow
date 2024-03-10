@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity.searching
+package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -24,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
@@ -34,24 +36,30 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun SearchingScreen(isClassicMode: Boolean, onClickOnGuide: () -> Unit) {
+fun SearchingScreen(navController: NavController?, isClassicMode: Boolean, onClickOnGuide: () -> Unit) {
+    val viewModel: SearchingViewModel = hiltViewModel()
     Scaffold(
-        topBar = { TopBar(onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide) },
         content = {
-            Column(Modifier.background(SecondaryBackground)) {
-                Scores(isClassicMode)
-                Compass()
-                Steps()
-                Buttons()
-                Spacer(
-                    modifier = Modifier
-                        .weight(0.01f)
-                        .background(Color.Transparent)
-                )
-                AdvertBanner()
-            }
+            SearchingScreenBody(isClassicMode)
         }
     )
+}
+
+@Composable
+private fun SearchingScreenBody(isClassicMode: Boolean) {
+    Column(Modifier.background(SecondaryBackground)) {
+        Scores(isClassicMode)
+        Compass()
+        Steps()
+        Buttons()
+        Spacer(
+            modifier = Modifier
+                .weight(0.01f)
+                .background(Color.Transparent)
+        )
+        AdvertBanner()
+    }
 }
 
 @Composable
@@ -64,7 +72,7 @@ fun Scores(isClassicMode: Boolean) {
             .background(Color.Transparent)
             .height(0.05.dh),
     ) {
-        if(isClassicMode) {
+        if (isClassicMode) {
             Image(
                 painterResource(R.drawable.gold),
                 contentDescription = "gold image",
@@ -239,6 +247,6 @@ private fun SoundTipButton() {
 @Composable
 fun DefaultPreview() {
     AppTheme {
-        SearchingScreen(false, {})
+        SearchingScreen(null, false, {})
     }
 }

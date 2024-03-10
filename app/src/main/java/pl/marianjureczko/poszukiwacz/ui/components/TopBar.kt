@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -27,20 +26,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.theme.Primary
 
 @Composable
-fun TopBar(onClickOnGuide: () -> Unit) {
+fun TopBar(navController: NavController?, onClickOnGuide: () -> Unit) {
     val showMenu = remember { mutableStateOf(false) }
     TopAppBar(
         backgroundColor = Primary,
         navigationIcon = {
-            EmbeddedButton(
-                Icons.Outlined.ArrowBack,
-                ColorFilter.tint(Color.White)
-            ) { print("TODO back") }
+            if (navController?.previousBackStackEntry != null) {
+                EmbeddedButton(
+                    Icons.Outlined.ArrowBack,
+                    ColorFilter.tint(Color.White)
+                ) { navController.navigateUp() }
+            }
         },
         actions = {
             IconButton(onClick = { showMenu.value = !showMenu.value }) {
@@ -50,39 +52,8 @@ fun TopBar(onClickOnGuide: () -> Unit) {
                 expanded = showMenu.value,
                 onDismissRequest = { showMenu.value = false }
             ) {
-                //TODO extract to dedicated file custom menu entry
-                DropdownMenuItem(onClick = onClickOnGuide) {
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Image(
-                            painterResource(R.drawable.question_mark),
-                            contentDescription = null,
-                        )
-                        Text(
-                            text = App.getResources().getString(R.string.menu_help),
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                }
-                DropdownMenuItem(onClick = { onClickOnGuide }) {
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Image(
-                            painterResource(R.drawable.facebook),
-                            contentDescription = null,
-                        )
-                        Text(
-                            text = App.getResources().getString(R.string.menu_facebook),
-                            modifier = Modifier.padding(8.dp)
-                        )
-                    }
-                }
+                MenuEntry(R.drawable.question_mark, R.string.menu_help, onClickOnGuide)
+                MenuEntry(R.drawable.facebook, R.string.menu_facebook) { /* TODO */ }
             }
         },
 

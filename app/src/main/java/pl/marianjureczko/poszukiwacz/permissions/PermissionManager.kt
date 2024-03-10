@@ -27,7 +27,7 @@ class PermissionManager(
         }
     }
 
-    fun requestAllPermissions(activity: PermissionActivity, activityRequirements: ActivityRequirements) {
+    fun requestAllPermissions(activity: Activity, activityRequirements: ActivityRequirements) {
         val permissions = activityRequirements.getSpecsArray()
             .flatMap { it.getPermissionsTextArray().asSequence() }
             .toTypedArray()
