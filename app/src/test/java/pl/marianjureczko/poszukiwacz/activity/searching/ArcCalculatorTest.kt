@@ -13,7 +13,7 @@ class ArcCalculatorTest {
     @MethodSource("data")
     fun cos(xTreasure: Double, yTreasure: Double, xLocation: Double, yLocation: Double, expected: Double) {
         //when
-        val actual = ArcCalculator().arc(xTreasure, yTreasure, xLocation, yLocation)
+        val actual = ArcCalculator().degree(xTreasure, yTreasure, xLocation, yLocation)
 
         //then
         assertEquals(expected, actual, 0.001)

@@ -49,7 +49,7 @@ fun CustomScreenBody(resources: Resources, goToSearching: (String) -> Unit) {
             )
             Text(
                 text = state.messages[state.messageIndex].text,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.Justify
             )
             Row(

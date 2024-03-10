@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mały Poszukiwacz Skarbów</string>
+    <string name="app_name">Kalinowice - Mały Poszukiwacz Skarbów</string>
     <string name="new_route_button">Nowa trasa</string>
     <string name="tip_recorded">Podpowiedź została nagrana</string>
     <string name="tip_recording_failed">Nie udało się nagrać podpowiedzi</string>

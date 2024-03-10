@@ -10,7 +10,7 @@ plugins {
 android {
     compileSdkVersion 33
     defaultConfig {
-        applicationId "pl.marianjureczko.poszukiwacz"
+        applicationId "pl.marianjureczko.poszukiwacz.kalinowice"
         minSdkVersion 23
         targetSdkVersion 33
         versionCode 1

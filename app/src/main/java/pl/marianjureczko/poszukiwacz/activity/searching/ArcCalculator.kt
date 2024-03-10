@@ -2,11 +2,12 @@ package pl.marianjureczko.poszukiwacz.activity.searching
 
 import kotlin.math.acos
 
+/** Needle degree calculator */
 class ArcCalculator {
 
     private val cartesian = CartesianCalculator()
 
-    fun arc(xTreasure: Double, yTreasure: Double, xLocation: Double, yLocation: Double): Double {
+    fun degree(xTreasure: Double, yTreasure: Double, xLocation: Double, yLocation: Double): Double {
         val cos = cartesian.cos(xTreasure, yTreasure, xLocation, yLocation)
         return when (cartesian.quarter(xTreasure, yTreasure, xLocation, yLocation)) {
             Quarter.LINE_Y -> if (yTreasure > yLocation) 0.0 else 180.0

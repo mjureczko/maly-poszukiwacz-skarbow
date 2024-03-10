@@ -17,7 +17,7 @@ class CompassPresenter(
         location?.let { location ->
             treasure?.let { treasure ->
                 stepsToDo.text = locationCalculator.distanceInSteps(treasure, location).toString()
-                val arc = arcCalculator.arc(treasure.longitude, treasure.latitude, location.longitude, location.latitude)
+                val arc = arcCalculator.degree(treasure.longitude, treasure.latitude, location.longitude, location.latitude)
                 arrow.rotation = arc.toFloat()
             }
         }

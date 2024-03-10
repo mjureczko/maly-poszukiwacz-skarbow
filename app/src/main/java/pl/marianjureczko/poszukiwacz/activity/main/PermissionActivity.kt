@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -22,7 +23,7 @@ abstract class PermissionActivity : ComponentActivity() {
         val permissionListener = object : PermissionListener {
 
             override fun permissionsGranted(activityRequirements: ActivityRequirements) {
-                print("// do nothing")
+                // do nothing
             }
 
             override fun navigateToSettings() {
@@ -67,6 +68,21 @@ abstract class PermissionActivity : ComponentActivity() {
     fun onPermissionsDenied() {
         if (exitOnDenied) {
             finish()
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (::activityRequirements.isInitialized) {
+            permissionManager.handleRequestPermissionsResult(this, activityRequirements, permissions, grantResults)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isComingFromSettings && ::activityRequirements.isInitialized) {
+            isComingFromSettings = false
+            permissionManager.handleResume(this)
         }
     }
 }

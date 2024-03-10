@@ -25,6 +25,7 @@ import javax.inject.Inject
 /**
  * Routes creation and selection activity
  */
+//TODO: check https://developer.android.com/build/build-variants and Product Flavours
 @AndroidEntryPoint
 class MainActivity : PermissionActivity() {
 

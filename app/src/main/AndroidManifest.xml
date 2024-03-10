@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pl.marianjureczko.poszukiwacz">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -107,17 +108,18 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="pl.marianjureczko.poszukiwacz.fileprovider"
+            android:authorities="pl.marianjureczko.poszukiwacz.kalinowice.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/files" />
         </provider>
-        <provider
-            android:name="com.facebook.FacebookContentProvider"
-            android:authorities="com.facebook.app.FacebookContentProvider732722584920929"
-            android:exported="true" />
+<!--        assure unique provider id https://stackoverflow.com/a/39756274/8471555-->
+<!--        <provider-->
+<!--            android:name="com.facebook.FacebookContentProvider"-->
+<!--            android:authorities="com.facebook.app.FacebookContentProvider732722584920929"-->
+<!--            android:exported="true" />-->
     </application>
 
 </manifest>

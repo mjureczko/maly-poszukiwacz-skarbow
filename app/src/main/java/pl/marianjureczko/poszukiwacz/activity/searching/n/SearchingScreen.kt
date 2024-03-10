@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,7 +40,6 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SearchingScreen(navController: NavController?, isClassicMode: Boolean, onClickOnGuide: () -> Unit) {
-    val viewModel: SearchingViewModel = hiltViewModel()
     Scaffold(
         topBar = { TopBar(navController, onClickOnGuide) },
         content = {
@@ -48,10 +50,12 @@ fun SearchingScreen(navController: NavController?, isClassicMode: Boolean, onCli
 
 @Composable
 private fun SearchingScreenBody(isClassicMode: Boolean) {
+    val viewModel: SearchingViewModel = hiltViewModel()
+    val state = viewModel.state.value
     Column(Modifier.background(SecondaryBackground)) {
         Scores(isClassicMode)
         Compass()
-        Steps()
+        Steps(state.stepsToTreasure)
         Buttons()
         Spacer(
             modifier = Modifier
@@ -144,7 +148,7 @@ fun Compass() {
 }
 
 @Composable
-fun Steps() {
+fun Steps(stepsToTreasure: Int?) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,13 +157,19 @@ fun Steps() {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            modifier = Modifier.padding(start = 50.dp),
-            fontSize = 56.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Gray,
-            text = "99"
-        )
+        if (stepsToTreasure != null) {
+            Text(
+                modifier = Modifier.padding(start = 50.dp),
+                fontSize = 56.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Gray,
+                text = stepsToTreasure.toString()
+            )
+        } else {
+            CircularProgressIndicator(Modifier.semantics {
+                this.contentDescription = "Waiting for GPS"
+            })
+        }
         Image(
             painterResource(R.drawable.steps),
             modifier = Modifier.padding(start = 50.dp),

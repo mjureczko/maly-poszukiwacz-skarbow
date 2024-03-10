@@ -7,6 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.activity.searching.n.LocationFetcher
 import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Singleton
@@ -31,5 +33,17 @@ object SingletonModule {
     @Provides
     fun resources(@ApplicationContext appContext: Context): Resources {
         return appContext.resources
+    }
+
+    @Singleton
+    @Provides
+    fun locationCalculator(): LocationCalculator {
+        return LocationCalculator()
+    }
+
+    @Singleton
+    @Provides
+    fun locationService(@ApplicationContext appContext: Context, calculator: LocationCalculator): LocationFetcher {
+        return LocationFetcher(appContext)
     }
 }
