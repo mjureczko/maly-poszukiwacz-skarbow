@@ -8,9 +8,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import pl.marianjureczko.poszukiwacz.activity.searching.ArcCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Inject
 
@@ -25,6 +25,7 @@ class SearchingViewModel @Inject constructor(
 ) : ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SearchingState> = mutableStateOf(SearchingState(loadRoute()))
+    private val arcCalculator = ArcCalculator()
 
     val state: State<SearchingState>
         get() = _state
@@ -38,16 +39,26 @@ class SearchingViewModel @Inject constructor(
     private fun updateLocation(location: Location) {
         _state.value = _state.value.copy(
             currentLocation = location,
-            stepsToTreasure = locationCalculator.distanceInSteps(state.value.currentTreasure, location)
+            stepsToTreasure = locationCalculator.distanceInSteps(state.value.currentTreasure, location),
+            needleRotation = arcCalculator.degree(
+                state.value.currentTreasure.longitude,
+                state.value.currentTreasure.latitude,
+                location.longitude,
+                location.latitude
+            ).toFloat()
         )
     }
 
     //TODO t: route_name to const
     private fun loadRoute(): Route {
-        return Route("Kalinowice", mutableListOf(TreasureDescription(
-            1, 25.1,26.1, null, null
-        )))
-//        return storageHelper.loadRoute(stateHandle.get<String>("route_name")!!)
+//        return Route(
+//            "Kalinowice", mutableListOf(
+//                TreasureDescription(
+//                    1, 25.1, 26.1, null, null
+//                )
+//            )
+//        )
+        return storageHelper.loadRoute(stateHandle.get<String>("route_name")!!)
     }
 
     override fun onCleared() {

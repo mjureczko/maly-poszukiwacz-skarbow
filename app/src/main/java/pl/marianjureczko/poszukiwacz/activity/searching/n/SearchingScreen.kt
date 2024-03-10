@@ -18,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -54,7 +55,7 @@ private fun SearchingScreenBody(isClassicMode: Boolean) {
     val state = viewModel.state.value
     Column(Modifier.background(SecondaryBackground)) {
         Scores(isClassicMode)
-        Compass()
+        Compass(state.needleRotation)
         Steps(state.stepsToTreasure)
         Buttons()
         Spacer(
@@ -127,7 +128,7 @@ fun Scores(isClassicMode: Boolean) {
 }
 
 @Composable
-fun Compass() {
+fun Compass(arcRotation: Float) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
@@ -140,9 +141,10 @@ fun Compass() {
             contentScale = ContentScale.Inside,
         )
         Image(
-            painterResource(R.drawable.arrow),
+            painter = painterResource(R.drawable.arrow),
             contentDescription = "compass needle",
             contentScale = ContentScale.Inside,
+            modifier =  Modifier.rotate(arcRotation)
         )
     }
 }

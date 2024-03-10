@@ -8,7 +8,8 @@ data class SearchingState(
     var route: Route,
     var currentTreasure: TreasureDescription,
     var currentLocation: Location?,
-    var stepsToTreasure: Int?
+    var stepsToTreasure: Int?,
+    var needleRotation: Float = 0.0f
 ) {
     constructor(route: Route) : this(route, route.treasures[0], null, null)
 }
