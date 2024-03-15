@@ -30,6 +30,10 @@ class TreasuresProgress() : Serializable {
         public get
 
     @field:Element
+    var knowledge: Int = 0
+        private set
+
+    @field:Element
     var golds: Int = 0
         private set
 
@@ -47,15 +51,18 @@ class TreasuresProgress() : Serializable {
     fun contains(treasure: Treasure): Boolean =
         collectedQrCodes.contains(treasure.id)
 
+    /** When collecting KNOWLEDGE collect(treasureDescription: TreasureDescription) must be called as well */
     fun collect(treasure: Treasure) {
         collectedQrCodes.add(treasure.id)
         when (treasure.type) {
             TreasureType.GOLD -> golds += treasure.quantity
             TreasureType.DIAMOND -> diamonds += treasure.quantity
             TreasureType.RUBY -> rubies += treasure.quantity
+            TreasureType.KNOWLEDGE -> knowledge++
         }
     }
 
+    /** When collecting KNOWLEDGE collect(treasure: Treasure) must be called as well */
     fun collect(treasureDescription: TreasureDescription) =
         collectedTreasuresDescriptionId.add(treasureDescription.id)
 

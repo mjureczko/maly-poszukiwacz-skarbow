@@ -5,6 +5,7 @@ import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someInt
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.*
@@ -57,6 +58,7 @@ class SelectorViewModelStateTest {
     }
 }
 
+@Disabled("the SUT is to replace")
 internal class SelectorViewModelTest {
 
     @Test

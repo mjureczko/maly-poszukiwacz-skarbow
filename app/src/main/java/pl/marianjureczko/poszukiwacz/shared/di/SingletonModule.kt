@@ -43,7 +43,7 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun locationService(@ApplicationContext appContext: Context, calculator: LocationCalculator): LocationFetcher {
+    fun locationService(@ApplicationContext appContext: Context): LocationFetcher {
         return LocationFetcher(appContext)
     }
 }

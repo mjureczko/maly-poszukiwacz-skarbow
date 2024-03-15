@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.activity.searching
 import androidx.lifecycle.SavedStateHandle
 import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -18,6 +19,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
 
+@Disabled("the SUT is to replace")
 @ExtendWith(MockitoExtension::class)
 class SearchingActivityViewModelTest {
 

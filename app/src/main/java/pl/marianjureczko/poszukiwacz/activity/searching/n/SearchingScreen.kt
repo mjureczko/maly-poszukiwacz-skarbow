@@ -1,8 +1,11 @@
 package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -30,7 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
+import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
@@ -40,24 +47,48 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun SearchingScreen(navController: NavController?, isClassicMode: Boolean, onClickOnGuide: () -> Unit) {
+fun SearchingScreen(
+    navController: NavController?,
+    isClassicMode: Boolean,
+    resources: Resources,
+    onClickOnGuide: () -> Unit,
+    goToResult: (ResultType) -> Unit
+) {
     Scaffold(
         topBar = { TopBar(navController, onClickOnGuide) },
         content = {
-            SearchingScreenBody(isClassicMode)
+            SearchingScreenBody(isClassicMode, resources, goToResult)
         }
     )
 }
 
+
 @Composable
-private fun SearchingScreenBody(isClassicMode: Boolean) {
+private fun SearchingScreenBody(
+    isClassicMode: Boolean,
+    resources: Resources,
+    goToResult: (ResultType) -> Unit
+) {
     val viewModel: SearchingViewModel = hiltViewModel()
     val state = viewModel.state.value
+    val scanQrLauncher = rememberLauncherForActivityResult(
+        contract = ScanContract(),
+        onResult = viewModel.scannedTreasureCallback() {
+            goToResult(it)
+        }
+    )
+    val scanQrCallback: () -> Unit = {
+        val scanOptions = ScanOptions()
+        scanOptions.setPrompt(resources.getString(R.string.qr_scanner_msg))
+        scanQrLauncher.launch(scanOptions)
+    }
+
+
     Column(Modifier.background(SecondaryBackground)) {
-        Scores(isClassicMode)
+        Scores(isClassicMode, state.treasuresProgress.knowledge)
         Compass(state.needleRotation)
         Steps(state.stepsToTreasure)
-        Buttons()
+        Buttons(scanQrCallback)
         Spacer(
             modifier = Modifier
                 .weight(0.01f)
@@ -68,7 +99,7 @@ private fun SearchingScreenBody(isClassicMode: Boolean) {
 }
 
 @Composable
-fun Scores(isClassicMode: Boolean) {
+fun Scores(isClassicMode: Boolean, score: Int) {
     Row(
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically,
@@ -119,7 +150,7 @@ fun Scores(isClassicMode: Boolean) {
             )
             Text(
                 color = Color.Gray,
-                text = "0",
+                text = score.toString(),
                 fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize,
                 modifier = Modifier.padding(end = 5.dp)
             )
@@ -144,7 +175,7 @@ fun Compass(arcRotation: Float) {
             painter = painterResource(R.drawable.arrow),
             contentDescription = "compass needle",
             contentScale = ContentScale.Inside,
-            modifier =  Modifier.rotate(arcRotation)
+            modifier = Modifier.rotate(arcRotation)
         )
     }
 }
@@ -182,7 +213,7 @@ fun Steps(stepsToTreasure: Int?) {
 }
 
 @Composable
-fun Buttons() {
+fun Buttons(scanQrCallback: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -196,7 +227,7 @@ fun Buttons() {
             ChangeTreasureButton()
         }
         Column(modifier = Modifier.width(0.6.dw)) {
-            ScanTreasureButton()
+            ScanTreasureButton(scanQrCallback)
         }
         Column(modifier = Modifier.width(0.2.dw)) {
             PhotoTipButton()
@@ -226,10 +257,12 @@ private fun ChangeTreasureButton() {
 }
 
 @Composable
-private fun ScanTreasureButton() {
+private fun ScanTreasureButton(scanQrCallback: () -> Unit) {
     Image(
         painterResource(R.drawable.chest),
-        modifier = Modifier.padding(start = 20.dp),
+        modifier = Modifier
+            .padding(start = 20.dp)
+            .clickable { scanQrCallback() },
         contentDescription = null,
         contentScale = ContentScale.Inside,
     )
@@ -257,8 +290,8 @@ private fun SoundTipButton() {
 
 @Preview(showBackground = true, apiLevel = 31)
 @Composable
-fun DefaultPreview() {
+fun SearchingDefaultPreview() {
     AppTheme {
-        SearchingScreen(null, false, {})
+        SearchingScreen(null, false, App.getResources(), {}, {})
     }
 }

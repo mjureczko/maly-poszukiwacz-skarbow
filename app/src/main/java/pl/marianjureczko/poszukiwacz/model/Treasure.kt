@@ -4,6 +4,10 @@ import pl.marianjureczko.poszukiwacz.R
 import java.io.Serializable
 
 enum class TreasureType {
+    KNOWLEDGE {
+        // remove image()
+        override fun image() = R.drawable.gold
+    },
     GOLD {
         override fun image() = R.drawable.gold
     },

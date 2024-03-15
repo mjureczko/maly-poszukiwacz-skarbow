@@ -16,6 +16,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_RESULT_TYPE
+import pl.marianjureczko.poszukiwacz.activity.result.n.ResultScreen
+import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
+import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.ui.Screen
@@ -63,9 +67,16 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickOnGuide
             }
         }
         composable(
-            route = "searching/{route_name}",
-            arguments = listOf(navArgument("route_name") { type = NavType.StringType }),
+            route = "searching/{$PARAMETER_ROUTE_NAME}",
+            arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
 //            deepLinks = listOf(navDeepLink { uriPattern = "www.restaurantsapp.details.com/{restaurant_id}" }),
-        ) { SearchingScreen(navController, settings.isClassicMode(), onClickOnGuide) }
+        ) { SearchingScreen(navController, settings.isClassicMode(), resources, onClickOnGuide) {
+            navController.navigate("result/$it")
+        } }
+        composable(
+            route = "result/{$PARAMETER_RESULT_TYPE}",
+            arguments = listOf(navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) })
+        ) { ResultScreen(navController, resources, onClickOnGuide) }
+
     }
 }
