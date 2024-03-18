@@ -2,6 +2,8 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.content.res.Resources
 import android.location.Location
+import android.media.MediaPlayer
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +17,6 @@ import pl.marianjureczko.poszukiwacz.activity.searching.ArcCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -47,11 +48,10 @@ class SearchingViewModel @Inject constructor(
     }
 
     //TODO: test the logic
-    //TODO: persist changes
     fun scannedTreasureCallback(goToResults: (ResultType) -> Unit): (ScanIntentResult?) -> Unit {
         return { scanResult ->
             var result: ResultType? = null
-            if (scanResult != null && scanResult.contents != null) {
+            if (scanResult != null && !scanResult.contents.isNullOrEmpty()) {
                 val newCode = scanResult.contents
                 val foundTreasure = state.value.route.treasures.find { treasure ->
                     newCode == treasure.qrCode
@@ -82,6 +82,7 @@ class SearchingViewModel @Inject constructor(
 
     override fun onCleared() {
         locationFetcher.stopFetching()
+        state.value.mediaPlayer.release()
         super.onCleared()
     }
 
@@ -101,18 +102,21 @@ class SearchingViewModel @Inject constructor(
     private fun createState(): SearchingState {
         val route = loadRoute()
         val treasuresProgress = loadProgress(route.name)
-        return SearchingState(route, treasuresProgress)
+        val mediaPlayer = MediaPlayer()
+        mediaPlayer!!.isLooping = false
+        mediaPlayer!!.setOnErrorListener { mp, what, extra -> handleMediaPlayerError(what, extra) }
+        return SearchingState(mediaPlayer, route, treasuresProgress)
     }
 
     private fun loadRoute(): Route {
-        return Route(
-            "Kalinowice", mutableListOf(
-                TreasureDescription(
-                    1, 25.1, 26.1, "g01abc", null, null
-                )
-            )
-        )
-//        return storageHelper.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!)
+//        return Route(
+//            "Kalinowice", mutableListOf(
+//                TreasureDescription(
+//                    1, 25.1, 26.1, "g01abc", null, null
+//                )
+//            )
+//        )
+        return storageHelper.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!)
     }
 
     private fun loadProgress(routeName: String): TreasuresProgress {
@@ -137,4 +141,15 @@ class SearchingViewModel @Inject constructor(
 //        }
 //    }
 
+    private fun handleMediaPlayerError(what: Int, extra: Int): Boolean {
+        when (what) {
+            MediaPlayer.MEDIA_ERROR_UNKNOWN -> Log.e(TAG, "An unknown error occurred: $extra")
+            MediaPlayer.MEDIA_ERROR_IO -> Log.e(TAG, "I/O error occurred: $extra")
+            MediaPlayer.MEDIA_ERROR_MALFORMED -> Log.e(TAG, "Media file is malformed: $extra")
+            MediaPlayer.MEDIA_ERROR_UNSUPPORTED -> Log.e(TAG, "Unsupported media type: $extra")
+            MediaPlayer.MEDIA_ERROR_TIMED_OUT -> Log.e(TAG, "Operation timed out: $extra")
+            else -> Log.e(TAG, "An unknown error occurred: $extra")
+        }
+        return true
+    }
 }

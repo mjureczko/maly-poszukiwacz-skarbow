@@ -130,7 +130,7 @@ internal class TreasuresEditorViewModelTest {
         treasure.id = treasureId
         route.treasures.add(treasure)
         model.setRoute(route)
-        doReturn(File(".")).`when`(treasure).instantiatePhotoFile(any(StorageHelper::class.java))
+        doReturn(File(".")).`when`(treasure).instantiatePhotoFile(pl.marianjureczko.poszukiwacz.any(StorageHelper::class.java))
 
         //when
         model.setupTreasureNeedingPhotoById(treasureId)
@@ -139,6 +139,4 @@ internal class TreasuresEditorViewModelTest {
         //then
         then(treasure.instantiatePhotoFile(storageHelper))
     }
-
-    private fun <T> any(type: Class<T>): T = Mockito.any<T>(type)
 }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.BDDMockito.*
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 
 @ExtendWith(MockitoExtension::class)
@@ -27,7 +26,7 @@ internal class PermissionManagerTest {
     @Test
     fun `SHOULD delegate checking permissions to ContextCompat checkSelfPermission() WHEN calling isPermissionGranted()`() {
         //given
-        given(context.checkPermission(eq(PermissionsSpec.CAMERA.getPermissionsTextArray()[0]), anyInt(), anyInt()))
+        given(context.checkPermission(pl.marianjureczko.poszukiwacz.eq(PermissionsSpec.CAMERA.getPermissionsTextArray()[0]), anyInt(), anyInt()))
             .willReturn(PackageManager.PERMISSION_DENIED)
 
         //when
@@ -49,8 +48,8 @@ internal class PermissionManagerTest {
         assertThat(actual)
             .`as`("when context mock is not configured it returns 0 which is PackageManager.PERMISSION_GRANTED")
             .isTrue()
-        then(context).should().checkPermission(eq(permissions[0].getPermissionsTextArray()[0]), anyInt(), anyInt());
-        then(context).should().checkPermission(eq(permissions[1].getPermissionsTextArray()[0]), anyInt(), anyInt());
+        then(context).should().checkPermission(pl.marianjureczko.poszukiwacz.eq(permissions[0].getPermissionsTextArray()[0]), anyInt(), anyInt());
+        then(context).should().checkPermission(pl.marianjureczko.poszukiwacz.eq(permissions[1].getPermissionsTextArray()[0]), anyInt(), anyInt());
     }
 
     @Test
@@ -76,7 +75,9 @@ internal class PermissionManagerTest {
         val fixture = PermissionsFixture(RequirementsForPhotoAndAudioTip)
         val permissions = fixture.getAllPermissions()
         val grantResult = fixture.getGrantResults(PackageManager.PERMISSION_DENIED)
-        given(dialogs.shouldShowRationale(any(Activity::class.java), eq(permissions.toList())))
+        given(dialogs.shouldShowRationale(pl.marianjureczko.poszukiwacz.any(Activity::class.java),
+            pl.marianjureczko.poszukiwacz.eq(permissions.toList())
+        ))
             .willReturn(true)
 
         //when
@@ -94,7 +95,9 @@ internal class PermissionManagerTest {
         val fixture = PermissionsFixture(RequirementsForPhotoAndAudioTip)
         val permissions = fixture.getAllPermissions()
         val grantResult = fixture.getGrantResults(PackageManager.PERMISSION_DENIED)
-        given(dialogs.shouldShowRationale(any(Activity::class.java), eq(permissions.toList())))
+        given(dialogs.shouldShowRationale(pl.marianjureczko.poszukiwacz.any(Activity::class.java),
+            pl.marianjureczko.poszukiwacz.eq(permissions.toList())
+        ))
             .willReturn(false)
 
         //when
@@ -103,8 +106,4 @@ internal class PermissionManagerTest {
         //then
         then(dialogs).should().showPermissionPermanentDenialDialog(activity, fixture.requirements, listener)
     }
-
-    private fun <T> any(type: Class<T>): T = Mockito.any(type)
-    private fun <T> eq(type: T): T = Mockito.eq(type)
-
 }

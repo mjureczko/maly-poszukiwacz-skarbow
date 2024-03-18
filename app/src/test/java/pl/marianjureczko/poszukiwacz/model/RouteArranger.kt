@@ -27,6 +27,12 @@ class RouteArranger : CustomArranger<Route>() {
             }
             return route
         }
+
+        fun withNameAndTreasureWithQrCode(name:String, qrCode: String): Route {
+            val route = some<Route>().copy(name = name)
+            route.treasures.first().qrCode = qrCode
+            return route
+        }
     }
 
     override fun instance(): Route {

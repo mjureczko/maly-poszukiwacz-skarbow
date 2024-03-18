@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
@@ -44,6 +45,7 @@ fun ResultScreen(
 fun ResultScreenBody(resources: Resources) {
     val viewModel: ResultViewModel = hiltViewModel()
     val state = viewModel.state.value
+    val snackbarCoroutineScope = rememberCoroutineScope()
     Column(Modifier.background(SecondaryBackground)) {
         if (state.resultType == ResultType.TREASURE) {
             //TODO
@@ -74,7 +76,6 @@ fun ResultScreenBody(resources: Resources) {
         )
         AdvertBanner()
     }
-
 }
 
 @Preview(showBackground = true, apiLevel = 31)

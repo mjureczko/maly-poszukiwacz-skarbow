@@ -10,7 +10,6 @@ import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.reset
 import org.mockito.BDDMockito.then
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
@@ -175,5 +174,3 @@ data class SearchingActivityViewModelFixture(
         model.initialize(xml, storageHelper)
     }
 }
-
-private fun <T> any(type: Class<T>): T = Mockito.any<T>(type)

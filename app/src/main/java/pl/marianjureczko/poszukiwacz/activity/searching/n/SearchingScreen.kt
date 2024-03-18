@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.media.MediaPlayer
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,8 +18,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -35,15 +39,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
 import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
+import java.net.URLEncoder
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -52,12 +61,15 @@ fun SearchingScreen(
     isClassicMode: Boolean,
     resources: Resources,
     onClickOnGuide: () -> Unit,
+    goToTipPhoto: (String) -> Unit,
     goToResult: (ResultType) -> Unit
 ) {
+    val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = { TopBar(navController, onClickOnGuide) },
         content = {
-            SearchingScreenBody(isClassicMode, resources, goToResult)
+            SearchingScreenBody(isClassicMode, resources, scaffoldState, goToTipPhoto, goToResult)
         }
     )
 }
@@ -67,6 +79,8 @@ fun SearchingScreen(
 private fun SearchingScreenBody(
     isClassicMode: Boolean,
     resources: Resources,
+    scaffoldState: ScaffoldState,
+    goToTipPhoto: (String) -> Unit,
     goToResult: (ResultType) -> Unit
 ) {
     val viewModel: SearchingViewModel = hiltViewModel()
@@ -82,13 +96,11 @@ private fun SearchingScreenBody(
         scanOptions.setPrompt(resources.getString(R.string.qr_scanner_msg))
         scanQrLauncher.launch(scanOptions)
     }
-
-
     Column(Modifier.background(SecondaryBackground)) {
         Scores(isClassicMode, state.treasuresProgress.knowledge)
         Compass(state.needleRotation)
         Steps(state.stepsToTreasure)
-        Buttons(scanQrCallback)
+        Buttons(scanQrCallback, state.currentTreasure, scaffoldState, resources, state.mediaPlayer, goToTipPhoto)
         Spacer(
             modifier = Modifier
                 .weight(0.01f)
@@ -213,7 +225,15 @@ fun Steps(stepsToTreasure: Int?) {
 }
 
 @Composable
-fun Buttons(scanQrCallback: () -> Unit) {
+fun Buttons(
+    scanQrCallback: () -> Unit,
+    currentTreasure: TreasureDescription,
+    scaffoldState: ScaffoldState,
+    resources: Resources,
+    mediaPlayer: MediaPlayer,
+    goToTipPhoto: (String) -> Unit
+) {
+    val snackbarCoroutineScope: CoroutineScope = rememberCoroutineScope()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -230,8 +250,8 @@ fun Buttons(scanQrCallback: () -> Unit) {
             ScanTreasureButton(scanQrCallback)
         }
         Column(modifier = Modifier.width(0.2.dw)) {
-            PhotoTipButton()
-            SoundTipButton()
+            PhotoTipButton(currentTreasure, scaffoldState, snackbarCoroutineScope, resources, goToTipPhoto)
+            SoundTipButton(currentTreasure, scaffoldState, snackbarCoroutineScope, resources, mediaPlayer)
         }
     }
 }
@@ -269,20 +289,55 @@ private fun ScanTreasureButton(scanQrCallback: () -> Unit) {
 }
 
 @Composable
-private fun PhotoTipButton() {
+private fun PhotoTipButton(
+    currentTreasure: TreasureDescription,
+    scaffoldState: ScaffoldState,
+    snackbarCoroutineScope: CoroutineScope,
+    resources: Resources,
+    goToTipPhoto: (String) -> Unit
+) {
     Image(
         painterResource(R.drawable.show_photo),
-        modifier = Modifier.padding(10.dp),
+        modifier = Modifier
+            .padding(10.dp)
+            .clickable {
+                if (currentTreasure.hasPhoto()) {
+                    val encodedFilePath = URLEncoder.encode(currentTreasure.photoFileName!!, Charsets.UTF_8.name())
+                    goToTipPhoto(encodedFilePath)
+                } else {
+                    errorTone()
+                    snackbarCoroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(resources.getString(R.string.no_photo_to_show))
+                    }
+                }
+            },
         contentDescription = null,
         contentScale = ContentScale.Inside,
     )
 }
 
 @Composable
-private fun SoundTipButton() {
+private fun SoundTipButton(
+    currentTreasure: TreasureDescription,
+    scaffoldState: ScaffoldState,
+    snackbarCoroutineScope: CoroutineScope,
+    resources: Resources,
+    mediaPlayer: MediaPlayer
+) {
     Image(
         painterResource(R.drawable.megaphone),
-        modifier = Modifier.padding(10.dp),
+        modifier = Modifier
+            .padding(10.dp)
+            .clickable {
+                if(currentTreasure.tipFileName != null) {
+                    SoundTipPlayer.playSound(mediaPlayer, currentTreasure.tipFileName!!)
+                } else {
+                    errorTone()
+                    snackbarCoroutineScope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(resources.getString(R.string.no_tip_to_play))
+                    }
+                }
+            },
         contentDescription = null,
         contentScale = ContentScale.Inside,
     )
@@ -292,6 +347,6 @@ private fun SoundTipButton() {
 @Composable
 fun SearchingDefaultPreview() {
     AppTheme {
-        SearchingScreen(null, false, App.getResources(), {}, {})
+        SearchingScreen(null, false, App.getResources(), {}, {}, {})
     }
 }

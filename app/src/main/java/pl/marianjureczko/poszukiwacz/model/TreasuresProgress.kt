@@ -17,7 +17,8 @@ class TreasuresProgress() : Serializable {
     lateinit var routeName: String
 
     @field:ElementList
-    private var collectedQrCodes: MutableSet<String> = mutableSetOf()
+    var collectedQrCodes: MutableSet<String> = mutableSetOf()
+        private set
 
     @field:ElementList
     var collectedTreasuresDescriptionId: MutableSet<Int> = mutableSetOf()

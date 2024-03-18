@@ -16,6 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.photo.n.PARAMETER_TIP_PHOTO
+import pl.marianjureczko.poszukiwacz.activity.photo.n.TipPhotoScreen
 import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_RESULT_TYPE
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultScreen
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
@@ -58,11 +60,11 @@ class MainActivity : PermissionActivity() {
 }
 
 @Composable
-private fun ComposeRoot(settings: Settings, resources: Resources, onClickOnGuide: () -> Unit) {
+private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: () -> Unit) {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
-            MainScreen(navController, settings.isClassicMode(), resources, onClickOnGuide) { routeName ->
+            MainScreen(navController, settings.isClassicMode(), resources, onClickGuide) { routeName ->
                 navController.navigate("searching/$routeName")
             }
         }
@@ -70,13 +72,25 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickOnGuide
             route = "searching/{$PARAMETER_ROUTE_NAME}",
             arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
 //            deepLinks = listOf(navDeepLink { uriPattern = "www.restaurantsapp.details.com/{restaurant_id}" }),
-        ) { SearchingScreen(navController, settings.isClassicMode(), resources, onClickOnGuide) {
-            navController.navigate("result/$it")
-        } }
+        ) {
+            SearchingScreen(
+                navController = navController,
+                isClassicMode = settings.isClassicMode(),
+                resources = resources,
+                onClickOnGuide = onClickGuide,
+                goToTipPhoto = { navController.navigate("tipPhoto/$it") },
+                goToResult = { navController.navigate("result/$it") }
+            )
+        }
         composable(
             route = "result/{$PARAMETER_RESULT_TYPE}",
             arguments = listOf(navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) })
-        ) { ResultScreen(navController, resources, onClickOnGuide) }
-
+        ) { ResultScreen(navController, resources, onClickGuide) }
+        composable(
+            route = "tipPhoto/{$PARAMETER_TIP_PHOTO}",
+            arguments = listOf(navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType })
+        ) {
+            TipPhotoScreen(navController = navController, onClickOnGuide = onClickGuide)
+        }
     }
 }
