@@ -16,6 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.map.n.MapScreen
+import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.photo.n.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.activity.photo.n.TipPhotoScreen
 import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_RESULT_TYPE
@@ -79,7 +81,8 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
                 resources = resources,
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
-                goToResult = { navController.navigate("result/$it") }
+                goToResult = { navController.navigate("result/$it") },
+                goToMap = { navController.navigate("map/$it") }
             )
         }
         composable(
@@ -91,6 +94,12 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
             arguments = listOf(navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType })
         ) {
             TipPhotoScreen(navController = navController, onClickOnGuide = onClickGuide)
+        }
+        composable(
+            route = "map/{$PARAMETER_ROUTE_NAME_2}",
+            arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
+        ) {
+            MapScreen(navController = navController, onClickOnGuide = onClickGuide, resources = resources)
         }
     }
 }

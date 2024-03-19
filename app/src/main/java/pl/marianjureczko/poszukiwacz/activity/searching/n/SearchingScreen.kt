@@ -44,6 +44,7 @@ import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
+import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
@@ -62,14 +63,15 @@ fun SearchingScreen(
     resources: Resources,
     onClickOnGuide: () -> Unit,
     goToTipPhoto: (String) -> Unit,
-    goToResult: (ResultType) -> Unit
+    goToResult: (ResultType) -> Unit,
+    goToMap: (String) -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(navController, onClickOnGuide) },
         content = {
-            SearchingScreenBody(isClassicMode, resources, scaffoldState, goToTipPhoto, goToResult)
+            SearchingScreenBody(isClassicMode, resources, scaffoldState, goToTipPhoto, goToResult, goToMap)
         }
     )
 }
@@ -81,7 +83,8 @@ private fun SearchingScreenBody(
     resources: Resources,
     scaffoldState: ScaffoldState,
     goToTipPhoto: (String) -> Unit,
-    goToResult: (ResultType) -> Unit
+    goToResult: (ResultType) -> Unit,
+    goToMap: (String) -> Unit
 ) {
     val viewModel: SearchingViewModel = hiltViewModel()
     val state = viewModel.state.value
@@ -100,7 +103,16 @@ private fun SearchingScreenBody(
         Scores(isClassicMode, state.treasuresProgress.knowledge)
         Compass(state.needleRotation)
         Steps(state.stepsToTreasure)
-        Buttons(scanQrCallback, state.currentTreasure, scaffoldState, resources, state.mediaPlayer, goToTipPhoto)
+        Buttons(
+            scanQrCallback,
+            state.currentTreasure,
+            state.route,
+            scaffoldState,
+            resources,
+            state.mediaPlayer,
+            goToTipPhoto,
+            goToMap
+        )
         Spacer(
             modifier = Modifier
                 .weight(0.01f)
@@ -228,10 +240,12 @@ fun Steps(stepsToTreasure: Int?) {
 fun Buttons(
     scanQrCallback: () -> Unit,
     currentTreasure: TreasureDescription,
+    route: Route,
     scaffoldState: ScaffoldState,
     resources: Resources,
     mediaPlayer: MediaPlayer,
-    goToTipPhoto: (String) -> Unit
+    goToTipPhoto: (String) -> Unit,
+    goToMap: (String) -> Unit
 ) {
     val snackbarCoroutineScope: CoroutineScope = rememberCoroutineScope()
     Row(
@@ -243,7 +257,7 @@ fun Buttons(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.width(0.2.dw)) {
-            ShowMapButton()
+            ShowMapButton(route, goToMap)
             ChangeTreasureButton()
         }
         Column(modifier = Modifier.width(0.6.dw)) {
@@ -257,10 +271,12 @@ fun Buttons(
 }
 
 @Composable
-private fun ShowMapButton() {
+private fun ShowMapButton(route: Route, goToMap: (String) -> Unit) {
     Image(
         painterResource(R.drawable.map),
-        modifier = Modifier.padding(10.dp),
+        modifier = Modifier
+            .padding(10.dp)
+            .clickable { goToMap(route.name) },
         contentDescription = null,
         contentScale = ContentScale.Inside,
     )
@@ -329,7 +345,7 @@ private fun SoundTipButton(
         modifier = Modifier
             .padding(10.dp)
             .clickable {
-                if(currentTreasure.tipFileName != null) {
+                if (currentTreasure.tipFileName != null) {
                     SoundTipPlayer.playSound(mediaPlayer, currentTreasure.tipFileName!!)
                 } else {
                     errorTone()
@@ -347,6 +363,6 @@ private fun SoundTipButton(
 @Composable
 fun SearchingDefaultPreview() {
     AppTheme {
-        SearchingScreen(null, false, App.getResources(), {}, {}, {})
+        SearchingScreen(null, false, App.getResources(), {}, {}, {}, {})
     }
 }
