@@ -18,7 +18,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 @ExtendWith(MockitoExtension::class)
-class SearchingViewModelTest {
+class SharedViewModelTest {
 
     @Mock
     lateinit var storage: StorageHelper

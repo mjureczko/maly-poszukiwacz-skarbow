@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -21,14 +22,24 @@ import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.photo.n.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.activity.photo.n.TipPhotoScreen
 import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_RESULT_TYPE
+import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultScreen
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.SelectorScreen
 import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.ui.Screen
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
 import javax.inject.Inject
+
+val SEARCHING_PATH = "searching"
+val SEARCHING_ROUTE = "$SEARCHING_PATH/{$PARAMETER_ROUTE_NAME}"
+val RESULTS_PATH = "result"
+val RESULTS_ROUTE = "$RESULTS_PATH/{$PARAMETER_RESULT_TYPE}/{$PARAMETER_TREASURE_ID}"
+val SELECTOR_PATH = "selector"
+val SELECTOR_ROUTE = "$SELECTOR_PATH/{$PARAMETER_JUST_FOUND_TREASURE}"
 
 /**
  * Routes creation and selection activity
@@ -36,7 +47,7 @@ import javax.inject.Inject
 //TODO: check https://developer.android.com/build/build-variants and Product Flavours
 @AndroidEntryPoint
 class MainActivity : PermissionActivity() {
-
+    private val TAG = javaClass.simpleName
     @Inject
     lateinit var settings: Settings
 
@@ -55,6 +66,26 @@ class MainActivity : PermissionActivity() {
         }
     }
 
+    override fun onPause() {
+        Log.i(TAG, "onPause")
+        super.onPause()
+    }
+
+    override fun onResume() {
+        Log.i(TAG, "onResume")
+        super.onResume()
+    }
+
+    override fun onStop() {
+        Log.i(TAG, "onStop")
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        Log.i(TAG, "onDestroy")
+        super.onDestroy()
+    }
+
     fun onClickOnGuide() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(resources.getString(R.string.help_path))))
     }
@@ -67,11 +98,11 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
             MainScreen(navController, settings.isClassicMode(), resources, onClickGuide) { routeName ->
-                navController.navigate("searching/$routeName")
+                navController.navigate("$SEARCHING_PATH/$routeName")
             }
         }
         composable(
-            route = "searching/{$PARAMETER_ROUTE_NAME}",
+            route = SEARCHING_ROUTE,
             arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
 //            deepLinks = listOf(navDeepLink { uriPattern = "www.restaurantsapp.details.com/{restaurant_id}" }),
         ) {
@@ -81,14 +112,18 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
                 resources = resources,
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
-                goToResult = { navController.navigate("result/$it") },
-                goToMap = { navController.navigate("map/$it") }
+                goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") },
+                goToMap = { navController.navigate("map/$it") },
+                goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") }
             )
         }
         composable(
-            route = "result/{$PARAMETER_RESULT_TYPE}",
-            arguments = listOf(navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) })
-        ) { ResultScreen(navController, resources, onClickGuide) }
+            route = RESULTS_ROUTE,
+            arguments = listOf(
+                navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) },
+                navArgument(PARAMETER_TREASURE_ID) { type = NavType.IntType }
+            )
+        ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, resources, onClickGuide) }
         composable(
             route = "tipPhoto/{$PARAMETER_TIP_PHOTO}",
             arguments = listOf(navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType })
@@ -101,5 +136,15 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
         ) {
             MapScreen(navController = navController, onClickOnGuide = onClickGuide, resources = resources)
         }
+        composable(
+            route = SELECTOR_ROUTE,
+            arguments = listOf(navArgument(PARAMETER_JUST_FOUND_TREASURE) { type = NavType.IntType }),
+        ) { navBackStackEntry -> SelectorScreen(
+            navController,
+            navBackStackEntry,
+            resources,
+            onClickGuide,
+            goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") }
+        ) }
     }
 }

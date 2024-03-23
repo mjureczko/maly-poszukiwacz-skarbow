@@ -32,12 +32,12 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.theme.Primary
 
 @Composable
-fun TopBar(navController: NavController?, onClickOnGuide: () -> Unit) {
+fun TopBar(navController: NavController, onClickOnGuide: () -> Unit) {
     val showMenu = remember { mutableStateOf(false) }
     TopAppBar(
         backgroundColor = Primary,
         navigationIcon = {
-            if (navController?.previousBackStackEntry != null) {
+            if (navController.previousBackStackEntry != null) {
                 EmbeddedButton(
                     Icons.Outlined.ArrowBack,
                     ColorFilter.tint(Color.White)

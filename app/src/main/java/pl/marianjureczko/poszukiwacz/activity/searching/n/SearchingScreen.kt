@@ -32,7 +32,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,8 +40,10 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
+import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
+import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -51,27 +52,38 @@ import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
-import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
+import pl.marianjureczko.poszukiwacz.ui.isOnStack
 import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 import java.net.URLEncoder
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SearchingScreen(
-    navController: NavController?,
+    navController: NavController,
     isClassicMode: Boolean,
     resources: Resources,
     onClickOnGuide: () -> Unit,
     goToTipPhoto: (String) -> Unit,
-    goToResult: (ResultType) -> Unit,
-    goToMap: (String) -> Unit
+    goToResult: (ResultType, Int) -> Unit,
+    goToMap: (String) -> Unit,
+    goToTreasureSelector: (Int) -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(navController, onClickOnGuide) },
         content = {
-            SearchingScreenBody(isClassicMode, resources, scaffoldState, goToTipPhoto, goToResult, goToMap)
+            SearchingScreenBody(
+                navController,
+                isClassicMode,
+                resources,
+                scaffoldState,
+                goToTipPhoto,
+                goToResult,
+                goToMap,
+                goToTreasureSelector
+            )
         }
     )
 }
@@ -79,19 +91,27 @@ fun SearchingScreen(
 
 @Composable
 private fun SearchingScreenBody(
+    navController: NavController,
     isClassicMode: Boolean,
     resources: Resources,
     scaffoldState: ScaffoldState,
     goToTipPhoto: (String) -> Unit,
-    goToResult: (ResultType) -> Unit,
-    goToMap: (String) -> Unit
+    goToResult: (ResultType, Int) -> Unit,
+    goToMap: (String) -> Unit,
+    goToTreasureSelector: (Int) -> Unit
 ) {
-    val viewModel: SearchingViewModel = hiltViewModel()
-    val state = viewModel.state.value
+    val viewModel: SearchingViewModel = getViewModel()
+    val state: SearchingSharedState = viewModel.state.value
+    if (!isOnStack(navController, SELECTOR_ROUTE)
+        && !isOnStack(navController, RESULTS_ROUTE)
+        && state.treasureFoundAndResultAlreadyPresented()
+    ) {
+        goToTreasureSelector(state.treasuresProgress.justFoundTreasureId!!)
+    }
     val scanQrLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
-        onResult = viewModel.scannedTreasureCallback() {
-            goToResult(it)
+        onResult = viewModel.scannedTreasureCallback { resultType, treasureId ->
+            goToResult(resultType, treasureId)
         }
     )
     val scanQrCallback: () -> Unit = {
@@ -111,7 +131,8 @@ private fun SearchingScreenBody(
             resources,
             state.mediaPlayer,
             goToTipPhoto,
-            goToMap
+            goToMap,
+            {goToTreasureSelector(NOTHING_FOUND_TREASURE_ID)}
         )
         Spacer(
             modifier = Modifier
@@ -223,9 +244,7 @@ fun Steps(stepsToTreasure: Int?) {
                 text = stepsToTreasure.toString()
             )
         } else {
-            CircularProgressIndicator(Modifier.semantics {
-                this.contentDescription = "Waiting for GPS"
-            })
+            CircularProgressIndicator(Modifier.semantics { this.contentDescription = "Waiting for GPS" })
         }
         Image(
             painterResource(R.drawable.steps),
@@ -245,7 +264,8 @@ fun Buttons(
     resources: Resources,
     mediaPlayer: MediaPlayer,
     goToTipPhoto: (String) -> Unit,
-    goToMap: (String) -> Unit
+    goToMap: (String) -> Unit,
+    goToTreasureSelector: () -> Unit
 ) {
     val snackbarCoroutineScope: CoroutineScope = rememberCoroutineScope()
     Row(
@@ -258,7 +278,7 @@ fun Buttons(
     ) {
         Column(modifier = Modifier.width(0.2.dw)) {
             ShowMapButton(route, goToMap)
-            ChangeTreasureButton()
+            ChangeTreasureButton(goToTreasureSelector)
         }
         Column(modifier = Modifier.width(0.6.dw)) {
             ScanTreasureButton(scanQrCallback)
@@ -283,11 +303,13 @@ private fun ShowMapButton(route: Route, goToMap: (String) -> Unit) {
 }
 
 @Composable
-private fun ChangeTreasureButton() {
+private fun ChangeTreasureButton(goToTreasureSelector: () -> Unit) {
     Image(
         painterResource(R.drawable.change_chest),
-        modifier = Modifier.padding(10.dp),
-        contentDescription = null,
+        modifier = Modifier
+            .padding(10.dp)
+            .clickable { goToTreasureSelector() },
+        contentDescription = "Change treasure button",
         contentScale = ContentScale.Inside,
     )
 }
@@ -359,10 +381,16 @@ private fun SoundTipButton(
     )
 }
 
-@Preview(showBackground = true, apiLevel = 31)
 @Composable
-fun SearchingDefaultPreview() {
-    AppTheme {
-        SearchingScreen(null, false, App.getResources(), {}, {}, {}, {})
-    }
+private fun getViewModel(): SearchingViewModel {
+    val viewModelDoNotInline: SharedViewModel = hiltViewModel()
+    return viewModelDoNotInline
 }
+
+//@Preview(showBackground = true, apiLevel = 31)
+//@Composable
+//fun SearchingDefaultPreview() {
+//    AppTheme {
+//        SearchingScreen(null, false, App.getResources(), {}, {}, { _, _ -> }, {}, { s: String, i: Int? -> })
+//    }
+//}

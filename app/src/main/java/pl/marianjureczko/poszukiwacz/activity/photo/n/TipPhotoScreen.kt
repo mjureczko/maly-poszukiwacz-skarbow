@@ -27,7 +27,7 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TipPhotoScreen(
-    navController: NavController?,
+    navController: NavController,
     onClickOnGuide: () -> Unit
 ) {
     Scaffold(

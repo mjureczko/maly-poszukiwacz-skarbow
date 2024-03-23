@@ -22,13 +22,13 @@ data class SearchingViewModelFixture(
 
     lateinit var route: Route
 
-    fun givenMocksForNoProgress(): SearchingViewModel {
+    fun givenMocksForNoProgress(): SharedViewModel {
         BDDMockito.given(savedState.get<String>(PARAMETER_ROUTE_NAME)).willReturn(routeName)
         route = some<Route>().copy(name = routeName)
         route.treasures.first().qrCode = firstTreasureQrCode
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)
         BDDMockito.given(storage.loadProgress(routeName)).willReturn(null)
-        return SearchingViewModel(storage, locationFetcher, LocationCalculator(), savedState, resources)
+        return SharedViewModel(storage, locationFetcher, LocationCalculator(), savedState, resources)
     }
 
     fun givenScanIntentResultForFirstTreasure(): ScanIntentResult {

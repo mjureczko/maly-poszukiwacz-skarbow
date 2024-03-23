@@ -9,10 +9,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 const val PARAMETER_RESULT_TYPE = "result_type"
+const val PARAMETER_TREASURE_ID = "treasure_id"
+const val NOTHING_FOUND_TREASURE_ID = -1
 
 @HiltViewModel
 class ResultViewModel @Inject constructor(
-    private val stateHandle: SavedStateHandle
+    private val stateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private var _state: MutableState<ResultState> = mutableStateOf(createState())
@@ -24,4 +26,5 @@ class ResultViewModel @Inject constructor(
         val resultType = stateHandle.get<ResultType>(PARAMETER_RESULT_TYPE) ?: ResultType.NOT_A_TREASURE
         return ResultState(resultType, null, null, null)
     }
+
 }

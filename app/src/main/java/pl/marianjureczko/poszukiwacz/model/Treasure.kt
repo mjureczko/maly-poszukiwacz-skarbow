@@ -33,7 +33,11 @@ enum class TreasureType {
 }
 
 /** QR code is the id */
-data class Treasure(val id: String, val quantity: Int, val type: TreasureType): Serializable
+data class Treasure(val id: String, val quantity: Int, val type: TreasureType) : Serializable {
+    companion object {
+        fun knowledgeTreasure(id: String): Treasure = Treasure(id, 1, TreasureType.KNOWLEDGE)
+    }
+}
 
 class TreasureParser {
     fun parse(content: String): Treasure =

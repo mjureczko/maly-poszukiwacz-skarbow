@@ -29,10 +29,10 @@ class LocationFetcher(val context: Context) {
         }
     }
 
-    fun startFetching(viewModelScope: CoroutineScope, updateLocationCallback: (Location) -> Unit) {
+    fun startFetching(interval: Long, viewModelScope: CoroutineScope, updateLocationCallback: (Location) -> Unit) {
         this.updateLocationCallback = updateLocationCallback
         viewModelScope.launch {
-            requestLocation()
+            requestLocation(interval)
         }
     }
 
@@ -40,10 +40,10 @@ class LocationFetcher(val context: Context) {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
-    suspend fun requestLocation() {
+    suspend fun requestLocation(interval: Long = 1_000) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
-        val locationRequest = LocationRequest.Builder(1_000).build()
+        val locationRequest = LocationRequest.Builder(interval).build()
         return suspendCoroutine { _ ->
             //The permission should be already granted, but Idea reports error when the check is missing
             if (ContextCompat.checkSelfPermission(

@@ -16,6 +16,15 @@ class TreasuresProgress() : Serializable {
     @field:Element
     lateinit var routeName: String
 
+    @field:Element(required = false)
+    var justFoundTreasureId: Int? = null
+
+    @field:Element(required = false)
+    var resultRequiresPresentation: Boolean? = false
+
+    @field:Element(required = false)
+    var treasureFoundGoToSelector: Boolean? = false
+
     @field:ElementList
     var collectedQrCodes: MutableSet<String> = mutableSetOf()
         private set

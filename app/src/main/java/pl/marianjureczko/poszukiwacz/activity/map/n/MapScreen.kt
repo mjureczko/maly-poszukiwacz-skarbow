@@ -20,7 +20,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MapScreen(
-    navController: NavController?,
+    navController: NavController,
     resources: Resources,
     onClickOnGuide: () -> Unit
 ) {
