@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.journeyapps.barcodescanner.ScanIntentResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
@@ -49,6 +49,7 @@ class SharedViewModel @Inject constructor(
     private val locationFetcher: LocationFetcher,
     private val locationCalculator: LocationCalculator,
     private val stateHandle: SavedStateHandle,
+    private val dispatcher: CoroutineDispatcher,
     private val resources: Resources
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
@@ -58,7 +59,7 @@ class SharedViewModel @Inject constructor(
     init {
         startFetchingLocation()
         // after between screen navigation location updating may stop, hence needs to be retriggered periodically
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             while (true) {
                 locationFetcher.stopFetching()
                 startFetchingLocation()
@@ -70,6 +71,7 @@ class SharedViewModel @Inject constructor(
     override val state: State<SharedState>
         get() = _state
 
+    //TODO: introduce types for callbacks used as parameters
     override fun scannedTreasureCallback(goToResults: (ResultType, Int) -> Unit): (ScanIntentResult?) -> Unit {
         return { scanResult ->
             var result: ResultType? = null
@@ -105,7 +107,7 @@ class SharedViewModel @Inject constructor(
     }
 
     override fun resultPresented() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             delay(500)
             if (state.value.treasuresProgress.resultRequiresPresentation == true) {
                 state.value.treasuresProgress.resultRequiresPresentation = false

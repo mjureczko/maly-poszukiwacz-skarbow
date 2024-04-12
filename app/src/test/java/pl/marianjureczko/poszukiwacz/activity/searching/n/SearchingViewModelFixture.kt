@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
+import kotlinx.coroutines.CoroutineDispatcher
 import org.mockito.BDDMockito
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
@@ -12,6 +13,7 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 data class SearchingViewModelFixture(
+    val dispatcher: CoroutineDispatcher,
     val routeName: String = someString(),
     val firstTreasureQrCode: String = someString(),
     val storage: StorageHelper = mock(StorageHelper::class.java),
@@ -28,7 +30,7 @@ data class SearchingViewModelFixture(
         route.treasures.first().qrCode = firstTreasureQrCode
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)
         BDDMockito.given(storage.loadProgress(routeName)).willReturn(null)
-        return SharedViewModel(storage, locationFetcher, LocationCalculator(), savedState, resources)
+        return SharedViewModel(storage, locationFetcher, LocationCalculator(), savedState, dispatcher, resources)
     }
 
     fun givenScanIntentResultForFirstTreasure(): ScanIntentResult {

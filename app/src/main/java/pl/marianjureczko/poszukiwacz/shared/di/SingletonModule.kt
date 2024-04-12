@@ -7,6 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.n.LocationFetcher
 import pl.marianjureczko.poszukiwacz.shared.Settings
@@ -16,6 +18,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object SingletonModule {
+
+    @Provides
+    fun providesDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Singleton
     @Provides
@@ -43,7 +48,7 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun locationService(@ApplicationContext appContext: Context): LocationFetcher {
-        return LocationFetcher(appContext)
+    fun locationService(@ApplicationContext appContext: Context, dispatcher: CoroutineDispatcher): LocationFetcher {
+        return LocationFetcher(appContext, dispatcher)
     }
 }

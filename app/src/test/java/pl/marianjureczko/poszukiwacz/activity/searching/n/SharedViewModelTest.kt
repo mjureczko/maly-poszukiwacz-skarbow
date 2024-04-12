@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -20,6 +22,8 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 @ExtendWith(MockitoExtension::class)
 class SharedViewModelTest {
 
+    private val dispatcher: TestDispatcher = StandardTestDispatcher()
+
     @Mock
     lateinit var storage: StorageHelper
 
@@ -32,16 +36,19 @@ class SharedViewModelTest {
     @Mock
     lateinit var resources: Resources
 
+    /**
+     * private val scope = TestScope(dispatcher); ... scope.runTest {...} is not used to disable corutines execution
+     */
     @Test
-    fun `SHOULD not call goToResults WHEN there is no  result of qr code scanning`() {
+    fun `SHOULD not call goToResults WHEN there is not result of qr code scanning`() {
         //given
-        val fixture = SearchingViewModelFixture()
+        val fixture = SearchingViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = some<ScanIntentResult>(overrides = mapOf("contents" to { "" }))
 
         //when
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { actual ->
+        val callback = viewModel.scannedTreasureCallback { _: ResultType, _: Int ->
             wasCalled = true
         }
         callback(qrResult)
@@ -57,13 +64,13 @@ class SharedViewModelTest {
     @Test
     fun `SHOULD return not a treasure WHEN the scanned qr code is not associated with any treasure`() {
         //given
-        val fixture = SearchingViewModelFixture()
+        val fixture = SearchingViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = some<ScanIntentResult>(overrides = mapOf("contents" to { someString() }))
 
         //when & then
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { actual ->
+        val callback = viewModel.scannedTreasureCallback { actual, _ ->
             wasCalled = true
             assertThat(actual).isEqualTo(ResultType.NOT_A_TREASURE)
         }
@@ -80,13 +87,13 @@ class SharedViewModelTest {
     fun `SHOULD return a treasure WHEN the scanned qr code is not associated with a treasure`() {
         //given
         val qrCode = someString()
-        val fixture = SearchingViewModelFixture(firstTreasureQrCode = qrCode)
+        val fixture = SearchingViewModelFixture(dispatcher, firstTreasureQrCode = qrCode)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = fixture.givenScanIntentResultForFirstTreasure()
 
         //when & then
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { actual ->
+        val callback = viewModel.scannedTreasureCallback { actual, _ ->
             wasCalled = true
             assertThat(actual).isEqualTo(ResultType.TREASURE)
         }
@@ -103,17 +110,17 @@ class SharedViewModelTest {
     @Test
     fun `SHOULD return already taken WHEN the scanned qr code is scanned twice`() {
         //given
-        val fixture = SearchingViewModelFixture()
+        val fixture = SearchingViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = fixture.givenScanIntentResultForFirstTreasure()
 
         //when & then
         var callbackUsed = 0
-        val callback1 = viewModel.scannedTreasureCallback { actual ->
+        val callback1 = viewModel.scannedTreasureCallback { actual, _ ->
             callbackUsed++
         }
         callback1(qrResult)
-        val callback2 = viewModel.scannedTreasureCallback { actual ->
+        val callback2 = viewModel.scannedTreasureCallback { actual, _ ->
             callbackUsed++
             assertThat(actual).isEqualTo(ResultType.ALREADY_TAKEN)
         }
