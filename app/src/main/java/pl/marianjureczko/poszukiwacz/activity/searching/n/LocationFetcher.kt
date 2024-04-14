@@ -10,13 +10,12 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.coroutines.suspendCoroutine
 
 
-class LocationFetcher(val context: Context, val dispatcher: CoroutineDispatcher) {
+class LocationFetcher(val context: Context) {
 
     private val TAG = javaClass.simpleName
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -32,7 +31,7 @@ class LocationFetcher(val context: Context, val dispatcher: CoroutineDispatcher)
 
     fun startFetching(interval: Long, viewModelScope: CoroutineScope, updateLocationCallback: (Location) -> Unit) {
         this.updateLocationCallback = updateLocationCallback
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch {
             requestLocation(interval)
         }
     }

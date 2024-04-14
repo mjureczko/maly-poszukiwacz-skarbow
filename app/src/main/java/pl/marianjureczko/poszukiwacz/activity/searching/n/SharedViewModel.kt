@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.searching.n
 
-import android.content.res.Resources
 import android.media.MediaPlayer
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -22,6 +21,7 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Inject
 
@@ -41,6 +41,13 @@ interface SelectorSharedViewModel {
     fun updateJustFoundFromSelector()
     fun selectorPresented()
     fun updateCurrentTreasure(treasure: TreasureDescription)
+    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): () -> Unit
+}
+
+interface CommemorativeSharedViewModel {
+    val state: State<SharedState>
+
+    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): () -> Unit
 }
 
 @HiltViewModel
@@ -48,10 +55,10 @@ class SharedViewModel @Inject constructor(
     private val storageHelper: StorageHelper,
     private val locationFetcher: LocationFetcher,
     private val locationCalculator: LocationCalculator,
+    private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
-    private val dispatcher: CoroutineDispatcher,
-    private val resources: Resources
-) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, ViewModel() {
+    private val dispatcher: CoroutineDispatcher
+) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
     private val arcCalculator = ArcCalculator()
@@ -130,6 +137,15 @@ class SharedViewModel @Inject constructor(
 
     override fun updateCurrentTreasure(treasure: TreasureDescription) {
         _state.value = _state.value.copy(currentTreasure = treasure)
+    }
+
+    override fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): () -> Unit {
+        return {
+            val target = _state.value.treasuresProgress.getCommemorativePhoto(treasure)
+                ?: storageHelper.newCommemorativePhotoFile()
+            photoHelper.moveCommemorativePhotoToPermanentLocation(target)
+            _state.value.treasuresProgress.addCommemorativePhoto(treasure, target)
+        }
     }
 
     override fun onCleared() {

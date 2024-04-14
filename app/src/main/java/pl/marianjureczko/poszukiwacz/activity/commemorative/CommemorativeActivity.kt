@@ -10,7 +10,6 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookInputData
 import pl.marianjureczko.poszukiwacz.databinding.ActivityCommemorativeBinding
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.ActivityWithAdsAndBackButton
@@ -53,7 +52,7 @@ class CommemorativeActivity : ActivityWithAdsAndBackButton() {
             rotatePhoto(input.photoAbsolutePath, model.commemorativePhotoUri())
         }
         binding.doPhotoBtn.setOnClickListener {
-            doPhotoLauncher.launch(photoHelper.createCommemorativePhotoTempUri())
+            doPhotoLauncher.launch(photoHelper.getCommemorativePhotoTempUri())
         }
         setContentView(binding.root)
 

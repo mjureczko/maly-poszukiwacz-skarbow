@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.searching.n
 
-import android.content.res.Resources
 import androidx.lifecycle.SavedStateHandle
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.ocadotechnology.gembus.test.some
@@ -10,6 +9,7 @@ import org.mockito.BDDMockito
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
 data class SearchingViewModelFixture(
@@ -19,7 +19,7 @@ data class SearchingViewModelFixture(
     val storage: StorageHelper = mock(StorageHelper::class.java),
     val locationFetcher: LocationFetcher = mock(LocationFetcher::class.java),
     val savedState: SavedStateHandle = mock(SavedStateHandle::class.java),
-    val resources: Resources = mock(Resources::class.java)
+    val photoHelper: PhotoHelper = mock(PhotoHelper::class.java)
 ) {
 
     lateinit var route: Route
@@ -30,7 +30,7 @@ data class SearchingViewModelFixture(
         route.treasures.first().qrCode = firstTreasureQrCode
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)
         BDDMockito.given(storage.loadProgress(routeName)).willReturn(null)
-        return SharedViewModel(storage, locationFetcher, LocationCalculator(), savedState, dispatcher, resources)
+        return SharedViewModel(storage, locationFetcher, LocationCalculator(), photoHelper, savedState, dispatcher)
     }
 
     fun givenScanIntentResultForFirstTreasure(): ScanIntentResult {

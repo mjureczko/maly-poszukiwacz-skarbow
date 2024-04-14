@@ -81,7 +81,7 @@ class PhotoHelper(
         }
     }
 
-    fun createCommemorativePhotoTempUri(): Uri = createPhotoUri(getCommemorativePhotoTempFile())
+    fun getCommemorativePhotoTempUri(): Uri = createPhotoUri(getCommemorativePhotoTempFile())
 
     /**
      * @return absolute path to the commemorative photo
@@ -125,11 +125,12 @@ class PhotoHelper(
         }
     }
 
-    private fun createPhotoUri(photoFile: File): Uri {
+    fun createPhotoUri(photoFile: File): Uri {
         if (!photoFile.exists()) {
             photoFile.createNewFile()
         }
-        return FileProvider.getUriForFile(context, "pl.marianjureczko.poszukiwacz.fileprovider", photoFile)
+        //TODO: configurable classic vs kalinowice
+        return FileProvider.getUriForFile(context, "pl.marianjureczko.poszukiwacz.kalinowice.fileprovider", photoFile)
     }
 }
 

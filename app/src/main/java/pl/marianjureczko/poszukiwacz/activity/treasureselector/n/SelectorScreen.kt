@@ -2,6 +2,9 @@ package pl.marianjureczko.poszukiwacz.activity.treasureselector.n
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
@@ -52,7 +57,8 @@ fun SelectorScreen(
     navBackStackEntry: NavBackStackEntry,
     resources: Resources,
     onClickOnGuide: () -> Unit,
-    goToResult: (Int) -> Unit
+    goToResult: (Int) -> Unit,
+    goToCommemorative: (Int) -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
@@ -64,7 +70,8 @@ fun SelectorScreen(
                 shareViewModelStoreOwner(navBackStackEntry, navController),
                 resources,
                 scaffoldState,
-                goToResult
+                goToResult,
+                goToCommemorative
             )
         }
     )
@@ -76,7 +83,8 @@ fun SelectorScreenBody(
     viewModelStoreOwner: NavBackStackEntry,
     resources: Resources,
     scaffoldState: ScaffoldState,
-    goToResult: (Int) -> Unit
+    goToResult: (Int) -> Unit,
+    goToCommemorative: (Int) -> Unit
 ) {
     val localViewModel: SelectorViewModel = hiltViewModel()
     val localState: SelectorState = localViewModel.state.value
@@ -89,7 +97,16 @@ fun SelectorScreenBody(
             modifier = Modifier.weight(0.99f)
         ) {
             items(state.route.treasures) { treasure ->
-                TreasureItem(navController, resources, treasure, localState, state, goToResult, sharedViewModel)
+                TreasureItem(
+                    navController,
+                    resources,
+                    treasure,
+                    localState,
+                    state,
+                    goToResult,
+                    sharedViewModel,
+                    goToCommemorative
+                )
             }
         }
         Spacer(modifier = Modifier.weight(0.01f))
@@ -107,7 +124,8 @@ fun TreasureItem(
     localState: SelectorState,
     state: SelectorSharedState,
     goToResult: (Int) -> Unit,
-    sharedViewModel: SelectorSharedViewModel
+    sharedViewModel: SelectorSharedViewModel,
+    goToCommemorative: (Int) -> Unit
 ) {
     Card(
         elevation = 4.dp,
@@ -153,7 +171,13 @@ fun TreasureItem(
                         .semantics { this.contentDescription = "Waiting for GPS" })
             }
             ShowMovieButton(state, treasure, goToResult)
-            PhotoButton(state, treasure)
+            CommemorativePhotoButton(
+                state,
+                localState,
+                treasure,
+                goToCommemorative,
+                sharedViewModel.handleDoCommemorativePhotoResult(treasure)
+            )
         }
     }
 }
@@ -174,25 +198,48 @@ fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, g
 }
 
 @Composable
-private fun PhotoButton(sharedState: SelectorSharedState, treasure: TreasureDescription) {
-    if (sharedState.hasCommemorativePhoto(treasure.id)) {
-        Image(
-            painterResource(R.drawable.camera_show_photo),
-            modifier = Modifier
-                .padding(2.dp)
-                .height(35.dp),
-            contentDescription = "Show commemorative photo",
-            contentScale = ContentScale.Inside,
-        )
-    } else {
-        Image(
-            painterResource(R.drawable.camera_do_photo),
-            modifier = Modifier
-                .padding(2.dp)
-                .height(35.dp),
-            contentDescription = "Do commemorative photo",
-            contentScale = ContentScale.Inside,
-        )
+private fun CommemorativePhotoButton(
+    sharedState: SelectorSharedState,
+    localState: SelectorState,
+    treasure: TreasureDescription,
+    goToCommemorative: (Int) -> Unit,
+    handleDoPhotoResult: () -> Unit
+) {
+    if (localState.cameraPermissionGranted) {
+        if (sharedState.hasCommemorativePhoto(treasure.id)) {
+            Image(
+                painterResource(R.drawable.camera_show_photo),
+                modifier = Modifier
+                    .padding(2.dp)
+                    .height(35.dp)
+                    .clickable { goToCommemorative(treasure.id) },
+                contentDescription = "Show commemorative photo",
+                contentScale = ContentScale.Inside,
+            )
+        } else {
+            val successMsg = stringResource(R.string.photo_replaced)
+            val failureMsg = stringResource(R.string.photo_not_replaced)
+            val cameraLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.TakePicture(),
+                onResult = { success ->
+                    if (success) {
+                        handleDoPhotoResult()
+                        Toast.makeText(App.getAppContext(), successMsg, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(App.getAppContext(), failureMsg, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            )
+            Image(
+                painterResource(R.drawable.camera_do_photo),
+                modifier = Modifier
+                    .padding(2.dp)
+                    .height(35.dp)
+                    .clickable { cameraLauncher.launch(localState.tempPhotoFileLocation) },
+                contentDescription = "Do commemorative photo",
+                contentScale = ContentScale.Inside,
+            )
+        }
     }
 }
 

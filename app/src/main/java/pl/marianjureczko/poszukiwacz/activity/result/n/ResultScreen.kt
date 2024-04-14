@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.result.n
 
 import android.annotation.SuppressLint
-import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
@@ -31,19 +31,18 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 fun ResultScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
-    resources: Resources,
     onClickOnGuide: () -> Unit
 ) {
     Scaffold(
         topBar = { TopBar(navController, onClickOnGuide) },
         content = {
-            ResultScreenBody(resources, shareViewModelStoreOwner(navBackStackEntry, navController))
+            ResultScreenBody(shareViewModelStoreOwner(navBackStackEntry, navController))
         }
     )
 }
 
 @Composable
-fun ResultScreenBody(resources: Resources, viewModelStoreOwner: NavBackStackEntry) {
+fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
     val localViewModel: ResultViewModel = hiltViewModel()
     val localState = localViewModel.state.value
     val sharedViewModel: ResultSharedViewModel = getViewModel(viewModelStoreOwner)
@@ -59,9 +58,9 @@ fun ResultScreenBody(resources: Resources, viewModelStoreOwner: NavBackStackEntr
                     .background(Color.Transparent)
             )
             val text = if (localState.resultType == ResultType.NOT_A_TREASURE) {
-                resources.getString(R.string.not_a_treasure_msg)
+                stringResource(R.string.not_a_treasure_msg)
             } else {
-                resources.getString(R.string.treasure_already_taken_msg)
+                stringResource(R.string.treasure_already_taken_msg)
             }
             Text(
                 fontSize = 60.sp,

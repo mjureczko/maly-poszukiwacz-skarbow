@@ -17,6 +17,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.commemorative.n.CommemorativeScreen
+import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.activity.map.n.MapScreen
 import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.photo.n.PARAMETER_TIP_PHOTO
@@ -40,6 +42,8 @@ val RESULTS_PATH = "result"
 val RESULTS_ROUTE = "$RESULTS_PATH/{$PARAMETER_RESULT_TYPE}/{$PARAMETER_TREASURE_ID}"
 val SELECTOR_PATH = "selector"
 val SELECTOR_ROUTE = "$SELECTOR_PATH/{$PARAMETER_JUST_FOUND_TREASURE}"
+val COMMEMORATIVE_PATH = "commemorative"
+val COMMEMORATIVE_ROUTE = "$COMMEMORATIVE_PATH/{$PARAMETER_TREASURE_DESCRIPTION_ID}"
 
 /**
  * Routes creation and selection activity
@@ -123,7 +127,7 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
                 navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) },
                 navArgument(PARAMETER_TREASURE_ID) { type = NavType.IntType }
             )
-        ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, resources, onClickGuide) }
+        ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, onClickGuide) }
         composable(
             route = "tipPhoto/{$PARAMETER_TIP_PHOTO}",
             arguments = listOf(navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType })
@@ -144,7 +148,12 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
             navBackStackEntry,
             resources,
             onClickGuide,
-            goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") }
+            goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") },
+            goToCommemorative = {treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId")}
         ) }
+        composable(
+            route = COMMEMORATIVE_ROUTE,
+            arguments = listOf(navArgument(PARAMETER_TREASURE_DESCRIPTION_ID) { type = NavType.IntType })
+        ) { navBackStackEntry -> CommemorativeScreen(navController, navBackStackEntry, onClickGuide) }
     }
 }

@@ -24,6 +24,11 @@ interface SearchingSharedState {
     fun treasureFoundAndResultAlreadyPresented(): Boolean
 }
 
+interface CommemorativeSharedState {
+    val route: Route
+    var treasuresProgress: TreasuresProgress
+}
+
 data class SharedState(
     override val mediaPlayer: MediaPlayer,
     override var route: Route,
@@ -36,7 +41,7 @@ data class SharedState(
     override val distancesInSteps: Map<Int, Int?> = route.treasures
         .associate { it.id to null }
         .toMap()
-) : SelectorSharedState, SearchingSharedState {
+) : SelectorSharedState, SearchingSharedState, CommemorativeSharedState {
     constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress) :
             this(mediaPlayer, route, route.treasures[0], treasuresProgress, null, null)
 

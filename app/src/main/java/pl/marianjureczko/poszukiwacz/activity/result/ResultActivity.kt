@@ -86,7 +86,7 @@ class ResultActivity : ActivityWithAdsAndBackButton() {
         } else {
             binding.doPhoto.setImageResource(R.drawable.camera_do_photo)
             binding.doPhoto.setOnClickListener {
-                doPhotoLauncher.launch(photoHelper.createCommemorativePhotoTempUri())
+                doPhotoLauncher.launch(photoHelper.getCommemorativePhotoTempUri())
             }
         }
     }

@@ -63,7 +63,7 @@ class TreasureProgressHolder(
         photoBtn.setOnClickListener {
             if (commemorativePhoto == null) {
                 model.selectForCommemorativePhoto(treasure)
-                doPhotoLauncher.launch(photoHelper.createCommemorativePhotoTempUri())
+                doPhotoLauncher.launch(photoHelper.getCommemorativePhotoTempUri())
             } else {
                 showCommemorativeLauncher.launch(CommemorativeInputData(commemorativePhoto, model.progress))
             }

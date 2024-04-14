@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
 import pl.marianjureczko.poszukiwacz.permissions.PermissionListener
 import pl.marianjureczko.poszukiwacz.permissions.PermissionManager
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
 
 abstract class PermissionActivity : ComponentActivity() {
@@ -42,6 +43,9 @@ abstract class PermissionActivity : ComponentActivity() {
         }
         permissionManager = PermissionManager(permissionListener)
         assurePermissionsAreGranted(RequirementsForNavigation, true)
+        //TODO: exitOnDenied==true and then exitOnDenied==false presumably leads to race condition
+        assurePermissionsAreGranted(RequirementsForDoingPhoto, false)
+//        assurePermissionsAreGranted(RequirementsForExternalStorage, false)
     }
 
     /**

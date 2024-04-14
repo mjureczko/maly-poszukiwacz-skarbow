@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.n.LocationFetcher
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Singleton
@@ -21,6 +22,12 @@ object SingletonModule {
 
     @Provides
     fun providesDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Singleton
+    @Provides
+    fun photoHelper(@ApplicationContext appContext: Context, storageHelper: StorageHelper): PhotoHelper {
+        return PhotoHelper(appContext, storageHelper)
+    }
 
     @Singleton
     @Provides
@@ -48,7 +55,7 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun locationService(@ApplicationContext appContext: Context, dispatcher: CoroutineDispatcher): LocationFetcher {
-        return LocationFetcher(appContext, dispatcher)
+    fun locationService(@ApplicationContext appContext: Context): LocationFetcher {
+        return LocationFetcher(appContext)
     }
 }
