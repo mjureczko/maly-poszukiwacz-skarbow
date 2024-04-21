@@ -65,7 +65,7 @@ tasks.register('copy_splash', Copy) {
 }
 
 tasks.register('copy_properties', Copy) {
-    from layout.getProjectDirectory().file("assets/${findProperty('config_src')}/config.properties")
+    from layout.getProjectDirectory().file("assets/${findProperty('config_src')}/assets")
     into layout.getProjectDirectory().dir("app/src/main/assets")
 }
 copy_config.finalizedBy copy_splash

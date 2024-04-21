@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.model
 
+import com.ocadotechnology.gembus.test.somePositiveInt
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -51,6 +52,22 @@ class TreasureParserTest {
         //then
         assertEquals(TreasureType.RUBY, actual.type)
         assertEquals(quantity, actual.quantity)
+        assertEquals(id, actual.id)
+    }
+
+    @Test
+    fun parseKnowledge() {
+        //given
+        val type = "k"
+        val quantity = somePositiveInt(9)
+        val id = "a11"
+
+        //when
+        val actual = TreasureParser().parse("${type}9$quantity$id")
+
+        //then
+        assertEquals(TreasureType.KNOWLEDGE, actual.type)
+        assertEquals(1, actual.quantity)
         assertEquals(id, actual.id)
     }
 

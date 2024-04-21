@@ -198,7 +198,7 @@ open class StorageHelper(val context: Context) {
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
 
     //TODO: what about invalid characters in name?
-    private fun getRouteFile(routeName: String): File = getFile(getRoutesDir(), routeName)
+    fun getRouteFile(routeName: String): File = getFile(getRoutesDir(), routeName)
 
     private fun getProgressFile(routeName: String): File = getFile(getProgressDir(), routeName)
 

@@ -13,10 +13,11 @@ data class TreasureDescription(
     @field:Element var longitude: Double,
     @field:Element(required = false) var qrCode: String?,
     @field:Element(required = false) var tipFileName: String?,
-    @field:Element(required = false) var photoFileName: String?
+    @field:Element(required = false) var photoFileName: String?,
+    @field:Element(required = false) var movieFileName: String?
 ) : Serializable {
-    constructor(id: Int, latitude: Double, longitude: Double) : this(id, latitude, longitude, null, null, null)
-    constructor() : this(0, 0.0, 0.0, null, null, null)
+    constructor(id: Int, latitude: Double, longitude: Double) : this(id, latitude, longitude, null, null, null, null)
+    constructor() : this(0, 0.0, 0.0, null, null, null, null)
 
     fun prettyName(): String = "[$id] $latitude $longitude"
 

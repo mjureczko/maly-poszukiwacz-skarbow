@@ -81,7 +81,7 @@ fun CustomScreenBody(resources: Resources, goToSearching: (String) -> Unit) {
                 .background(PrimaryBackground)
         )
         LargeButton(R.string.custom_lets_start) {
-            goToSearching.invoke("1") //TODO use real name
+            goToSearching.invoke(CustomInitializerForRoute.routeName)
         }
         AdvertBanner()
     }

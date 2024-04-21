@@ -24,6 +24,7 @@ enum class TreasureType {
                 "g" -> GOLD
                 "r" -> RUBY
                 "d" -> DIAMOND
+                "k" -> KNOWLEDGE
                 else -> throw IllegalArgumentException("$code is not valid treasure type")
             }
 
@@ -40,12 +41,13 @@ data class Treasure(val id: String, val quantity: Int, val type: TreasureType) :
 }
 
 class TreasureParser {
-    fun parse(content: String): Treasure =
-        Treasure(
-            content.substring(3),
-            content.substring(1, 3).toInt(),
-            TreasureType.from(
-                content.substring(0, 1)
-            )
-        )
+    fun parse(content: String): Treasure {
+        val type = TreasureType.from(content.substring(0, 1))
+        val quantity = if (type == TreasureType.KNOWLEDGE) {
+            1
+        } else {
+            content.substring(1, 3).toInt()
+        }
+        return Treasure(content.substring(3), quantity, type)
+    }
 }
