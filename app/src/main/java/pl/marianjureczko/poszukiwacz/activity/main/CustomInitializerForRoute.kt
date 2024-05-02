@@ -4,7 +4,6 @@ import android.content.res.AssetManager
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
 
 class CustomInitializerForRoute(
     val storageHelper: StorageHelper,
@@ -13,33 +12,35 @@ class CustomInitializerForRoute(
     companion object {
         const val routeName = "custom"
     }
+
     private val markerFile = "copied_marker.txt"
     private val pathToDestination = storageHelper.pathToRoutesDir() + File.separator
     fun copyRouteToLocalStorage() {
         if (!isAlreadyCopied()) {
             copyRouteDefinition()
-            copyPhotosAndSounds()
+            copyMedia()
             markIsCopied()
         }
     }
 
     private fun copyRouteDefinition() {
-        val inputStream = assetManager.open("$routeName.xml")
-        copy(inputStream, storageHelper.getRouteFile(routeName))
+        copy("$routeName.xml", storageHelper.getRouteFile(routeName))
     }
 
-    private fun copyPhotosAndSounds() {
+    private fun copyMedia() {
         val route = storageHelper.loadRoute(routeName)
         route.treasures.forEach { td ->
             td.photoFileName?.let { photoFileName ->
-                val inputToPhoto = assetManager.open(photoFileName)
-                copy(inputToPhoto, File(pathToDestination + photoFileName))
-                td.photoFileName = pathToDestination + photoFileName
+                td.photoFileName = copy(photoFileName, File(pathToDestination + photoFileName))
             }
             td.tipFileName?.let { soundFileName ->
-                val inputToSound = assetManager.open(soundFileName)
-                copy(inputToSound, File(pathToDestination + soundFileName))
-                td.tipFileName = pathToDestination + soundFileName
+                td.tipFileName = copy(soundFileName, File(pathToDestination + soundFileName))
+            }
+            td.movieFileName?.let { movieFileName ->
+                td.movieFileName = copy(movieFileName, File(pathToDestination + movieFileName))
+            }
+            td.subtitlesFileName?.let { subtitlesFileName ->
+                td.subtitlesFileName = copy(subtitlesFileName, File(pathToDestination + subtitlesFileName))
             }
         }
         storageHelper.save(route)
@@ -53,12 +54,14 @@ class CustomInitializerForRoute(
         File(pathToDestination + markerFile).createNewFile()
     }
 
-    private fun copy(inputStream: InputStream, outputFile: File) {
+    private fun copy(assetFileName: String, outputFile: File): String {
+        val inputStream = assetManager.open(assetFileName)
         val outputStream = FileOutputStream(outputFile)
         inputStream.use { input ->
             outputStream.use { output ->
                 input.copyTo(output)
             }
         }
+        return pathToDestination + assetFileName
     }
 }

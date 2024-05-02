@@ -6,7 +6,11 @@ data class ResultState(
     val resultType: ResultType,
     val treasureType: TreasureType?,
     val amount: Int?,
-    val moviePath: String?
+    val moviePath: String?,
+    val subtitlesLine: String?,
+    val subtitlesPath: String?,
+    val localesWithSubtitles: Boolean = false,
+    val isPlayVisible: Boolean = true
 )
 
 enum class ResultType {

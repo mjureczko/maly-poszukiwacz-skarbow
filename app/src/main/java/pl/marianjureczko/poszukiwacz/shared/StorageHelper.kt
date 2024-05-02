@@ -166,6 +166,8 @@ open class StorageHelper(val context: Context) {
 
     fun pathToRoutesDir(): String = getRoutesDir().absolutePath
 
+    //TODO: what about invalid characters in name?
+    fun getRouteFile(routeName: String): File = getFile(getRoutesDir(), routeName)
 
     private fun extractFile(zipEntry: ZipEntry, actualZip: ZipInputStream, routesDir: String) {
         FileOutputStream("${routesDir}${zipEntry.name}").use {
@@ -196,9 +198,6 @@ open class StorageHelper(val context: Context) {
 
     private fun newFile(prefix: String, extension: String) =
         getRoutesDir().absolutePath + File.separator + prefix + UUID.randomUUID().toString() + extension
-
-    //TODO: what about invalid characters in name?
-    fun getRouteFile(routeName: String): File = getFile(getRoutesDir(), routeName)
 
     private fun getProgressFile(routeName: String): File = getFile(getProgressDir(), routeName)
 
