@@ -28,10 +28,11 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 @Composable
 fun TipPhotoScreen(
     navController: NavController,
-    onClickOnGuide: () -> Unit
+    onClickOnGuide: () -> Unit,
+    onClickOnFacebook: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController, onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
         content = {
             TipPhotoScreenBody()
         }

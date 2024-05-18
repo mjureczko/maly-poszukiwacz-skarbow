@@ -58,12 +58,13 @@ fun SelectorScreen(
     resources: Resources,
     onClickOnGuide: () -> Unit,
     goToResult: (Int) -> Unit,
-    goToCommemorative: (Int) -> Unit
+    goToCommemorative: (Int) -> Unit,
+    onClickOnFacebook: () -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
         content = {
             SelectorScreenBody(
                 navController,

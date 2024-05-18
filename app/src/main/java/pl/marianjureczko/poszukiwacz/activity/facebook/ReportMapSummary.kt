@@ -11,7 +11,7 @@ import java.text.DateFormat
 import java.util.Locale
 
 class ReportMapSummary(
-    private val model: FacebookViewModel,
+    private val model: FacebookReportModel,
     private val font: Typeface
 ) : ReportPart {
 

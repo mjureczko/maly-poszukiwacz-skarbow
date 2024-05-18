@@ -77,11 +77,11 @@
     <string name="menu_facebook">Share on Facebook</string>
     <string name="facebook_app_id" translatable="false">732722584920929</string>
     <string name="title_activity_facebook">Share on Facebook</string>
-    <string name="facebook_activity_header">Select elements to share</string>
+    <string name="facebook_screen_subheader">Select elements to share</string>
     <string name="share_button">Share</string>
     <string name="facebook_share_cancel">Sharing was cancelled</string>
     <string name="facebook_share_success">Shared</string>
-    <string name="facebook_share_impossible">Sharing content is currently not possible. Please ensure that you have the Facebook app installed and that you have granted the necessary permissions.</string>
+    <string name="facebook_share_impossible">Facebook app not found. Please make sure that you have installed the Facebook app and granted the necessary permissions.</string>
     <string name="facebook_share_error">An error occurred while sharing content. The Facebook application responded with: </string>
     <string name="select_treasure_progress_to_share">Please select the route you would like to share</string>
     <string name="facebook_invalid_roote">It is not possible to share shit route</string>

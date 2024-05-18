@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.content.res.Resources
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
@@ -31,6 +33,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 /** Kalinowice */
+//TODO t: use stringResource
 @Composable
 fun CustomScreenBody(resources: Resources, goToSearching: (String) -> Unit) {
     val viewModel: CustomMainViewModel = hiltViewModel()
@@ -92,12 +95,19 @@ private fun NextButton(viewModel: CustomMainViewModel) {
     OutlinedButton(
         shape = RoundedCornerShape(50),
         onClick = { viewModel.nextLeadMessage() },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.White,
+            contentColor = Color.Black
+        ),
+        border = BorderStroke(2.dp, Color.LightGray), // Border color and thickness
+        elevation = ButtonDefaults.elevation(4.dp),
+//        modifier = Modifier.colo(Color.Gray),
         content = {
             Image(
                 imageVector = Icons.Rounded.ArrowForward,
                 contentDescription = null,
                 modifier = Modifier.background(color = Color.Transparent),
-                colorFilter = ColorFilter.tint(PrimaryBackground)
+                colorFilter = ColorFilter.tint(Color.Black)
             )
         }
     )

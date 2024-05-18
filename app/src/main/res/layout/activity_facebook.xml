@@ -17,7 +17,7 @@
         android:padding="4dp"
         android:textSize="20sp"
         android:gravity="center"
-        android:text="@string/facebook_activity_header" />
+        android:text="@string/facebook_screen_subheader" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/elements"

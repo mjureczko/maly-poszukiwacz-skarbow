@@ -6,7 +6,7 @@ import android.graphics.Typeface
 import pl.marianjureczko.poszukiwacz.R
 
 class ReportMapHeader(
-    private val model: FacebookViewModel,
+    private val model: FacebookReportModel,
     private val font: Typeface
 ) : ReportPart {
     override fun height(): Float {

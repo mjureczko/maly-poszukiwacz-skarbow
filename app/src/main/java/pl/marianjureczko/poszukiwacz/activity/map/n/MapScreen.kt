@@ -21,11 +21,13 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 @Composable
 fun MapScreen(
     navController: NavController,
+    //TODO t: use StringResource instead
     resources: Resources,
-    onClickOnGuide: () -> Unit
+    onClickOnGuide: () -> Unit,
+    onClickOnFacebook: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController, onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
         content = {
             MapScreenBody(resources)
         }

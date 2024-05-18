@@ -51,10 +51,11 @@ private const val SUBTITLES_MIME_TYPE = "application/x-subrip"
 fun ResultScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
-    onClickOnGuide: () -> Unit
+    onClickOnGuide: () -> Unit,
+    onClickOnFacebook: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController, onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
         content = {
             ResultScreenBody(shareViewModelStoreOwner(navBackStackEntry, navController))
         }
@@ -80,7 +81,8 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
                 localViewModel,
                 localState.moviePath,
                 localState.subtitlesLine,
-                localState.subtitlesPath
+                localState.subtitlesPath,
+                localState.localesWithSubtitles
             ) { localViewModel.setSubtitlesLine(it) }
         } else {
             Message(localState)
@@ -123,6 +125,7 @@ private fun Movie(
     moviePath: String = "/data/user/0/pl.marianjureczko.poszukiwacz.kalinowice/files/treasures_lists/kalinowice_01.mp4",
     subtitlesLine: String? = null,
     subtitlesPath: String? = null,
+    localesWithSubtitles: Boolean = false,
     updateSubtitlesLine: (String) -> Unit = {}
 ) {
     Column(
@@ -136,18 +139,21 @@ private fun Movie(
         ) {
             val context = LocalContext.current
             val videoView: VideoView = remember { VideoView(context) }
-            Video(videoView, subtitlesPath, updateSubtitlesLine, movieController, moviePath)
+            Video(videoView, subtitlesPath, updateSubtitlesLine, movieController, moviePath, localesWithSubtitles)
             PlayButton(isPlayVisible, videoView, movieController)
-            subtitlesLine?.let {
-                Text(
-                    fontSize = 45.sp,
-                    fontFamily = FANCY_FONT,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    text = it,
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    style = TextStyle(shadow = Shadow(color = Color.Black, blurRadius = 12f))
-                )
+            //TODO t: merge conditions, and maybe move to  state
+            if (localesWithSubtitles) {
+                subtitlesLine?.let {
+                    Text(
+                        fontSize = 45.sp,
+                        fontFamily = FANCY_FONT,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        text = it,
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        style = TextStyle(shadow = Shadow(color = Color.Black, blurRadius = 12f))
+                    )
+                }
             }
         }
     }
@@ -159,18 +165,22 @@ private fun Video(
     subtitlesPath: String?,
     updateSubtitlesLine: (String) -> Unit,
     movieController: MovieController,
-    moviePath: String
+    moviePath: String,
+    localesWithSubtitles: Boolean
 ) {
     videoView.setOnPreparedListener { mediaPlayer ->
-        subtitlesPath?.let {
-            mediaPlayer.addTimedTextSource(subtitlesPath, SUBTITLES_MIME_TYPE)
-            val textTrackIndex: Int = findTrackIndexFor(
-                TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mediaPlayer.getTrackInfo()
-            )
-            if (textTrackIndex >= 0) {
-                mediaPlayer.selectTrack(textTrackIndex);
+        //TODO t: merge conditions, and maybe move to  state
+        if (localesWithSubtitles) {
+            subtitlesPath?.let {
+                mediaPlayer.addTimedTextSource(subtitlesPath, SUBTITLES_MIME_TYPE)
+                val textTrackIndex: Int = findTrackIndexFor(
+                    TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mediaPlayer.getTrackInfo()
+                )
+                if (textTrackIndex >= 0) {
+                    mediaPlayer.selectTrack(textTrackIndex)
+                }
+                mediaPlayer.setOnTimedTextListener { _, text -> updateSubtitlesLine(text.text) }
             }
-            mediaPlayer.setOnTimedTextListener { _, text -> updateSubtitlesLine(text.text) }
         }
     }
     AndroidView(

@@ -2,9 +2,11 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.location.Location
 import android.media.MediaPlayer
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+
 interface SelectorSharedState {
     val route: Route
     val currentLocation: Location?
@@ -21,6 +23,7 @@ interface SearchingSharedState {
     val currentLocation: Location?
     val stepsToTreasure: Int?
     var needleRotation: Float
+    var hunterPath: HunterPath
     fun treasureFoundAndResultAlreadyPresented(): Boolean
 }
 
@@ -37,13 +40,14 @@ data class SharedState(
     override var treasuresProgress: TreasuresProgress,
     override var currentLocation: Location?,
     override var stepsToTreasure: Int?,
+    override var hunterPath: HunterPath,
     override var needleRotation: Float = 0.0f,
     override val distancesInSteps: Map<Int, Int?> = route.treasures
         .associate { it.id to null }
         .toMap()
 ) : SelectorSharedState, SearchingSharedState, CommemorativeSharedState {
-    constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress) :
-            this(mediaPlayer, route, route.treasures[0], treasuresProgress, null, null)
+    constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress, hunterPath: HunterPath) :
+            this(mediaPlayer, route, route.treasures[0], treasuresProgress, null, null, hunterPath)
 
     override fun isTreasureCollected(treasureId: Int): Boolean =
         treasuresProgress.collectedTreasuresDescriptionId.contains(treasureId)

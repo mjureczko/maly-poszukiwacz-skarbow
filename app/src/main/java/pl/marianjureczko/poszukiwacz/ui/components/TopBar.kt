@@ -32,7 +32,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.theme.Primary
 
 @Composable
-fun TopBar(navController: NavController, onClickOnGuide: () -> Unit) {
+fun TopBar(navController: NavController, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
     val showMenu = remember { mutableStateOf(false) }
     TopAppBar(
         backgroundColor = Primary,
@@ -53,7 +53,7 @@ fun TopBar(navController: NavController, onClickOnGuide: () -> Unit) {
                 onDismissRequest = { showMenu.value = false }
             ) {
                 MenuEntry(R.drawable.question_mark, R.string.menu_help, onClickOnGuide)
-                MenuEntry(R.drawable.facebook, R.string.menu_facebook) { /* TODO */ }
+                MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClickOnFacebook)
             }
         },
 

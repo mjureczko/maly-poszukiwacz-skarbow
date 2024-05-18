@@ -2,14 +2,13 @@ package pl.marianjureczko.poszukiwacz.activity.facebook
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 class ReportTitle(
-    private val model: FacebookViewModel,
+    private val model: FacebookReportModel,
     private val font: Typeface
 ) : ReportPart {
     override fun height(): Float = 150f

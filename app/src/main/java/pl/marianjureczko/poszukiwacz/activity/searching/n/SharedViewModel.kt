@@ -17,6 +17,8 @@ import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.ArcCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -171,6 +173,10 @@ class SharedViewModel @Inject constructor(
                     .associate { it.id to locationCalculator.distanceInSteps(it, location) }
                     .toMap()
             )
+            val currentCoordinates = Coordinates(location.latitude, location.longitude)
+            if (state.value.hunterPath.addLocation(currentCoordinates)) {
+                storageHelper.save(state.value.hunterPath)
+            }
         }
     }
 
@@ -178,20 +184,14 @@ class SharedViewModel @Inject constructor(
         Log.i(TAG, "Create state")
         val route = loadRoute()
         val treasuresProgress = loadProgress(route.name)
+        val hunterPath = loadHunterPath(route.name)
         val mediaPlayer = MediaPlayer()
         mediaPlayer.isLooping = false
         mediaPlayer.setOnErrorListener { mp, what, extra -> handleMediaPlayerError(what, extra) }
-        return SharedState(mediaPlayer, route, treasuresProgress)
+        return SharedState(mediaPlayer, route, treasuresProgress, hunterPath)
     }
 
     private fun loadRoute(): Route {
-//        return Route(
-//            "Kalinowice", mutableListOf(
-//                TreasureDescription(
-//                    1, 25.1, 26.1, "g01abc", null, null
-//                )
-//            )
-//        )
         return storageHelper.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!)
     }
 
@@ -203,19 +203,15 @@ class SharedViewModel @Inject constructor(
         }
         return loadedProgress
     }
-//    fun loadProgressFromStorage(storageHelper: StorageHelper) {
-//        var loadedProgress = storageHelper.loadProgress(route.name)
-//        if (loadedProgress == null) {
-//            loadedProgress = TreasuresProgress(route.name)
-//            storageHelper.save(loadedProgress)
-//        }
-//        treasuresProgress = loadedProgress
-//        hunterPath = storageHelper.loadHunterPath(route.name)
-//        if(hunterPath == null) {
-//            hunterPath = HunterPath(route.name)
-//            storageHelper.save(hunterPath!!)
-//        }
-//    }
+
+    private fun loadHunterPath(routeName: String): HunterPath {
+        var hunterPath = storageHelper.loadHunterPath(routeName)
+        if (hunterPath == null) {
+            hunterPath = HunterPath(routeName)
+            storageHelper.save(hunterPath)
+        }
+        return hunterPath
+    }
 
     private fun handleMediaPlayerError(what: Int, extra: Int): Boolean {
         when (what) {

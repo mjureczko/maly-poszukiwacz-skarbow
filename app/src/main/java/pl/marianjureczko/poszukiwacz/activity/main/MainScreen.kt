@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 
+//TODO: add sample qr code to introduction
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
@@ -14,10 +15,11 @@ fun MainScreen(
     isClassic: Boolean,
     resources: Resources,
     onClickOnGuide: () -> Unit,
+    onClickOnFacebook: () -> Unit,
     goToSearching: (String) -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController, onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
         content = { _ ->
             if (isClassic) {
                 ClassicScreenBody(goToSearching)

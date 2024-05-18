@@ -8,7 +8,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 class ReportSummary(
-    private val model: FacebookViewModel,
+    private val model: FacebookReportModel,
     private val font: Typeface
 ) : ReportPart {
 

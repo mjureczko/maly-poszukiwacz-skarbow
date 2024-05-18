@@ -66,13 +66,14 @@ fun SearchingScreen(
     goToTipPhoto: (String) -> Unit,
     goToResult: (ResultType, Int) -> Unit,
     goToMap: (String) -> Unit,
-    goToTreasureSelector: (Int) -> Unit
+    goToTreasureSelector: (Int) -> Unit,
+    goToFacebook: () -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
 
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, onClickOnGuide) },
+        topBar = { TopBar(navController, onClickOnGuide, goToFacebook) },
         content = {
             SearchingScreenBody(
                 navController,

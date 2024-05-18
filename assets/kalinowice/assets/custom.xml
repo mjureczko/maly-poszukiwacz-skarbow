@@ -1,25 +1,36 @@
 <route>
-   <name>custom</name>
-   <treasures class="java.util.ArrayList">
-      <treasureDescription>
-         <id>1</id>
-         <latitude>50.501055</latitude>
-         <longitude>18.180191</longitude>
-         <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
-         <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
-         <qrCode>k01001</qrCode>
-         <movieFileName>kalinowice_01.mp4</movieFileName>
-         <subtitlesFileName>en_01.srt</subtitlesFileName>
-      </treasureDescription>
-      <treasureDescription>
-         <id>2</id>
-         <latitude>50.505667</latitude>
-         <longitude>18.185020</longitude>
-         <photoFileName>photo_2185c623-ef91-4e00-b1fc-3c6d4082d1be.jpg</photoFileName>
-         <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
-         <qrCode>k01002</qrCode>
-         <movieFileName>kalinowice_01.mp4</movieFileName>
-         <subtitlesFileName>en_01.srt</subtitlesFileName>
-      </treasureDescription>
-   </treasures>
+    <name>custom</name>
+    <treasures class="java.util.ArrayList">
+        <treasureDescription>
+            <id>1</id>
+            <latitude>50.501055</latitude>
+            <longitude>18.180191</longitude>
+            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
+            <qrCode>k01001</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!--bocianie gniazdo-->
+            <id>2</id>
+            <latitude>50.5079648</latitude>
+            <longitude>18.1846258</longitude>
+            <photoFileName></photoFileName>
+            <tipFileName></tipFileName>
+            <qrCode>k01002</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <id>6</id>
+            <latitude>50.505667</latitude>
+            <longitude>18.185020</longitude>
+            <photoFileName>photo_2185c623-ef91-4e00-b1fc-3c6d4082d1be.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01002</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+    </treasures>
 </route>

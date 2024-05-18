@@ -22,7 +22,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 
 class ReportMap(
-    private val model: FacebookViewModel
+    private val model: FacebookReportModel
 ) : ReportPart {
 
     companion object {

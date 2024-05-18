@@ -5,17 +5,32 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.core.content.res.ResourcesCompat
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.HunterPath
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.util.Collections
 
 interface ReportPart {
     fun height(): Float
 }
 
+interface FacebookReportModel {
+    fun getSummaryElement(): ElementDescription
+    fun getCommemorativePhotoElements():  List<ElementDescription>
+    fun getMap(): ElementDescription?
+    fun getMapSummary(): ElementDescription?
+    fun getMapRoute(): ElementDescription?
+
+    val hunterPath: HunterPath?
+    val route: Route
+    val progress: TreasuresProgress
+}
+
 class ReportGenerator {
     /**
      * @return it is returned for testing purposes
      */
-    fun create(context: Context, model: FacebookViewModel, reportPublisher: (Bitmap) -> Unit): Bitmap {
+    fun create(context: Context, model: FacebookReportModel, reportPublisher: (Bitmap) -> Unit): Bitmap {
         val typeface = ResourcesCompat.getFont(context, R.font.akaya_telivigala)!!
         val title = ReportTitle(model, typeface)
         val summary = ReportSummary(model, typeface)
@@ -24,7 +39,8 @@ class ReportGenerator {
         val map = ReportMap(model)
         val mapSummary = ReportMapSummary(model, typeface)
         val footer = ReportFooter()
-        val height = title.height() + summary.height() + commemorativePhotos.height() + mapHeader.height() + map.height() + mapSummary.height() + footer.height()
+        val height =
+            title.height() + summary.height() + commemorativePhotos.height() + mapHeader.height() + map.height() + mapSummary.height() + footer.height()
         val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, height.toInt(), Bitmap.Config.ARGB_8888)
 
         val canvas = Canvas(bitmap)
