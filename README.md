@@ -10,4 +10,3 @@ TODO:
 - w introduction dodać widok-instrukcję z kodem QR
 - kopiowanie "assetów" podczas wyświetlania splash screen
 - remove dead code
-- do not show splash when switching back to app

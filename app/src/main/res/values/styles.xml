@@ -1,9 +1,7 @@
 <resources>
 
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/chest_splash</item>
-        <item name="postSplashScreenTheme">@style/FullscreenTheme</item>
+    <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
 
     <!-- Base application theme. -->
