@@ -16,7 +16,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -68,7 +67,6 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
     val localState: ResultState = localViewModel.state.value
     val sharedViewModel: ResultSharedViewModel = getViewModel(viewModelStoreOwner)
     sharedViewModel.resultPresented()
-    val snackbarCoroutineScope = rememberCoroutineScope()
     Column(Modifier.background(SecondaryBackground)) {
         Spacer(
             modifier = Modifier
@@ -141,7 +139,7 @@ private fun Movie(
             val videoView: VideoView = remember { VideoView(context) }
             Video(videoView, subtitlesPath, updateSubtitlesLine, movieController, moviePath, localesWithSubtitles)
             PlayButton(isPlayVisible, videoView, movieController)
-            //TODO t: merge conditions, and maybe move to  state
+            //TODO t: merge conditions, and maybe move to the state
             if (localesWithSubtitles) {
                 subtitlesLine?.let {
                     Text(
@@ -239,11 +237,3 @@ private fun getViewModel(viewModelStoreOwner: NavBackStackEntry): ResultSharedVi
     val viewModelDoNotInline: SharedViewModel = hiltViewModel(viewModelStoreOwner)
     return viewModelDoNotInline
 }
-
-//@Preview(showBackground = true, apiLevel = 31)
-//@Composable
-//fun ResultDefaultPreview() {
-//    AppTheme {
-//        ResultScreenBody(App.getResources())
-//    }
-//}

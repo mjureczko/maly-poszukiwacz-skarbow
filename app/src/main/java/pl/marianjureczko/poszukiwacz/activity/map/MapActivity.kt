@@ -34,7 +34,7 @@ class MapActivity : ActivityWithAdsAndBackButton() {
 
         model.setup(intent.getSerializableExtra(MAP) as MapInputData)
         mapView = binding.mapView
-        MapHelper.renderTreasures(model.route, mapView, this.resources)
+        MapHelper.renderTreasures(model.route, mapView)
         hideRoads()
 
         setContentView(binding.root)

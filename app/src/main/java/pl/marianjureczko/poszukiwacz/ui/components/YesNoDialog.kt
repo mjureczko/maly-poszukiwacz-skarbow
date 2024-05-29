@@ -7,10 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 
 @Composable
@@ -27,10 +26,10 @@ fun YesNoDialog(state: Boolean, hideIt: () -> Unit, title: Int, onYes: () -> Uni
                     onYes()
                     hideIt()
                 }) {
-                    Text(App.getResources().getString(R.string.yes))
+                    Text(stringResource(R.string.yes))
                 }
                 TextButton(onClick = { hideIt() }) {
-                    Text(App.getResources().getString(R.string.no))
+                    Text(stringResource(R.string.no))
                 }
             }
         }

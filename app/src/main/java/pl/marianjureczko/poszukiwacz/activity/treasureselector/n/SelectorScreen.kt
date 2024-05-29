@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.treasureselector.n
 
 import android.annotation.SuppressLint
-import android.content.res.Resources
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -55,7 +54,6 @@ import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 fun SelectorScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
-    resources: Resources,
     onClickOnGuide: () -> Unit,
     goToResult: (Int) -> Unit,
     goToCommemorative: (Int) -> Unit,
@@ -69,8 +67,6 @@ fun SelectorScreen(
             SelectorScreenBody(
                 navController,
                 shareViewModelStoreOwner(navBackStackEntry, navController),
-                resources,
-                scaffoldState,
                 goToResult,
                 goToCommemorative
             )
@@ -82,8 +78,6 @@ fun SelectorScreen(
 fun SelectorScreenBody(
     navController: NavController,
     viewModelStoreOwner: NavBackStackEntry,
-    resources: Resources,
-    scaffoldState: ScaffoldState,
     goToResult: (Int) -> Unit,
     goToCommemorative: (Int) -> Unit
 ) {
@@ -100,7 +94,6 @@ fun SelectorScreenBody(
             items(state.route.treasures) { treasure ->
                 TreasureItem(
                     navController,
-                    resources,
                     treasure,
                     localState,
                     state,
@@ -120,7 +113,6 @@ fun SelectorScreenBody(
 @Composable
 fun TreasureItem(
     navController: NavController,
-    resources: Resources,
     treasure: TreasureDescription,
     localState: SelectorState,
     state: SelectorSharedState,
@@ -148,7 +140,7 @@ fun TreasureItem(
             val distanceInSteps = state.distancesInSteps[treasure.id]
             if (distanceInSteps != null) {
                 Text(
-                    text = resources.getString(R.string.steps_to_treasure, treasure.id, distanceInSteps),
+                    text = stringResource(R.string.steps_to_treasure, treasure.id, distanceInSteps),
                     style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Center,
                     fontFamily = FANCY_FONT,

@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.map.n
 
 import android.annotation.SuppressLint
-import android.content.res.Resources
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -23,31 +22,29 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 @Composable
 fun MapScreen(
     navController: NavController,
-    //TODO t: use StringResource instead
-    resources: Resources,
     onClickOnGuide: () -> Unit,
     onClickOnFacebook: () -> Unit
 ) {
     Scaffold(
         topBar = { TopBar(navController, stringResource(R.string.map_activity_title), onClickOnGuide, onClickOnFacebook) },
         content = {
-            MapScreenBody(resources)
+            MapScreenBody()
         }
     )
 }
 
 @Composable
-fun MapScreenBody(resources: Resources) {
+fun MapScreenBody() {
     val viewModel: MapViewModel = hiltViewModel()
     val state = viewModel.state.value
-    MapboxMap(state.route, resources)
+    MapboxMap(state.route)
 }
 
 @Composable
-fun MapboxMap(route: Route, resources: Resources) {
+fun MapboxMap(route: Route) {
     val mapView = MapView(App.getAppContext())
 
-    MapHelper.renderTreasures(route, mapView, resources)
+    MapHelper.renderTreasures(route, mapView)
     mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) { style -> hideRoads(style) }
 
     AndroidView({ mapView }, Modifier.fillMaxSize())

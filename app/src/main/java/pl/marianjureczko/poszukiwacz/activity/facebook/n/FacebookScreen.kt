@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.facebook.ElementDescription
@@ -61,19 +60,18 @@ import java.io.FileOutputStream
 @Composable
 fun FacebookScreen(
     navController: NavController,
-    navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: () -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(navController, stringResource(R.string.title_activity_facebook), onClickOnGuide, {}) },
-        content = { FacebookScreenBody(navController) }
+        content = { FacebookScreenBody() }
     )
 }
 
 @Composable
-fun FacebookScreenBody(navController: NavController) {
+fun FacebookScreenBody() {
     val viewModel: FacebookViewModel = hiltViewModel()
     val state: FacebookState = viewModel.state.value
 

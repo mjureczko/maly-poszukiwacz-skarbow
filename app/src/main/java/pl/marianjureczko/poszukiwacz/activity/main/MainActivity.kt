@@ -118,7 +118,6 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
             SearchingScreen(
                 navController = navController,
                 isClassicMode = settings.isClassicMode(),
-                resources = resources,
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
                 goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") },
@@ -151,7 +150,6 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
             MapScreen(
                 navController = navController,
                 onClickOnGuide = onClickGuide,
-                resources = resources,
                 onClickOnFacebook = goToFacebook
             )
         }
@@ -162,7 +160,6 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
             SelectorScreen(
                 navController,
                 navBackStackEntry,
-                resources,
                 onClickGuide,
                 goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") },
                 goToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") },
@@ -175,6 +172,6 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
         ) { navBackStackEntry -> CommemorativeScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
         composable(
             route = FACEBOOK_ROUTE,
-        ) { navBackStackEntry -> FacebookScreen(navController, navBackStackEntry, onClickGuide) }
+        ) { navBackStackEntry -> FacebookScreen(navController, onClickGuide) }
     }
 }

@@ -11,13 +11,12 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 
 @Composable
@@ -55,7 +54,7 @@ fun EnterTextDialog(
                         text.value = ""
                     },
                 ) {
-                    Text(App.getResources().getString(R.string.ok))
+                    Text(stringResource(R.string.ok))
                 }
             }
         }

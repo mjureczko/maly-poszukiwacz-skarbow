@@ -86,7 +86,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         handler.post(presenter)
 
         mapView = binding.mapView
-        MapHelper.renderTreasures(model.getRoute(), mapView, this.resources)
+        MapHelper.renderTreasures(model.getRoute(), mapView)
 
         setContentView(binding.root)
         setUpAds(binding.adView)
@@ -130,7 +130,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
         )
         model.addTreasure(treasure, storageHelper)
         treasureAdapter.notifyDataSetChanged()
-        MapHelper.addTreasureToMap(treasure, mapView, this.resources)
+        MapHelper.addTreasureToMap(treasure, mapView)
         MapHelper.positionMapOnTreasures(model.getRoute(), mapView, 0.0)
     }
 
@@ -199,7 +199,7 @@ class TreasuresEditorActivity : PermissionActivity(), RouteNameDialog.Callback, 
     override fun remove(treasureToRemove: TreasureDescription) {
         model.removeTreasure(treasureToRemove, storageHelper)
         treasureAdapter.notifyDataSetChanged()
-        MapHelper.renderTreasures(model.getRoute(), mapView, this.resources)
+        MapHelper.renderTreasures(model.getRoute(), mapView)
         MapHelper.positionMapOnTreasures(model.getRoute(), mapView, 0.0)
     }
 }

@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.shared
 
-import android.content.res.Resources
 import android.graphics.BitmapFactory
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -16,6 +15,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
+import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.map.LocationHelper
 import pl.marianjureczko.poszukiwacz.databinding.TreasureOnMapViewBinding
@@ -26,8 +26,8 @@ class MapHelper {
 
     private val TAG = javaClass.simpleName
 
-    private class TreasureOnMapHelper(mapView: MapView, resources: Resources) {
-        private val iconBitmap = BitmapFactory.decodeResource(resources, R.drawable.chest_closed_small)
+    private class TreasureOnMapHelper(mapView: MapView) {
+        private val iconBitmap = BitmapFactory.decodeResource(App.getResources(), R.drawable.chest_closed_small)
         private val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
         private val viewAnnotationManager = mapView.viewAnnotationManager
 
@@ -44,21 +44,21 @@ class MapHelper {
     }
 
     companion object {
-        fun renderTreasures(route: Route, mapView: MapView, resources: Resources) {
+        fun renderTreasures(route: Route, mapView: MapView) {
             mapView.getMapboxMap().loadStyleUri(Style.OUTDOORS)
             val cameraPosition = CameraOptions.Builder()
                 .center(LocationHelper(route).center())
                 .build()
             mapView.getMapboxMap().setCamera(cameraPosition)
 
-            val treasureOnMapHelper = TreasureOnMapHelper(mapView, resources)
+            val treasureOnMapHelper = TreasureOnMapHelper(mapView)
             route.treasures.forEach {
                 treasureOnMapHelper.addTreasure(it)
             }
         }
 
-        fun addTreasureToMap(treasure: TreasureDescription, mapView: MapView, resources: Resources) {
-            val treasureOnMapHelper = TreasureOnMapHelper(mapView, resources)
+        fun addTreasureToMap(treasure: TreasureDescription, mapView: MapView) {
+            val treasureOnMapHelper = TreasureOnMapHelper(mapView)
             treasureOnMapHelper.addTreasure(treasure)
         }
 

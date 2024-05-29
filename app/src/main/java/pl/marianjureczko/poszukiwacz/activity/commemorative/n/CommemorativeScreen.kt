@@ -58,9 +58,7 @@ fun CommemorativeScreen(
         topBar = { TopBar(navController, stringResource(R.string.app_name), onClickOnGuide, goToFacebook) },
         content = {
             CommemorativeScreenBody(
-                navController,
-                shareViewModelStoreOwner(navBackStackEntry, navController),
-                scaffoldState
+                shareViewModelStoreOwner(navBackStackEntry, navController)
             )
         }
     )
@@ -68,9 +66,7 @@ fun CommemorativeScreen(
 
 @Composable
 fun CommemorativeScreenBody(
-    navController: NavController,
-    viewModelStoreOwner: NavBackStackEntry,
-    scaffoldState: ScaffoldState
+    viewModelStoreOwner: NavBackStackEntry
 ) {
     val sharedViewModel: CommemorativeSharedViewModel = getViewModel(viewModelStoreOwner)
     val sharedState = sharedViewModel.state.value as CommemorativeSharedState
