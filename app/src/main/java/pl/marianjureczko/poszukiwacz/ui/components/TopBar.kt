@@ -27,12 +27,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.theme.Primary
 
 @Composable
-fun TopBar(navController: NavController, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
+fun TopBar(navController: NavController, title:String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
     val showMenu = remember { mutableStateOf(false) }
     TopAppBar(
         backgroundColor = Primary,
@@ -72,7 +71,7 @@ fun TopBar(navController: NavController, onClickOnGuide: () -> Unit, onClickOnFa
                     contentScale = ContentScale.FillHeight
                 )
                 Text(
-                    text = App.getResources().getString(R.string.app_name),
+                    text = title,
                     //TODO save color in theme
                     color = Color.White,
                     style = MaterialTheme.typography.h6,

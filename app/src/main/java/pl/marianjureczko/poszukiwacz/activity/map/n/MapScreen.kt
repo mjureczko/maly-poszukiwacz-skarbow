@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -13,6 +14,7 @@ import com.mapbox.bindgen.Value
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import pl.marianjureczko.poszukiwacz.App
+import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.MapHelper
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
@@ -27,7 +29,7 @@ fun MapScreen(
     onClickOnFacebook: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
+        topBar = { TopBar(navController, stringResource(R.string.map_activity_title), onClickOnGuide, onClickOnFacebook) },
         content = {
             MapScreenBody(resources)
         }

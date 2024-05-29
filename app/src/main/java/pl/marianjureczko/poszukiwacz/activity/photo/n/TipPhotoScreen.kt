@@ -17,9 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
@@ -32,7 +34,7 @@ fun TipPhotoScreen(
     onClickOnFacebook: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
+        topBar = { TopBar(navController, stringResource(R.string.photo_tip), onClickOnGuide, onClickOnFacebook) },
         content = {
             TipPhotoScreenBody()
         }

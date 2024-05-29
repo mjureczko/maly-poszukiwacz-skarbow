@@ -55,7 +55,7 @@ fun CommemorativeScreen(
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, onClickOnGuide, goToFacebook) },
+        topBar = { TopBar(navController, stringResource(R.string.app_name), onClickOnGuide, goToFacebook) },
         content = {
             CommemorativeScreenBody(
                 navController,

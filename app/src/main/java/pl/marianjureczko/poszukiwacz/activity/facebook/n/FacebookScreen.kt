@@ -67,7 +67,7 @@ fun FacebookScreen(
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, onClickOnGuide, {}) },
+        topBar = { TopBar(navController, stringResource(R.string.title_activity_facebook), onClickOnGuide, {}) },
         content = { FacebookScreenBody(navController) }
     )
 }

@@ -2,10 +2,11 @@
     <name>custom</name>
     <treasures class="java.util.ArrayList">
         <treasureDescription>
+            <!--witacz-->
             <id>1</id>
             <latitude>50.501055</latitude>
             <longitude>18.180191</longitude>
-            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <photoFileName>tip_01.jpg</photoFileName>
             <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
             <qrCode>k01001</qrCode>
             <movieFileName>kalinowice_01.mp4</movieFileName>
@@ -16,21 +17,133 @@
             <id>2</id>
             <latitude>50.5079648</latitude>
             <longitude>18.1846258</longitude>
-            <photoFileName></photoFileName>
-            <tipFileName></tipFileName>
+            <photoFileName>tip_02.jpg</photoFileName>
+            <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
             <qrCode>k01002</qrCode>
             <movieFileName>kalinowice_01.mp4</movieFileName>
             <subtitlesFileName>en_01.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
-            <id>6</id>
-            <latitude>50.505667</latitude>
-            <longitude>18.185020</longitude>
-            <photoFileName>photo_2185c623-ef91-4e00-b1fc-3c6d4082d1be.jpg</photoFileName>
-            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
-            <qrCode>k01002</qrCode>
+            <!--dąbrówka-->
+            <id>3</id>
+            <latitude>50.520650</latitude>
+            <longitude>18.200960</longitude>
+            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
+            <qrCode>k01003</qrCode>
             <movieFileName>kalinowice_01.mp4</movieFileName>
             <subtitlesFileName>en_01.srt</subtitlesFileName>
         </treasureDescription>
+        <treasureDescription>
+            <!--dzwonek zmarłych-->
+            <id>4</id>
+            <latitude>50.509795</latitude>
+            <longitude>18.181506</longitude>
+            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
+            <qrCode>k01004</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- kapliczka u Nieszwieca-->
+            <id>5</id>
+            <latitude>50.511045</latitude>
+            <longitude>18.180305</longitude>
+            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
+            <qrCode>k01005</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- kopaczka -->
+            <id>6</id>
+            <latitude>50.505620</latitude>
+            <longitude>18.185022</longitude>
+            <photoFileName>tip_06.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01006</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- krzyż przy wiejskiej -->
+            <id>7</id>
+            <latitude>50.502843</latitude>
+            <longitude>18.179361</longitude>
+            <photoFileName>tip_07.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01007</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- lipa -->
+            <id>8</id>
+            <latitude>50.489289</latitude>
+            <longitude>18.177942</longitude>
+            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01008</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- miłorząb -->
+            <id>9</id>
+            <latitude>50.505919</latitude>
+            <longitude>18.184735</longitude>
+            <photoFileName>tip_09.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01009</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- Oko opatrzności -->
+            <id>10</id>
+            <latitude>50.506084</latitude>
+            <longitude>18.192550</longitude>
+            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01010</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- plac zabaw -->
+            <id>11</id>
+            <latitude>50.506154</latitude>
+            <longitude>18.179228</longitude>
+            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01011</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- Stary cmentarz -->
+            <id>12</id>
+            <latitude>50.505077</latitude>
+            <longitude>18.184561</longitude>
+            <photoFileName>tip_12.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01012</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+        <treasureDescription>
+            <!-- Szkoła -->
+            <id>13</id>
+            <latitude>50.506781</latitude>
+            <longitude>18.180218</longitude>
+            <photoFileName>tip_13.jpg</photoFileName>
+            <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
+            <qrCode>k01013</qrCode>
+            <movieFileName>kalinowice_01.mp4</movieFileName>
+            <subtitlesFileName>en_01.srt</subtitlesFileName>
+        </treasureDescription>
+
     </treasures>
 </route>

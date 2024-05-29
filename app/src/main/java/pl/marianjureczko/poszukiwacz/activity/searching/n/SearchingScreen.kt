@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -70,14 +71,16 @@ fun SearchingScreen(
     goToFacebook: () -> Unit
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-
+    val viewModel: SearchingViewModel = getViewModel()
+    val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.currentTreasure.id}"
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, onClickOnGuide, goToFacebook) },
+        topBar = { TopBar(navController, title, onClickOnGuide, goToFacebook) },
         content = {
             SearchingScreenBody(
                 navController,
                 isClassicMode,
+                viewModel,
                 resources,
                 scaffoldState,
                 goToTipPhoto,
@@ -94,6 +97,7 @@ fun SearchingScreen(
 private fun SearchingScreenBody(
     navController: NavController,
     isClassicMode: Boolean,
+    viewModel: SearchingViewModel,
     resources: Resources,
     scaffoldState: ScaffoldState,
     goToTipPhoto: (String) -> Unit,
@@ -101,7 +105,7 @@ private fun SearchingScreenBody(
     goToMap: (String) -> Unit,
     goToTreasureSelector: (Int) -> Unit
 ) {
-    val viewModel: SearchingViewModel = getViewModel()
+
     val state: SearchingSharedState = viewModel.state.value
     if (!isOnStack(navController, SELECTOR_ROUTE)
         && !isOnStack(navController, RESULTS_ROUTE)

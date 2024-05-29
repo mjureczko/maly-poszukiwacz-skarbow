@@ -64,7 +64,7 @@ fun SelectorScreen(
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
+        topBar = { TopBar(navController, stringResource(R.string.select_treasure_dialog_title), onClickOnGuide, onClickOnFacebook) },
         content = {
             SelectorScreenBody(
                 navController,

@@ -106,7 +106,7 @@ private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: 
 
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
-            MainScreen(navController, settings.isClassicMode(), resources, onClickGuide, goToFacebook) { routeName ->
+            MainScreen(navController, settings.isClassicMode(), onClickGuide, goToFacebook) { routeName ->
                 navController.navigate("$SEARCHING_PATH/$routeName")
             }
         }

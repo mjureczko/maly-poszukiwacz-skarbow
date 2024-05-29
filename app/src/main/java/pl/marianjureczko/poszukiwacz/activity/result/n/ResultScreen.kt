@@ -55,7 +55,7 @@ fun ResultScreen(
     onClickOnFacebook: () -> Unit
 ) {
     Scaffold(
-        topBar = { TopBar(navController, onClickOnGuide, onClickOnFacebook) },
+        topBar = { TopBar(navController, stringResource(R.string.treasure), onClickOnGuide, onClickOnFacebook) },
         content = {
             ResultScreenBody(shareViewModelStoreOwner(navBackStackEntry, navController))
         }

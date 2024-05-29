@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
-import android.content.res.Resources
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,9 +33,8 @@ import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 /** Kalinowice */
-//TODO t: use stringResource
 @Composable
-fun CustomScreenBody(resources: Resources, goToSearching: (String) -> Unit) {
+fun CustomScreenBody(goToSearching: (String) -> Unit) {
     val viewModel: CustomMainViewModel = hiltViewModel()
     val state = viewModel.state.value
     Column(Modifier.background(PrimaryBackground)) {
@@ -46,7 +45,7 @@ fun CustomScreenBody(resources: Resources, goToSearching: (String) -> Unit) {
                 .weight(0.89f)
         ) {
             Text(
-                text = resources.getString(R.string.custom_title),
+                text = stringResource(R.string.custom_title),
                 style = MaterialTheme.typography.h3,
                 textAlign = TextAlign.Center
             )
@@ -101,7 +100,6 @@ private fun NextButton(viewModel: CustomMainViewModel) {
         ),
         border = BorderStroke(2.dp, Color.LightGray), // Border color and thickness
         elevation = ButtonDefaults.elevation(4.dp),
-//        modifier = Modifier.colo(Color.Gray),
         content = {
             Image(
                 imageVector = Icons.Rounded.ArrowForward,
