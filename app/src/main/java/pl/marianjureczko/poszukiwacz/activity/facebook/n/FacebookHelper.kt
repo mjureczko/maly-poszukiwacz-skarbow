@@ -2,10 +2,12 @@ package pl.marianjureczko.poszukiwacz.activity.facebook.n
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.FACEBOOK_PATH
 
@@ -16,11 +18,11 @@ object FacebookHelper {
         val context = LocalContext.current
         val noFacebookErrorMsg = stringResource(id = R.string.facebook_share_impossible)
         val goToFacebook = {
-//            if (isFacebookInstalled(context)) {
+            if (isFacebookInstalled(context)) {
                 navController.navigate(FACEBOOK_PATH)
-//            } else {
-//                Toast.makeText(App.getAppContext(), noFacebookErrorMsg, Toast.LENGTH_LONG).show()
-//            }
+            } else {
+                Toast.makeText(App.getAppContext(), noFacebookErrorMsg, Toast.LENGTH_LONG).show()
+            }
         }
         return goToFacebook
     }
