@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.result.n
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.media.MediaPlayer.TrackInfo
 import android.widget.VideoView
 import androidx.compose.foundation.Image
@@ -74,7 +75,7 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
                 .background(Color.Transparent)
         )
         if (localState.resultType == ResultType.TREASURE && localState.moviePath != null) {
-            Movie(
+            VidePlayerWithButon(
                 localState.isPlayVisible,
                 localViewModel,
                 localState.moviePath,
@@ -113,7 +114,7 @@ private fun Message(localState: ResultState) {
 
 @Composable
 @Preview(showBackground = true, apiLevel = 31)
-private fun Movie(
+private fun VidePlayerWithButon(
     isPlayVisible: Boolean = true,
     movieController: MovieController = object : MovieController {
         override fun onPlay() {}
@@ -137,50 +138,58 @@ private fun Movie(
         ) {
             val context = LocalContext.current
             val videoView: VideoView = remember { VideoView(context) }
-            Video(videoView, subtitlesPath, updateSubtitlesLine, movieController, moviePath, localesWithSubtitles)
-            PlayButton(isPlayVisible, videoView, movieController)
-            //TODO t: merge conditions, and maybe move to the state
-            if (localesWithSubtitles) {
-                subtitlesLine?.let {
-                    Text(
-                        fontSize = 45.sp,
-                        fontFamily = FANCY_FONT,
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                        text = it,
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                        style = TextStyle(shadow = Shadow(color = Color.Black, blurRadius = 12f))
-                    )
+            videoView.setOnPreparedListener { mediaPlayer ->
+                if (localesWithSubtitles) {
+                    registerSubtitles(subtitlesPath, mediaPlayer, updateSubtitlesLine)
                 }
+            }
+            Video(videoView, movieController, moviePath)
+            PlayButton(isPlayVisible, videoView, movieController)
+            if (localesWithSubtitles) {
+                SubtitlesLine(subtitlesLine, Modifier.align(Alignment.BottomCenter))
             }
         }
     }
 }
 
 @Composable
+private fun SubtitlesLine(subtitlesLine: String?, modifier: Modifier) {
+    subtitlesLine?.let {
+        Text(
+            fontSize = 45.sp,
+            fontFamily = FANCY_FONT,
+            color = Color.White,
+            textAlign = TextAlign.Center,
+            text = it,
+            modifier = modifier,
+            style = TextStyle(shadow = Shadow(color = Color.Black, blurRadius = 12f))
+        )
+    }
+}
+
+private fun registerSubtitles(
+    subtitlesPath: String?,
+    mediaPlayer: MediaPlayer,
+    updateSubtitlesLine: (String) -> Unit
+) {
+    subtitlesPath?.let {
+        mediaPlayer.addTimedTextSource(subtitlesPath, SUBTITLES_MIME_TYPE)
+        val textTrackIndex: Int = findTrackIndexFor(
+            TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mediaPlayer.getTrackInfo()
+        )
+        if (textTrackIndex >= 0) {
+            mediaPlayer.selectTrack(textTrackIndex)
+        }
+        mediaPlayer.setOnTimedTextListener { _, text -> updateSubtitlesLine(text.text) }
+    }
+}
+
+@Composable
 private fun Video(
     videoView: VideoView,
-    subtitlesPath: String?,
-    updateSubtitlesLine: (String) -> Unit,
     movieController: MovieController,
-    moviePath: String,
-    localesWithSubtitles: Boolean
+    moviePath: String
 ) {
-    videoView.setOnPreparedListener { mediaPlayer ->
-        //TODO t: merge conditions, and maybe move to  state
-        if (localesWithSubtitles) {
-            subtitlesPath?.let {
-                mediaPlayer.addTimedTextSource(subtitlesPath, SUBTITLES_MIME_TYPE)
-                val textTrackIndex: Int = findTrackIndexFor(
-                    TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mediaPlayer.getTrackInfo()
-                )
-                if (textTrackIndex >= 0) {
-                    mediaPlayer.selectTrack(textTrackIndex)
-                }
-                mediaPlayer.setOnTimedTextListener { _, text -> updateSubtitlesLine(text.text) }
-            }
-        }
-    }
     AndroidView(
         modifier = Modifier
             .fillMaxSize()
