@@ -107,10 +107,11 @@
     <string name="image_saved_under_name">under the name</string>
     <string name="save_failed">Save failed.</string>
     <string name="custom_lets_start">Let\'s start the hunt</string>
-    <string name="custom_lead1">Zapraszamy na wyjątkową podróż po pozornie zwyczajnej opolskiej wiosce. Zabierze nas w nią mieszkaniec Kalinowic i pasjonat lokalnej historii Pan Andrzej Legrand. Dzięki niemu poznamy największe okoliczne tajemnice i odkryjemy bezcenne skarby wiedzy.</string>
-    <string name="custom_lead2">Dokładny przebieg trasy zależy od Twoich decyzji, ale możesz się spodziewać, że jej długość to będzie około X km.</string>
-    <string name="custom_lead3">W trakcie zabawy należy odszukać ukryte skarby reprezentowane przez kody QR. Aby poznać kryjące się za nimi tajemnice trzeba je zeskanować naciskając na:</string>
-    <string name="custom_lead4">Gra będzie nam pomagać podając ile kroków w linii prostej pozostało do skarbu oraz wskazując czy trzeba pójść na północ, południe, wschód czy zachód. Kierunki będziesz odnajdywać samodzielnie, ale nie ma się czym przejmować gdyż pod tymi przyciskami znajdziesz podpowiedzi:</string>
-    <string name="custom_lead5">Do odnalezienia jest kilka skarbów. Ten aktualnie poszukiwany można zmienić przyciskiem:</string>
-    <string name="custom_title">Przygoda w Kalinowicach</string>
+    <string name="custom_lead1">We invite you on a special journey through a seemingly ordinary village. Our guide will be Mr. Andrzej Legrand, a resident of Kalinowice and a lover of local history. Thanks to him, we will learn about the biggest local secrets and discover priceless treasures of knowledge.</string>
+    <string name="custom_lead2">The exact route depends on your choices, but you can expect it to be about 13 km long. Consider breaking the journey into a few days or using a bike.</string>
+    <string name="custom_lead3">During the game, you need to find hidden treasures represented by QR codes. They will look like the one shown below:</string>
+    <string name="custom_lead4">To discover the secrets behind the QR code, you need to scan it by pressing:</string>
+    <string name="custom_lead5">The game will help us by telling how many steps in a straight line are left to the treasure and whether to go north, south, east, or west. But you have to find the directions by yourself. Don’t worry because you can find hints under these buttons:</string>
+    <string name="custom_lead6">There are several treasures to find. You can change the one you are currently searching for by pressing this button:</string>
+    <string name="custom_title">Kalinowice Adventure Trip</string>
 </resources>

@@ -57,6 +57,7 @@ fun CustomScreenBody(goToSearching: (String) -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(20.dp)
                     .height(150.dp),
                 horizontalArrangement = Arrangement.End,
             ) {
@@ -83,6 +84,7 @@ fun CustomScreenBody(goToSearching: (String) -> Unit) {
                 .background(PrimaryBackground)
         )
         LargeButton(R.string.custom_lets_start) {
+            viewModel.restartMessages()
             goToSearching.invoke(CustomInitializerForRoute.routeName)
         }
         AdvertBanner()
