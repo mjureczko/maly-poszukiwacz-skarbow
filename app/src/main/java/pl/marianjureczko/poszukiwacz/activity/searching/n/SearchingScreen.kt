@@ -44,9 +44,15 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
-import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
+import pl.marianjureczko.poszukiwacz.shared.GoToMap
+import pl.marianjureczko.poszukiwacz.shared.GoToQrScanner
+import pl.marianjureczko.poszukiwacz.shared.GoToResults
+import pl.marianjureczko.poszukiwacz.shared.GoToTipPhoto
+import pl.marianjureczko.poszukiwacz.shared.GoToTreasureSelector
 import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
@@ -61,12 +67,12 @@ import java.net.URLEncoder
 fun SearchingScreen(
     navController: NavController,
     isClassicMode: Boolean,
-    onClickOnGuide: () -> Unit,
-    goToTipPhoto: (String) -> Unit,
-    goToResult: (ResultType, Int) -> Unit,
-    goToMap: (String) -> Unit,
-    goToTreasureSelector: (Int) -> Unit,
-    goToFacebook: () -> Unit
+    onClickOnGuide: GoToGuide,
+    goToTipPhoto: GoToTipPhoto,
+    goToResult: GoToResults,
+    goToMap: GoToMap,
+    goToTreasureSelector: GoToTreasureSelector,
+    goToFacebook: GoToFacebook
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
@@ -96,10 +102,10 @@ private fun SearchingScreenBody(
     isClassicMode: Boolean,
     viewModel: SearchingViewModel,
     scaffoldState: ScaffoldState,
-    goToTipPhoto: (String) -> Unit,
-    goToResult: (ResultType, Int) -> Unit,
-    goToMap: (String) -> Unit,
-    goToTreasureSelector: (Int) -> Unit
+    goToTipPhoto: GoToTipPhoto,
+    goToResult: GoToResults,
+    goToMap: GoToMap,
+    goToTreasureSelector: GoToTreasureSelector
 ) {
 
     val state: SearchingSharedState = viewModel.state.value
@@ -116,7 +122,7 @@ private fun SearchingScreenBody(
         }
     )
     val prompt = stringResource(R.string.qr_scanner_msg)
-    val scanQrCallback: () -> Unit = {
+    val scanQrCallback: GoToQrScanner = {
         val scanOptions = ScanOptions()
         scanOptions.setPrompt(prompt)
         scanQrLauncher.launch(scanOptions)
@@ -257,13 +263,13 @@ fun Steps(stepsToTreasure: Int?) {
 
 @Composable
 fun Buttons(
-    scanQrCallback: () -> Unit,
+    scanQrCallback: GoToQrScanner,
     currentTreasure: TreasureDescription,
     route: Route,
     scaffoldState: ScaffoldState,
     mediaPlayer: MediaPlayer,
-    goToTipPhoto: (String) -> Unit,
-    goToMap: (String) -> Unit,
+    goToTipPhoto: GoToTipPhoto,
+    goToMap: GoToMap,
     goToTreasureSelector: () -> Unit
 ) {
     val snackbarCoroutineScope: CoroutineScope = rememberCoroutineScope()
@@ -290,7 +296,7 @@ fun Buttons(
 }
 
 @Composable
-private fun ShowMapButton(route: Route, goToMap: (String) -> Unit) {
+private fun ShowMapButton(route: Route, goToMap: GoToMap) {
     Image(
         painterResource(R.drawable.map),
         modifier = Modifier
@@ -314,7 +320,7 @@ private fun ChangeTreasureButton(goToTreasureSelector: () -> Unit) {
 }
 
 @Composable
-private fun ScanTreasureButton(scanQrCallback: () -> Unit) {
+private fun ScanTreasureButton(scanQrCallback: GoToQrScanner) {
     Image(
         painterResource(R.drawable.chest),
         modifier = Modifier
@@ -330,7 +336,7 @@ private fun PhotoTipButton(
     currentTreasure: TreasureDescription,
     scaffoldState: ScaffoldState,
     snackbarCoroutineScope: CoroutineScope,
-    goToTipPhoto: (String) -> Unit
+    goToTipPhoto: GoToTipPhoto
 ) {
     val noPhotoToShowMsg = stringResource(R.string.no_photo_to_show)
     Image(

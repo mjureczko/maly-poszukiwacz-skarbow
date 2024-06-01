@@ -39,6 +39,8 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.CommemorativeSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.CommemorativeSharedViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
@@ -49,8 +51,8 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 fun CommemorativeScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
-    onClickOnGuide: () -> Unit,
-    goToFacebook: () -> Unit,
+    onClickOnGuide: GoToGuide,
+    goToFacebook: GoToFacebook,
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(

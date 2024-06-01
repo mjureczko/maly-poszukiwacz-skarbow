@@ -44,6 +44,11 @@ import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.shared.DoPhotoResultHandler
+import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
+import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
@@ -54,10 +59,10 @@ import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 fun SelectorScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
-    onClickOnGuide: () -> Unit,
-    goToResult: (Int) -> Unit,
-    goToCommemorative: (Int) -> Unit,
-    onClickOnFacebook: () -> Unit
+    onClickOnGuide: GoToGuide,
+    goToResult: GoToResultWithTreasure,
+    goToCommemorative: GoToCommemorative,
+    onClickOnFacebook: GoToFacebook
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
@@ -78,8 +83,8 @@ fun SelectorScreen(
 fun SelectorScreenBody(
     navController: NavController,
     viewModelStoreOwner: NavBackStackEntry,
-    goToResult: (Int) -> Unit,
-    goToCommemorative: (Int) -> Unit
+    goToResult: GoToResultWithTreasure,
+    goToCommemorative: GoToCommemorative
 ) {
     val localViewModel: SelectorViewModel = hiltViewModel()
     val localState: SelectorState = localViewModel.state.value
@@ -116,9 +121,9 @@ fun TreasureItem(
     treasure: TreasureDescription,
     localState: SelectorState,
     state: SelectorSharedState,
-    goToResult: (Int) -> Unit,
+    goToResult: GoToResultWithTreasure,
     sharedViewModel: SelectorSharedViewModel,
-    goToCommemorative: (Int) -> Unit
+    goToCommemorative: GoToCommemorative
 ) {
     Card(
         elevation = 4.dp,
@@ -176,7 +181,7 @@ fun TreasureItem(
 }
 
 @Composable
-fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, goToResult: (Int) -> Unit) {
+fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, goToResult: GoToResultWithTreasure) {
     if (state.isTreasureCollected(treasure.id)) {
         Image(
             painterResource(R.drawable.movie),
@@ -195,8 +200,8 @@ private fun CommemorativePhotoButton(
     sharedState: SelectorSharedState,
     localState: SelectorState,
     treasure: TreasureDescription,
-    goToCommemorative: (Int) -> Unit,
-    handleDoPhotoResult: () -> Unit
+    goToCommemorative: GoToCommemorative,
+    handleDoPhotoResult: DoPhotoResultHandler
 ) {
     if (localState.cameraPermissionGranted) {
         if (sharedState.hasCommemorativePhoto(treasure.id)) {

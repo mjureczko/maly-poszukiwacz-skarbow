@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.journeyapps.barcodescanner.ScanIntentResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -23,7 +22,10 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.DoPhotoResultHandler
+import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.ScanTreasureCallback
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Inject
 
@@ -31,7 +33,7 @@ const val PARAMETER_ROUTE_NAME = "route_name"
 
 interface SearchingViewModel {
     val state: State<SharedState>
-    fun scannedTreasureCallback(goToResults: (ResultType, Int) -> Unit): (ScanIntentResult?) -> Unit
+    fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback
 }
 
 interface ResultSharedViewModel {
@@ -43,13 +45,13 @@ interface SelectorSharedViewModel {
     fun updateJustFoundFromSelector()
     fun selectorPresented()
     fun updateCurrentTreasure(treasure: TreasureDescription)
-    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): () -> Unit
+    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler
 }
 
 interface CommemorativeSharedViewModel {
     val state: State<SharedState>
 
-    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): () -> Unit
+    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler
 }
 
 @HiltViewModel
@@ -80,8 +82,8 @@ class SharedViewModel @Inject constructor(
     override val state: State<SharedState>
         get() = _state
 
-    //TODO: introduce types for callbacks used as parameters
-    override fun scannedTreasureCallback(goToResults: (ResultType, Int) -> Unit): (ScanIntentResult?) -> Unit {
+    //TODO t: introduce types for callbacks used as parameters
+    override fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback {
         return { scanResult ->
             var result: ResultType? = null
             var treasureId = NOTHING_FOUND_TREASURE_ID
@@ -104,7 +106,7 @@ class SharedViewModel @Inject constructor(
                         treasuresProgress.treasureFoundGoToSelector = true
                         treasureId = foundTreasure.id
                         storageHelper.save(treasuresProgress)
-                        //TODO message show collected treasure
+                        //TODO t: message show collected treasure
                         result = ResultType.TREASURE
                     }
                 }
@@ -141,7 +143,7 @@ class SharedViewModel @Inject constructor(
         _state.value = _state.value.copy(currentTreasure = treasure)
     }
 
-    override fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): () -> Unit {
+    override fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler {
         return {
             val target = _state.value.treasuresProgress.getCommemorativePhoto(treasure)
                 ?: storageHelper.newCommemorativePhotoFile()

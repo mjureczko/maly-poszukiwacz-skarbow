@@ -72,7 +72,7 @@ fun TopBar(navController: NavController, title:String, onClickOnGuide: () -> Uni
                 )
                 Text(
                     text = title,
-                    //TODO save color in theme
+                    //TODO t: save color in theme
                     color = Color.White,
                     style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Center

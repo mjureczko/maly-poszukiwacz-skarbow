@@ -3,7 +3,6 @@ package pl.marianjureczko.poszukiwacz.activity.main
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +31,7 @@ import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.SelectorScreen
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.ui.Screen
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
@@ -51,7 +51,7 @@ val FACEBOOK_ROUTE = "$FACEBOOK_PATH"
 /**
  * Routes creation and selection activity
  */
-//TODO: check https://developer.android.com/build/build-variants and Product Flavours
+//TODO t: check https://developer.android.com/build/build-variants and Product Flavours
 @AndroidEntryPoint
 class MainActivity : PermissionActivity() {
     private val TAG = javaClass.simpleName
@@ -68,7 +68,7 @@ class MainActivity : PermissionActivity() {
 
         setContent {
             AppTheme {
-                ComposeRoot(settings, resources) { onClickOnGuide() }
+                ComposeRoot(settings) { onClickOnGuide() }
             }
         }
     }
@@ -100,7 +100,7 @@ class MainActivity : PermissionActivity() {
 }
 
 @Composable
-private fun ComposeRoot(settings: Settings, resources: Resources, onClickGuide: () -> Unit) {
+private fun ComposeRoot(settings: Settings, onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook = FacebookHelper.createFacebookCallback(navController)
 

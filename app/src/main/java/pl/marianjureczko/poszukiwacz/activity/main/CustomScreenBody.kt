@@ -28,13 +28,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 /** Kalinowice */
 @Composable
-fun CustomScreenBody(goToSearching: (String) -> Unit) {
+fun CustomScreenBody(goToSearching: GoToSearching) {
     val viewModel: CustomMainViewModel = hiltViewModel()
     val state = viewModel.state.value
     Column(Modifier.background(PrimaryBackground)) {

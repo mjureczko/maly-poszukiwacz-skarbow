@@ -25,7 +25,7 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
     private val TAG = javaClass.simpleName
     private val xmlHelper = XmlHelper()
     private lateinit var route: Route
-    //TODO: state should be employed as property is mutable
+    //TODO t: state should be employed as property is mutable
     private lateinit var treasuresProgress: TreasuresProgress
     private var currentLocation: Location? = null
     private var currentCoordinates: Coordinates? = state.get<Coordinates?>(CURRENT_COORDINATES)

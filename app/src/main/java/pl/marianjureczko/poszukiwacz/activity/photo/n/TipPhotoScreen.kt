@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
@@ -30,8 +32,8 @@ import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 @Composable
 fun TipPhotoScreen(
     navController: NavController,
-    onClickOnGuide: () -> Unit,
-    onClickOnFacebook: () -> Unit
+    onClickOnGuide: GoToGuide,
+    onClickOnFacebook: GoToFacebook
 ) {
     Scaffold(
         topBar = { TopBar(navController, stringResource(R.string.photo_tip), onClickOnGuide, onClickOnFacebook) },

@@ -15,6 +15,8 @@ import com.mapbox.maps.Style
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.MapHelper
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 
@@ -22,8 +24,8 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 @Composable
 fun MapScreen(
     navController: NavController,
-    onClickOnGuide: () -> Unit,
-    onClickOnFacebook: () -> Unit
+    onClickOnGuide: GoToGuide,
+    onClickOnFacebook: GoToFacebook
 ) {
     Scaffold(
         topBar = { TopBar(navController, stringResource(R.string.map_activity_title), onClickOnGuide, onClickOnFacebook) },

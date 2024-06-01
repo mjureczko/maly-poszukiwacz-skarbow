@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.DeleteRoute
+import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
 import pl.marianjureczko.poszukiwacz.ui.components.EnterTextDialog
@@ -36,7 +38,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 @Composable
-fun ClassicScreenBody(goToSearching: (String) -> Unit) {
+fun ClassicScreenBody(goToSearching: GoToSearching) {
     val viewModel: ClassicMainViewModel = hiltViewModel()
     val state = viewModel.state.value
     Column(Modifier.background(PrimaryBackground)) {
@@ -78,7 +80,7 @@ fun ClassicScreenBody(goToSearching: (String) -> Unit) {
 }
 
 @Composable
-fun RouteItem(item: Route, viewModel: ClassicMainViewModel, onDelete: () -> Unit, goToSearching: (String) -> Unit) {
+fun RouteItem(item: Route, viewModel: ClassicMainViewModel, onDelete: DeleteRoute, goToSearching: GoToSearching) {
     Card(
         elevation = 4.dp,
         modifier = Modifier

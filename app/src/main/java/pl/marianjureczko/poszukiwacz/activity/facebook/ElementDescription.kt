@@ -1,6 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook
 
-//TODO: change var to val to avoid missing compose refreshes
+//TODO t: change var to val to avoid missing compose refreshes
 data class ElementDescription(
     val index: Int,
     var type: Type,

@@ -38,6 +38,9 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.ResultSharedViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
+import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
@@ -51,8 +54,8 @@ private const val SUBTITLES_MIME_TYPE = "application/x-subrip"
 fun ResultScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
-    onClickOnGuide: () -> Unit,
-    onClickOnFacebook: () -> Unit
+    onClickOnGuide: GoToGuide,
+    onClickOnFacebook: GoToFacebook
 ) {
     Scaffold(
         topBar = { TopBar(navController, stringResource(R.string.treasure), onClickOnGuide, onClickOnFacebook) },
@@ -125,7 +128,7 @@ private fun VidePlayerWithButon(
     subtitlesLine: String? = null,
     subtitlesPath: String? = null,
     localesWithSubtitles: Boolean = false,
-    updateSubtitlesLine: (String) -> Unit = {}
+    updateSubtitlesLine: UpdateSubtitlesLine = {}
 ) {
     Column(
         modifier = Modifier.fillMaxHeight(0.95F)
@@ -170,7 +173,7 @@ private fun SubtitlesLine(subtitlesLine: String?, modifier: Modifier) {
 private fun registerSubtitles(
     subtitlesPath: String?,
     mediaPlayer: MediaPlayer,
-    updateSubtitlesLine: (String) -> Unit
+    updateSubtitlesLine: UpdateSubtitlesLine
 ) {
     subtitlesPath?.let {
         mediaPlayer.addTimedTextSource(subtitlesPath, SUBTITLES_MIME_TYPE)

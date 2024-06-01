@@ -25,7 +25,7 @@ class PhotoHelper(
         private val TAG = javaClass.simpleName
         const val TMP_PICTURE_FILE = "/tmp_commemorative_photo.jpg"
 
-        //TODO: merge with other functions
+        //TODO t: merge with other functions
         /**
          * Scales the photo, but keeps the aspect ratio
          * @param maxHeight - the maximum height after scaling
@@ -50,7 +50,7 @@ class PhotoHelper(
             }
         }
 
-        //TODO: private?
+        //TODO t: private?
         fun createScalingMatrix(width: Int, height: Int): Matrix {
             val scalingFactor = calculateScalingFactor(width, height)
             val matrix = Matrix()

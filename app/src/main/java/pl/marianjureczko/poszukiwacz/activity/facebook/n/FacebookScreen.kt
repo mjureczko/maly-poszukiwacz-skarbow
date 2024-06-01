@@ -46,7 +46,9 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.facebook.ElementDescription
 import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookReportModel
 import pl.marianjureczko.poszukiwacz.activity.facebook.ReportGenerator
+import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
@@ -55,12 +57,11 @@ import pl.marianjureczko.poszukiwacz.ui.theme.Typography
 import java.io.File
 import java.io.FileOutputStream
 
-
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun FacebookScreen(
     navController: NavController,
-    onClickOnGuide: () -> Unit
+    onClickOnGuide: GoToGuide
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
@@ -102,7 +103,7 @@ private fun Elements(
     modifier: Modifier,
     state: FacebookState,
     viewModel: FacebookViewModel,
-    onRotatePhoto: (String) -> Unit
+    onRotatePhoto: RotatePhoto
 ) {
     LazyColumn(
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
@@ -141,7 +142,7 @@ private fun FacebookImage(modifier: Modifier) {
 }
 
 @Composable
-fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRotatePhoto: (String) -> Unit) {
+fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRotatePhoto: RotatePhoto) {
     Card(
         elevation = 4.dp,
         modifier = Modifier.padding(4.dp)
