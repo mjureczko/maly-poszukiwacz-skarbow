@@ -82,7 +82,6 @@ class SharedViewModel @Inject constructor(
     override val state: State<SharedState>
         get() = _state
 
-    //TODO t: introduce types for callbacks used as parameters
     override fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback {
         return { scanResult ->
             var result: ResultType? = null

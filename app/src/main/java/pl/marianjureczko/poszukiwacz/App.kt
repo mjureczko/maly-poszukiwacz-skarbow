@@ -10,6 +10,7 @@ import java.util.concurrent.Executors
 @HiltAndroidApp
 class App : Application() {
 
+    // TODO Why not use LocalContext.current instead? Decide once code covered with tests
     init { App.app = this }
 
     companion object {

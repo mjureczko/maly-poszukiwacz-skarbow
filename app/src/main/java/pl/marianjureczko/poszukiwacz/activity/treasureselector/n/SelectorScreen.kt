@@ -38,12 +38,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto
 import pl.marianjureczko.poszukiwacz.shared.DoPhotoResultHandler
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
@@ -51,9 +55,11 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SelectorScreen(
@@ -64,12 +70,21 @@ fun SelectorScreen(
     goToCommemorative: GoToCommemorative,
     onClickOnFacebook: GoToFacebook
 ) {
+    val cameraPermission: PermissionState = handlePermission(RequirementsForDoingPhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, stringResource(R.string.select_treasure_dialog_title), onClickOnGuide, onClickOnFacebook) },
+        topBar = {
+            TopBar(
+                navController,
+                stringResource(R.string.select_treasure_dialog_title),
+                onClickOnGuide,
+                onClickOnFacebook
+            )
+        },
         content = {
             SelectorScreenBody(
+                cameraPermission,
                 navController,
                 shareViewModelStoreOwner(navBackStackEntry, navController),
                 goToResult,
@@ -79,8 +94,10 @@ fun SelectorScreen(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SelectorScreenBody(
+    cameraPermission: PermissionState,
     navController: NavController,
     viewModelStoreOwner: NavBackStackEntry,
     goToResult: GoToResultWithTreasure,
@@ -98,6 +115,7 @@ fun SelectorScreenBody(
         ) {
             items(state.route.treasures) { treasure ->
                 TreasureItem(
+                    cameraPermission,
                     navController,
                     treasure,
                     localState,
@@ -115,8 +133,10 @@ fun SelectorScreenBody(
     sharedViewModel.updateJustFoundFromSelector()
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun TreasureItem(
+    cameraPermission: PermissionState,
     navController: NavController,
     treasure: TreasureDescription,
     localState: SelectorState,
@@ -170,6 +190,7 @@ fun TreasureItem(
             }
             ShowMovieButton(state, treasure, goToResult)
             CommemorativePhotoButton(
+                cameraPermission,
                 state,
                 localState,
                 treasure,
@@ -195,15 +216,17 @@ fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, g
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun CommemorativePhotoButton(
+    cameraPermission: PermissionState,
     sharedState: SelectorSharedState,
     localState: SelectorState,
     treasure: TreasureDescription,
     goToCommemorative: GoToCommemorative,
     handleDoPhotoResult: DoPhotoResultHandler
 ) {
-    if (localState.cameraPermissionGranted) {
+    if (cameraPermission.status.isGranted) {
         if (sharedState.hasCommemorativePhoto(treasure.id)) {
             Image(
                 painterResource(R.drawable.camera_show_photo),

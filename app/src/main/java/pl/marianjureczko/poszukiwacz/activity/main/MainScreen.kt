@@ -5,9 +5,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
@@ -17,6 +21,7 @@ fun MainScreen(
     onClickOnFacebook: () -> Unit,
     goToSearching: (String) -> Unit
 ) {
+    handlePermissionWithExitOnDenied(RequirementsForNavigation)
     Scaffold(
         topBar = { TopBar(navController, stringResource(R.string.app_name), onClickOnGuide, onClickOnFacebook) },
         content = { _ ->

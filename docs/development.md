@@ -87,6 +87,14 @@ There are three levels of state persistence.
 
 # Permissions
 
+https://medium.com/@rzmeneghelo/how-to-request-permissions-in-jetpack-compose-a-step-by-step-guide-7ce4b7782bd7
+
+https://stackoverflow.com/questions/60608101/how-request-permissions-with-jetpack-compose
+
+https://google.github.io/accompanist/permissions/
+
+https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/permissions
+
 ## Structure
 
 ```mermaid

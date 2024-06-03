@@ -63,9 +63,9 @@
     <string name="permission_retry_dialog_title">Brakujące pozwolenie</string>
     <string name="settings">Ustawienia</string>
     <string name="missing_photo_and_audio_permission">Pozwolenia są potrzebne do przygotowywania podpowiedzi w postaci zdjęć i nagrań dzwiękowych.</string>
-    <string name="missing_photo_permission">Pozwolenie jest potrzebne do zrobienia pomiątkowego zdjęcia z poszukiwania skarbu.</string>
+    <string name="missing_photo_permission">Pozwolenie jest potrzebne do zrobienia pomiątkowego zdjęcia z poszukiwania skarbu. Możesz przyznać je później w ustawieniach aplikacji.</string>
     <string name="operation_not_permitted">Operacja nie jest dozwolona</string>
-    <string name="missing_location_permission">Pozwolenie na dostęp do lokalizacji jest niezbędne do rozgrywki.</string>
+    <string name="missing_location_permission">Pozwolenie na dostęp do lokalizacji jest niezbędne do rozgrywki. Uruchom ponownie grę albo przejdź do ustawień żeby przyznać dostęp.</string>
     <string name="missing_bluetooth_permission">Pozwolenie na dostęp do Bluetooth jest potrzebne do przekazywania tras pomiędzy urządzeniami.</string>
     <string name="help_path">https://little-treasure-hunter.netlify.app/#/</string>
     <string name="qr_scanner_msg">Zeskanuj kod QR reprezentujący skarb.</string>

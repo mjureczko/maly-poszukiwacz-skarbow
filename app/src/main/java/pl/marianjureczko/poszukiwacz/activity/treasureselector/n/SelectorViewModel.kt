@@ -13,8 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
-import pl.marianjureczko.poszukiwacz.permissions.PermissionManager
-import pl.marianjureczko.poszukiwacz.permissions.PermissionsSpec
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import javax.inject.Inject
 
@@ -45,8 +43,7 @@ class SelectorViewModel @Inject constructor(
         val justFoundTreasureId = stateHandle.get<Int>(PARAMETER_JUST_FOUND_TREASURE)!!
         return SelectorState(
             justFoundTreasureId,
-            photoHelper.getCommemorativePhotoTempUri(),
-            PermissionManager.isPermissionGranted(appContext, PermissionsSpec.CAMERA)
+            photoHelper.getCommemorativePhotoTempUri()
         )
     }
 }
