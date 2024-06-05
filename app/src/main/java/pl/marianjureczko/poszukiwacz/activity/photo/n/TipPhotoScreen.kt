@@ -26,7 +26,6 @@ import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
-import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -47,7 +46,7 @@ fun TipPhotoScreen(
 fun TipPhotoScreenBody() {
     val viewModel: TipPhotoViewModel = hiltViewModel()
     val state = viewModel.state.value
-    Column(Modifier.background(SecondaryBackground)) {
+    Column {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)

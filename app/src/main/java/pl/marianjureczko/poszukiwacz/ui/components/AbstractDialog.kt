@@ -4,11 +4,11 @@ import androidx.compose.foundation.border
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.App
-import pl.marianjureczko.poszukiwacz.ui.theme.Primary
+import pl.marianjureczko.poszukiwacz.R
 
 @Composable
 fun AbstractDialog(
@@ -21,7 +21,7 @@ fun AbstractDialog(
     if (state) {
         AlertDialog(
             onDismissRequest = { hideIt() },
-            modifier = Modifier.border(width = 1.dp, color = Primary),
+            modifier = Modifier.border(width = 1.dp, color = colorResource(R.color.colorPrimary)),
             title = { Text(text = App.getResources().getString(title)) },
             text = text,
             buttons = buttons

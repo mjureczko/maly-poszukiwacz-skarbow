@@ -44,7 +44,6 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
-import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -77,7 +76,7 @@ fun CommemorativeScreenBody(
     localViewModel.setPhotoPath(
         sharedState.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds[localState.treasureDesId]!!
     )
-    Column(Modifier.background(SecondaryBackground)) {
+    Column {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)

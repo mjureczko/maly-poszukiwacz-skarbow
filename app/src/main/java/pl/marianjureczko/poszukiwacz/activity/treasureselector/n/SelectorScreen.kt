@@ -58,6 +58,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
+import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -147,6 +148,7 @@ fun TreasureItem(
 ) {
     Card(
         elevation = 4.dp,
+        shape = Shapes.large,
         modifier = Modifier
             .padding(4.dp)
             .clickable {

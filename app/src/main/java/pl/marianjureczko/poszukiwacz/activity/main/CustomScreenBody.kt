@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -22,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,28 +31,28 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
-import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
+import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 
 /** Kalinowice */
 @Composable
 fun CustomScreenBody(goToSearching: GoToSearching) {
     val viewModel: CustomMainViewModel = hiltViewModel()
     val state = viewModel.state.value
-    Column(Modifier.background(PrimaryBackground)) {
+    Column(Modifier.background(colorResource(R.color.colorBackgroundVariant))) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
-                .background(PrimaryBackground)
                 .weight(0.89f)
         ) {
             Text(
                 text = stringResource(R.string.custom_title),
                 style = MaterialTheme.typography.h3,
+                color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = state.messages[state.messageIndex].text,
-                style = MaterialTheme.typography.body1,
+                color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Justify
             )
             Row(
@@ -82,7 +82,6 @@ fun CustomScreenBody(goToSearching: GoToSearching) {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)
-                .background(PrimaryBackground)
         )
         LargeButton(R.string.custom_lets_start) {
             viewModel.restartMessages()
@@ -95,7 +94,7 @@ fun CustomScreenBody(goToSearching: GoToSearching) {
 @Composable
 private fun NextButton(viewModel: CustomMainViewModel) {
     OutlinedButton(
-        shape = RoundedCornerShape(50),
+        shape = Shapes.small,
         onClick = { viewModel.nextLeadMessage() },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.White,

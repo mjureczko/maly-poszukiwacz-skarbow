@@ -45,7 +45,6 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
-import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 
 private const val SUBTITLES_MIME_TYPE = "application/x-subrip"
 
@@ -71,7 +70,7 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
     val localState: ResultState = localViewModel.state.value
     val sharedViewModel: ResultSharedViewModel = getViewModel(viewModelStoreOwner)
     sharedViewModel.resultPresented()
-    Column(Modifier.background(SecondaryBackground)) {
+    Column {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)

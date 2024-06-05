@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.main
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,17 +34,16 @@ import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
 import pl.marianjureczko.poszukiwacz.ui.components.EnterTextDialog
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
-import pl.marianjureczko.poszukiwacz.ui.theme.PrimaryBackground
 
 @Composable
 fun ClassicScreenBody(goToSearching: GoToSearching) {
     val viewModel: ClassicMainViewModel = hiltViewModel()
     val state = viewModel.state.value
-    Column(Modifier.background(PrimaryBackground)) {
+    Column(/*Modifier.background(PrimaryBackground)*/) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
             modifier = Modifier
-                .background(PrimaryBackground)
+//                .background(PrimaryBackground)
                 .weight(0.99f)
         ) {
             items(state.routes) { route ->
@@ -55,7 +53,7 @@ fun ClassicScreenBody(goToSearching: GoToSearching) {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)
-                .background(PrimaryBackground)
+//                .background(PrimaryBackground)
         )
         LargeButton(R.string.new_route_button) {
             viewModel.openNewRouteDialog()

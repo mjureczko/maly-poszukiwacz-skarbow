@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -31,9 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.journeyapps.barcodescanner.ScanContract
@@ -59,7 +58,6 @@ import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
-import pl.marianjureczko.poszukiwacz.ui.theme.SecondaryBackground
 import java.net.URLEncoder
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -127,7 +125,7 @@ private fun SearchingScreenBody(
         scanOptions.setPrompt(prompt)
         scanQrLauncher.launch(scanOptions)
     }
-    Column(Modifier.background(SecondaryBackground)) {
+    Column {
         Scores(isClassicMode, state.treasuresProgress.knowledge)
         Compass(state.needleRotation)
         Steps(state.stepsToTreasure)
@@ -243,9 +241,8 @@ fun Steps(stepsToTreasure: Int?) {
     ) {
         if (stepsToTreasure != null) {
             Text(
-                modifier = Modifier.padding(start = 50.dp),
-                fontSize = 56.sp,
-                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(start = 40.dp),
+                style = MaterialTheme.typography.h2,
                 color = Color.Gray,
                 text = stepsToTreasure.toString()
             )

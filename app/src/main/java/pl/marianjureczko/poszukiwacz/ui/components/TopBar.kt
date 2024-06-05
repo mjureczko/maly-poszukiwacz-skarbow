@@ -24,17 +24,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.ui.theme.Primary
 
 @Composable
 fun TopBar(navController: NavController, title:String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
     val showMenu = remember { mutableStateOf(false) }
     TopAppBar(
-        backgroundColor = Primary,
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 EmbeddedButton(
@@ -72,9 +71,8 @@ fun TopBar(navController: NavController, title:String, onClickOnGuide: () -> Uni
                 )
                 Text(
                     text = title,
-                    //TODO t: save color in theme
                     color = Color.White,
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.h6.copy(fontFamily = FontFamily.Default),
                     textAlign = TextAlign.Center
                 )
             }

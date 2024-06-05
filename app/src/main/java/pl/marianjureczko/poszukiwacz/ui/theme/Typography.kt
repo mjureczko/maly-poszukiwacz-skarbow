@@ -8,7 +8,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import pl.marianjureczko.poszukiwacz.R
 
+val FANCY_FONT = FontFamily(Font(R.font.akaya_telivigala))
+
 val Typography = Typography(
+    defaultFontFamily = FANCY_FONT,
     body1 = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -18,15 +21,5 @@ val Typography = Typography(
         fontFamily = FontFamily.Monospace,
         fontWeight = FontWeight.W800,
         fontSize = 18.sp,
-        color = PrimaryBackground
     )
-/* Other default text styles to override,
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
 )
-
-val FANCY_FONT = FontFamily(Font(R.font.akaya_telivigala))
