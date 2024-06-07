@@ -5,6 +5,6 @@ import androidx.compose.material.Shapes
 
 val Shapes = Shapes(
     small = RoundedCornerShape(50),
-    medium = RoundedCornerShape(50),
+    medium = RoundedCornerShape(0),
     large = RoundedCornerShape(35)
 )

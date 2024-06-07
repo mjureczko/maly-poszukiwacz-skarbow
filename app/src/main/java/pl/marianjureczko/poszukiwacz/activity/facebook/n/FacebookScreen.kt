@@ -53,6 +53,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
+import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 import pl.marianjureczko.poszukiwacz.ui.theme.Typography
 import java.io.File
 import java.io.FileOutputStream
@@ -145,6 +146,7 @@ private fun FacebookImage(modifier: Modifier) {
 fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRotatePhoto: RotatePhoto) {
     Card(
         elevation = 4.dp,
+        shape = Shapes.large,
         modifier = Modifier.padding(4.dp)
     ) {
         Row(

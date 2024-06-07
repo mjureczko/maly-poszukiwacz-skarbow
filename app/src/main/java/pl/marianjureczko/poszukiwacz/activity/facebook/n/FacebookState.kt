@@ -8,8 +8,6 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.util.Random
 
-
-//TODO t: chack if facebook works when no path data is persisted yet
 data class FacebookState(
     override val hunterPath: HunterPath?,
     override val progress: TreasuresProgress,

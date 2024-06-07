@@ -346,6 +346,7 @@ private fun PhotoTipButton(
                     goToTipPhoto(encodedFilePath)
                 } else {
                     errorTone()
+                    //TODO t: replace with Toast, there is also noTip err msg
                     snackbarCoroutineScope.launch {
                         scaffoldState.snackbarHostState.showSnackbar(noPhotoToShowMsg)
                     }
