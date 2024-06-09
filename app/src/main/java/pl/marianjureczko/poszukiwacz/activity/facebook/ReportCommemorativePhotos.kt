@@ -8,7 +8,7 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Typeface
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 import java.io.File
 import java.io.FileInputStream
 import java.lang.System.currentTimeMillis
@@ -70,7 +70,7 @@ class ReportCommemorativePhotos(
             .chunked(3)
             .forEach { row ->
                 val images = row.map { photoElement ->
-                    PhotoHelper.scalePhotoKeepRatio(BitmapFactory.decodeStream(FileInputStream(File(photoElement.photo!!))), IMAGE_PLACEHOLDER_HEIGHT, IMAGE_PLACEHOLDER_WIDTH)
+                    PhotoScalingHelper.scalePhotoKeepRatio(BitmapFactory.decodeStream(FileInputStream(File(photoElement.photo!!))), IMAGE_PLACEHOLDER_HEIGHT, IMAGE_PLACEHOLDER_WIDTH)
                 }
                 when (row.size) {
                     3 -> {

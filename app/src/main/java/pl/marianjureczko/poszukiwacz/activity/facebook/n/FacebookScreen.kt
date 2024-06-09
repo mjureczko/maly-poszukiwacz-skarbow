@@ -47,7 +47,7 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.ElementDescription
 import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookReportModel
 import pl.marianjureczko.poszukiwacz.activity.facebook.ReportGenerator
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
-import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
@@ -198,7 +198,7 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
 
 private fun renderPhoto(photoFile: String): Bitmap {
     val photo = BitmapFactory.decodeFile(photoFile)
-    return PhotoHelper.scalePhotoKeepRatio(photo, 250f, 300f)
+    return PhotoScalingHelper.scalePhotoKeepRatio(photo, 250f, 300f)
 }
 
 object FacebookShareHelper {

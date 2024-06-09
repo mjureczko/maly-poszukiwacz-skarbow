@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 
 class ElementHolder(
     private val activity: FragmentActivity,
@@ -68,7 +69,7 @@ class ElementHolder(
 
     private fun renderPhoto(image: ImageView, photoFile: String) {
         val photo = BitmapFactory.decodeFile(photoFile)
-        val resizedPhoto = PhotoHelper.scalePhotoKeepRatio(photo, 250f, 300f)
+        val resizedPhoto = PhotoScalingHelper.scalePhotoKeepRatio(photo, 250f, 300f)
         image.setImageBitmap(resizedPhoto)
     }
 
