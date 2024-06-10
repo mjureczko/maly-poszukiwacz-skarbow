@@ -16,7 +16,6 @@ class FacebookViewModel(private val state: SavedStateHandle) : FacebookReportMod
     override var hunterPath: HunterPath? = null
         private set
     lateinit var elements: List<ElementDescription>
-        private set
 
     override lateinit var route: Route
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kalinowice - Mały Poszukiwacz Skarbów</string>
-    <string name="new_route_button">Nowa trasa</string>
+    <string name="new_route_button">NOWA TRASA</string>
     <string name="tip_recorded">Podpowiedź została nagrana</string>
     <string name="tip_recording_failed">Nie udało się nagrać podpowiedzi</string>
     <string name="route_name_prompt">Podaj nazwę trasy:</string>
@@ -31,7 +31,7 @@
     <string name="overwritting_route">Trasa o takiej nazwie już istnieje, czy chcesz ją nadpisać?</string>
     <string name="overwritting_tip">Istnieje już podpowiedź, czy chcesz ją nadpisać?</string>
     <string name="overwritting_photo">Zrobiono już zdjęcie, czy chcesz je nadpisać?</string>
-    <string name="route_from_bluetooth_button">Pobierz trasę przez Bluetooth</string>
+    <string name="route_from_bluetooth_button">POBIERZ TRASĘ PRZEZ BLUETOOTH</string>
     <string name="sending_route">Przesyłanie trasy</string>
     <string name="select_bluetooth_device">> Wybierz urządzenie, na które chcesz wysłać trasę. Wysyłanie uda się tylko jeżeli istnieje aktywne połączenie z wybranym urządzeniem.\n> Lista sparowanych urządzeń:\n</string>
     <string name="device_was_selected">Wybrano %s.\n</string>
@@ -76,11 +76,11 @@
     <string name="menu_facebook">Opublikuj na Facebook</string>
     <string name="title_activity_facebook">Opublikuj na Facebook</string>
     <string name="facebook_screen_subheader">Wybierz elementy do opublikowania</string>
-    <string name="share_button">Opublikuj</string>
+    <string name="share_button">OPUBLIKUJ</string>
     <string name="facebook_share_cancel">Zrezygnowano z publikacji</string>
     <string name="facebook_share_success">Opublikowano</string>
     <string name="facebook_share_impossible">Nie znaleziono aplikacji Facebook. Proszę, sprawdź czy jest zainstalowana i czy przyznano uprawnienia.</string>
-    <string name="facebook_share_error">"Wystąpił błąd podczas publikowania. Aplikacja Facebook odpowiedziała: "</string>
+    <string name="facebook_share_error">"Wystąpił błąd podczas publikowania."</string>
     <string name="select_treasure_progress_to_share">Wybierz trasę do udostępnienia</string>
     <string name="facebook_invalid_roote">Nie można opublikować tej trasy</string>
     <string name="facebook_nothing_to_share">Aktualnie nie ma nic do opublikowania. Publikować można tylko trasy na których przynajmniej zaczęły się poszukiwania.</string>
@@ -104,7 +104,7 @@
     <string name="image_saved">Plik został zapisany. Znajdziesz go w obrazach</string>
     <string name="image_saved_under_name">pod nazwą</string>
     <string name="save_failed">Zapis nie powiódł się.</string>
-    <string name="custom_lets_start">Zaczynamy poszukiwania</string>
+    <string name="custom_lets_start">ZACZYNAMY POSZUKIWANIA</string>
     <string name="custom_lead1">Zapraszamy na wyjątkową podróż po pozornie zwyczajnej opolskiej wiosce. Zabierze nas w nią mieszkaniec Kalinowic i pasjonat lokalnej historii Pan Andrzej Legrand. Dzięki niemu poznamy największe okoliczne tajemnice i odkryjemy bezcenne skarby wiedzy.</string>
     <string name="custom_lead2">Dokładny przebieg trasy zależy od Twoich decyzji, ale możesz się spodziewać, że jej długość to będzie około 13 km. Rozważ rozbicie poszukiwań na kilka dni albo wspomaganie się rowerem.</string>
     <string name="custom_lead3">W trakcie zabawy należy odszukać ukryte skarby reprezentowane przez kody QR. Będą przypominać ten widoczny poniżej:</string>

@@ -18,8 +18,7 @@ val Typography = Typography(
         fontSize = 16.sp
     ),
     button = TextStyle(
-        fontFamily = FontFamily.Monospace,
         fontWeight = FontWeight.W800,
-        fontSize = 18.sp,
+        fontSize = 20.sp,
     )
 )

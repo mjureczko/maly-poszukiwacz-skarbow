@@ -1,13 +1,15 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook
 
-//TODO t: change var to val to avoid missing compose refreshes
+import android.graphics.Bitmap
+
 data class ElementDescription(
     val index: Int,
-    var type: Type,
-    var isSelected: Boolean,
+    val type: Type,
+    val isSelected: Boolean,
     val description: String,
     val orderNumber: Int? = null,
-    val photo: String? = null
+    val photo: String? = null,
+    val scaledPhoto: Bitmap? = null
 )
 
 enum class Type {

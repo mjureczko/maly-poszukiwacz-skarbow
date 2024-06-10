@@ -7,8 +7,6 @@ import kotlin.math.min
 
 object PhotoScalingHelper {
 
-    //TODO t: add suspend
-    //TODO t: try to test with https://robolectric.org/androidx_test/
     /**
      * Scales the photo, but keeps the aspect ratio
      * @param maxHeight - the maximum height after scaling

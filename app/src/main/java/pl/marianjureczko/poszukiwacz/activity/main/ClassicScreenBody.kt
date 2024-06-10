@@ -42,19 +42,13 @@ fun ClassicScreenBody(goToSearching: GoToSearching) {
     Column(/*Modifier.background(PrimaryBackground)*/) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
-            modifier = Modifier
-//                .background(PrimaryBackground)
-                .weight(0.99f)
+            modifier = Modifier.weight(0.99f)
         ) {
             items(state.routes) { route ->
                 RouteItem(route, viewModel, { viewModel.deleteRoute(route) }, goToSearching)
             }
         }
-        Spacer(
-            modifier = Modifier
-                .weight(0.01f)
-//                .background(PrimaryBackground)
-        )
+        Spacer(modifier = Modifier.weight(0.01f))
         LargeButton(R.string.new_route_button) {
             viewModel.openNewRouteDialog()
         }

@@ -15,7 +15,7 @@ typealias GoToTreasureSelector = (Int) -> Unit
 
 typealias DeleteRoute = () -> Unit
 typealias DoPhotoResultHandler = () -> Unit
-typealias RotatePhoto = (String) -> Unit
+typealias RotatePhoto = (Int) -> Unit
 typealias ScanTreasureCallback = (ScanIntentResult?) -> Unit
 typealias UpdateSubtitlesLine = (String) -> Unit
 typealias GoToCommemorative = (Int) -> Unit

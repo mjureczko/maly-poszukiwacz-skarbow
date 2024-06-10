@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
-import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 
 class ElementHolder(
     private val activity: FragmentActivity,
@@ -69,24 +68,24 @@ class ElementHolder(
 
     private fun renderPhoto(image: ImageView, photoFile: String) {
         val photo = BitmapFactory.decodeFile(photoFile)
-        val resizedPhoto = PhotoScalingHelper.scalePhotoKeepRatio(photo, 250f, 300f)
-        image.setImageBitmap(resizedPhoto)
+//        val resizedPhoto = PhotoScalingHelper.scalePhotoKeepRatio(photo, 250f, 300f)
+//        image.setImageBitmap(resizedPhoto)
     }
 
     private fun toPx(dp: Int): Int = (dp * view.context.resources.displayMetrics.density).toInt()
 
     private fun addListener(selected: ImageButton, element: ElementDescription, elementLayout: LinearLayout) {
         selected.setOnClickListener {
-            if (element.isSelected) {
-                element.isSelected = false
-                selected.setImageResource(R.drawable.checkbox_empty)
-            } else {
-                element.isSelected = true
-                selected.setImageResource(R.drawable.checkbox_checked)
-            }
-            if (element.type == Type.MAP) {
-                adapter.notifyDataSetChanged()
-            }
+//            if (element.isSelected) {
+//                element.isSelected = false
+//                selected.setImageResource(R.drawable.checkbox_empty)
+//            } else {
+//                element.isSelected = true
+//                selected.setImageResource(R.drawable.checkbox_checked)
+//            }
+//            if (element.type == Type.MAP) {
+//                adapter.notifyDataSetChanged()
+//            }
         }
     }
 

@@ -44,7 +44,11 @@ class ReportGeneratorTest {
         val model = FacebookViewModel(SavedStateHandle(mapOf()))
         model.initialize(context, hunterPath, treasuresProgress)
         //MapBox doesn't work in tests
-        model.getMap()?.isSelected = false
+        val mapIdx = model.elements.indices.find { model.elements[it].type == Type.MAP }!!
+        val elements = model.elements.toMutableList()
+        elements[mapIdx] = model.elements[mapIdx].copy(isSelected = false)
+        model.elements = elements
+
         val actual = report.create(context, model) {
             // do nothing
         }

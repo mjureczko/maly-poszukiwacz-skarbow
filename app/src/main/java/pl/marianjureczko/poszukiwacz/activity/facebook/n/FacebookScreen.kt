@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,7 +47,6 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.ElementDescription
 import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookReportModel
 import pl.marianjureczko.poszukiwacz.activity.facebook.ReportGenerator
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
-import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
@@ -80,7 +79,7 @@ fun FacebookScreenBody() {
 
     Column(Modifier.background(Color.White)) {
         SubHeader()
-        Elements(Modifier.weight(0.99f), state, viewModel, {viewModel.rotatePhoto(it)})
+        Elements(Modifier.weight(0.99f), state, viewModel, viewModel.rotatePhoto())
         Spacer(modifier = Modifier.weight(0.01f))
         ShareOnFacebookButton(state)
         AdvertBanner()
@@ -118,11 +117,12 @@ private fun Elements(
 
 @Composable
 private fun ShareOnFacebookButton(model: FacebookReportModel) {
-    Box() {
+    Box {
         val context = LocalContext.current
+        val sharingErrorMsg = stringResource(R.string.facebook_share_error)
         LargeButton(R.string.share_button) {
             ReportGenerator().create(context, model) { bitmap ->
-                FacebookShareHelper.shareBitmapOnFacebook(context, bitmap)
+                FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg)
             }
         }
         FacebookImage(Modifier.align(AbsoluteAlignment.CenterLeft))
@@ -175,8 +175,8 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
                 fontFamily = FANCY_FONT,
                 fontSize = Typography.h6.fontSize
             )
-            it.photo?.let { photoFile ->
-                val imageBitmap = renderPhoto(photoFile).asImageBitmap()
+            it.scaledPhoto?.let { photo ->
+                val imageBitmap = photo.asImageBitmap()
                 Image(
                     modifier = Modifier.padding(8.dp),
                     painter = BitmapPainter(imageBitmap),
@@ -188,7 +188,8 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
                     modifier = Modifier
                         .padding(1.dp)
                         .height(60.dp)
-                        .clickable { onRotatePhoto(photoFile) },
+                        .clickable { onRotatePhoto(it.index) }
+                    ,
                     contentScale = ContentScale.Inside
                 )
             }
@@ -196,19 +197,14 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
     }
 }
 
-private fun renderPhoto(photoFile: String): Bitmap {
-    val photo = BitmapFactory.decodeFile(photoFile)
-    return PhotoScalingHelper.scalePhotoKeepRatio(photo, 250f, 300f)
-}
-
 object FacebookShareHelper {
 
-    fun shareBitmapOnFacebook(context: Context, bitmap: Bitmap) {
+    fun shareBitmapOnFacebook(context: Context, bitmap: Bitmap, errorMsg: String) {
         val uri = bitmapToUri(context, bitmap)
         if (uri != null) {
             shareContent(context, uri)
         } else {
-            // Handle error: Unable to convert Bitmap to Uri
+            Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
         }
     }
 

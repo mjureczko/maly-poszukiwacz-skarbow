@@ -10,7 +10,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
-//TODO t: try to change to https://robolectric.org/androidx_test/
 abstract class ReportAbstractTest {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     val model: FacebookViewModel = FacebookViewModel(SavedStateHandle(mapOf()))
