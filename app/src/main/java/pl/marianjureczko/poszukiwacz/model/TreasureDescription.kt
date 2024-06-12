@@ -17,6 +17,11 @@ data class TreasureDescription(
     @field:Element(required = false) var movieFileName: String?,
     @field:Element(required = false) var subtitlesFileName: String?
 ) : Serializable {
+
+    companion object{
+        fun nullObject() = TreasureDescription()
+    }
+
     constructor(id: Int, latitude: Double, longitude: Double) : this(id, latitude, longitude, null, null, null, null, null)
     constructor() : this(0, 0.0, 0.0, null, null, null, null, null)
 

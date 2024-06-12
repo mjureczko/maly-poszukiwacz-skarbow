@@ -68,20 +68,21 @@ class RouteTest {
     fun `SHOULD remove selected treasure from progress WHEN the removed TreasureDescription was selected`() {
         //given
         val fixture = RouteAndProgressFixture.savedWithSelectedTreasure(storageHelper)
+        val toRemove = fixture.progress.selectedTreasure
 
         //when
-        fixture.route.remove(fixture.selectedTreasure()!!, storageHelper)
+        fixture.route.remove(toRemove, storageHelper)
 
         //then
         val actualProgress = storageHelper.loadProgress(fixture.route.name)!!
-        assertThat(actualProgress.selectedTreasure).isNull()
+        assertThat(actualProgress.selectedTreasure).isNotEqualTo(toRemove)
     }
 
     @Test
     fun `SHOULD not alter the progress WHEN the removed TreasureDescription was not selected`() {
         //given
         val fixture = RouteAndProgressFixture.savedWithoutSelectedTreasure(storageHelper)
-        val toRemove = fixture.route.treasures[0]
+        val toRemove = fixture.route.treasures[1]
 
         //when
         fixture.route.remove(toRemove, storageHelper)

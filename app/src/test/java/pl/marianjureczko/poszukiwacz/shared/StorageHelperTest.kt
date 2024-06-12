@@ -23,7 +23,6 @@ import java.nio.charset.StandardCharsets
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-
 class StorageHelperTest {
 
     private val context = TestContext()
@@ -33,6 +32,7 @@ class StorageHelperTest {
     @BeforeEach
     fun cleanup() {
         FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.routesDirectory))
+        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.progressDirectory))
     }
 
     @Test
@@ -122,9 +122,7 @@ class StorageHelperTest {
         //given
         val route = some<Route>()
         storageHelper.save(route)
-        val progress = some<TreasuresProgress>() {
-            routeName = route.name
-        }
+        val progress = some<TreasuresProgress>(mapOf("routeName" to {route.name}))
         storageHelper.save(progress)
 
         //when
@@ -185,18 +183,27 @@ class StorageHelperTest {
         var zipEntry: ZipEntry?
         var actualRoute: Route? = null
         var actualFiles: MutableSet<String> = mutableSetOf()
-        while (actualZip.nextEntry.also { zipEntry = it } != null) {
-            if (zipEntry!!.name == route.name + ".xml") {
-                val stringWriter = StringWriter()
-                IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
-                actualRoute = xmlHelper.loadFromString<Route>(stringWriter.toString())
-            } else {
-                actualFiles.add(zipEntry!!.name)
+        try {
+            while (actualZip.nextEntry.also { zipEntry = it } != null) {
+                if (zipEntry!!.name == route.name + ".xml") {
+                    val stringWriter = StringWriter()
+                    IOUtils.copy(actualZip, stringWriter, StandardCharsets.UTF_8)
+                    actualRoute = xmlHelper.loadFromString<Route>(stringWriter.toString())
+                } else {
+                    actualFiles.add(zipEntry!!.name)
+                }
+            }
+            actualZip.close()
+            assertRoute(actualRoute!!, route)
+            assertRouteFiles(actualFiles, route)
+        } finally {
+            actualFiles.forEach {
+                val file = File(it)
+                if(file.exists()) {
+                    FileUtils.delete(file)
+                }
             }
         }
-        actualZip.close()
-        assertRoute(actualRoute!!, route)
-        assertRouteFiles(actualFiles, route)
     }
 
     @Test

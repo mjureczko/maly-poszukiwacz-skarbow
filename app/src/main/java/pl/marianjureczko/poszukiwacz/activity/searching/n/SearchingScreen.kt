@@ -74,7 +74,7 @@ fun SearchingScreen(
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
-    val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.currentTreasure.id}"
+    val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasure.id}"
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(navController, title, onClickOnGuide, goToFacebook) },
@@ -131,7 +131,7 @@ private fun SearchingScreenBody(
         Steps(state.stepsToTreasure)
         Buttons(
             scanQrCallback,
-            state.currentTreasure,
+            state.treasuresProgress.selectedTreasure,
             state.route,
             scaffoldState,
             state.mediaPlayer,

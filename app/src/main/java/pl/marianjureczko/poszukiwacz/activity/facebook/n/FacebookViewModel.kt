@@ -53,9 +53,9 @@ class FacebookViewModel @Inject constructor(
 
     private fun createState(): FacebookState {
         var index = 0
-        val progress = storageHelper.loadProgress(ROUTE_NAME) ?: TreasuresProgress(ROUTE_NAME)
-        val path = storageHelper.loadHunterPath(ROUTE_NAME)
         val route = storageHelper.loadRoute(ROUTE_NAME)
+        val progress = storageHelper.loadProgress(ROUTE_NAME) ?: TreasuresProgress(ROUTE_NAME, route.treasures[0])
+        val path = storageHelper.loadHunterPath(ROUTE_NAME)
 
         val elements = mutableListOf<ElementDescription>()
         elements.add(

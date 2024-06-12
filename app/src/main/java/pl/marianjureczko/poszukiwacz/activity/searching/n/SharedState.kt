@@ -4,7 +4,6 @@ import android.location.Location
 import android.media.MediaPlayer
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 interface SelectorSharedState {
@@ -18,7 +17,6 @@ interface SelectorSharedState {
 interface SearchingSharedState {
     val mediaPlayer: MediaPlayer
     val route: Route
-    var currentTreasure: TreasureDescription
     var treasuresProgress: TreasuresProgress
     val currentLocation: Location?
     val stepsToTreasure: Int?
@@ -36,7 +34,7 @@ data class SharedState(
     override val mediaPlayer: MediaPlayer,
     override var route: Route,
     //TODO t: should be persisted to not loose the state
-    override var currentTreasure: TreasureDescription,
+//    override var currentTreasure: TreasureDescription,
     override var treasuresProgress: TreasuresProgress,
     override var currentLocation: Location?,
     override var stepsToTreasure: Int?,
@@ -47,7 +45,7 @@ data class SharedState(
         .toMap()
 ) : SelectorSharedState, SearchingSharedState, CommemorativeSharedState {
     constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress, hunterPath: HunterPath) :
-            this(mediaPlayer, route, route.treasures[0], treasuresProgress, null, null, hunterPath)
+            this(mediaPlayer, route, treasuresProgress, null, null, hunterPath)
 
     override fun isTreasureCollected(treasureId: Int): Boolean =
         treasuresProgress.collectedTreasuresDescriptionId.contains(treasureId)

@@ -7,56 +7,49 @@ import org.simpleframework.xml.Root
 import java.io.Serializable
 
 @Root
-class TreasuresProgress() : Serializable {
+data class TreasuresProgress(
+    @field:Element
+    var routeName: String,
 
-    constructor(routeName: String) : this() {
+    /** Selected for searching */
+    @field:Element
+    var selectedTreasure: TreasureDescription,
+
+    @field:Element(required = false)
+    var justFoundTreasureId: Int? = null,
+
+    @field:Element(required = false)
+    var resultRequiresPresentation: Boolean? = false,
+
+    @field:Element(required = false)
+    var treasureFoundGoToSelector: Boolean? = false,
+
+    @field:ElementList(required = false)
+    var collectedQrCodes: MutableSet<String> = mutableSetOf(),
+
+    @field:ElementList(required = false)
+    var collectedTreasuresDescriptionId: MutableSet<Int> = mutableSetOf(),
+
+//TODO: remove files on remove tresure bag (restart) and on removing route
+    @field:ElementMap(required = false)
+    var commemorativePhotosByTreasuresDescriptionIds: MutableMap<Int, String> = mutableMapOf(),
+
+    @field:Element(required = false)
+    var knowledge: Int = 0,
+
+    @field:Element(required = false)
+    var golds: Int = 0,
+
+    @field:Element(required = false)
+    var rubies: Int = 0,
+
+    @field:Element(required = false)
+    var diamonds: Int = 0,
+) : Serializable {
+
+    constructor() : this("", TreasureDescription.nullObject()) {
         this.routeName = routeName
     }
-
-    @field:Element
-    lateinit var routeName: String
-
-    @field:Element(required = false)
-    var justFoundTreasureId: Int? = null
-
-    @field:Element(required = false)
-    var resultRequiresPresentation: Boolean? = false
-
-    @field:Element(required = false)
-    var treasureFoundGoToSelector: Boolean? = false
-
-    @field:ElementList
-    var collectedQrCodes: MutableSet<String> = mutableSetOf()
-        private set
-
-    @field:ElementList
-    var collectedTreasuresDescriptionId: MutableSet<Int> = mutableSetOf()
-        private set
-
-    //TODO: remove files on remove tresure bag (restart) and on removing route
-    @field:ElementMap
-    var commemorativePhotosByTreasuresDescriptionIds: MutableMap<Int, String> = mutableMapOf()
-        private set
-        public get
-
-    @field:Element
-    var knowledge: Int = 0
-        private set
-
-    @field:Element
-    var golds: Int = 0
-        private set
-
-    @field:Element
-    var rubies: Int = 0
-        private set
-
-    @field:Element
-    var diamonds: Int = 0
-        private set
-
-    @field:Element(required = false)
-    var selectedTreasure: TreasureDescription? = null
 
     fun contains(treasure: Treasure): Boolean =
         collectedQrCodes.contains(treasure.id)

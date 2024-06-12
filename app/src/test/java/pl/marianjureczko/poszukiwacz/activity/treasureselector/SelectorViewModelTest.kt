@@ -187,7 +187,7 @@ internal class SelectorViewModelTest {
         val selectorViewModel = SelectorViewModel(state)
         val treasure = some<TreasureDescription>()
         val route = some<Route>().copy(treasures = mutableListOf(treasure))
-        selectorViewModel.initialize(route, TreasuresProgress(), false, null, null)
+        selectorViewModel.initialize(route, TreasuresProgress(route.name, treasure), false, null, null)
         selectorViewModel.selectForCommemorativePhoto(treasure)
         Mockito.reset(state)
         val firstPhoto = Files.createTempFile("test", ".test").toAbsolutePath().toString()

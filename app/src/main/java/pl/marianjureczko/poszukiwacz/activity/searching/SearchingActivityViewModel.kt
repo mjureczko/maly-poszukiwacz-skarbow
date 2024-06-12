@@ -120,11 +120,11 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
 
     fun loadProgressFromStorage(storageHelper: StorageHelper) {
         var loadedProgress = storageHelper.loadProgress(route.name)
-        if (loadedProgress == null) {
-            loadedProgress = TreasuresProgress(route.name)
-            storageHelper.save(loadedProgress)
-        }
-        treasuresProgress = loadedProgress
+//        if (loadedProgress == null) {
+//            loadedProgress = TreasuresProgress(route.name)
+//            storageHelper.save(loadedProgress)
+//        }
+        treasuresProgress = loadedProgress!!
         hunterPath = storageHelper.loadHunterPath(route.name)
         if(hunterPath == null) {
             hunterPath = HunterPath(route.name)

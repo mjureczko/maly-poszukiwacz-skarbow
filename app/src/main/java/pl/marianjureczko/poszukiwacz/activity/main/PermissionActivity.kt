@@ -43,11 +43,6 @@ abstract class PermissionActivity : ComponentActivity() {
         }
         permissionManager = PermissionManager(permissionListener)
         assurePermissionsAreGranted(RequirementsForNavigation, true)
-        //TODO t: exitOnDenied==true and then exitOnDenied==false leads to race condition
-//        assurePermissionsAreGranted(RequirementsForDoingPhoto, false)
-
-
-//        assurePermissionsAreGranted(RequirementsForExternalStorage, false)
     }
 
     /**

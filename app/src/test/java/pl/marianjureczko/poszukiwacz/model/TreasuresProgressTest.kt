@@ -45,7 +45,7 @@ class TreasuresProgressTest {
     @Test
     fun addGoldToBag() {
         //given
-        val bag = TreasuresProgress(someString())
+        val bag = TreasuresProgress(someString(), some<TreasureDescription>())
 
         //when
         bag.collect(gold7)
@@ -60,7 +60,7 @@ class TreasuresProgressTest {
     @Test
     fun addDiamondsToBag() {
         //given
-        val bag = TreasuresProgress(someString())
+        val bag = TreasuresProgress(someString(), some<TreasureDescription>())
 
         //when
         bag.collect(diamond17)
@@ -75,7 +75,7 @@ class TreasuresProgressTest {
     @Test
     fun addRubiesToBag() {
         //given
-        val bag = TreasuresProgress(someString())
+        val bag = TreasuresProgress(someString(), some<TreasureDescription>())
 
         //when
         bag.collect(ruby27)
@@ -90,7 +90,7 @@ class TreasuresProgressTest {
     @Test
     fun detectAlreadyCollectedTreasures() {
         //given
-        val bag = TreasuresProgress(someString())
+        val bag = TreasuresProgress(someString(), some<TreasureDescription>())
         bag.collect(gold9)
 
         //then
@@ -103,7 +103,7 @@ class TreasuresProgressTest {
         //given
         val xmlHelper = XmlHelper()
         val routeName = someString()
-        val treasuresProgress = TreasuresProgress(routeName)
+        val treasuresProgress = TreasuresProgress(routeName, some<TreasureDescription>())
         val treasure = some<Treasure>().copy(type = TreasureType.DIAMOND)
         treasuresProgress.collect(treasure)
         val description = some<TreasureDescription>()

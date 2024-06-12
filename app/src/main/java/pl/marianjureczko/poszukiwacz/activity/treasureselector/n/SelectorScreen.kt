@@ -152,7 +152,7 @@ fun TreasureItem(
         modifier = Modifier
             .padding(4.dp)
             .clickable {
-                sharedViewModel.updateCurrentTreasure(treasure)
+                sharedViewModel.updateSelectedTreasure(treasure)
                 navController.navigateUp()
             }
     ) {

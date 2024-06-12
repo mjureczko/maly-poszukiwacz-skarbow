@@ -37,7 +37,8 @@ data class Route(
 
         storageHelper.loadProgress(name)?.let {
             if (it.selectedTreasure?.id == td.id) {
-                it.selectedTreasure = null
+                //TODO: introduce dummy treasure for scenario where last treasure is removed
+                it.selectedTreasure = treasures[0]
                 storageHelper.save(it)
             }
         }

@@ -12,6 +12,7 @@ import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -26,7 +27,7 @@ class ReportGeneratorTest {
         val report = ReportGenerator()
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val photos = arrangePhotos(context)
-        val treasuresProgress = TreasuresProgress("123456789 123456789 123456789 123456789 12345")
+        val treasuresProgress = TreasuresProgress("123456789 123456789 123456789 123456789 12345", TreasureDescription.nullObject())
         val treasure = Treasure("1", 7, TreasureType.DIAMOND)
         treasuresProgress.collect(treasure)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, photos[0])

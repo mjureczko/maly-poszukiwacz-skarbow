@@ -29,19 +29,6 @@ class SearchingActivityViewModelTest {
     lateinit var state: SavedStateHandle
 
     @Test
-    fun `SHOULD create empty treasure bag WHEN storage helper does not load anything`() {
-        //given
-        val fixture = SearchingActivityViewModelFixture(state)
-        fixture.setupMockForEmptyTreasureBag(storageHelper)
-
-        //when initialize model (in fixture)
-
-        //then
-        assertThat(fixture.model.getRoute()).isEqualTo(fixture.route)
-        assertThat(fixture.model.getProgress()).usingRecursiveComparison().isEqualTo(TreasuresProgress(fixture.route.name))
-    }
-
-    @Test
     fun `SHOULD load treasure bag from storage WHEN storage helper loads a one`() {
         //given
         val treasuresProgress = some<TreasuresProgress>()

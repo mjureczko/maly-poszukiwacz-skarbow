@@ -44,7 +44,7 @@ interface SelectorSharedViewModel {
     val state: State<SharedState>
     fun updateJustFoundFromSelector()
     fun selectorPresented()
-    fun updateCurrentTreasure(treasure: TreasureDescription)
+    fun updateSelectedTreasure(treasure: TreasureDescription)
     fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler
 }
 
@@ -138,8 +138,10 @@ class SharedViewModel @Inject constructor(
         storageHelper.save(state.value.treasuresProgress)
     }
 
-    override fun updateCurrentTreasure(treasure: TreasureDescription) {
-        _state.value = _state.value.copy(currentTreasure = treasure)
+    override fun updateSelectedTreasure(treasure: TreasureDescription) {
+        _state.value = state.value.copy(
+            treasuresProgress = state.value.treasuresProgress.copy(selectedTreasure = treasure
+        ))
     }
 
     override fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler {
@@ -161,12 +163,13 @@ class SharedViewModel @Inject constructor(
     private fun startFetchingLocation() {
         locationFetcher.startFetching(1_000, viewModelScope) { location ->
             Log.i(TAG, "location updated")
+            val selectedTreasure = state.value.treasuresProgress.selectedTreasure
             _state.value = _state.value.copy(
                 currentLocation = location,
-                stepsToTreasure = locationCalculator.distanceInSteps(state.value.currentTreasure, location),
+                stepsToTreasure = locationCalculator.distanceInSteps(selectedTreasure, location),
                 needleRotation = arcCalculator.degree(
-                    state.value.currentTreasure.longitude,
-                    state.value.currentTreasure.latitude,
+                    selectedTreasure.longitude,
+                    selectedTreasure.latitude,
                     location.longitude,
                     location.latitude
                 ).toFloat(),
@@ -184,11 +187,15 @@ class SharedViewModel @Inject constructor(
     private fun createState(): SharedState {
         Log.i(TAG, "Create state")
         val route = loadRoute()
-        val treasuresProgress = loadProgress(route.name)
+        val treasuresProgress = loadProgress(route)
         val hunterPath = loadHunterPath(route.name)
         val mediaPlayer = MediaPlayer()
         mediaPlayer.isLooping = false
         mediaPlayer.setOnErrorListener { mp, what, extra -> handleMediaPlayerError(what, extra) }
+        if(treasuresProgress.selectedTreasure==null) {
+            treasuresProgress.selectedTreasure = route.treasures[0]
+            storageHelper.save(treasuresProgress)
+        }
         return SharedState(mediaPlayer, route, treasuresProgress, hunterPath)
     }
 
@@ -196,10 +203,10 @@ class SharedViewModel @Inject constructor(
         return storageHelper.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!)
     }
 
-    private fun loadProgress(routeName: String): TreasuresProgress {
-        var loadedProgress = storageHelper.loadProgress(routeName)
+    private fun loadProgress(route: Route): TreasuresProgress {
+        var loadedProgress = storageHelper.loadProgress(route.name)
         if (loadedProgress == null) {
-            loadedProgress = TreasuresProgress(routeName)
+            loadedProgress = TreasuresProgress(route.name, route.treasures[0])
             storageHelper.save(loadedProgress)
         }
         return loadedProgress

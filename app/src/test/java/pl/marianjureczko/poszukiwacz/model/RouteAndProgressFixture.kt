@@ -12,7 +12,7 @@ class RouteAndProgressFixture(
         fun savedWithSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
             val selected = someFrom(route.treasures)
-            val progress = TreasuresProgress(route.name)
+            val progress = TreasuresProgress(route.name, route.treasures[0])
             progress.selectedTreasure = selected
             saveBoth(storageHelper, route, progress)
             return RouteAndProgressFixture(route, progress)
@@ -20,7 +20,7 @@ class RouteAndProgressFixture(
 
         fun savedWithoutSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
-            val progress = TreasuresProgress(route.name)
+            val progress = TreasuresProgress(route.name, route.treasures[0])
             saveBoth(storageHelper, route, progress)
             return RouteAndProgressFixture(route, progress)
         }
@@ -30,9 +30,4 @@ class RouteAndProgressFixture(
             storageHelper.save(progress)
         }
     }
-
-    fun selectedTreasure(): TreasureDescription? =
-        route.treasures
-            .find { t -> t.id == progress.selectedTreasure?.id }
-
 }
