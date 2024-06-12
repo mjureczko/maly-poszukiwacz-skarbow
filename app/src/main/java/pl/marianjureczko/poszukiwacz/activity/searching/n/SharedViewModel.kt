@@ -105,7 +105,6 @@ class SharedViewModel @Inject constructor(
                         treasuresProgress.treasureFoundGoToSelector = true
                         treasureId = foundTreasure.id
                         storageHelper.save(treasuresProgress)
-                        //TODO t: message show collected treasure
                         result = ResultType.TREASURE
                     }
                 }

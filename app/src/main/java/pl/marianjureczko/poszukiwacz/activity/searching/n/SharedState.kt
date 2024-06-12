@@ -33,8 +33,6 @@ interface CommemorativeSharedState {
 data class SharedState(
     override val mediaPlayer: MediaPlayer,
     override var route: Route,
-    //TODO t: should be persisted to not loose the state
-//    override var currentTreasure: TreasureDescription,
     override var treasuresProgress: TreasuresProgress,
     override var currentLocation: Location?,
     override var stepsToTreasure: Int?,

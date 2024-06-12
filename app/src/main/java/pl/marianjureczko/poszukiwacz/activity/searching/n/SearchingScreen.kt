@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,12 +23,12 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -37,8 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
@@ -83,7 +82,6 @@ fun SearchingScreen(
                 navController,
                 isClassicMode,
                 viewModel,
-                scaffoldState,
                 goToTipPhoto,
                 goToResult,
                 goToMap,
@@ -99,7 +97,6 @@ private fun SearchingScreenBody(
     navController: NavController,
     isClassicMode: Boolean,
     viewModel: SearchingViewModel,
-    scaffoldState: ScaffoldState,
     goToTipPhoto: GoToTipPhoto,
     goToResult: GoToResults,
     goToMap: GoToMap,
@@ -133,7 +130,6 @@ private fun SearchingScreenBody(
             scanQrCallback,
             state.treasuresProgress.selectedTreasure,
             state.route,
-            scaffoldState,
             state.mediaPlayer,
             goToTipPhoto,
             goToMap
@@ -263,13 +259,11 @@ fun Buttons(
     scanQrCallback: GoToQrScanner,
     currentTreasure: TreasureDescription,
     route: Route,
-    scaffoldState: ScaffoldState,
     mediaPlayer: MediaPlayer,
     goToTipPhoto: GoToTipPhoto,
     goToMap: GoToMap,
     goToTreasureSelector: () -> Unit
 ) {
-    val snackbarCoroutineScope: CoroutineScope = rememberCoroutineScope()
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -286,8 +280,8 @@ fun Buttons(
             ScanTreasureButton(scanQrCallback)
         }
         Column(modifier = Modifier.width(0.2.dw)) {
-            PhotoTipButton(currentTreasure, scaffoldState, snackbarCoroutineScope, goToTipPhoto)
-            SoundTipButton(currentTreasure, scaffoldState, snackbarCoroutineScope, mediaPlayer)
+            PhotoTipButton(currentTreasure, goToTipPhoto)
+            SoundTipButton(currentTreasure, mediaPlayer)
         }
     }
 }
@@ -329,13 +323,9 @@ private fun ScanTreasureButton(scanQrCallback: GoToQrScanner) {
 }
 
 @Composable
-private fun PhotoTipButton(
-    currentTreasure: TreasureDescription,
-    scaffoldState: ScaffoldState,
-    snackbarCoroutineScope: CoroutineScope,
-    goToTipPhoto: GoToTipPhoto
-) {
+private fun PhotoTipButton(currentTreasure: TreasureDescription, goToTipPhoto: GoToTipPhoto) {
     val noPhotoToShowMsg = stringResource(R.string.no_photo_to_show)
+    val context = LocalContext.current
     Image(
         painterResource(R.drawable.show_photo),
         modifier = Modifier
@@ -346,10 +336,7 @@ private fun PhotoTipButton(
                     goToTipPhoto(encodedFilePath)
                 } else {
                     errorTone()
-                    //TODO t: replace with Toast, there is also noTip err msg
-                    snackbarCoroutineScope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(noPhotoToShowMsg)
-                    }
+                    Toast.makeText(context, noPhotoToShowMsg, Toast.LENGTH_LONG).show()
                 }
             },
         contentDescription = null,
@@ -358,13 +345,9 @@ private fun PhotoTipButton(
 }
 
 @Composable
-private fun SoundTipButton(
-    currentTreasure: TreasureDescription,
-    scaffoldState: ScaffoldState,
-    snackbarCoroutineScope: CoroutineScope,
-    mediaPlayer: MediaPlayer
-) {
+private fun SoundTipButton(currentTreasure: TreasureDescription, mediaPlayer: MediaPlayer) {
     val noTipToPlayMsg = stringResource(R.string.no_tip_to_play)
+    val context = LocalContext.current
     Image(
         painterResource(R.drawable.megaphone),
         modifier = Modifier
@@ -374,9 +357,7 @@ private fun SoundTipButton(
                     SoundTipPlayer.playSound(mediaPlayer, currentTreasure.tipFileName!!)
                 } else {
                     errorTone()
-                    snackbarCoroutineScope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(noTipToPlayMsg)
-                    }
+                    Toast.makeText(context, noTipToPlayMsg, Toast.LENGTH_LONG).show()
                 }
             },
         contentDescription = null,
