@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import pl.marianjureczko.poszukiwacz.R
@@ -44,6 +47,8 @@ import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto
+import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToMap
@@ -55,10 +60,13 @@ import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
 import java.net.URLEncoder
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SearchingScreen(
@@ -69,8 +77,10 @@ fun SearchingScreen(
     goToResult: GoToResults,
     goToMap: GoToMap,
     goToTreasureSelector: GoToTreasureSelector,
-    goToFacebook: GoToFacebook
+    goToFacebook: GoToFacebook,
+    goToCommemorative: GoToCommemorative
 ) {
+    val cameraPermission: PermissionState = handlePermission(RequirementsForDoingPhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
     val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasure.id}"
@@ -85,13 +95,16 @@ fun SearchingScreen(
                 goToTipPhoto,
                 goToResult,
                 goToMap,
-                goToTreasureSelector
+                goToTreasureSelector,
+                cameraPermission,
+                goToCommemorative
             )
         }
     )
 }
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun SearchingScreenBody(
     navController: NavController,
@@ -100,9 +113,10 @@ private fun SearchingScreenBody(
     goToTipPhoto: GoToTipPhoto,
     goToResult: GoToResults,
     goToMap: GoToMap,
-    goToTreasureSelector: GoToTreasureSelector
+    goToTreasureSelector: GoToTreasureSelector,
+    cameraPermissionState: PermissionState,
+    goToCommemorative: GoToCommemorative
 ) {
-
     val state: SearchingSharedState = viewModel.state.value
     if (!isOnStack(navController, SELECTOR_ROUTE)
         && !isOnStack(navController, RESULTS_ROUTE)
@@ -123,8 +137,19 @@ private fun SearchingScreenBody(
         scanQrLauncher.launch(scanOptions)
     }
     Column {
-        Scores(isClassicMode, state.treasuresProgress.knowledge)
-        Compass(state.needleRotation)
+        Box {
+            Scores(isClassicMode, state.treasuresProgress.knowledge, Modifier.align(Alignment.TopStart))
+            Compass(state.needleRotation, Modifier.align(Alignment.Center))
+            CommemorativePhotoButton(
+                cameraPermissionState,
+                state,
+                state.tempPhotoFileLocation,
+                state.treasuresProgress.selectedTreasure,
+                goToCommemorative,
+                viewModel.handleDoCommemorativePhotoResult(state.treasuresProgress.selectedTreasure),
+                Modifier.align(Alignment.TopEnd).padding(15.dp)
+            )
+        }
         Steps(state.stepsToTreasure)
         Buttons(
             scanQrCallback,
@@ -144,11 +169,10 @@ private fun SearchingScreenBody(
 }
 
 @Composable
-fun Scores(isClassicMode: Boolean, score: Int) {
+fun Scores(isClassicMode: Boolean, score: Int, modifier: Modifier) {
     Row(
-        horizontalArrangement = Arrangement.End,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
+            .padding(10.dp)
             .fillMaxWidth()
             .background(Color.Transparent)
             .height(0.05.dh),
@@ -204,11 +228,12 @@ fun Scores(isClassicMode: Boolean, score: Int) {
 }
 
 @Composable
-fun Compass(arcRotation: Float) {
+fun Compass(arcRotation: Float, modifier: Modifier) {
     BoxWithConstraints(
-        modifier = Modifier
+        modifier = modifier
+            .padding(15.dp)
             .fillMaxWidth()
-            .height(0.35.dh),
+            .height(0.40.dh),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -233,7 +258,7 @@ fun Steps(stepsToTreasure: Int?) {
             .background(Color.Transparent)
             .height(0.15.dh),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
     ) {
         if (stepsToTreasure != null) {
             Text(
@@ -247,7 +272,7 @@ fun Steps(stepsToTreasure: Int?) {
         }
         Image(
             painterResource(R.drawable.steps),
-            modifier = Modifier.padding(start = 50.dp),
+            modifier = Modifier.padding(start = 45.dp),
             contentDescription = null,
             contentScale = ContentScale.Inside,
         )

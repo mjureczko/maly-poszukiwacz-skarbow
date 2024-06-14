@@ -122,6 +122,7 @@ fun CommemorativeScreenBody(
     }
 }
 
+//TODO t: check if it duplicates CommemorativePhotoButton()
 @Composable
 private fun DoPhotoButton(
     sharedViewModel: CommemorativeSharedViewModel,
@@ -154,6 +155,7 @@ private fun DoPhotoButton(
     )
 }
 
+//TODO: learn more about sharing view model
 @Composable
 private fun getViewModel(viewModelStoreOwner: NavBackStackEntry): CommemorativeSharedViewModel {
     val viewModelDoNotInline: SharedViewModel = hiltViewModel(viewModelStoreOwner)

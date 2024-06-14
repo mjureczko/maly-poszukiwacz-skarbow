@@ -31,27 +31,28 @@ import javax.inject.Inject
 
 const val PARAMETER_ROUTE_NAME = "route_name"
 
-interface SearchingViewModel {
-    val state: State<SharedState>
-    fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback
+interface DoCommemrative {
+    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler
 }
 
 interface ResultSharedViewModel {
     fun resultPresented()
 }
 
-interface SelectorSharedViewModel {
+interface SearchingViewModel : DoCommemrative {
+    val state: State<SharedState>
+    fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback
+}
+
+interface SelectorSharedViewModel : DoCommemrative {
     val state: State<SharedState>
     fun updateJustFoundFromSelector()
     fun selectorPresented()
     fun updateSelectedTreasure(treasure: TreasureDescription)
-    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler
 }
 
-interface CommemorativeSharedViewModel {
+interface CommemorativeSharedViewModel : DoCommemrative {
     val state: State<SharedState>
-
-    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler
 }
 
 @HiltViewModel
@@ -139,8 +140,10 @@ class SharedViewModel @Inject constructor(
 
     override fun updateSelectedTreasure(treasure: TreasureDescription) {
         _state.value = state.value.copy(
-            treasuresProgress = state.value.treasuresProgress.copy(selectedTreasure = treasure
-        ))
+            treasuresProgress = state.value.treasuresProgress.copy(
+                selectedTreasure = treasure
+            )
+        )
     }
 
     override fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler {
@@ -148,7 +151,9 @@ class SharedViewModel @Inject constructor(
             val target = _state.value.treasuresProgress.getCommemorativePhoto(treasure)
                 ?: storageHelper.newCommemorativePhotoFile()
             photoHelper.moveCommemorativePhotoToPermanentLocation(target)
-            _state.value.treasuresProgress.addCommemorativePhoto(treasure, target)
+            state.value.treasuresProgress.addCommemorativePhoto(treasure, target)
+            _state.value = _state.value.copy()
+            storageHelper.save(state.value.treasuresProgress)
         }
     }
 
@@ -191,11 +196,17 @@ class SharedViewModel @Inject constructor(
         val mediaPlayer = MediaPlayer()
         mediaPlayer.isLooping = false
         mediaPlayer.setOnErrorListener { mp, what, extra -> handleMediaPlayerError(what, extra) }
-        if(treasuresProgress.selectedTreasure==null) {
+        if (treasuresProgress.selectedTreasure == null) {
             treasuresProgress.selectedTreasure = route.treasures[0]
             storageHelper.save(treasuresProgress)
         }
-        return SharedState(mediaPlayer, route, treasuresProgress, hunterPath)
+        return SharedState(
+            mediaPlayer,
+            route,
+            treasuresProgress,
+            hunterPath,
+            photoHelper.getCommemorativePhotoTempUri()
+        )
     }
 
     private fun loadRoute(): Route {

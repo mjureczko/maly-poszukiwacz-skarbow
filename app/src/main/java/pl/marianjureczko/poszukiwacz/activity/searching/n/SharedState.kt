@@ -2,19 +2,23 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.location.Location
 import android.media.MediaPlayer
+import android.net.Uri
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
-interface SelectorSharedState {
+interface HasCommemorativePhoto {
+    fun hasCommemorativePhoto(treasureId: Int): Boolean
+}
+
+interface SelectorSharedState : HasCommemorativePhoto {
     val route: Route
     val currentLocation: Location?
     val distancesInSteps: Map<Int, Int?>
     fun isTreasureCollected(treasureId: Int): Boolean
-    fun hasCommemorativePhoto(treasureId: Int): Boolean
 }
 
-interface SearchingSharedState {
+interface SearchingSharedState : HasCommemorativePhoto {
     val mediaPlayer: MediaPlayer
     val route: Route
     var treasuresProgress: TreasuresProgress
@@ -22,6 +26,7 @@ interface SearchingSharedState {
     val stepsToTreasure: Int?
     var needleRotation: Float
     var hunterPath: HunterPath
+    val tempPhotoFileLocation: Uri
     fun treasureFoundAndResultAlreadyPresented(): Boolean
 }
 
@@ -37,13 +42,14 @@ data class SharedState(
     override var currentLocation: Location?,
     override var stepsToTreasure: Int?,
     override var hunterPath: HunterPath,
+    override val tempPhotoFileLocation: Uri,
     override var needleRotation: Float = 0.0f,
     override val distancesInSteps: Map<Int, Int?> = route.treasures
         .associate { it.id to null }
-        .toMap()
+        .toMap(),
 ) : SelectorSharedState, SearchingSharedState, CommemorativeSharedState {
-    constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress, hunterPath: HunterPath) :
-            this(mediaPlayer, route, treasuresProgress, null, null, hunterPath)
+    constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress, hunterPath: HunterPath, tempPhotoFileLocation: Uri) :
+            this(mediaPlayer, route, treasuresProgress, null, null, hunterPath, tempPhotoFileLocation)
 
     override fun isTreasureCollected(treasureId: Int): Boolean =
         treasuresProgress.collectedTreasuresDescriptionId.contains(treasureId)

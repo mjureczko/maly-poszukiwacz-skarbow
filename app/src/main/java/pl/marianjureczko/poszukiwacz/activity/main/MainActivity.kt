@@ -124,7 +124,9 @@ private fun ComposeRoot(settings: Settings, onClickGuide: GoToGuide) {
                 goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
-                goToFacebook = goToFacebook
+                goToFacebook = goToFacebook,
+                //TODO t: copy of goToCommemorative from Selector
+                goToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") },
             )
         }
         composable(

@@ -68,7 +68,6 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
     }
 
     override fun onPermissionsGranted(activityRequirements: ActivityRequirements) {
-        //TODO t: enable (do)showPhotoBtn, first disable it on start (it is possible that user didn't give the permission, when route was obtained via bluetooth?)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
