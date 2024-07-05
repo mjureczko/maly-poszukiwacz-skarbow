@@ -99,11 +99,6 @@ class SearchingActivityViewModel(private val state: SavedStateHandle) : ViewMode
     fun treasureSelectionInitialized() =
         treasureSelectionInitialized || treasuresProgress.selectedTreasure != null
 
-    fun collectTreasure(treasure: Treasure, storageHelper: StorageHelper) {
-        treasuresProgress.collect(treasure)
-        storageHelper.save(this.treasuresProgress)
-    }
-
     fun getGolds(): String =
         treasuresProgress.golds.toString()
 

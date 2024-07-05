@@ -6,14 +6,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
-import org.mockito.BDDMockito.reset
 import org.mockito.BDDMockito.then
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.XmlHelper
@@ -66,22 +63,6 @@ class SearchingActivityViewModelTest {
         //then
         then(storageHelper).should().save(treasuresProgress)
         assertThat(model.getProgress()).usingRecursiveComparison().isEqualTo(treasuresProgress)
-    }
-
-    @Test
-    fun `SHOULD save new treasure progress WHEN collecting next treasure`() {
-        //given
-        val fixture = SearchingActivityViewModelFixture(state)
-        fixture.setupMockForEmptyTreasureBag(storageHelper)
-        val treasure = some<Treasure>().copy(type = TreasureType.DIAMOND)
-        reset(storageHelper)
-
-        //when
-        fixture.model.collectTreasure(treasure, storageHelper)
-
-        //then
-        then(storageHelper).should().save(fixture.model.getProgress())
-        assertThat(fixture.model.getDiamonds()).isEqualTo(treasure.quantity.toString())
     }
 
     @Test
