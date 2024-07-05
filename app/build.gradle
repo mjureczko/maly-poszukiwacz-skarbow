@@ -11,8 +11,8 @@ android {
         applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 3
-        versionName "2.0"
+        versionCode 4
+        versionName "2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [facebookToken: FACEBOOK_TOKEN]
     }
