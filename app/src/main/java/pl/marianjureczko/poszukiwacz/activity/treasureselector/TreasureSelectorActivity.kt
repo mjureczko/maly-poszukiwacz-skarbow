@@ -42,11 +42,13 @@ class TreasureSelectorActivity : PermissionActivity(), ActivityTerminator {
     private val model: SelectorViewModel by viewModels()
     private lateinit var adapter: TreasureProgressAdapter
     private val photoHelper = PhotoHelper(this, StorageHelper(this))
+    private val storageHelper = StorageHelper(this)
     private val doPhotoLauncher: ActivityResultLauncher<Uri> =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
             if (result) {
                 val newPhotoLocation = photoHelper.moveCommemorativePhotoToPermanentLocation()
                 model.setCommemorativePhotoOnSelectedTreasureDescription(newPhotoLocation)
+                storageHelper.save(model.progress)
                 adapter.notifyDataSetChanged()
                 Toast.makeText(this, R.string.photo_saved, Toast.LENGTH_SHORT).show()
             } else {
