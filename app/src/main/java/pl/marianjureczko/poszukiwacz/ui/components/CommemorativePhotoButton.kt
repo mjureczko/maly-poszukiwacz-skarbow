@@ -14,9 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.isGranted
 import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.HasCommemorativePhoto
@@ -24,10 +21,9 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.DoPhotoResultHandler
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CommemorativePhotoButton(
-    cameraPermission: PermissionState,
+    isPermissionGranted: Boolean,
     hasCommemorativePhoto: HasCommemorativePhoto,
     tmpPhoto: Uri,
     treasure: TreasureDescription,
@@ -35,7 +31,7 @@ fun CommemorativePhotoButton(
     handleDoPhotoResult: DoPhotoResultHandler,
     modifier: Modifier = Modifier
 ) {
-    if (cameraPermission.status.isGranted) {
+    if (isPermissionGranted) {
         if (hasCommemorativePhoto.hasCommemorativePhoto(treasure.id)) {
             Image(
                 painterResource(R.drawable.camera_show_photo),

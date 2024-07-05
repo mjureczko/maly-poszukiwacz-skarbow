@@ -37,6 +37,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
@@ -187,7 +188,7 @@ fun TreasureItem(
             }
             ShowMovieButton(state, treasure, goToResult)
             CommemorativePhotoButton(
-                cameraPermission,
+                cameraPermission.status.isGranted,
                 state,
                 localState.tempPhotoFileLocation,
                 treasure,

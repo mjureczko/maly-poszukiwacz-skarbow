@@ -32,6 +32,8 @@ import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.SelectorScreen
+import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.ui.Screen
@@ -103,7 +105,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun ComposeRoot(settings: Settings, onClickGuide: GoToGuide) {
     val navController = rememberNavController()
-    val goToFacebook = FacebookHelper.createFacebookCallback(navController)
+    val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
+    val goToCommemorative: GoToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") }
 
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
@@ -125,8 +128,7 @@ private fun ComposeRoot(settings: Settings, onClickGuide: GoToGuide) {
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
                 goToFacebook = goToFacebook,
-                //TODO t: copy of goToCommemorative from Selector
-                goToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") },
+                goToCommemorative = goToCommemorative,
             )
         }
         composable(
@@ -165,7 +167,7 @@ private fun ComposeRoot(settings: Settings, onClickGuide: GoToGuide) {
                 navBackStackEntry,
                 onClickGuide,
                 goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") },
-                goToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") },
+                goToCommemorative = goToCommemorative,
                 onClickOnFacebook = goToFacebook
             )
         }

@@ -122,7 +122,6 @@ fun CommemorativeScreenBody(
     }
 }
 
-//TODO t: check if it duplicates CommemorativePhotoButton()
 @Composable
 private fun DoPhotoButton(
     sharedViewModel: CommemorativeSharedViewModel,

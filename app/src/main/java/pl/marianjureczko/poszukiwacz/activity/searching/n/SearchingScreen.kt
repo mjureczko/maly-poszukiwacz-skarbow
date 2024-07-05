@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import pl.marianjureczko.poszukiwacz.R
@@ -141,7 +142,7 @@ private fun SearchingScreenBody(
             Scores(isClassicMode, state.treasuresProgress.knowledge, Modifier.align(Alignment.TopStart))
             Compass(state.needleRotation, Modifier.align(Alignment.Center))
             CommemorativePhotoButton(
-                cameraPermissionState,
+                cameraPermissionState.status.isGranted,
                 state,
                 state.tempPhotoFileLocation,
                 state.treasuresProgress.selectedTreasure,
