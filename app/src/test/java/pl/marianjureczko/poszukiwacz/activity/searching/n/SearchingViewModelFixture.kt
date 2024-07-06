@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.searching.n
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.ocadotechnology.gembus.test.some
@@ -30,6 +31,7 @@ data class SearchingViewModelFixture(
         route.treasures.first().qrCode = firstTreasureQrCode
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)
         BDDMockito.given(storage.loadProgress(routeName)).willReturn(null)
+        BDDMockito.given(photoHelper.getCommemorativePhotoTempUri()).willReturn(mock(Uri::class.java))
         return SharedViewModel(storage, locationFetcher, LocationCalculator(), photoHelper, savedState, dispatcher)
     }
 
