@@ -10,7 +10,7 @@ plugins {
 android {
     compileSdkVersion 33
     defaultConfig {
-        applicationId "pl.marianjureczko.poszukiwacz.kalinowice"
+        applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 23
         targetSdkVersion 33
         versionCode 1
@@ -32,7 +32,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             resValue "string", "main_ad", "ca-app-pub-6283649742373707/7715917886"
             resValue "string", "searching_ad", "ca-app-pub-6283649742373707/9491764484"
@@ -44,6 +44,36 @@ android {
             resValue "string", "photo_ad", "ca-app-pub-3940256099942544/6300978111"
         }
     }
+    flavorDimensions "assets", "mode"
+    productFlavors {
+        classic {
+            dimension "mode"
+        }
+
+        custom {
+            dimension "mode"
+
+        }
+
+        defaultAssets {
+            dimension "assets"
+        }
+
+        kalinowice {
+            dimension "assets"
+            applicationIdSuffix ".kalinowice"
+        }
+    }
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (names.contains("custom") && names.contains("defaultAssets")) {
+            setIgnore(true)
+        }
+        if (names.contains("classic") && !name.contains("defaultAssets")) {
+            setIgnore(true)
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -56,7 +86,7 @@ android {
     buildFeatures {
         compose true
     }
-    
+
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }

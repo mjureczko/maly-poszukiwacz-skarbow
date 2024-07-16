@@ -44,29 +44,3 @@ allprojects {
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }
-
-tasks.register('copy_config') {
-    doFirst {
-        def config_names = layout.getProjectDirectory().dir("assets").getAsFile().listFiles().collect { it.name }
-        if(config_names.contains(findProperty('config_src'))) {
-            println("**** The " + findProperty('config_src') + " configuration was chosen! ****")
-        } else {
-            println("Usage:")
-            println("\$ ./gradlew copy_config -Pconfig_src=DIR")
-            println("\twhere DIR is one of:")
-            config_names.each { println("\t - ${it.name}") }
-        }
-    }
-}
-
-tasks.register('copy_splash', Copy) {
-    from layout.getProjectDirectory().file("assets/${findProperty('config_src')}/chest_splash.png")
-    into layout.getProjectDirectory().dir("app/src/main/res/drawable")
-}
-
-tasks.register('copy_properties', Copy) {
-    from layout.getProjectDirectory().file("assets/${findProperty('config_src')}/assets")
-    into layout.getProjectDirectory().dir("app/src/main/assets")
-}
-copy_config.finalizedBy copy_splash
-copy_config.finalizedBy copy_properties

@@ -1,8 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook.n
 
-import pl.marianjureczko.poszukiwacz.activity.facebook.ElementDescription
-import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookReportModel
-import pl.marianjureczko.poszukiwacz.activity.facebook.Type
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
@@ -14,7 +11,7 @@ data class FacebookState(
     override val route: Route,
     val elements: List<ElementDescription>,
     val recompose: Int = Random().nextInt()
-) : FacebookReportModel {
+) : pl.marianjureczko.poszukiwacz.activity.facebook.n.FacebookReportModel {
     override fun getSummaryElement(): ElementDescription {
         return elements[0]
     }

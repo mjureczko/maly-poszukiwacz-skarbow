@@ -14,11 +14,11 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import pl.marianjureczko.poszukiwacz.App
-import pl.marianjureczko.poszukiwacz.permissions.ActivityRequirements
+import pl.marianjureczko.poszukiwacz.permissions.Requirements
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
-fun handlePermission(requirements: ActivityRequirements): PermissionState {
+fun handlePermission(requirements: Requirements): PermissionState {
     return handlePermissionGenerically(requirements) { permission ->
         permission.status.isGranted || !permission.status.shouldShowRationale
     }
@@ -26,7 +26,7 @@ fun handlePermission(requirements: ActivityRequirements): PermissionState {
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
-fun handlePermissionWithExitOnDenied(requirements: ActivityRequirements) {
+fun handlePermissionWithExitOnDenied(requirements: Requirements) {
     val activity = LocalContext.current as? Activity
     handlePermissionGenerically(requirements, { activity?.finish() }) { permission ->
         !permission.status.isGranted
@@ -36,7 +36,7 @@ fun handlePermissionWithExitOnDenied(requirements: ActivityRequirements) {
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
 private fun handlePermissionGenerically(
-    requirements: ActivityRequirements,
+    requirements: Requirements,
     deniedCleanUp: () -> Unit = {},
     launchingCondition: (PermissionState) -> Boolean
 ): PermissionState {

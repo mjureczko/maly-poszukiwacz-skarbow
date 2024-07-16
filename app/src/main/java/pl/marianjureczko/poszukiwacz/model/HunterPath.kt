@@ -4,8 +4,7 @@ import org.apache.commons.math3.stat.StatUtils
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import java.io.Serializable
 import java.util.Date
 
@@ -61,7 +60,7 @@ class HunterPath() : Serializable {
     }
 
     fun pathLengthInKm(): Double {
-        val calculator = LocationCalculator()
+        val calculator = pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator()
         var result = 0.0
         chunkedCoordinates.forEachIndexed { index, location ->
             if (index > 0) {

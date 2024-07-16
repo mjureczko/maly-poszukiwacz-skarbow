@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.model
 import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import java.util.Date
 
 class HunterPathTest {
@@ -126,7 +126,8 @@ class HunterPathTest {
         val actual = hunterPath.pathAsCoordinates()
 
         //then
-        assertThat(actual).containsExactly(Coordinates(2.0, 2.0), Coordinates(4.5, 3.0))
+        assertThat(actual).containsExactly(Coordinates(2.0, 2.0),Coordinates(4.5, 3.0)
+        )
     }
 
 }

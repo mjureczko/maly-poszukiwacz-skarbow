@@ -10,7 +10,6 @@ import androidx.core.content.FileProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.withContext
-import pl.marianjureczko.poszukiwacz.activity.treasureseditor.TreasuresEditorActivity
 import java.io.File
 import java.io.FileOutputStream
 
@@ -65,7 +64,7 @@ class PhotoHelper(
     /** visibility for tests */
     fun getCommemorativePhotoTempFile() = File(this.storageHelper.pathToRoutesDir() + TMP_PICTURE_FILE)
 
-    fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + TreasuresEditorActivity.TMP_PICTURE_FILE)
+    fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + "/tmp.jpg")
 
     suspend fun rescaleImageAndSaveInTreasure(photoFile: File, destinationPhotoFile: File, onSuccess: Runnable, onFailure: Runnable) {
         val result = withContext(Dispatchers.IO) {
@@ -94,7 +93,7 @@ class PhotoHelper(
         if (!photoFile.exists()) {
             photoFile.createNewFile()
         }
-        //TODO: configurable classic vs kalinowice
+        //TODO: t configurable classic vs kalinowice
         return FileProvider.getUriForFile(context, "pl.marianjureczko.poszukiwacz.kalinowice.fileprovider", photoFile)
     }
 }

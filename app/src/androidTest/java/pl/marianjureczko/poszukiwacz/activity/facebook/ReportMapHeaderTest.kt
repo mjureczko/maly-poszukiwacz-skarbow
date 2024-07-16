@@ -15,8 +15,8 @@ class ReportMapHeaderTest : ReportAbstractTest() {
     @Test
     fun shouldDrawSummary() {
         //given
-        val reportMapHeader = ReportMapHeader(model, font)
-        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
+        val reportMapHeader = pl.marianjureczko.poszukiwacz.activity.facebook.ReportMapHeader(model, font)
+        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         model.initialize(context, null, treasuresProgress)

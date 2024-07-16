@@ -30,7 +30,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
     @Test
     fun shouldDrawCommemorativePhotosInSingleLine_when2() {
         //given
-        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, tempPhoto(800, 400))
@@ -38,7 +38,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
 
         StorageHelper(context).save(Route(treasuresProgress.routeName))
         model.initialize(context, null, treasuresProgress)
-        val reportPhotos = ReportCommemorativePhotos(model, font, seed)
+        val reportPhotos = pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommemorativePhotos(model, font, seed)
 
         //when
         reportPhotos.draw(context, canvas, 0f)
@@ -52,7 +52,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
     @Test
     fun shouldDrawCommemorativePhotosIn2Lines_when4() {
         //given
-        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, tempPhoto(800, 400))
@@ -60,7 +60,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, tempPhoto(400, 800))
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(4, tempPhoto(600, 500))
         model.initialize(context, null, treasuresProgress)
-        val reportPhotos = ReportCommemorativePhotos(model, font, seed)
+        val reportPhotos = pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommemorativePhotos(model, font, seed)
 
         //when
         reportPhotos.draw(context, canvas, 0f)

@@ -16,8 +16,8 @@ class ReportFooterTest : ReportAbstractTest() {
     @Test
     fun should_drawFooter() {
         //given
-        val footer = ReportFooter()
-        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
+        val footer = pl.marianjureczko.poszukiwacz.activity.facebook.ReportFooter()
+        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
 

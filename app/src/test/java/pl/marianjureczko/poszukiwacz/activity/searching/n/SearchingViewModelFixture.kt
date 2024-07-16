@@ -8,7 +8,6 @@ import com.ocadotechnology.gembus.test.someString
 import kotlinx.coroutines.CoroutineDispatcher
 import org.mockito.BDDMockito
 import org.mockito.Mockito.mock
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -32,7 +31,8 @@ data class SearchingViewModelFixture(
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)
         BDDMockito.given(storage.loadProgress(routeName)).willReturn(null)
         BDDMockito.given(photoHelper.getCommemorativePhotoTempUri()).willReturn(mock(Uri::class.java))
-        return SharedViewModel(storage, locationFetcher, LocationCalculator(), photoHelper, savedState, dispatcher)
+        return SharedViewModel(storage, locationFetcher,
+            pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator(), photoHelper, savedState, dispatcher)
     }
 
     fun givenScanIntentResultForFirstTreasure(): ScanIntentResult {

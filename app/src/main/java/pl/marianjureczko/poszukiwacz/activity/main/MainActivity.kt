@@ -35,10 +35,8 @@ import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.SelectorScreen
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
-import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.ui.Screen
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
-import javax.inject.Inject
 
 val SEARCHING_PATH = "searching"
 val SEARCHING_ROUTE = "$SEARCHING_PATH/{$PARAMETER_ROUTE_NAME}"
@@ -59,9 +57,6 @@ val FACEBOOK_ROUTE = "$FACEBOOK_PATH"
 class MainActivity : ComponentActivity() {
     private val TAG = javaClass.simpleName
 
-    @Inject
-    lateinit var settings: Settings
-
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme {
-                ComposeRoot(settings) { onClickOnGuide() }
+                ComposeRoot { onClickOnGuide() }
             }
         }
     }
@@ -103,14 +98,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun ComposeRoot(settings: Settings, onClickGuide: GoToGuide) {
+private fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
     val goToCommemorative: GoToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") }
 
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
-            MainScreen(navController, settings.isClassicMode(), onClickGuide, goToFacebook) { routeName ->
+            MainScreen(navController, onClickGuide, goToFacebook) { routeName ->
                 navController.navigate("$SEARCHING_PATH/$routeName")
             }
         }
@@ -121,7 +116,6 @@ private fun ComposeRoot(settings: Settings, onClickGuide: GoToGuide) {
         ) {
             SearchingScreen(
                 navController = navController,
-                isClassicMode = settings.isClassicMode(),
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
                 goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") },

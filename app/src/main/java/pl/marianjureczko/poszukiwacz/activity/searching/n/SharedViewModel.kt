@@ -15,13 +15,12 @@ import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.ArcCalculator
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhotoResultHandler
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
@@ -59,7 +58,7 @@ interface CommemorativeSharedViewModel : DoCommemrative {
 class SharedViewModel @Inject constructor(
     private val storageHelper: StorageHelper,
     private val locationFetcher: LocationFetcher,
-    private val locationCalculator: LocationCalculator,
+    private val locationCalculator: pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator,
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
     private val dispatcher: CoroutineDispatcher

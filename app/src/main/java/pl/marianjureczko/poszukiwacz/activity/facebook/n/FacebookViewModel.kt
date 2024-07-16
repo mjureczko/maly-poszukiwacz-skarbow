@@ -11,8 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.facebook.ElementDescription
-import pl.marianjureczko.poszukiwacz.activity.facebook.Type
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
@@ -80,8 +78,22 @@ class FacebookViewModel @Inject constructor(
             )
             preparePhoto(index - 1, photo)
         }
-        elements.add(ElementDescription(index++, Type.MAP, true, resources.getString(R.string.treasures_map)))
-        elements.add(ElementDescription(index++, Type.MAP_ROUTE, true, resources.getString(R.string.route_on_map)))
+        elements.add(
+            ElementDescription(
+                index++,
+                Type.MAP,
+                true,
+                resources.getString(R.string.treasures_map)
+            )
+        )
+        elements.add(
+            ElementDescription(
+                index++,
+                Type.MAP_ROUTE,
+                true,
+                resources.getString(R.string.route_on_map)
+            )
+        )
         elements.add(
             ElementDescription(
                 index++,

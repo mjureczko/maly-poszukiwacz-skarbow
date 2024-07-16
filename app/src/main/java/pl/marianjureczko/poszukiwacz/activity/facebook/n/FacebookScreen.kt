@@ -43,9 +43,6 @@ import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.facebook.ElementDescription
-import pl.marianjureczko.poszukiwacz.activity.facebook.FacebookReportModel
-import pl.marianjureczko.poszukiwacz.activity.facebook.ReportGenerator
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner

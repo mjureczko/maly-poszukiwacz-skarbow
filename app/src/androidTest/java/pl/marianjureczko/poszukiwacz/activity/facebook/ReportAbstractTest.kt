@@ -13,7 +13,8 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 abstract class ReportAbstractTest {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    val model: FacebookViewModel = FacebookViewModel(SavedStateHandle(mapOf()))
+    val model: pl.marianjureczko.poszukiwacz.activity.facebook.FacebookViewModel =
+        pl.marianjureczko.poszukiwacz.activity.facebook.FacebookViewModel(SavedStateHandle(mapOf()))
     val font: Typeface = ResourcesCompat.getFont(context, R.font.akaya_telivigala)!!
     val treasuresProgress: TreasuresProgress = TreasuresProgress("123456789", TreasureDescription.nullObject())
 

@@ -18,8 +18,8 @@ internal class ReportSummaryTest : ReportAbstractTest() {
     @Test
     fun shouldDrawSummary() {
         //given
-        val reportSummary = ReportSummary(model, font)
-        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
+        val reportSummary = pl.marianjureczko.poszukiwacz.activity.facebook.ReportSummary(model, font)
+        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
 

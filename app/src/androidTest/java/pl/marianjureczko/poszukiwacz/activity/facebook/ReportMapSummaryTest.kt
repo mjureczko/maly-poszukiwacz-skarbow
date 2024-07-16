@@ -19,14 +19,14 @@ class ReportMapSummaryTest : ReportAbstractTest() {
     @Test
     fun should_drawSummaryWithLengthAndTimestamps() {
         //given
-        val reportMapHeader = ReportMapSummary(model, font)
-        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
+        val reportMapHeader = pl.marianjureczko.poszukiwacz.activity.facebook.ReportMapSummary(model, font)
+        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         val hunterPath = HunterPath()
-        hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
+        hunterPath.addLocation(pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates(10.0, 10.0), Date(1))
+        hunterPath.addLocation(pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates(10.0, 11.0), Date(1_000_000))
+        hunterPath.addLocation(pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates(10.0, 11.0), Date(2_000_000))
         model.initialize(context, hunterPath, treasuresProgress)
 
         //when

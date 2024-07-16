@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import org.simpleframework.xml.Element
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import java.io.Serializable
 
 /**

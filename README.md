@@ -6,5 +6,3 @@ GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
 TODO:
 - remove dead code
 - prepare custom version artifact for the play shop 
-- add doDommemorativePhoto to searching screen
-- - "Photo has been repalced" toast after creating a new commemorative photo

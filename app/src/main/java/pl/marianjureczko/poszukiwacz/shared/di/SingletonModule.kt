@@ -10,11 +10,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import pl.marianjureczko.poszukiwacz.activity.main.CustomInitializerForRoute
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.n.LocationFetcher
+import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
-import pl.marianjureczko.poszukiwacz.shared.Settings
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Singleton
 
@@ -51,20 +49,14 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun settings(assetManager: AssetManager): Settings {
-        return Settings(assetManager)
-    }
-
-    @Singleton
-    @Provides
     fun resources(@ApplicationContext appContext: Context): Resources {
         return appContext.resources
     }
 
     @Singleton
     @Provides
-    fun locationCalculator(): LocationCalculator {
-        return LocationCalculator()
+    fun locationCalculator(): pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator {
+        return pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator()
     }
 
     @Singleton

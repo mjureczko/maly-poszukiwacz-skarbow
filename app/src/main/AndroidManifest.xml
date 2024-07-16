@@ -55,27 +55,6 @@
             android:value="${facebookToken}" />
 
         <activity
-            android:name=".activity.result.ResultActivity"
-            android:exported="false"
-            android:theme="@style/FullscreenTheme"
-            />
-        <activity
-            android:name=".activity.map.MapActivity"
-            android:exported="false"
-            android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".activity.treasureselector.TreasureSelectorActivity"
-            android:theme="@style/FullscreenTheme" />
-        <activity android:name=".activity.bluetooth.BluetoothActivity" />
-        <activity
-            android:name=".activity.photo.PhotoActivity"
-            android:label="@string/photo_tip"
-            android:theme="@style/FullscreenTheme"
-            />
-        <activity
-            android:name=".activity.treasureseditor.TreasuresEditorActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".activity.main.MainActivity"
             android:exported="true"
             android:theme="@style/LaunchTheme">
@@ -85,30 +64,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.searching.SearchingActivity"
-            android:exported="true"
-            android:label="@string/searching_activity_title"
-            android:theme="@style/FullscreenTheme">
-            <intent-filter>
-                <action android:name="com.google.zxing.client.android.SCAN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.commemorative.CommemorativeActivity"
-            android:exported="false"
-            android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".activity.facebook.FacebookActivity"
-            android:exported="false"
-            android:label="@string/title_activity_facebook"
-            android:theme="@style/FullscreenTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="pl.marianjureczko.poszukiwacz.kalinowice.fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

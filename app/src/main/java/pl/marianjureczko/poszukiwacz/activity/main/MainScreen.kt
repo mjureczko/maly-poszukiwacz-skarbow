@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
+import pl.marianjureczko.poszukiwacz.screen.main.MainScreenBody
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 
@@ -16,7 +17,6 @@ import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 @Composable
 fun MainScreen(
     navController: NavController,
-    isClassic: Boolean,
     onClickOnGuide: () -> Unit,
     onClickOnFacebook: () -> Unit,
     goToSearching: (String) -> Unit
@@ -24,13 +24,7 @@ fun MainScreen(
     handlePermissionWithExitOnDenied(RequirementsForNavigation)
     Scaffold(
         topBar = { TopBar(navController, stringResource(R.string.app_name), onClickOnGuide, onClickOnFacebook) },
-        content = { _ ->
-            if (isClassic) {
-                ClassicScreenBody(goToSearching)
-            } else {
-                CustomScreenBody(goToSearching)
-            }
-        }
+        content = { _ -> MainScreenBody(goToSearching) }
     )
 }
 

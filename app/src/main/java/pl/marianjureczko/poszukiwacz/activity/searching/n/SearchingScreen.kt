@@ -48,7 +48,6 @@ import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
@@ -72,7 +71,6 @@ import java.net.URLEncoder
 @Composable
 fun SearchingScreen(
     navController: NavController,
-    isClassicMode: Boolean,
     onClickOnGuide: GoToGuide,
     goToTipPhoto: GoToTipPhoto,
     goToResult: GoToResults,
@@ -81,7 +79,7 @@ fun SearchingScreen(
     goToFacebook: GoToFacebook,
     goToCommemorative: GoToCommemorative
 ) {
-    val cameraPermission: PermissionState = handlePermission(RequirementsForDoingPhoto)
+    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
     val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasure.id}"
@@ -91,7 +89,6 @@ fun SearchingScreen(
         content = {
             SearchingScreenBody(
                 navController,
-                isClassicMode,
                 viewModel,
                 goToTipPhoto,
                 goToResult,
@@ -109,7 +106,6 @@ fun SearchingScreen(
 @Composable
 private fun SearchingScreenBody(
     navController: NavController,
-    isClassicMode: Boolean,
     viewModel: SearchingViewModel,
     goToTipPhoto: GoToTipPhoto,
     goToResult: GoToResults,
@@ -139,7 +135,7 @@ private fun SearchingScreenBody(
     }
     Column {
         Box {
-            Scores(isClassicMode, state.treasuresProgress.knowledge, Modifier.align(Alignment.TopStart))
+            Scores(state.treasuresProgress.knowledge, Modifier.align(Alignment.TopStart))
             Compass(state.needleRotation, Modifier.align(Alignment.Center))
             CommemorativePhotoButton(
                 cameraPermissionState.status.isGranted,
@@ -170,7 +166,7 @@ private fun SearchingScreenBody(
 }
 
 @Composable
-fun Scores(isClassicMode: Boolean, score: Int, modifier: Modifier) {
+fun Scores(score: Int, modifier: Modifier) {
     Row(
         modifier = modifier
             .padding(10.dp)
@@ -178,7 +174,8 @@ fun Scores(isClassicMode: Boolean, score: Int, modifier: Modifier) {
             .background(Color.Transparent)
             .height(0.05.dh),
     ) {
-        if (isClassicMode) {
+        //TODO if(isClassicMode)
+        if (false) {
             Image(
                 painterResource(R.drawable.gold),
                 contentDescription = "gold image",

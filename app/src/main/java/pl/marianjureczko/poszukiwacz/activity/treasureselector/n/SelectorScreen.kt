@@ -43,7 +43,6 @@ import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
@@ -67,7 +66,7 @@ fun SelectorScreen(
     goToCommemorative: GoToCommemorative,
     onClickOnFacebook: GoToFacebook
 ) {
-    val cameraPermission: PermissionState = handlePermission(RequirementsForDoingPhoto)
+    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,

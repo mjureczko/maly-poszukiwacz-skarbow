@@ -24,7 +24,7 @@ class ReportGeneratorTest {
     @Test
     fun shouldCreateImage() {
         //given
-        val report = ReportGenerator()
+        val report = pl.marianjureczko.poszukiwacz.activity.facebook.ReportGenerator()
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val photos = arrangePhotos(context)
         val treasuresProgress = TreasuresProgress("123456789 123456789 123456789 123456789 12345", TreasureDescription.nullObject())
@@ -36,16 +36,16 @@ class ReportGeneratorTest {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(13, photos[4])
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(0, photos[5])
         val hunterPath = HunterPath()
-        hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
+        hunterPath.addLocation(pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates(10.0, 10.0), Date(1))
+        hunterPath.addLocation(pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates(10.0, 11.0), Date(1_000_000))
+        hunterPath.addLocation(pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates(10.0, 11.0), Date(2_000_000))
         StorageHelper(context).save(Route(treasuresProgress.routeName))
 
         //when
-        val model = FacebookViewModel(SavedStateHandle(mapOf()))
+        val model = pl.marianjureczko.poszukiwacz.activity.facebook.FacebookViewModel(SavedStateHandle(mapOf()))
         model.initialize(context, hunterPath, treasuresProgress)
         //MapBox doesn't work in tests
-        val mapIdx = model.elements.indices.find { model.elements[it].type == Type.MAP }!!
+        val mapIdx = model.elements.indices.find { model.elements[it].type == pl.marianjureczko.poszukiwacz.activity.facebook.Type.MAP }!!
         val elements = model.elements.toMutableList()
         elements[mapIdx] = model.elements[mapIdx].copy(isSelected = false)
         model.elements = elements
