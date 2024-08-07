@@ -7,6 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportCommons
+import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportSummary
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import java.io.File
@@ -18,14 +20,14 @@ internal class ReportSummaryTest : ReportAbstractTest() {
     @Test
     fun shouldDrawSummary() {
         //given
-        val reportSummary = pl.marianjureczko.poszukiwacz.activity.facebook.ReportSummary(model, font)
-        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
 
         val treasure = Treasure("1", 17, TreasureType.GOLD)
         treasuresProgress.collect(treasure)
-        model.initialize(context, null, treasuresProgress)
+        storageHelper.save(treasuresProgress)
+        val reportSummary = ReportSummary(createFacebookViewModel().state.value, font)
 
         //when
         reportSummary.draw(context, canvas, 0f)

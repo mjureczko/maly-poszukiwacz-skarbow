@@ -19,7 +19,7 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Inject
 
 //TODO: should be configurable for the sake of classic version
-private const val ROUTE_NAME = "custom"
+const val ROUTE_NAME = "custom"
 
 @HiltViewModel
 class FacebookViewModel @Inject constructor(

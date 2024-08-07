@@ -7,6 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportCommons
+import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportMapHeader
 import java.io.File
 
 // Requires phone with API 34
@@ -15,11 +17,11 @@ class ReportMapHeaderTest : ReportAbstractTest() {
     @Test
     fun shouldDrawSummary() {
         //given
-        val reportMapHeader = pl.marianjureczko.poszukiwacz.activity.facebook.ReportMapHeader(model, font)
-        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
-        model.initialize(context, null, treasuresProgress)
+        saveEmptyProgress()
+        val reportMapHeader = ReportMapHeader(createFacebookViewModel().state.value, font)
 
         //when
         reportMapHeader.draw(context, canvas, 0f)

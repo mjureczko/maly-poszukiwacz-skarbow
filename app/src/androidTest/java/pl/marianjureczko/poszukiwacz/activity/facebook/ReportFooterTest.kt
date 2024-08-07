@@ -7,6 +7,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportCommons
+import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportFooter
 import java.io.File
 
 // Requires phone with API 34
@@ -16,8 +18,8 @@ class ReportFooterTest : ReportAbstractTest() {
     @Test
     fun should_drawFooter() {
         //given
-        val footer = pl.marianjureczko.poszukiwacz.activity.facebook.ReportFooter()
-        val bitmap = Bitmap.createBitmap(pl.marianjureczko.poszukiwacz.activity.facebook.ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
+        val footer = ReportFooter()
+        val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 200, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
 
