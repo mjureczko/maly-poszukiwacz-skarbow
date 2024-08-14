@@ -39,7 +39,6 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, tempPhoto(600, 600))
         storageHelper.save(treasuresProgress)
         StorageHelper(context).save(Route(treasuresProgress.routeName))
-//        model.initialize(context, null, treasuresProgress)
         val reportPhotos = ReportCommemorativePhotos(createFacebookViewModel().state.value, font, seed)
 
         //when
@@ -62,7 +61,6 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, tempPhoto(400, 800))
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(4, tempPhoto(600, 500))
         storageHelper.save(treasuresProgress)
-//        model.initialize(context, null, treasuresProgress)
         val reportPhotos = ReportCommemorativePhotos(createFacebookViewModel().state.value, font, seed)
 
         //when

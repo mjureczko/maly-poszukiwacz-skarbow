@@ -29,7 +29,6 @@ class ReportMapSummaryTest : ReportAbstractTest() {
         hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
         hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
         hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
-//        model.initialize(context, hunterPath, treasuresProgress)
         saveEmptyProgress()
         storageHelper.save(hunterPath)
         val reportMapHeader = ReportMapSummary(createFacebookViewModel().state.value, font)

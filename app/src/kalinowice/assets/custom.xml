@@ -21,7 +21,7 @@
             <tipFileName>tip_02.m4a</tipFileName>
             <qrCode>k01002</qrCode>
             <movieFileName>kalinowice_02.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_02.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!--dąbrówka-->
@@ -32,7 +32,7 @@
             <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
             <qrCode>k01003</qrCode>
             <movieFileName>kalinowice_03.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_03.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!--dzwonek zmarłych-->
@@ -43,7 +43,7 @@
             <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
             <qrCode>k01004</qrCode>
             <movieFileName>kalinowice_04.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_04.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- kapliczka u Nieszwieca-->
@@ -54,7 +54,7 @@
             <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
             <qrCode>k01005</qrCode>
             <movieFileName>kalinowice_05.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_05.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- kopaczka -->
@@ -65,7 +65,7 @@
             <tipFileName>tip_06.m4a</tipFileName>
             <qrCode>k01006</qrCode>
             <movieFileName>kalinowice_06.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_06.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- krzyż przy wiejskiej -->
@@ -76,7 +76,7 @@
             <tipFileName>tip_07.m4a</tipFileName>
             <qrCode>k01007</qrCode>
             <movieFileName>kalinowice_07.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_07.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- lipa -->
@@ -87,7 +87,7 @@
             <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
             <qrCode>k01008</qrCode>
             <movieFileName>kalinowice_08.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_08.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- miłorząb -->
@@ -98,7 +98,7 @@
             <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
             <qrCode>k01009</qrCode>
             <movieFileName>kalinowice_09.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_09.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- Oko opatrzności -->
@@ -109,7 +109,7 @@
             <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
             <qrCode>k01010</qrCode>
             <movieFileName>kalinowice_10.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_10.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- plac zabaw -->
@@ -120,7 +120,7 @@
             <tipFileName>sound_72686712-ceb1-40b6-a420-2d4016bf3872.3gp</tipFileName>
             <qrCode>k01011</qrCode>
             <movieFileName>kalinowice_11.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_11.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- Stary cmentarz -->
@@ -131,7 +131,7 @@
             <tipFileName>tip_12.m4a</tipFileName>
             <qrCode>k01012</qrCode>
             <movieFileName>kalinowice_12.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_12.srt</subtitlesFileName>
         </treasureDescription>
         <treasureDescription>
             <!-- Szkoła -->
@@ -142,7 +142,7 @@
             <tipFileName>tip_13.m4a</tipFileName>
             <qrCode>k01013</qrCode>
             <movieFileName>kalinowice_13.mp4</movieFileName>
-            <subtitlesFileName>en_01.srt</subtitlesFileName>
+            <subtitlesFileName>en_13.srt</subtitlesFileName>
         </treasureDescription>
 
     </treasures>

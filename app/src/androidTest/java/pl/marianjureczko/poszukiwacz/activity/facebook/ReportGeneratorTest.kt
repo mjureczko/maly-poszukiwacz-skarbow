@@ -50,8 +50,6 @@ class ReportGeneratorTest {
 
         //when
         val model = FacebookViewModel(StorageHelper(context), context.resources, StandardTestDispatcher())
-//            //SavedStateHandle(mapOf()))
-//        model.initialize(context, hunterPath, treasuresProgress)
 //        //MapBox doesn't work in tests
         var state = model.state.value
         val mapIdx = state.elements.indices.find { state.elements[it].type == Type.MAP }!!
