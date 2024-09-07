@@ -21,10 +21,10 @@ import androidx.compose.material.icons.twotone.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.DeleteRoute
@@ -52,8 +52,9 @@ fun MainScreenBody(goToSearching: GoToSearching) {
         LargeButton(R.string.new_route_button) {
             viewModel.openNewRouteDialog()
         }
+        val context = LocalContext.current
         LargeButton(R.string.route_from_bluetooth_button) {
-            Toast.makeText(App.getAppContext(), "Clicked Bluetooth", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Clicked Bluetooth", Toast.LENGTH_SHORT).show()
         }
         EnterTextDialog(
             state = state.showNewRouteDialog,
