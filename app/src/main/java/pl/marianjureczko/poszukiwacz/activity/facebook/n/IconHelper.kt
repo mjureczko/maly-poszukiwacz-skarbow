@@ -1,8 +1,8 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook.n
 
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import pl.marianjureczko.poszukiwacz.App
 
 class IconHelper() {
 
@@ -12,8 +12,8 @@ class IconHelper() {
          * Is intended to scale down, for scaling up more computation costly interpolation should be used (filter parameter).
          * @param desiredHeight in pixels
          */
-        fun loadIcon(resource: Int, desiredHeight: Int): Bitmap {
-            val rawIcon: Bitmap = BitmapFactory.decodeResource(App.getResources(), resource)
+        fun loadIcon(resources: Resources, resource: Int, desiredHeight: Int): Bitmap {
+            val rawIcon: Bitmap = BitmapFactory.decodeResource(resources, resource)
             val desiredScale = desiredHeight.toFloat() / rawIcon.height.toFloat()
             val desiredWidth = desiredScale * rawIcon.width.toFloat()
             return Bitmap.createScaledBitmap(rawIcon, desiredWidth.toInt(), desiredHeight, false)

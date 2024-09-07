@@ -13,7 +13,6 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.permissions.Requirements
 
 @Composable
@@ -40,12 +39,12 @@ private fun handlePermissionGenerically(
     deniedCleanUp: () -> Unit = {},
     launchingCondition: (PermissionState) -> Boolean
 ): PermissionState {
-
+    val context = LocalContext.current
     val permissionDeniedMessage = stringResource(requirements.getMessage())
     val requestPermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (!granted) {
-                Toast.makeText(App.getAppContext(), permissionDeniedMessage, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, permissionDeniedMessage, Toast.LENGTH_LONG).show()
                 deniedCleanUp()
             }
         }

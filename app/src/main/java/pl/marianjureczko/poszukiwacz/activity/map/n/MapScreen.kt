@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -12,7 +13,6 @@ import androidx.navigation.NavController
 import com.mapbox.bindgen.Value
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
@@ -44,9 +44,10 @@ fun MapScreenBody() {
 
 @Composable
 fun MapboxMap(route: Route) {
-    val mapView = MapView(App.getAppContext())
+    val context = LocalContext.current
+    val mapView = MapView(context)
 
-    MapHelper.renderTreasures(route, mapView)
+    MapHelper.renderTreasures(context, route, mapView)
     mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) { style -> hideRoads(style) }
 
     AndroidView({ mapView }, Modifier.fillMaxSize())

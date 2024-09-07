@@ -96,24 +96,24 @@ open class StorageHelper(val context: Context) {
         return outputStream
     }
 
-    fun extractZipStream(inStream: InputStream, progress: ExtractionProgress) {
-        val actualZip = ZipInputStream(inStream)
-        var zipEntry: ZipEntry?
-        var routesDir = this.getRoutesDir().absolutePath
-        if (!routesDir.endsWith("/")) {
-            routesDir = "$routesDir/"
-        }
-        while (actualZip.nextEntry.also { zipEntry = it } != null) {
-            if (zipEntry!!.name.endsWith(".xml")) {
-                val route = extractRoute(actualZip, routesDir)
-                progress.routeExtracted(route.name)
-            } else {
-                extractFile(zipEntry!!, actualZip, routesDir)
-                progress.fileExtracted(zipEntry!!.name)
-            }
-        }
-        actualZip.close()
-    }
+//    fun extractZipStream(inStream: InputStream, progress: ExtractionProgress) {
+//        val actualZip = ZipInputStream(inStream)
+//        var zipEntry: ZipEntry?
+//        var routesDir = this.getRoutesDir().absolutePath
+//        if (!routesDir.endsWith("/")) {
+//            routesDir = "$routesDir/"
+//        }
+//        while (actualZip.nextEntry.also { zipEntry = it } != null) {
+//            if (zipEntry!!.name.endsWith(".xml")) {
+//                val route = extractRoute(actualZip, routesDir)
+//                progress.routeExtracted(route.name)
+//            } else {
+//                extractFile(zipEntry!!, actualZip, routesDir)
+//                progress.fileExtracted(zipEntry!!.name)
+//            }
+//        }
+//        actualZip.close()
+//    }
 
     fun routeAlreadyExists(route: Route): Boolean =
         getRouteFile(route.fileName()).exists()

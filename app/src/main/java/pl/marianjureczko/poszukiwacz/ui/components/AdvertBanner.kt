@@ -7,7 +7,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 
 @Composable
@@ -15,9 +14,9 @@ fun AdvertBanner(){
     AndroidView(
         modifier = Modifier.fillMaxWidth(),
         factory = { context ->
-            AdView(App.getAppContext()).apply {
+            AdView(context).apply {
                 setAdSize(AdSize.BANNER)
-                adUnitId = App.getResources().getString(R.string.main_ad)
+                adUnitId = context.resources.getString(R.string.main_ad)
                 loadAd(AdRequest.Builder().build())
             }
         }

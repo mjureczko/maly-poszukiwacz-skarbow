@@ -29,13 +29,6 @@ class MapViewModel @Inject constructor(
     }
 
     private fun loadRoute(routeName: String): Route {
-//        return Route(
-//            "Kalinowice", mutableListOf(
-//                TreasureDescription(
-//                    1, 25.1, 26.1, "g01abc", null, null
-//                )
-//            )
-//        )
         return storageHelper.loadRoute(routeName)
     }
 }

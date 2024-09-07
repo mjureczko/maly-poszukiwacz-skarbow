@@ -28,13 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.CommemorativeSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.CommemorativeSharedViewModel
@@ -130,16 +130,17 @@ private fun DoPhotoButton(
 ) {
     val successMsg = stringResource(R.string.photo_replaced)
     val failureMsg = stringResource(R.string.photo_not_replaced)
+    val context = LocalContext.current
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
         onResult = { success ->
             if (success) {
-                Toast.makeText(App.getAppContext(), successMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, successMsg, Toast.LENGTH_SHORT).show()
                 sharedViewModel.handleDoCommemorativePhotoResult(
                     sharedState.route.treasures.find { it.id == localState.treasureDesId }!!
                 )()
             } else {
-                Toast.makeText(App.getAppContext(), failureMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, failureMsg, Toast.LENGTH_SHORT).show()
             }
         }
     )

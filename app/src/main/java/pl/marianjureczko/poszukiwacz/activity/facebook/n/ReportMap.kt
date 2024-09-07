@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook.n
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -45,7 +46,7 @@ class ReportMap(
             snapshotter.start { snapshot ->
                 snapshot?.bitmap()?.let { bitmap ->
                     val mapCanvas = Canvas(bitmap)
-                    drawChests(model.route, snapshot, model.progress, mapCanvas)
+                    drawChests(context.resources, model.route, snapshot, model.progress, mapCanvas)
                     if (showRouteSelected()) {
                         drawRoute(snapshot, mapCanvas)
                     }
@@ -113,9 +114,9 @@ class ReportMap(
         return snapshotter
     }
 
-    private fun drawChests(route: Route, snapshot: MapSnapshotInterface, progress: TreasuresProgress, canvas: Canvas) {
-        val closedChest = IconHelper.loadIcon(R.drawable.chest_closed_small, 41)
-        val openedChest = IconHelper.loadIcon(R.drawable.chest_very_small, 41)
+    private fun drawChests(resources: Resources, route: Route, snapshot: MapSnapshotInterface, progress: TreasuresProgress, canvas: Canvas) {
+        val closedChest = IconHelper.loadIcon(resources, R.drawable.chest_closed_small, 41)
+        val openedChest = IconHelper.loadIcon(resources, R.drawable.chest_very_small, 41)
         route.treasures.forEach { t ->
             val xy = snapshot.screenCoordinate(Point.fromLngLat(t.longitude, t.latitude))
             val chestToDraw = if (progress.collectedTreasuresDescriptionId.contains(t.id)) {

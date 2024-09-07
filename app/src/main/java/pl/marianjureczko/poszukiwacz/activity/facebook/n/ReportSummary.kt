@@ -28,7 +28,7 @@ class ReportSummary(
             val textY = currentTop + 50
             var x = ReportCommons.REPORT_MARGIN
             canvas.drawText(summaryText, x, textY, textPaint)
-            val gold = IconHelper.loadIcon(R.drawable.gold, 40)
+            val gold = IconHelper.loadIcon(context.resources, R.drawable.gold, 40)
             x += summarySize
             canvas.drawBitmap(gold, x, currentTop + 20, null)
 
@@ -36,7 +36,7 @@ class ReportSummary(
             val diamondsSize = textPaint.measureText(diamonds)
             x += gold.width + 20
             canvas.drawText(diamonds, x, textY, textPaint)
-            val diamond = IconHelper.loadIcon(R.drawable.diamond, 50)
+            val diamond = IconHelper.loadIcon(context.resources, R.drawable.diamond, 50)
             x += diamondsSize
             canvas.drawBitmap(diamond, x, currentTop + 10, null)
 
@@ -44,7 +44,7 @@ class ReportSummary(
             val rubiesSize = textPaint.measureText(rubies)
             x += diamond.width + 20
             canvas.drawText(rubies, x, textY, textPaint)
-            val ruby = IconHelper.loadIcon(R.drawable.ruby, 50)
+            val ruby = IconHelper.loadIcon(context.resources, R.drawable.ruby, 50)
             x += rubiesSize
             canvas.drawBitmap(ruby, x, currentTop + 10, null)
         }

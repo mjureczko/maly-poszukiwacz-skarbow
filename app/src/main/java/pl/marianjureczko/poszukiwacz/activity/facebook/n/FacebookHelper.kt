@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.FACEBOOK_PATH
 
@@ -21,7 +20,7 @@ object FacebookHelper {
             if (isFacebookInstalled(context)) {
                 navController.navigate(FACEBOOK_PATH)
             } else {
-                Toast.makeText(App.getAppContext(), noFacebookErrorMsg, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, noFacebookErrorMsg, Toast.LENGTH_LONG).show()
             }
         }
         return goToFacebook

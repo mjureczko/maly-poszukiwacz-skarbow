@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook.n
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.core.content.res.ResourcesCompat
@@ -44,7 +45,7 @@ class ReportGenerator {
         val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, height.toInt(), Bitmap.Config.ARGB_8888)
 
         val canvas = Canvas(bitmap)
-        createBackground(canvas, height)
+        createBackground(context.resources, canvas, height)
 
         var currentTop = 0f
         title.draw(context, canvas)
@@ -65,19 +66,19 @@ class ReportGenerator {
         mapSummary.draw(context, canvas, currentTop)
         currentTop += mapSummary.height()
 
-        footer.draw(canvas, currentTop)
+        footer.draw(context.resources, canvas, currentTop)
 
         return bitmap
     }
 
-    private fun createBackground(canvas: Canvas, height: Float) {
+    private fun createBackground(resources: Resources, canvas: Canvas, height: Float) {
         val backgroundHeight = 1127
-        val background = IconHelper.loadIcon(R.drawable.background, backgroundHeight)
+        val background = IconHelper.loadIcon(resources, R.drawable.background, backgroundHeight)
         canvas.drawBitmap(background, 0f, 0f, null)
         if (height > backgroundHeight) {
             val partHeight = 138
-            val background1 = IconHelper.loadIcon(R.drawable.background_1, partHeight)
-            val background2 = IconHelper.loadIcon(R.drawable.background_2, partHeight)
+            val background1 = IconHelper.loadIcon(resources, R.drawable.background_1, partHeight)
+            val background2 = IconHelper.loadIcon(resources, R.drawable.background_2, partHeight)
             val parts = mutableListOf(background1, background2)
             var currentY = backgroundHeight.toFloat()
             while (currentY < height) {

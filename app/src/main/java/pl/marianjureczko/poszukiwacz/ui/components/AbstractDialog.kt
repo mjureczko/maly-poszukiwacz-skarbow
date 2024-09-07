@@ -5,9 +5,9 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 
 @Composable
@@ -19,10 +19,11 @@ fun AbstractDialog(
     buttons: @Composable () -> Unit
 ) {
     if (state) {
+        val context = LocalContext.current
         AlertDialog(
             onDismissRequest = { hideIt() },
             modifier = Modifier.border(width = 1.dp, color = colorResource(R.color.colorPrimary)),
-            title = { Text(text = App.getResources().getString(title)) },
+            title = { Text(text = context.resources.getString(title)) },
             text = text,
             buttons = buttons
         )

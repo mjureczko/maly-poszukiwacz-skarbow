@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import pl.marianjureczko.poszukiwacz.App
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.HasCommemorativePhoto
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -45,14 +45,15 @@ fun CommemorativePhotoButton(
         } else {
             val successMsg = stringResource(R.string.photo_saved)
             val failureMsg = stringResource(R.string.photo_not_replaced)
+            val context = LocalContext.current
             val cameraLauncher = rememberLauncherForActivityResult(
                 contract = ActivityResultContracts.TakePicture(),
                 onResult = { success ->
                     if (success) {
                         handleDoPhotoResult()
-                        Toast.makeText(App.getAppContext(), successMsg, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, successMsg, Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(App.getAppContext(), failureMsg, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, failureMsg, Toast.LENGTH_SHORT).show()
                     }
                 }
             )

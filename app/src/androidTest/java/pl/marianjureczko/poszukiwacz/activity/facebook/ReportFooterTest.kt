@@ -24,7 +24,7 @@ class ReportFooterTest : ReportAbstractTest() {
         canvas.drawColor(Color.WHITE)
 
         //when
-        footer.draw(canvas, 0f)
+        footer.draw(context.resources, canvas, 0f)
 
         //then
         //save to hava a reference in case of failing test
