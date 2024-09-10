@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.activity.facebook.n
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -117,9 +118,10 @@ private fun ShareOnFacebookButton(model: FacebookReportModel) {
     Box {
         val context = LocalContext.current
         val sharingErrorMsg = stringResource(R.string.facebook_share_error)
+        val noFacebookErrorMsg = stringResource(id = R.string.facebook_share_impossible)
         LargeButton(R.string.share_button) {
             ReportGenerator().create(context, model) { bitmap ->
-                FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg)
+                FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
             }
         }
         FacebookImage(Modifier.align(AbsoluteAlignment.CenterLeft))
@@ -185,8 +187,7 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
                     modifier = Modifier
                         .padding(1.dp)
                         .height(60.dp)
-                        .clickable { onRotatePhoto(it.index) }
-                    ,
+                        .clickable { onRotatePhoto(it.index) },
                     contentScale = ContentScale.Inside
                 )
             }
@@ -196,10 +197,14 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
 
 object FacebookShareHelper {
 
-    fun shareBitmapOnFacebook(context: Context, bitmap: Bitmap, errorMsg: String) {
+    fun shareBitmapOnFacebook(context: Context, bitmap: Bitmap, errorMsg: String, noFacebookErrorMsg: String) {
         val uri = bitmapToUri(context, bitmap)
         if (uri != null) {
-            shareContent(context, uri)
+            try {
+                shareContent(context, uri)
+            } catch (ex: ActivityNotFoundException) {
+                Toast.makeText(context, noFacebookErrorMsg, Toast.LENGTH_LONG).show()
+            }
         } else {
             Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
         }
