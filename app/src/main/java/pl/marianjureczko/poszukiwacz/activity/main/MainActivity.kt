@@ -52,7 +52,6 @@ val FACEBOOK_ROUTE = "$FACEBOOK_PATH"
 /**
  * Routes creation and selection activity
  */
-//TODO t: check https://developer.android.com/build/build-variants and Product Flavours
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val TAG = javaClass.simpleName
@@ -98,7 +97,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun ComposeRoot(onClickGuide: GoToGuide) {
+fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
     val goToCommemorative: GoToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") }
@@ -112,7 +111,6 @@ private fun ComposeRoot(onClickGuide: GoToGuide) {
         composable(
             route = SEARCHING_ROUTE,
             arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
-//            deepLinks = listOf(navDeepLink { uriPattern = "www.restaurantsapp.details.com/{restaurant_id}" }),
         ) {
             SearchingScreen(
                 navController = navController,

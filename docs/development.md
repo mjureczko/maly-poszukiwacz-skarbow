@@ -223,12 +223,20 @@ In order to refer to one of the variant, for instance to execute unit tests, one
 ```
 $ ./gradlew testCustomDebugUnitTest
 ```
+The above line will execute tests from the "custom" flavors as well as from the "unflavoured" source set, i.e. src/test.
+
 
 # Source sets
 
 For each flavor there has been created a source set with the same name as the flavor.
-There are also dedicated test source sets with the `Test` postfix, i.e. `<flavor>Test`
+There are also dedicated test source sets with the `test` prefix, i.e. `test<flavor>`
 Note that the source sets contains not only source code but also resources and assets.
+The pattern is not followed for the instrumented UI tests.
+For those tests, the source set directory name has and `androidTest` prefix followed by all flavors required to have a vaild build variant, e.g. `androidTestKalinowiceCustomDebug`.
+In order to execute such tests you need and a running emulator, and then execute:
+```
+$ ./gradlew connectedKalinowiceCustomDebugAndroidTest
+```
 
 # Releasing
 

@@ -13,10 +13,16 @@ android {
         applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 23
         targetSdkVersion 34
-        versionCode 7
-        versionName "0.7"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 8
+        versionName "0.8"
+        testInstrumentationRunner "pl.marianjureczko.poszukiwacz.CustomTestRunner"
         manifestPlaceholders = [facebookToken: FACEBOOK_TOKEN]
+        javaCompileOptions {
+            annotationProcessorOptions {
+                // Ensure these options are set for androidTest as well
+                arguments += ["dagger.hilt.android.internal.disableAndroidSuperclassValidation": "true"]
+            }
+        }
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
@@ -43,6 +49,10 @@ android {
             resValue "string", "searching_ad", "ca-app-pub-3940256099942544/6300978111"
             resValue "string", "photo_ad", "ca-app-pub-3940256099942544/6300978111"
         }
+    }
+    kapt {
+        correctErrorTypes = true
+        showProcessorStats = true
     }
     flavorDimensions "assets", "mode"
     productFlavors {
@@ -73,7 +83,13 @@ android {
             setIgnore(true)
         }
     }
-
+    sourceSets {
+        androidTest {
+            manifest.srcFile 'src/androidTest/AndroidManifest.xml'
+            java.srcDirs = ['src/androidTest/java']
+            res.srcDirs = ['src/androidTest/res']
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -125,7 +141,8 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.2"
     implementation "androidx.window:window-java:1.1.0"
     implementation "com.google.dagger:hilt-android:${hilt_version}"
-    kapt "com.google.dagger:hilt-compiler:${hilt_version}"
+    implementation 'com.google.ar:core:1.45.0'
+    kapt "com.google.dagger:hilt-android-compiler:${hilt_version}"
     implementation 'androidx.hilt:hilt-navigation-compose:1.1.0-alpha01'
     implementation 'com.google.accompanist:accompanist-permissions:0.30.1'
     implementation 'commons-io:commons-io:2.11.0'
@@ -152,11 +169,17 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test:core:1.4.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.1"
     androidTestImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
     androidTestImplementation 'org.mockito:mockito-inline:2.13.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    androidTestImplementation 'androidx.test:rules:1.5.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation "com.google.dagger:hilt-android-testing:${hilt_version}"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:${hilt_version}"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 }
 
 configurations {
