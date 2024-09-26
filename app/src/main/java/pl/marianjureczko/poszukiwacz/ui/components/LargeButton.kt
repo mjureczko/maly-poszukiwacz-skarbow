@@ -15,13 +15,21 @@ import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 
 @Composable
-fun LargeButton(title: Int, description: String = "", onClick: () -> Unit) {
+fun LargeButton(title: Int, description: String = "", enabled: Boolean = true, onClick: () -> Unit) {
+    val contentColor = if (enabled) {
+        Color.Black
+    } else {
+        Color.Gray
+    }
     OutlinedButton(
+        enabled = enabled,
         shape = Shapes.large,
-        modifier = Modifier.fillMaxWidth().semantics { contentDescription = description },
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { contentDescription = description },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.White,
-            contentColor = Color.Black
+            contentColor = contentColor
         ),
         border = BorderStroke(2.dp, Color.LightGray),
         elevation = ButtonDefaults.elevation(4.dp),
@@ -29,7 +37,7 @@ fun LargeButton(title: Int, description: String = "", onClick: () -> Unit) {
     ) {
         Text(
             stringResource(title),
-            color = Color.Black
+            color = contentColor
         )
     }
 }

@@ -17,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -45,6 +46,9 @@ const val START_BUTTON = "Start button"
 fun MainScreenBody(goToSearching: GoToSearching) {
     val viewModel: MainViewModel = hiltViewModel()
     val state = viewModel.state.value
+    LaunchedEffect(key1 = "on start"){
+        viewModel.initializeAssets()
+    }
     Column(Modifier.background(colorResource(R.color.colorBackgroundVariant))) {
         Column(
             modifier = Modifier
@@ -93,7 +97,7 @@ fun MainScreenBody(goToSearching: GoToSearching) {
             modifier = Modifier
                 .weight(0.01f)
         )
-        LargeButton(R.string.custom_lets_start, START_BUTTON) {
+        LargeButton(R.string.custom_lets_start, START_BUTTON, enabled = state.assetsCopied) {
             viewModel.restartMessages()
             goToSearching.invoke(CustomInitializerForRoute.routeName)
         }

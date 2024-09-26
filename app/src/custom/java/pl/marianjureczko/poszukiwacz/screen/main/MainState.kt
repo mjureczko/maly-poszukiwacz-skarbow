@@ -5,7 +5,8 @@ import pl.marianjureczko.poszukiwacz.R
 
 data class MainState(
     private val resources: Resources,
-    var messageIndex: Int = 0,
+    val messageIndex: Int = 0,
+    val assetsCopied: Boolean = false,
     val messages : List<Message> = listOf(
         Message(resources.getString(R.string.custom_lead1), R.drawable.al),
         Message(resources.getString(R.string.custom_lead2), R.drawable.kalinowice_wita),
