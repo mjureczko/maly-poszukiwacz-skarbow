@@ -9,14 +9,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 
 @Composable
-fun LargeButton(title: Int, onClick: () -> Unit) {
+fun LargeButton(title: Int, description: String = "", onClick: () -> Unit) {
     OutlinedButton(
         shape = Shapes.large,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().semantics { contentDescription = description },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.White,
             contentColor = Color.Black

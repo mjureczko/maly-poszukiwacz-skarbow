@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -34,6 +35,11 @@ import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
+
+const val GUIDE_TEXT = "Guide text"
+const val GUIDE_IMAGE = "Guide image"
+const val NEXT_GUIDE_BUTTON = "Next guide button"
+const val START_BUTTON = "Start button"
 
 @Composable
 fun MainScreenBody(goToSearching: GoToSearching) {
@@ -55,7 +61,7 @@ fun MainScreenBody(goToSearching: GoToSearching) {
                 text = state.messages[state.messageIndex].text,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Justify,
-                modifier = Modifier.semantics { contentDescription = "TEST" }
+                modifier = Modifier.semantics { contentDescription = GUIDE_TEXT }
             )
             Row(
                 modifier = Modifier
@@ -64,10 +70,12 @@ fun MainScreenBody(goToSearching: GoToSearching) {
                     .height(150.dp),
                 horizontalArrangement = Arrangement.End,
             ) {
+                val imageId = state.messages[state.messageIndex].imageId
                 Image(
-                    painterResource(state.messages[state.messageIndex].imageId),
-                    contentDescription = null,
+                    painterResource(imageId),
+                    contentDescription = GUIDE_IMAGE,
                     contentScale = ContentScale.Inside,
+                    modifier = Modifier.testTag(imageId.toString())
                 )
             }
         }
@@ -85,7 +93,7 @@ fun MainScreenBody(goToSearching: GoToSearching) {
             modifier = Modifier
                 .weight(0.01f)
         )
-        LargeButton(R.string.custom_lets_start) {
+        LargeButton(R.string.custom_lets_start, START_BUTTON) {
             viewModel.restartMessages()
             goToSearching.invoke(CustomInitializerForRoute.routeName)
         }
@@ -104,6 +112,7 @@ private fun NextButton(viewModel: MainViewModel) {
         ),
         border = BorderStroke(2.dp, Color.LightGray), // Border color and thickness
         elevation = ButtonDefaults.elevation(4.dp),
+        modifier = Modifier.semantics { contentDescription = NEXT_GUIDE_BUTTON },
         content = {
             Image(
                 imageVector = Icons.Rounded.ArrowForward,

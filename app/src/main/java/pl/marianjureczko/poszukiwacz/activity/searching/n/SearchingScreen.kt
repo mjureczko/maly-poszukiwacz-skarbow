@@ -66,6 +66,8 @@ import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
 import java.net.URLEncoder
 
+const val COMPASS = "Compass"
+
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -231,7 +233,8 @@ fun Compass(arcRotation: Float, modifier: Modifier) {
         modifier = modifier
             .padding(15.dp)
             .fillMaxWidth()
-            .height(0.40.dh),
+            .height(0.40.dh)
+            .semantics { contentDescription = COMPASS },
         contentAlignment = Alignment.Center
     ) {
         Image(
