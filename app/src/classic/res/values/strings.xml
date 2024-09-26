@@ -56,5 +56,5 @@
     <string name="facebook_invalid_roote">It is not possible to share this route</string>
     <string name="facebook_nothing_to_share">There is currently nothing to share. You can only share routes where the searching has already begun.</string>
     <string name="missing_external_storage_permission">External storage permission is required for exporting game progress into an image.</string>
-
+    <string name="help_path">https://little-treasure-hunter.netlify.app/#/README_en</string>
 </resources>

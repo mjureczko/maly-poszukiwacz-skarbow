@@ -58,5 +58,5 @@
     <string name="facebook_invalid_roote">Nie można opublikować tej trasy</string>
     <string name="facebook_nothing_to_share">Aktualnie nie ma nic do opublikowania. Publikować można tylko trasy na których przynajmniej zaczęły się poszukiwania.</string>
     <string name="missing_external_storage_permission">Pozwolenie na zapisywanie plików jest potrzebne do wyksportowania postępów gry w postaci pliku graficznego.</string>
-
+    <string name="help_path">https://little-treasure-hunter.netlify.app/#/</string>
 </resources>

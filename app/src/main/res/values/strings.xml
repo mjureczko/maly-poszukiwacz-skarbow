@@ -12,7 +12,6 @@
     <string name="photo_tip">Hint</string>
     <string name="no_photo_to_show">No hint has been prepared</string>
     <string name="no_tip_to_play">No hint has been prepared</string>
-    <string name="help_path">https://little-treasure-hunter.netlify.app/#/README_en</string>
     <string name="qr_scanner_msg">Scan the QR code representing the treasure.</string>
     <string name="map_activity_title">Treasures map</string>
     <string name="menu_help">Guide</string>

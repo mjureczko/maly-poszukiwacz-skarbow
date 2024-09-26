@@ -10,7 +10,6 @@
     <string name="photo_replaced">Zdjęcie zostało zastąpione nowym</string>
     <string name="photo_not_replaced">Zdjęcie nie zostało zastąpione nowym</string>
     <string name="photo_tip">Podpowiedź</string>
-    <string name="help_path">https://little-treasure-hunter.netlify.app/#/</string>
     <string name="qr_scanner_msg">Zeskanuj kod QR reprezentujący skarb.</string>
     <string name="map_activity_title">Mapa skarbów</string>
     <string name="menu_help">Instrukcja obsługi</string>
