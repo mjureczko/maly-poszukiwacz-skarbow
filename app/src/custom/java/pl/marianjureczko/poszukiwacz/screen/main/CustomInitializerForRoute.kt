@@ -7,8 +7,8 @@ import java.io.FileOutputStream
 
 //TODO t: add unit test
 class CustomInitializerForRoute(
-    val storageHelper: StorageHelper,
-    val assetManager: AssetManager
+    private val storageHelper: StorageHelper,
+    private val assetManager: AssetManager
 ) {
     companion object {
         const val routeName = "custom"
@@ -22,6 +22,10 @@ class CustomInitializerForRoute(
             copyMedia()
             markIsCopied()
         }
+    }
+
+    fun isAlreadyCopied(): Boolean {
+        return File(pathToDestination + markerFile).exists()
     }
 
     private fun copyRouteDefinition() {
@@ -45,10 +49,6 @@ class CustomInitializerForRoute(
             }
         }
         storageHelper.save(route)
-    }
-
-    private fun isAlreadyCopied(): Boolean {
-        return File(pathToDestination + markerFile).exists()
     }
 
     private fun markIsCopied() {
