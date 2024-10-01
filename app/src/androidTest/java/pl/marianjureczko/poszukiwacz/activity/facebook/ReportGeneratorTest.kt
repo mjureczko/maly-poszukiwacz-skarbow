@@ -25,6 +25,8 @@ import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class ReportGeneratorTest {
+    private val testDispatcher = StandardTestDispatcher()
+
     @Test
     fun shouldCreateImage() {
         //given
@@ -49,7 +51,7 @@ class ReportGeneratorTest {
         StorageHelper(context).save(Route(treasuresProgress.routeName))
 
         //when
-        val model = FacebookViewModel(StorageHelper(context), context.resources, StandardTestDispatcher())
+        val model = FacebookViewModel(StorageHelper(context), context.resources, testDispatcher, testDispatcher)
 //        //MapBox doesn't work in tests
         var state = model.state.value
         val mapIdx = state.elements.indices.find { state.elements[it].type == Type.MAP }!!

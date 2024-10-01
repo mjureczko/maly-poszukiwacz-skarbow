@@ -1,40 +1,83 @@
 package pl.marianjureczko.poszukiwacz.activity.searching.n
 
-import android.content.res.Resources
-import androidx.lifecycle.SavedStateHandle
+import android.content.Context
+import android.location.Location
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.somePositiveInt
 import com.ocadotechnology.gembus.test.someString
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.data.Offset
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.then
 import org.mockito.BDDMockito.times
-import org.mockito.Mock
+import org.mockito.Mockito.mock
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.argumentCaptor
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.any
+import pl.marianjureczko.poszukiwacz.eq
+import pl.marianjureczko.poszukiwacz.model.HunterLocation
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.Coordinates
 
 @ExtendWith(MockitoExtension::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class SharedViewModelTest {
 
     private val dispatcher: TestDispatcher = StandardTestDispatcher()
+    private val scope = TestScope(dispatcher)
 
-    @Mock
-    lateinit var storage: StorageHelper
+    @Test
+    fun `SHOULD update location`() = scope.runTest {
+        //given
+        val context = mock(Context::class.java)
+        val locationProvider = mock(FusedLocationProviderClient::class.java)
+        val locationFetcher = LocationFetcher(context, locationProvider)
+        val fixture = SharedViewModelFixture(dispatcher, locationFetcher = locationFetcher)
+        val captor = argumentCaptor<LocationCallback>()
+        given(locationProvider.requestLocationUpdates(any(LocationRequest::class.java), captor.capture(), eq(null)))
+            .willReturn(mock())
+        val viewModel = fixture.givenMocksForNoProgress()
 
-    @Mock
-    lateinit var locationFetcher: LocationFetcher
+        val location: Location = mock()
+        val locationResult: LocationResult = mock()
+        val latitude = viewModel.state.value.treasuresProgress.selectedTreasure.latitude
+        val longitude = viewModel.state.value.treasuresProgress.selectedTreasure.longitude - 1
+        given(location.getLatitude()).willReturn(latitude)
+        given(location.getLongitude()).willReturn(longitude)
+        val expectedDistance = somePositiveInt(999_999)
+        given(
+            fixture.locationCalculator.distanceInSteps(
+                viewModel.state.value.treasuresProgress.selectedTreasure, location
+            )
+        ).willReturn(expectedDistance)
 
-    @Mock
-    lateinit var savedState: SavedStateHandle
+        //when
+        advanceTimeBy(100L)
+        val locationCallback = captor.firstValue
+        given(locationResult.getLastLocation()).willReturn(location)
+        locationCallback.onLocationResult(locationResult)
 
-    @Mock
-    lateinit var resources: Resources
+        //then
+        assertThat(viewModel.state.value.currentLocation).isEqualTo(location)
+        assertThat(viewModel.state.value.stepsToTreasure).isEqualTo(expectedDistance)
+        assertThat(viewModel.state.value.needleRotation).isCloseTo(90.0f, Offset.offset(0.01f))
+        assertThat(viewModel.state.value.hunterPath.publicLocations)
+            .containsExactly(HunterLocation(Coordinates(latitude, longitude)))
+    }
 
     /**
      * private val scope = TestScope(dispatcher); ... scope.runTest {...} is not used to disable corutines execution
@@ -42,7 +85,7 @@ class SharedViewModelTest {
     @Test
     fun `SHOULD not call goToResults WHEN there is not result of qr code scanning`() {
         //given
-        val fixture = SearchingViewModelFixture(dispatcher)
+        val fixture = SharedViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = some<ScanIntentResult>(overrides = mapOf("contents" to { "" }))
 
@@ -64,7 +107,7 @@ class SharedViewModelTest {
     @Test
     fun `SHOULD return not a treasure WHEN the scanned qr code is not associated with any treasure`() {
         //given
-        val fixture = SearchingViewModelFixture(dispatcher)
+        val fixture = SharedViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = some<ScanIntentResult>(overrides = mapOf("contents" to { someString() }))
 
@@ -87,7 +130,7 @@ class SharedViewModelTest {
     fun `SHOULD return a treasure WHEN the scanned qr code is not associated with a treasure`() {
         //given
         val qrCode = someString()
-        val fixture = SearchingViewModelFixture(dispatcher, firstTreasureQrCode = qrCode)
+        val fixture = SharedViewModelFixture(dispatcher, firstTreasureQrCode = qrCode)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = fixture.givenScanIntentResultForFirstTreasure()
 
@@ -110,7 +153,7 @@ class SharedViewModelTest {
     @Test
     fun `SHOULD return already taken WHEN the scanned qr code is scanned twice`() {
         //given
-        val fixture = SearchingViewModelFixture(dispatcher)
+        val fixture = SharedViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = fixture.givenScanIntentResultForFirstTreasure()
 

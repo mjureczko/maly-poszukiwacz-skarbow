@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.ArcCalculator
+import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
@@ -26,6 +27,8 @@ import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.ScanTreasureCallback
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
+import pl.marianjureczko.poszukiwacz.shared.di.MainDispatcher
 import javax.inject.Inject
 
 const val PARAMETER_ROUTE_NAME = "route_name"
@@ -58,20 +61,23 @@ interface CommemorativeSharedViewModel : DoCommemrative {
 class SharedViewModel @Inject constructor(
     private val storageHelper: StorageHelper,
     private val locationFetcher: LocationFetcher,
-    private val locationCalculator: pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator,
+    private val locationCalculator: LocationCalculator,
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
-    private val dispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
     private val arcCalculator = ArcCalculator()
+    //for test
+    var respawn: Boolean = true
 
     init {
         startFetchingLocation()
         // after between screen navigation location updating may stop, hence needs to be retriggered periodically
-        viewModelScope.launch(dispatcher) {
-            while (true) {
+        viewModelScope.launch(ioDispatcher) {
+            while (respawn) {
                 locationFetcher.stopFetching()
                 startFetchingLocation()
                 delay(20_000)
@@ -116,7 +122,7 @@ class SharedViewModel @Inject constructor(
     }
 
     override fun resultPresented() {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             delay(500)
             if (state.value.treasuresProgress.resultRequiresPresentation == true) {
                 state.value.treasuresProgress.resultRequiresPresentation = false
@@ -164,7 +170,7 @@ class SharedViewModel @Inject constructor(
     }
 
     private fun startFetchingLocation() {
-        locationFetcher.startFetching(1_000, viewModelScope) { location ->
+        locationFetcher.startFetching(1_000, viewModelScope, mainDispatcher) { location ->
             Log.i(TAG, "location updated")
             val selectedTreasure = state.value.treasuresProgress.selectedTreasure
             _state.value = _state.value.copy(

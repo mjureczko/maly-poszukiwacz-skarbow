@@ -5,7 +5,6 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import java.io.File
 import java.io.FileOutputStream
 
-//TODO t: add unit test
 class CustomInitializerForRoute(
     private val storageHelper: StorageHelper,
     private val assetManager: AssetManager

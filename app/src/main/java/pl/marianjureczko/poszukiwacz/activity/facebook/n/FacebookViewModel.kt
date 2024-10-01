@@ -16,6 +16,8 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.di.DefaultDispatcher
+import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import javax.inject.Inject
 
 //TODO: should be configurable for the sake of classic version
@@ -25,7 +27,8 @@ const val ROUTE_NAME = "custom"
 class FacebookViewModel @Inject constructor(
     private val storageHelper: StorageHelper,
     private val resources: Resources,
-    private val dispatcher: CoroutineDispatcher
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private var _state: MutableState<FacebookState> = mutableStateOf(createState())
@@ -40,9 +43,9 @@ class FacebookViewModel @Inject constructor(
     }
 
     fun rotatePhoto(): RotatePhoto = { photoIdx: Int ->
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(defaultDispatcher) {
             state.value.elements[photoIdx].photo?.let {
-                PhotoHelper.rotateGraphicClockwise(it) {
+                PhotoHelper.rotateGraphicClockwise(ioDispatcher, it) {
                     preparePhoto(photoIdx, it)
                 }
             }
@@ -107,7 +110,7 @@ class FacebookViewModel @Inject constructor(
     }
 
     private fun preparePhoto(index: Int, photoFile: String) {
-        viewModelScope.launch(dispatcher) {
+        viewModelScope.launch(defaultDispatcher) {
             val photo = BitmapFactory.decodeFile(photoFile)
             val readyPhoto = PhotoScalingHelper.scalePhotoKeepRatio(photo, 250f, 300f)
             val elements = state.value.elements.toMutableList()

@@ -7,8 +7,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import javax.inject.Inject
 
 const val PARAMETER_TREASURE_DESCRIPTION_ID = "treasure_description_id"
@@ -16,7 +18,8 @@ const val PARAMETER_TREASURE_DESCRIPTION_ID = "treasure_description_id"
 @HiltViewModel
 class CommemorativeViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
-    private val photoHelper: PhotoHelper
+    private val photoHelper: PhotoHelper,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<CommemorativeState> = mutableStateOf(createState())
@@ -35,7 +38,7 @@ class CommemorativeViewModel @Inject constructor(
     fun rotatePhoto() {
         if(state.value.photoPath != null) {
             viewModelScope.launch {
-                PhotoHelper.rotateGraphicClockwise(state.value.photoPath!!) {
+                PhotoHelper.rotateGraphicClockwise(ioDispatcher, state.value.photoPath!!) {
                     // refresh view
                     _state.value = _state.value.copy()
                 }

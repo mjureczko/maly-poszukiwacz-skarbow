@@ -25,6 +25,10 @@ class HunterPath() : Serializable {
     @field:ElementList
     private var locations = mutableListOf<HunterLocation>()
 
+    // Public getter for test purpose
+    val publicLocations: List<HunterLocation>
+        get() = locations
+
     @field:Element(required = false)
     private var start: Date? = null
 

@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.withContext
@@ -25,8 +26,8 @@ class PhotoHelper(
         /**
          * @param photoFile absolute path to graphic file
          */
-        suspend fun rotateGraphicClockwise(photoFile: String, postExecute: Runnable) {
-            val result = withContext(Dispatchers.IO) {
+        suspend fun rotateGraphicClockwise(ioDispatcher: CoroutineDispatcher, photoFile: String, postExecute: Runnable) {
+            val result = withContext(ioDispatcher) {
                 val bitmap = BitmapFactory.decodeFile(photoFile)
                 val matrix = Matrix()
                 matrix.postRotate(90f)

@@ -63,6 +63,7 @@ fun MainScreenBody(goToSearching: GoToSearching) {
             )
             Text(
                 text = state.messages[state.messageIndex].text,
+                style = MaterialTheme.typography.body1,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.semantics { contentDescription = GUIDE_TEXT }

@@ -23,7 +23,9 @@ abstract class ReportAbstractTest {
     val font: Typeface = ResourcesCompat.getFont(context, R.font.akaya_telivigala)!!
     val treasuresProgress: TreasuresProgress = TreasuresProgress(ROUTE_NAME, TreasureDescription.nullObject())
 
-    fun createFacebookViewModel() = FacebookViewModel(storageHelper, context.resources, StandardTestDispatcher())
+    private val testDispatcher = StandardTestDispatcher()
+
+    fun createFacebookViewModel() = FacebookViewModel(storageHelper, context.resources, testDispatcher, testDispatcher)
 
     fun saveEmptyProgress() = storageHelper.save(treasuresProgress)
 

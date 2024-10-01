@@ -9,12 +9,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     resources: Resources,
-    private val dispatcher: CoroutineDispatcher,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val customInitializerForRoute: CustomInitializerForRoute
 ) : ViewModel() {
     private var _state = mutableStateOf(MainState(resources))
