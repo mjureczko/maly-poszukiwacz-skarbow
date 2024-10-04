@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz
 
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -12,6 +13,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.Before
 import org.junit.Rule
 import pl.marianjureczko.poszukiwacz.activity.main.MainActivity
+import pl.marianjureczko.poszukiwacz.screen.main.START_BUTTON
 
 open class UiTest {
     @get:Rule(order = 0)
@@ -47,5 +49,21 @@ open class UiTest {
     fun assertImageIsDisplayed(drawableId: Int) {
         composeRule.onNodeWithTag(drawableId.toString())
             .assertIsDisplayed()
+    }
+
+    protected fun goToSearching() {
+        var buttonDisabled = true
+        while (buttonDisabled) {
+            try {
+                composeRule
+                    .onNodeWithContentDescription(START_BUTTON)
+                    .assertIsEnabled()
+                buttonDisabled = false
+            } catch (ex: AssertionError) {
+                Thread.sleep(100)
+            }
+        }
+        performClick(START_BUTTON)
+        composeRule.waitForIdle()
     }
 }

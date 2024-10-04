@@ -67,6 +67,7 @@ import pl.marianjureczko.poszukiwacz.ui.isOnStack
 import java.net.URLEncoder
 
 const val COMPASS = "Compass"
+const val STEPS_TO_TREASURE = "Steps to treasure"
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -263,7 +264,9 @@ fun Steps(stepsToTreasure: Int?) {
     ) {
         if (stepsToTreasure != null) {
             Text(
-                modifier = Modifier.padding(start = 40.dp),
+                modifier = Modifier
+                    .padding(start = 40.dp)
+                    .semantics { contentDescription = STEPS_TO_TREASURE },
                 style = MaterialTheme.typography.h2,
                 color = Color.Gray,
                 text = stepsToTreasure.toString()
