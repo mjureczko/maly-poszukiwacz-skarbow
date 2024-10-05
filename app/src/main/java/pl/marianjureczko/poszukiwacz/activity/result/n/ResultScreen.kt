@@ -220,6 +220,7 @@ private fun PlayButton(
 ) {
     if (isPlayVisible) {
         Image(
+            //TODO: move play image to custom
             painterResource(R.drawable.play),
             modifier = Modifier
                 .padding(10.dp)

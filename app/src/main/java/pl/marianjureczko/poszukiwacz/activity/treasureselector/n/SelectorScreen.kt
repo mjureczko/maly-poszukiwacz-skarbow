@@ -202,6 +202,7 @@ fun TreasureItem(
 fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, goToResult: GoToResultWithTreasure) {
     if (state.isTreasureCollected(treasure.id)) {
         Image(
+            //TODO: move movie image to custom
             painterResource(R.drawable.movie),
             modifier = Modifier
                 .padding(2.dp)
