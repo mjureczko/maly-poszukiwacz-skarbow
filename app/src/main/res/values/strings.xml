@@ -1,4 +1,5 @@
 <resources>
+    <string name="generic_app_name">Little Treasure Hunter</string>
     <string name="mapbox_access_token" translatable="false">pk.eyJ1IjoibWFyaWFuanVyZWN6a28iLCJhIjoiY2w5aGJkZnA4MWJncDNwbDl6NWU5ZmI0byJ9.55910AZH-1fwb9pC4-XX5A</string>
     <string name="ok">OK</string>
     <string name="yes">Yes</string>

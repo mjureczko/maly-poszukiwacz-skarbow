@@ -19,9 +19,12 @@ class ReportTitle(
     }
 
     private fun title(context: Context, canvas: Canvas, titlePaint: Paint, progress: TreasuresProgress) {
-        canvas.drawText(context.getString(R.string.app_name), ReportCommons.reportWidthAsFloat() / 2, 100f, titlePaint)
+        canvas.drawText(context.getString(R.string.generic_app_name), ReportCommons.reportWidthAsFloat() / 2, 100f, titlePaint)
         val maxTitleLength = 20
-        val routeName = if (progress.routeName.length > maxTitleLength) "${progress.routeName.subSequence(0, maxTitleLength)}..." else progress.routeName
+        // TODO: route name should be variant specific
+        // var routeName = progress.routeName
+        var routeName = "Kalinowice"
+        routeName = if (routeName.length > maxTitleLength) "${routeName.subSequence(0, maxTitleLength)}..." else routeName
         canvas.drawText("${context.getString(R.string.report_from_expedition)} \"$routeName\"", ReportCommons.reportWidthAsFloat() / 2, 150f, titlePaint)
     }
 }

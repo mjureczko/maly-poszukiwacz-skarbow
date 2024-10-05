@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="generic_app_name">Mały Poszukiwacz Skarbów</string>
     <string name="ok">OK</string>
     <string name="yes">Tak</string>
     <string name="no">Nie</string>

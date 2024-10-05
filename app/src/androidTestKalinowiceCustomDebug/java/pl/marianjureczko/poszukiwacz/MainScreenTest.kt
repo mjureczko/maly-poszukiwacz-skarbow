@@ -8,7 +8,6 @@ import org.junit.Test
 import pl.marianjureczko.poszukiwacz.activity.searching.n.COMPASS
 import pl.marianjureczko.poszukiwacz.screen.main.GUIDE_TEXT
 import pl.marianjureczko.poszukiwacz.screen.main.NEXT_GUIDE_BUTTON
-import pl.marianjureczko.poszukiwacz.screen.main.START_BUTTON
 
 //@UninstallModules(SingletonModule::class)
 @HiltAndroidTest
@@ -50,7 +49,7 @@ class MainScreenTest : UiTest() {
     @Test
     fun shouldStartTheSearching() {
         // when
-        performClick(START_BUTTON)
+        goToSearching()
 
         //then
         val node = getNode(COMPASS)
