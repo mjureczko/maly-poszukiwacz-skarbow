@@ -6,7 +6,7 @@
     <string name="route_name_prompt">Enter route name:</string>
     <string name="stop_recording">Stop the recording</string>
     <string name="close">Close</string>
-    <string name="route_remove_prompt">"Are you sure you want to delete the %1$s list?"</string>
+    <string name="route_remove_prompt">"Are you sure you want to delete the %1$s route?"</string>
     <string name="latitude">Latitude:</string>
     <string name="longitude">Longitude:</string>
     <string name="route">Route</string>

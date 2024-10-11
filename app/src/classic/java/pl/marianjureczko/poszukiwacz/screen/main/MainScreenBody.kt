@@ -57,7 +57,7 @@ fun MainScreenBody(goToSearching: GoToSearching) {
             Toast.makeText(context, "Clicked Bluetooth", Toast.LENGTH_SHORT).show()
         }
         EnterTextDialog(
-            state = state.showNewRouteDialog,
+            visible = state.newRoute.showDialog,
             hideIt = { viewModel.hideNewRouteDialog() },
             title = R.string.route_name_prompt
         ) { routeName -> viewModel.createNewRouteByName(routeName) }
@@ -66,7 +66,7 @@ fun MainScreenBody(goToSearching: GoToSearching) {
             { viewModel.hideOverrideRouteDialog() },
             R.string.overwritting_route
         ) {
-            viewModel.replaceRouteWithNewOne(state.newRouteName)
+            viewModel.replaceRouteWithNewOne(state.newRoute.routeName)
         }
         AdvertBanner()
     }
@@ -97,12 +97,12 @@ fun RouteItem(item: Route, viewModel: MainViewModel, onDelete: DeleteRoute, goTo
             )
             EmbeddedButton(Icons.TwoTone.Edit) { print("TODO") }
             EmbeddedButton(Icons.TwoTone.Share) { print("TODO") }
-            EmbeddedButton(Icons.TwoTone.Delete) { viewModel.openConfirmDeleteDialog() }
+            EmbeddedButton(Icons.TwoTone.Delete) { viewModel.openConfirmDeleteDialog(item.name) }
 
             YesNoDialog(
-                state = viewModel.state.value.showConfirmDeleteDialog,
+                state = viewModel.state.value.deleteConfirmation.showDialog,
                 hideIt = { viewModel.hideConfirmDeleteDialog() },
-                title = R.string.overwritting_route,
+                titleString = viewModel.state.value.deleteConfirmation.confirmationPrompt,
                 onYes = onDelete
             )
         }

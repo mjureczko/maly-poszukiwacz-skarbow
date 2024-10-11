@@ -68,6 +68,7 @@ import java.net.URLEncoder
 
 const val COMPASS = "Compass"
 const val STEPS_TO_TREASURE = "Steps to treasure"
+const val SCAN_TREASURE_BUTTON = "Scan treasure"
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -346,7 +347,7 @@ private fun ScanTreasureButton(scanQrCallback: GoToQrScanner) {
         modifier = Modifier
             .padding(start = 20.dp)
             .clickable { scanQrCallback() },
-        contentDescription = null,
+        contentDescription = SCAN_TREASURE_BUTTON,
         contentScale = ContentScale.Inside,
     )
 }

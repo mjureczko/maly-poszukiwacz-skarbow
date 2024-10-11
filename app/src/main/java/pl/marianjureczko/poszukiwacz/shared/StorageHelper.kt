@@ -36,7 +36,7 @@ open class StorageHelper(val context: Context) {
 
     fun newCommemorativePhotoFile(): String = newFile("commemorativephoto_", ".jpg")
 
-    fun save(route: Route) {
+    open fun save(route: Route) {
         xmlHelper.writeToFile(route, getRouteFile(route.fileName()))
     }
 
@@ -119,7 +119,7 @@ open class StorageHelper(val context: Context) {
         getRouteFile(route.fileName()).exists()
 
 
-    fun loadAll(): MutableList<Route> {
+    open fun loadAll(): MutableList<Route> {
         val dir = getRoutesDir()
         return dir.listFiles()
             .filter { it.name.lowercase().endsWith(".xml") }
@@ -139,7 +139,7 @@ open class StorageHelper(val context: Context) {
         return xmlHelper.loadRouteFromFile(routeFile)
     }
 
-    fun remove(toRemove: Route) {
+    open fun remove(toRemove: Route) {
         toRemove.treasures.iterator().forEach {
             removeTipFiles(it)
         }
@@ -158,7 +158,7 @@ open class StorageHelper(val context: Context) {
         }
     }
 
-    fun removeRouteByName(name: String) {
+    open fun removeRouteByName(name: String) {
         loadAll()
             .filter { it -> it.name == name }
             .forEach { it -> remove(it) }

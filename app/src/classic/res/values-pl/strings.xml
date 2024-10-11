@@ -6,7 +6,7 @@
     <string name="route_name_prompt">Podaj nazwę trasy:</string>
     <string name="stop_recording">Zatrzymaj nagrywanie</string>
     <string name="close">Zamknij</string>
-    <string name="route_remove_prompt">Czy na pewno chcesz skasować listę %1$s?</string>
+    <string name="route_remove_prompt">Czy na pewno chcesz skasować trasę %1$s?</string>
     <string name="latitude">"Szerokość:"</string>
     <string name="longitude">"Długość:"</string>
     <string name="route">Trasa</string>

@@ -12,18 +12,20 @@ import pl.marianjureczko.poszukiwacz.R
 
 @Composable
 fun AbstractDialog(
-    state: Boolean,
+    visible: Boolean,
     hideIt: () -> Unit,
-    title: Int,
+    title: Int?,
+    titleString: String? = null,
     text: @Composable (() -> Unit)? = null,
     buttons: @Composable () -> Unit
 ) {
-    if (state) {
+    if (visible) {
         val context = LocalContext.current
+        val titleToShow = titleString ?: context.resources.getString(title!!)
         AlertDialog(
             onDismissRequest = { hideIt() },
             modifier = Modifier.border(width = 1.dp, color = colorResource(R.color.colorPrimary)),
-            title = { Text(text = context.resources.getString(title)) },
+            title = { Text(text = titleToShow) },
             text = text,
             buttons = buttons
         )

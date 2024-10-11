@@ -21,6 +21,7 @@ import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 @HiltAndroidTest
 class SearchingScreenTest : UiTest() {
 
+    //TODO: introduce ports that are installed in different hilt module and replace them in tests
     @RequiresApi(Build.VERSION_CODES.S)
     @Test
     fun shouldUpdateNavigationWidgets_whenLocationIsUpdated() {

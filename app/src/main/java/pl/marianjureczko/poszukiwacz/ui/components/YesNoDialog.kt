@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 
 @Composable
-fun YesNoDialog(state: Boolean, hideIt: () -> Unit, title: Int, onYes: () -> Unit) {
-    AbstractDialog(state, hideIt, title,
+fun YesNoDialog(state: Boolean, hideIt: () -> Unit, title: Int? = null, titleString: String? = null, onYes: () -> Unit) {
+    AbstractDialog(state, hideIt, title, titleString,
         buttons = {
             Row(
                 modifier = Modifier

@@ -4,8 +4,17 @@ import pl.marianjureczko.poszukiwacz.model.Route
 
 data class MainState(
     var routes: List<Route> = emptyList(),
-    var showNewRouteDialog: Boolean = false,
+    val newRoute: NewRoute = NewRoute(),
     var showOverrideRouteDialog: Boolean = false,
-    var showConfirmDeleteDialog: Boolean = false,
-    var newRouteName: String = "",
+    val deleteConfirmation: DeleteConfirmation = DeleteConfirmation()
+)
+
+data class DeleteConfirmation(
+    val showDialog: Boolean = false,
+    val confirmationPrompt: String = ""
+)
+
+data class NewRoute(
+    var showDialog: Boolean = false,
+    var routeName: String = ""
 )
