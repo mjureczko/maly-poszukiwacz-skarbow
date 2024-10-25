@@ -28,7 +28,6 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.ScanTreasureCallback
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
-import pl.marianjureczko.poszukiwacz.shared.di.MainDispatcher
 import javax.inject.Inject
 
 const val PARAMETER_ROUTE_NAME = "route_name"
@@ -60,12 +59,11 @@ interface CommemorativeSharedViewModel : DoCommemrative {
 @HiltViewModel
 class SharedViewModel @Inject constructor(
     private val storageHelper: StorageHelper,
-    private val locationFetcher: LocationFetcher,
+    private val locationPort: LocationPort,
     private val locationCalculator: LocationCalculator,
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
@@ -74,15 +72,7 @@ class SharedViewModel @Inject constructor(
     var respawn: Boolean = true
 
     init {
-        startFetchingLocation()
-        // after between screen navigation location updating may stop, hence needs to be retriggered periodically
-        viewModelScope.launch(ioDispatcher) {
-            while (respawn) {
-                locationFetcher.stopFetching()
-                startFetchingLocation()
-                delay(20_000)
-            }
-        }
+        locationPort.startFetching(viewModelScope, updatedLocationCallback())
     }
 
     override val state: State<SharedState>
@@ -164,13 +154,12 @@ class SharedViewModel @Inject constructor(
 
     override fun onCleared() {
         Log.i(TAG, "ViewModel cleared")
-        locationFetcher.stopFetching()
+        locationPort.stopFetching()
         state.value.mediaPlayer.release()
         super.onCleared()
     }
 
-    private fun startFetchingLocation() {
-        locationFetcher.startFetching(1_000, viewModelScope, mainDispatcher) { location ->
+    private fun updatedLocationCallback() : UpdateLocationCallback = { location ->
             Log.i(TAG, "location updated")
             val selectedTreasure = state.value.treasuresProgress.selectedTreasure
             _state.value = _state.value.copy(
@@ -191,7 +180,6 @@ class SharedViewModel @Inject constructor(
                 storageHelper.save(state.value.hunterPath)
             }
         }
-    }
 
     private fun createState(): SharedState {
         Log.i(TAG, "Create state")

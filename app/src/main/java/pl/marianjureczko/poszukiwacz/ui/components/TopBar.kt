@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -31,7 +32,7 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 
 @Composable
-fun TopBar(navController: NavController, title:String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
+fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
     val showMenu = remember { mutableStateOf(false) }
     TopAppBar(
         navigationIcon = {
@@ -46,12 +47,14 @@ fun TopBar(navController: NavController, title:String, onClickOnGuide: () -> Uni
             IconButton(onClick = { showMenu.value = !showMenu.value }) {
                 Icon(imageVector = Icons.Filled.Menu, contentDescription = null, tint = Color.White)
             }
-            DropdownMenu(
-                expanded = showMenu.value,
-                onDismissRequest = { showMenu.value = false }
-            ) {
-                MenuEntry(R.drawable.question_mark, R.string.menu_help, onClickOnGuide)
-                MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClickOnFacebook)
+            MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(0.dp))) {
+                DropdownMenu(
+                    expanded = showMenu.value,
+                    onDismissRequest = { showMenu.value = false }
+                ) {
+                    MenuEntry(R.drawable.question_mark, R.string.menu_help, onClickOnGuide)
+                    MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClickOnFacebook)
+                }
             }
         },
 

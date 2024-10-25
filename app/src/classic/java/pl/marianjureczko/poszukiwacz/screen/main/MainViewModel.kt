@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import javax.inject.Inject
 
@@ -52,19 +53,20 @@ class MainViewModel @Inject constructor(
         _state.value = _state.value.copy(deleteConfirmation = newValue)
     }
 
-    fun createNewRouteByName(routeName: String) {
+    fun createNewRouteByName(routeName: String, goToTreasureEditor: GoToTreasureEditor) {
         _state.value = _state.value.copy(newRoute = _state.value.newRoute.copy(routeName = routeName))
         if (routeExists(routeName)) {
             openOverrideRouteDialog()
         } else {
             saveNewRoute(routeName)
-            //TODO: go to edit route screen
+            goToTreasureEditor.invoke(routeName)
         }
     }
 
-    fun replaceRouteWithNewOne(newRouteName: String) {
+    fun replaceRouteWithNewOne(newRouteName: String, goToTreasureEditor: GoToTreasureEditor) {
         storageHelper.removeRouteByName(newRouteName)
         saveNewRoute(newRouteName)
+        goToTreasureEditor.invoke(newRouteName)
     }
 
     fun deleteRoute(route: Route) {

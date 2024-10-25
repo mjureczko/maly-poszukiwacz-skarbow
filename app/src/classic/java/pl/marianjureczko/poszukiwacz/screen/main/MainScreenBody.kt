@@ -29,6 +29,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.DeleteRoute
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
+import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
 import pl.marianjureczko.poszukiwacz.ui.components.EnterTextDialog
@@ -36,16 +37,16 @@ import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 
 @Composable
-fun MainScreenBody(goToSearching: GoToSearching) {
+fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSearching) {
     val viewModel: MainViewModel = hiltViewModel()
     val state = viewModel.state.value
-    Column(/*Modifier.background(PrimaryBackground)*/) {
+    Column {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
             modifier = Modifier.weight(0.99f)
         ) {
             items(state.routes) { route ->
-                RouteItem(route, viewModel, { viewModel.deleteRoute(route) }, goToSearching)
+                RouteItem(route, viewModel, { viewModel.deleteRoute(route) }, goToTreasureEditor, goToSearching)
             }
         }
         Spacer(modifier = Modifier.weight(0.01f))
@@ -60,20 +61,26 @@ fun MainScreenBody(goToSearching: GoToSearching) {
             visible = state.newRoute.showDialog,
             hideIt = { viewModel.hideNewRouteDialog() },
             title = R.string.route_name_prompt
-        ) { routeName -> viewModel.createNewRouteByName(routeName) }
+        ) { routeName -> viewModel.createNewRouteByName(routeName, goToTreasureEditor) }
         YesNoDialog(
             state.showOverrideRouteDialog,
             { viewModel.hideOverrideRouteDialog() },
             R.string.overwritting_route
         ) {
-            viewModel.replaceRouteWithNewOne(state.newRoute.routeName)
+            viewModel.replaceRouteWithNewOne(state.newRoute.routeName, goToTreasureEditor)
         }
         AdvertBanner()
     }
 }
 
 @Composable
-fun RouteItem(item: Route, viewModel: MainViewModel, onDelete: DeleteRoute, goToSearching: GoToSearching) {
+fun RouteItem(
+    item: Route,
+    viewModel: MainViewModel,
+    onDelete: DeleteRoute,
+    goToTreasureEditor: GoToTreasureEditor,
+    goToSearching: GoToSearching
+) {
     Card(
         elevation = 4.dp,
         modifier = Modifier
@@ -95,7 +102,7 @@ fun RouteItem(item: Route, viewModel: MainViewModel, onDelete: DeleteRoute, goTo
                     .fillMaxWidth()
                     .weight(0.5f)
             )
-            EmbeddedButton(Icons.TwoTone.Edit) { print("TODO") }
+            EmbeddedButton(Icons.TwoTone.Edit) { goToTreasureEditor(item.name) }
             EmbeddedButton(Icons.TwoTone.Share) { print("TODO") }
             EmbeddedButton(Icons.TwoTone.Delete) { viewModel.openConfirmDeleteDialog(item.name) }
 

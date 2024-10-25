@@ -19,3 +19,5 @@ typealias RotatePhoto = (Int) -> Unit
 typealias ScanTreasureCallback = (ScanIntentResult?) -> Unit
 typealias UpdateSubtitlesLine = (String) -> Unit
 typealias GoToCommemorative = (Int) -> Unit
+
+typealias GoToTreasureEditor = (String) -> Unit

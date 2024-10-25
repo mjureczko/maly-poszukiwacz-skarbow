@@ -45,8 +45,8 @@ class SharedViewModelTest {
         //given
         val context = mock(Context::class.java)
         val locationProvider = mock(FusedLocationProviderClient::class.java)
-        val locationFetcher = LocationFetcher(context, locationProvider)
-        val fixture = SharedViewModelFixture(dispatcher, locationFetcher = locationFetcher)
+        val locationPort = LocationPort(context, locationProvider, dispatcher, dispatcher)
+        val fixture = SharedViewModelFixture(dispatcher, locationPort = locationPort)
         val captor = argumentCaptor<LocationCallback>()
         given(locationProvider.requestLocationUpdates(any(LocationRequest::class.java), captor.capture(), eq(null)))
             .willReturn(mock())

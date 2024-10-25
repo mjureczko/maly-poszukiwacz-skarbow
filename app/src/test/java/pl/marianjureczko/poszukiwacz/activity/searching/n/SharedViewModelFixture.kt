@@ -18,7 +18,7 @@ data class SharedViewModelFixture(
     val routeName: String = someString(),
     val firstTreasureQrCode: String = someString(),
     val storage: StorageHelper = mock(StorageHelper::class.java),
-    val locationFetcher: LocationFetcher = mock(LocationFetcher::class.java),
+    val locationPort: LocationPort = mock(LocationPort::class.java),
     val locationCalculator: LocationCalculator = mock(),
     val savedState: SavedStateHandle = mock(SavedStateHandle::class.java),
     val photoHelper: PhotoHelper = mock(PhotoHelper::class.java)
@@ -35,11 +35,10 @@ data class SharedViewModelFixture(
         BDDMockito.given(photoHelper.getCommemorativePhotoTempUri()).willReturn(mock(Uri::class.java))
         val result = SharedViewModel(
             storage,
-            locationFetcher,
+            locationPort,
             locationCalculator,
             photoHelper,
             savedState,
-            testDispatcher,
             testDispatcher
         )
         result.respawn = false;

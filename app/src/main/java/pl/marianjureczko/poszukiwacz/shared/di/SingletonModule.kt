@@ -3,8 +3,6 @@ package pl.marianjureczko.poszukiwacz.shared.di
 import android.content.Context
 import android.content.res.AssetManager
 import android.content.res.Resources
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +11,6 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.activity.searching.n.LocationFetcher
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.StorageHelper
@@ -82,17 +79,5 @@ object SingletonModule {
     @Provides
     fun locationCalculator(): LocationCalculator {
         return LocationCalculator()
-    }
-
-    @Singleton
-    @Provides
-    fun fusedLocationClient(@ApplicationContext context: Context): FusedLocationProviderClient {
-        return LocationServices.getFusedLocationProviderClient(context)
-    }
-
-    @Singleton
-    @Provides
-    fun locationService(@ApplicationContext appContext: Context, locationClient: FusedLocationProviderClient): LocationFetcher {
-        return LocationFetcher(appContext, locationClient)
     }
 }

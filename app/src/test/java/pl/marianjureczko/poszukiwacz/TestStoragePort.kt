@@ -1,10 +1,11 @@
-package pl.marianjureczko.poszukiwacz.shared
+package pl.marianjureczko.poszukiwacz
 
 import com.ocadotechnology.gembus.test.some
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 
-class TestStorage : StorageHelper(mock()) {
+class TestStoragePort : StorageHelper(mock()) {
     val routes: MutableMap<String, Route> = mutableMapOf()
 
     init {
@@ -13,6 +14,7 @@ class TestStorage : StorageHelper(mock()) {
     }
 
     override fun loadAll(): MutableList<Route> = routes.values.toMutableList()
+    override fun loadRoute(name: String): Route = routes[name]!!
     override fun save(route: Route) {
         routes[route.name] = route
     }

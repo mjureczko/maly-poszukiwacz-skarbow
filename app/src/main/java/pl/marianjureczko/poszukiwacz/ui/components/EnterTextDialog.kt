@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +45,7 @@ fun EnterTextDialog(
         text = {
             Column {
                 TextField(
+                    textStyle = MaterialTheme.typography.body1,
                     modifier = Modifier.focusRequester(focusRequester),
                     shape = RoundedCornerShape(0),
                     value = text.value,
@@ -62,7 +65,6 @@ fun EnterTextDialog(
                     modifier = Modifier.width(140.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                     onClick = {
-                        focusManager.clearFocus()
                         hideIt()
                         onClick(text.value)
                         text.value = ""
@@ -76,6 +78,11 @@ fun EnterTextDialog(
     if (visible) {
         LaunchedEffect(key1 = "on start") {
             focusRequester.requestFocus()
+        }
+        DisposableEffect(key1 = "on dispose") {
+            onDispose {
+                focusManager.clearFocus()
+            }
         }
     }
 }

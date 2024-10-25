@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.TestStoragePort
 import pl.marianjureczko.poszukiwacz.eq
-import pl.marianjureczko.poszukiwacz.shared.TestStorage
+import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 
 class MainViewModelTest {
 
-    val storage: TestStorage = TestStorage()
+    val storage: TestStoragePort = TestStoragePort()
     val resources: Resources = mock()
 
     @Test
@@ -99,7 +100,7 @@ class MainViewModelTest {
         val viewModel = MainViewModel(storage, resources)
 
         //when
-        viewModel.createNewRouteByName(route.name)
+        viewModel.createNewRouteByName(route.name, {})
 
         //then
         val actualState = viewModel.state.value
@@ -114,9 +115,11 @@ class MainViewModelTest {
         val route = storage.loadAll()[0]
         val viewModel = MainViewModel(storage, resources)
         val newRouteName = someString()
+        var calledName = ""
+        val goToTreasureEditor: GoToTreasureEditor = { calledName = it }
 
         //when
-        viewModel.createNewRouteByName(newRouteName)
+        viewModel.createNewRouteByName(newRouteName, goToTreasureEditor)
 
         //then
         val actualState = viewModel.state.value
@@ -125,7 +128,7 @@ class MainViewModelTest {
         assertThat(storage.routes.values).contains(route)
         assertThat(storage.routes[newRouteName]!!.name).isEqualTo(newRouteName)
         assertThat(storage.routes[newRouteName]!!.treasures).isEmpty()
-        //TODO: verify go to edit screen
+        assertThat(calledName).isEqualTo(newRouteName)
     }
 
     @Test
@@ -134,13 +137,16 @@ class MainViewModelTest {
         val route = storage.loadAll()[0]
         val viewModel = MainViewModel(storage, resources)
         val routeName = route.name
+        var calledName = ""
+        val goToTreasureEditor: GoToTreasureEditor = { calledName = it }
 
         //when
-        viewModel.replaceRouteWithNewOne(routeName)
+        viewModel.replaceRouteWithNewOne(routeName, goToTreasureEditor)
 
         //then
         assertThat(storage.routes[routeName]!!.name).isEqualTo(routeName)
         assertThat(storage.routes[routeName]!!.treasures).isEmpty()
+        assertThat(calledName).isEqualTo(routeName)
     }
 
     @Test

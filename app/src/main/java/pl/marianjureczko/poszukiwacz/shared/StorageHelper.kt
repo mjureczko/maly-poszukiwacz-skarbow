@@ -134,7 +134,7 @@ open class StorageHelper(val context: Context) {
     }
 
     @Throws(FileNotFoundException::class)
-    fun loadRoute(name: String): Route {
+    open fun loadRoute(name: String): Route {
         val routeFile = getRouteFile(name)
         return xmlHelper.loadRouteFromFile(routeFile)
     }
@@ -243,6 +243,5 @@ open class StorageHelper(val context: Context) {
             }
         }
     }
-
 }
 
