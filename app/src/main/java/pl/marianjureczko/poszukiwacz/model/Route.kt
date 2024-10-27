@@ -9,6 +9,7 @@ import java.io.Serializable
 @Root
 data class Route(
     @field:Element var name: String,
+    //TODO t: remove mutability
     @field:ElementList var treasures: MutableList<TreasureDescription>
 ) : Serializable {
     constructor() : this("", ArrayList())
@@ -31,6 +32,9 @@ data class Route(
         }
     }
 
+    fun getTreasureDescriptionById(id: Int): TreasureDescription? = treasures.find { it.id == id }
+
+    //TODO t: remove remove()
     fun remove(td: TreasureDescription, storageHelper: StorageHelper) {
         treasures.remove(td)
         storageHelper.removeTipFiles(td)

@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someInt
 import org.apache.commons.io.FileUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -47,6 +48,31 @@ class RouteTest {
     @BeforeEach
     fun cleanup() {
         FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.routesDirectory))
+    }
+
+    @Test
+    fun `SHOULD return TreasureDescription WHEN there is a match with requested id`() {
+        //given
+        val route = some<Route>()
+        val existingId = route.treasures.last().id
+
+        //when
+        val actual = route.getTreasureDescriptionById(existingId)
+
+        //then
+        assertThat(actual).isEqualTo(route.treasures.last())
+    }
+
+    @Test
+    fun `SHOULD return null WHEN there is no TreasureDescription with requested id`() {
+        //given
+        val route = some<Route>()
+
+        //when
+        val actual = route.getTreasureDescriptionById(someInt())
+
+        //then
+        assertThat(actual).isNull()
     }
 
     @Test

@@ -69,12 +69,17 @@ fun TreasureEditorScreen(
                 onClickOnFacebook
             )
         },
-        content = { _ -> TreasureEditorScreenBody(state) }
+        content = { _ ->
+            TreasureEditorScreenBody(
+                state,
+                { viewModel.addTreasure() },
+                { id -> viewModel.removeTreasure(id) })
+        }
     )
 }
 
 @Composable
-fun TreasureEditorScreenBody(state: TreasureEditorState) {
+fun TreasureEditorScreenBody(state: TreasureEditorState, addTreasure: () -> Unit, removeTreasure: (Int) -> Unit) {
     Column {
 
         LazyColumn(
@@ -82,12 +87,12 @@ fun TreasureEditorScreenBody(state: TreasureEditorState) {
             modifier = Modifier.weight(0.99f)
         ) {
             items(state.route.treasures) { treasure ->
-                TreasureItem(treasure)
+                TreasureItem(treasure, removeTreasure)
             }
         }
         Spacer(modifier = Modifier.weight(0.02f))
         LiveMap(state.route)
-        LocationBar(state.locationBarData())
+        LocationBar(state.locationBarData(), addTreasure)
         Spacer(modifier = Modifier.weight(0.001f))
         val isInPreview = LocalInspectionMode.current
         if (!isInPreview) {
@@ -97,7 +102,7 @@ fun TreasureEditorScreenBody(state: TreasureEditorState) {
 }
 
 @Composable
-private fun TreasureItem(treasure: TreasureDescription) {
+private fun TreasureItem(treasure: TreasureDescription, removeTreasure: (Int) -> Unit) {
     Card(
         elevation = 4.dp,
         modifier = Modifier.padding(4.dp)
@@ -119,7 +124,7 @@ private fun TreasureItem(treasure: TreasureDescription) {
             )
             EmbeddedButton(Icons.TwoTone.CameraAlt) {}
             EmbeddedButton(Icons.TwoTone.Mic) {}
-            EmbeddedButton(Icons.TwoTone.Delete) {}
+            EmbeddedButton(Icons.TwoTone.Delete) { removeTreasure.invoke(treasure.id) }
         }
     }
 }
@@ -148,7 +153,7 @@ fun LiveMap(route: Route) {
 }
 
 @Composable
-fun LocationBar(location: LocationBarData) {
+fun LocationBar(location: LocationBarData, addTreasure: () -> Unit) {
     Row(
         modifier = Modifier.padding(4.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -179,7 +184,7 @@ fun LocationBar(location: LocationBarData) {
                 .padding(start = 70.dp, top = 8.dp)
                 .height(50.dp)
                 .width(70.dp)
-                .clickable(enabled = location.buttonEnabled) { },
+                .clickable(enabled = location.buttonEnabled, onClick = addTreasure),
             contentDescription = "Add treasure button",
             contentScale = ContentScale.FillBounds,
         )
@@ -192,6 +197,7 @@ fun TreasureEditorScreenBodyPreview() {
     TreasureEditorScreenBody(
         TreasureEditorState(
             Route("name", mutableListOf(TreasureDescription())), null
-        )
+        ),
+        {}, {}
     )
 }

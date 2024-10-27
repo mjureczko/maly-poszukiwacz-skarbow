@@ -40,7 +40,7 @@ open class StorageHelper(val context: Context) {
         xmlHelper.writeToFile(route, getRouteFile(route.fileName()))
     }
 
-    fun save(progress: TreasuresProgress) {
+    open fun save(progress: TreasuresProgress) {
         xmlHelper.writeToFile(progress, getProgressFile(progress.routeName))
     }
 
@@ -48,7 +48,7 @@ open class StorageHelper(val context: Context) {
         xmlHelper.writeToFile(hunterPath, getHunterPathFile(hunterPath.routeName))
     }
 
-    fun loadProgress(routeName: String): TreasuresProgress? {
+    open fun loadProgress(routeName: String): TreasuresProgress? {
         val file = getProgressFile(routeName)
         return if (file.exists()) {
             try {
@@ -143,13 +143,16 @@ open class StorageHelper(val context: Context) {
         toRemove.treasures.iterator().forEach {
             removeTipFiles(it)
         }
-        getProgressFile(toRemove.name).delete()
+        removeProgress(toRemove.name)
         val fileToRemove = getRouteFile(toRemove.fileName())
         fileToRemove.delete()
     }
 
+    open fun removeProgress(routeName: String) {
+        getProgressFile(routeName).delete()
+    }
 
-    fun removeTipFiles(treasureDescription: TreasureDescription) {
+    open fun removeTipFiles(treasureDescription: TreasureDescription) {
         if (treasureDescription.tipFileName != null) {
             File(treasureDescription.tipFileName!!).delete()
         }
