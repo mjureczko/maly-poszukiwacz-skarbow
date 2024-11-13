@@ -13,8 +13,8 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
 
 @Disabled("the SUT is to replace")
 @ExtendWith(MockitoExtension::class)

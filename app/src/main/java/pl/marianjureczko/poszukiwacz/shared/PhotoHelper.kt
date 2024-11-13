@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.withContext
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 import java.io.FileOutputStream
 
@@ -94,8 +95,9 @@ class PhotoHelper(
         if (!photoFile.exists()) {
             photoFile.createNewFile()
         }
-        //TODO: t configurable classic vs kalinowice
-        return FileProvider.getUriForFile(context, "pl.marianjureczko.poszukiwacz.kalinowice.fileprovider", photoFile)
+        return FileProvider.getUriForFile(context, context.packageName + ".fileprovider", photoFile)
     }
+
+    fun createPhotoUri(photoFile: String): Uri = createPhotoUri(File(photoFile))
 }
 

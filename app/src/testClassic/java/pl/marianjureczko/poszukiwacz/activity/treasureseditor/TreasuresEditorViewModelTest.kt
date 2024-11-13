@@ -3,10 +3,9 @@ package pl.marianjureczko.poszukiwacz.activity.treasureseditor
 import androidx.lifecycle.SavedStateHandle
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.*
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 @ExtendWith(MockitoExtension::class)
 internal class TreasuresEditorViewModelTest {

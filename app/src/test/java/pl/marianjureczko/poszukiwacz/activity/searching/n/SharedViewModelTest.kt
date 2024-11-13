@@ -32,6 +32,7 @@ import pl.marianjureczko.poszukiwacz.eq
 import pl.marianjureczko.poszukiwacz.model.HunterLocation
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
+import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 
 @ExtendWith(MockitoExtension::class)
 @OptIn(ExperimentalCoroutinesApi::class)

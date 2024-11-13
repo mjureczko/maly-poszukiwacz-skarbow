@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportCommemorativePhotos
 import pl.marianjureczko.poszukiwacz.activity.facebook.n.ReportCommons
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 import java.util.UUID
 

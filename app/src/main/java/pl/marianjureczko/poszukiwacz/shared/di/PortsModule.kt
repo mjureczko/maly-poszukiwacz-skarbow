@@ -9,7 +9,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import pl.marianjureczko.poszukiwacz.activity.searching.n.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
+import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import javax.inject.Singleton
 
 @Module
@@ -31,5 +32,13 @@ object PortsModule {
         @MainDispatcher mainDispatcher: CoroutineDispatcher
     ): LocationPort {
         return LocationPort(appContext, locationClient, ioDispatcher, mainDispatcher)
+    }
+
+    @Singleton
+    @Provides
+    fun photoPort(
+        @ApplicationContext appContext: Context
+    ): CameraPort {
+        return CameraPort(appContext)
     }
 }

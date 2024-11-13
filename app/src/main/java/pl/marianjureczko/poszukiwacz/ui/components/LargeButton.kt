@@ -1,6 +1,8 @@
 package pl.marianjureczko.poszukiwacz.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
@@ -26,7 +28,8 @@ fun LargeButton(title: Int, description: String = "", enabled: Boolean = true, o
         shape = Shapes.large,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { contentDescription = description },
+            .semantics { contentDescription = description }
+            .clickable { Log.d("LargeButton", "LargeButton: ") },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.White,
             contentColor = contentColor

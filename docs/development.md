@@ -238,6 +238,63 @@ In order to execute such tests you need and a running emulator, and then execute
 $ ./gradlew connectedKalinowiceCustomDebugAndroidTest
 ```
 
+# Internal dependencies
+
+```mermaid
+graph LR
+    subgraph UseCases
+        AddTreasureDescriptionToRoute
+        ....
+    end
+
+    subgraph Screen
+        Commemorative
+        Facebook
+        Main
+        Map
+        Photo
+        Result
+        Searching
+        TresureSelector
+    end
+
+    subgraph UI
+        Components
+    end
+
+    subgraph Port
+        LocationPort
+        PhotoPort
+        StoragePort
+    end
+
+    subgraph Model
+        Route
+        ...
+    end
+
+    StoragePort --o StoragePortAPI
+
+    Screen --> Components
+    Screen --> UseCases
+    Screen --> Port
+    Screen --> Model
+
+    UseCases --> StoragePortAPI
+    UseCases -->  Model
+
+    Port --> Model
+```
+
+The arcs show dependencies.
+Model should not depend on anything.
+Use cases may depend only on the model and possibly on port APIs (that can be an interface or a potential interface).
+Screens are on top of the dependencies tree and may depend on anything.
+However, internally should have some structure.
+Only frontend code depends on the UI.
+The frontend code should maximize usage of state and minimize coupling to ViewModel, while only the ViewModels should depend on ports and use cases.
+Ports should wrap all external dependencies to make it possible to mock them in tests.
+
 # Releasing
 
 To build aab file execute:

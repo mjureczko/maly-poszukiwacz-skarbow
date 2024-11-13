@@ -59,4 +59,5 @@
     <string name="facebook_nothing_to_share">Aktualnie nie ma nic do opublikowania. Publikować można tylko trasy na których przynajmniej zaczęły się poszukiwania.</string>
     <string name="missing_external_storage_permission">Pozwolenie na zapisywanie plików jest potrzebne do wyksportowania postępów gry w postaci pliku graficznego.</string>
     <string name="help_path">https://little-treasure-hunter.netlify.app/#/</string>
+    <string name="recording_permission_not_granted">Aby nagrywać podpowiedzi, zezwól aplikacji na dostęp do mikrofonu.</string>
 </resources>

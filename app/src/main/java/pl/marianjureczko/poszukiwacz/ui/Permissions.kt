@@ -15,13 +15,16 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import pl.marianjureczko.poszukiwacz.permissions.Requirements
 
+/**
+ * Android allows only one permission request to be presented to the user at a time.
+ * Therefore, before requesting a new permission, the system must verify that the user has already responded
+ * to the previous request.
+ * This ensures that permission requests are handled sequentially.
+ */
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
-fun handlePermission(requirements: Requirements): PermissionState {
-    return handlePermissionGenerically(requirements) { permission ->
-        permission.status.isGranted || !permission.status.shouldShowRationale
-    }
-}
+fun canAskForNextPermission(previousPermissionState: PermissionState) =
+    previousPermissionState.status.isGranted || previousPermissionState.status.shouldShowRationale
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
@@ -29,6 +32,14 @@ fun handlePermissionWithExitOnDenied(requirements: Requirements) {
     val activity = LocalContext.current as? Activity
     handlePermissionGenerically(requirements, { activity?.finish() }) { permission ->
         !permission.status.isGranted
+    }
+}
+
+@Composable
+@OptIn(ExperimentalPermissionsApi::class)
+fun handlePermission(requirements: Requirements): PermissionState {
+    return handlePermissionGenerically(requirements) { permission ->
+        permission.status.isGranted || !permission.status.shouldShowRationale
     }
 }
 

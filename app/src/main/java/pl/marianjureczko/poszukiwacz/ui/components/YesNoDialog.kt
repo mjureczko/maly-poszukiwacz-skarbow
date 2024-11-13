@@ -7,31 +7,47 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 
 @Composable
-fun YesNoDialog(state: Boolean, hideIt: () -> Unit, title: Int? = null, titleString: String? = null, onYes: () -> Unit) {
+fun YesNoDialog(
+    state: Boolean,
+    hideIt: () -> Unit,
+    title: Int? = null,
+    titleString: String? = null,
+    onYes: () -> Unit
+) {
     AbstractDialog(state, hideIt, title, titleString,
         buttons = {
-            Row(
-                modifier = Modifier
-                    .padding(all = 16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                TextButton(onClick = {
-                    onYes()
-                    hideIt()
-                }) {
-                    Text(stringResource(R.string.yes))
+                Row(
+                    modifier = Modifier
+                        .padding(all = 16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TextButton(
+                        onClick = {
+                            onYes()
+                            hideIt()
+                        }) {
+                        Text(stringResource(R.string.yes))
+                    }
+                    TextButton(onClick = { hideIt() }) {
+                        Text(stringResource(R.string.no))
+                    }
                 }
-                TextButton(onClick = { hideIt() }) {
-                    Text(stringResource(R.string.no))
-                }
-            }
         }
     )
+}
+
+@Preview(apiLevel = 31)
+@Composable
+fun YesNoDialogPreview() {
+    YesNoDialog(true, {}, null, "title", {})
 }

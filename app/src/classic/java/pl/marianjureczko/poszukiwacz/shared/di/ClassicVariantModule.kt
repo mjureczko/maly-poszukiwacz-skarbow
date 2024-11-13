@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
 import javax.inject.Singleton

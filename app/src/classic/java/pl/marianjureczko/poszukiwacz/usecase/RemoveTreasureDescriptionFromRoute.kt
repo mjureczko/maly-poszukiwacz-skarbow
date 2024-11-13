@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.usecase
 
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 class RemoveTreasureDescriptionFromRoute(
     private val storage: StorageHelper

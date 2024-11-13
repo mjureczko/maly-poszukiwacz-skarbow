@@ -83,7 +83,7 @@ fun SearchingScreen(
     goToFacebook: GoToFacebook,
     goToCommemorative: GoToCommemorative
 ) {
-    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto)
+    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
     val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasure.id}"
@@ -144,10 +144,9 @@ private fun SearchingScreenBody(
             CommemorativePhotoButton(
                 cameraPermissionState.status.isGranted,
                 state,
-                state.tempPhotoFileLocation,
                 state.treasuresProgress.selectedTreasure,
                 goToCommemorative,
-                viewModel.handleDoCommemorativePhotoResult(state.treasuresProgress.selectedTreasure),
+                viewModel,
                 Modifier.align(Alignment.TopEnd).padding(15.dp)
             )
         }

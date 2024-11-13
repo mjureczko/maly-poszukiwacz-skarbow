@@ -3,26 +3,30 @@ package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 import androidx.lifecycle.SavedStateHandle
 import com.ocadotechnology.gembus.test.some
 import org.mockito.BDDMockito.given
-import org.mockito.Mockito
+import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.TestLocationPort
 import pl.marianjureczko.poszukiwacz.TestStoragePort
 import pl.marianjureczko.poszukiwacz.any
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
 
 class TreasureEditorViewModelFixture(
-    val route: Route
+    val route: Route,
+    val photoHelper: PhotoHelper = mock(PhotoHelper::class.java)
 ) {
-    private val stateHandleMock = Mockito.mock<SavedStateHandle>()
+    private val stateHandleMock = mock<SavedStateHandle>()
     val locationPort = TestLocationPort()
     val storage = TestStoragePort()
     val routeName = route.name
     val viewModel: TreasureEditorViewModel
     val addTreasureDescriptionToRoute = AddTreasureDescriptionToRoute(storage)
     val removeTreasureDescriptionFromRoute = RemoveTreasureDescriptionFromRoute(storage)
+    val cameraPort = mock(CameraPort::class.java)
 
     init {
         storage.routes[routeName] = route
@@ -31,6 +35,8 @@ class TreasureEditorViewModelFixture(
             storage,
             stateHandleMock,
             locationPort,
+            cameraPort,
+            photoHelper,
             addTreasureDescriptionToRoute,
             removeTreasureDescriptionFromRoute
         )

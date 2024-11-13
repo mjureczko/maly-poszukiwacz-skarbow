@@ -3,8 +3,6 @@ package pl.marianjureczko.poszukiwacz.screen.main
 import android.content.res.AssetManager
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
-
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
@@ -14,8 +12,8 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
 import java.io.File
 
 @ExtendWith(MockitoExtension::class)

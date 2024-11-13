@@ -1,16 +1,18 @@
 package pl.marianjureczko.poszukiwacz
 
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someString
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 class TestStoragePort : StorageHelper(mock()) {
     val routes: MutableMap<String, Route> = mutableMapOf()
     val requestedTipRemovals: MutableList<Int> = mutableListOf()
     val progresses: MutableMap<String, TreasuresProgress> = mutableMapOf()
+    var newPhotoFile: String = someString()
 
     init {
         val route = some<Route>()
@@ -40,4 +42,5 @@ class TestStoragePort : StorageHelper(mock()) {
     override fun removeProgress(routeName: String) {
         progresses.remove(routeName)
     }
+    override fun newPhotoFile(): String = newPhotoFile
 }

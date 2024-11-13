@@ -66,7 +66,7 @@ fun SelectorScreen(
     goToCommemorative: GoToCommemorative,
     onClickOnFacebook: GoToFacebook
 ) {
-    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingPhoto)
+    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
@@ -189,10 +189,9 @@ fun TreasureItem(
             CommemorativePhotoButton(
                 cameraPermission.status.isGranted,
                 state,
-                localState.tempPhotoFileLocation,
                 treasure,
                 goToCommemorative,
-                sharedViewModel.handleDoCommemorativePhotoResult(treasure)
+                sharedViewModel
             )
         }
     }

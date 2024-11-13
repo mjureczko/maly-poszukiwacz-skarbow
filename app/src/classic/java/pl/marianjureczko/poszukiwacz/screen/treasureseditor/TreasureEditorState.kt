@@ -1,11 +1,20 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
+
+typealias OverrideQuestionProvider = (TreasureDescription) -> Boolean
 
 data class TreasureEditorState(
     val route: Route,
-    val currentLocation: Coordinates?
+    val currentLocation: Coordinates?,
+    val overridePhotoQuestionProvider: OverrideQuestionProvider,
+    val overrideSoundTipQuestionProvider: OverrideQuestionProvider,
+    val showSoundRecordingDialog: Boolean = false,
+    val fileForTipRecording: String? = null,
+    val showOverridePhotoDialog: Boolean = false,
+    val showOverrideSoundTipDialog: Boolean = false
 ) {
     fun locationBarData(): LocationBarData {
         val formatter = CoordinatesFormatter()

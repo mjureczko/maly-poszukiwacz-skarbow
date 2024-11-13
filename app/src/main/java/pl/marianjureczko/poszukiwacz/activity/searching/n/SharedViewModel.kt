@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -12,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.ArcCalculator
@@ -22,37 +24,40 @@ import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
-import pl.marianjureczko.poszukiwacz.shared.DoPhotoResultHandler
+import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.ScanTreasureCallback
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
+import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
+import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Inject
 
 const val PARAMETER_ROUTE_NAME = "route_name"
 
-interface DoCommemrative {
-    fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler
+interface DoCommemorative {
+    @Composable
+    fun getDoPhoto(cameraPermissionGranted: Boolean, treasureDesId: Int): DoPhoto
 }
 
 interface ResultSharedViewModel {
     fun resultPresented()
 }
 
-interface SearchingViewModel : DoCommemrative {
+interface SearchingViewModel : DoCommemorative {
     val state: State<SharedState>
     fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback
 }
 
-interface SelectorSharedViewModel : DoCommemrative {
+interface SelectorSharedViewModel : DoCommemorative {
     val state: State<SharedState>
     fun updateJustFoundFromSelector()
     fun selectorPresented()
     fun updateSelectedTreasure(treasure: TreasureDescription)
 }
 
-interface CommemorativeSharedViewModel : DoCommemrative {
+interface CommemorativeSharedViewModel : DoCommemorative {
     val state: State<SharedState>
 }
 
@@ -63,11 +68,13 @@ class SharedViewModel @Inject constructor(
     private val locationCalculator: LocationCalculator,
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
+    private val cameraPort: CameraPort,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
     private val arcCalculator = ArcCalculator()
+
     //for test
     var respawn: Boolean = true
 
@@ -141,17 +148,6 @@ class SharedViewModel @Inject constructor(
         )
     }
 
-    override fun handleDoCommemorativePhotoResult(treasure: TreasureDescription): DoPhotoResultHandler {
-        return {
-            val target = _state.value.treasuresProgress.getCommemorativePhoto(treasure)
-                ?: storageHelper.newCommemorativePhotoFile()
-            photoHelper.moveCommemorativePhotoToPermanentLocation(target)
-            state.value.treasuresProgress.addCommemorativePhoto(treasure, target)
-            _state.value = _state.value.copy()
-            storageHelper.save(state.value.treasuresProgress)
-        }
-    }
-
     override fun onCleared() {
         Log.i(TAG, "ViewModel cleared")
         locationPort.stopFetching()
@@ -159,27 +155,50 @@ class SharedViewModel @Inject constructor(
         super.onCleared()
     }
 
-    private fun updatedLocationCallback() : UpdateLocationCallback = { location ->
-            Log.i(TAG, "location updated")
-            val selectedTreasure = state.value.treasuresProgress.selectedTreasure
-            _state.value = _state.value.copy(
-                currentLocation = location,
-                stepsToTreasure = locationCalculator.distanceInSteps(selectedTreasure, location),
-                needleRotation = arcCalculator.degree(
-                    selectedTreasure.longitude,
-                    selectedTreasure.latitude,
-                    location.longitude,
-                    location.latitude
-                ).toFloat(),
-                distancesInSteps = _state.value.route.treasures
-                    .associate { it.id to locationCalculator.distanceInSteps(it, location) }
-                    .toMap()
-            )
-            val currentCoordinates = Coordinates(location.latitude, location.longitude)
-            if (state.value.hunterPath.addLocation(currentCoordinates)) {
-                storageHelper.save(state.value.hunterPath)
-            }
+    @Composable
+    override fun getDoPhoto(
+        cameraPermissionGranted: Boolean,
+        treasureDesId: Int
+    ): DoPhoto {
+        return this.cameraPort.doPhoto(
+            cameraPermissionGranted,
+            R.string.photo_saved,
+            R.string.photo_not_replaced,
+            { photoHelper.getCommemorativePhotoTempUri() },
+            { handleDoCommemorativePhotoResult(state.value.route.treasures.find { it.id == treasureDesId }!!) }
+        )
+    }
+
+    private fun handleDoCommemorativePhotoResult(treasure: TreasureDescription) {
+        val target = _state.value.treasuresProgress.getCommemorativePhoto(treasure)
+            ?: storageHelper.newCommemorativePhotoFile()
+        photoHelper.moveCommemorativePhotoToPermanentLocation(target)
+        state.value.treasuresProgress.addCommemorativePhoto(treasure, target)
+        _state.value = _state.value.copy()
+        storageHelper.save(state.value.treasuresProgress)
+    }
+
+    private fun updatedLocationCallback(): UpdateLocationCallback = { location ->
+        Log.i(TAG, "location updated")
+        val selectedTreasure = state.value.treasuresProgress.selectedTreasure
+        _state.value = _state.value.copy(
+            currentLocation = location,
+            stepsToTreasure = locationCalculator.distanceInSteps(selectedTreasure, location),
+            needleRotation = arcCalculator.degree(
+                selectedTreasure.longitude,
+                selectedTreasure.latitude,
+                location.longitude,
+                location.latitude
+            ).toFloat(),
+            distancesInSteps = _state.value.route.treasures
+                .associate { it.id to locationCalculator.distanceInSteps(it, location) }
+                .toMap()
+        )
+        val currentCoordinates = Coordinates(location.latitude, location.longitude)
+        if (state.value.hunterPath.addLocation(currentCoordinates)) {
+            storageHelper.save(state.value.hunterPath)
         }
+    }
 
     private fun createState(): SharedState {
         Log.i(TAG, "Create state")
@@ -197,8 +216,7 @@ class SharedViewModel @Inject constructor(
             mediaPlayer,
             route,
             treasuresProgress,
-            hunterPath,
-            photoHelper.getCommemorativePhotoTempUri()
+            hunterPath
         )
     }
 

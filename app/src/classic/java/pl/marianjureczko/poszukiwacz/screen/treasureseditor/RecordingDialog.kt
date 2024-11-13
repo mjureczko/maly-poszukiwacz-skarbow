@@ -1,0 +1,122 @@
+package pl.marianjureczko.poszukiwacz.screen.treasureseditor
+
+import android.media.MediaRecorder
+import android.os.SystemClock
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import kotlinx.coroutines.delay
+import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.treasureseditor.formatTime
+import pl.marianjureczko.poszukiwacz.ui.components.AbstractDialog
+
+@Composable
+fun RecordingDialog(
+    fileName: String,
+    onDismiss: (Long?) -> Unit
+) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var isRecording = remember { mutableStateOf(true) }
+    var startedTime = remember { mutableStateOf(0L) }
+    var closedAt = remember { mutableStateOf<Long?>(null) }
+    val recorder = remember { MediaRecorder() }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                stopRecording(recorder, context)
+                onDismiss(closedAt.value)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            stopRecording(recorder, context)
+        }
+    }
+
+    LaunchedEffect(isRecording.value) {
+        if (isRecording.value) {
+            startRecording(recorder, fileName, context)
+            startedTime.value = SystemClock.elapsedRealtime()
+            while (isRecording.value) {
+                delay(1000)
+                closedAt.value = SystemClock.elapsedRealtime() - startedTime.value
+            }
+        }
+    }
+
+    AbstractDialog(
+        visible = true,
+        hideIt = {
+            isRecording.value = false
+            stopRecording(recorder, context)
+            onDismiss(closedAt.value)
+        },
+        title = null,
+        titleString = formatTime(closedAt.value),
+        buttons = {
+            Row(
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextButton(onClick = {
+                    isRecording.value = false
+                    stopRecording(recorder, context)
+                    onDismiss(closedAt.value)
+                }) {
+                    Text(text = context.getString(R.string.stop_recording))
+                }
+            }
+        },
+    )
+}
+
+private fun startRecording(recorder: MediaRecorder, fileName: String, context: android.content.Context) {
+    recorder.apply {
+        setAudioSource(MediaRecorder.AudioSource.MIC)
+        setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+        setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+        setOutputFile(fileName)
+        try {
+            prepare()
+            start()
+        } catch (e: Exception) {
+            Log.e("RecordingDialog", "Audio recording failed: ${e.message}", e)
+            Toast.makeText(context, context.getString(R.string.tip_recording_failed), Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+private fun stopRecording(recorder: MediaRecorder, context: android.content.Context) {
+    try {
+        recorder.apply {
+            stop()
+            release()
+            Toast.makeText(context, context.getString(R.string.tip_recorded), Toast.LENGTH_SHORT).show()
+        }
+    } catch (e: Exception) {
+        Log.e("RecordingDialog", "Failed to stop recording: ${e.message}", e)
+    }
+}

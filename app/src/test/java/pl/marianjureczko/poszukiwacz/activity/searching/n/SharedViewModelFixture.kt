@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.activity.searching.n
 
-import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.ocadotechnology.gembus.test.some
@@ -11,7 +10,9 @@ import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
+import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 data class SharedViewModelFixture(
     val testDispatcher: CoroutineDispatcher,
@@ -21,7 +22,8 @@ data class SharedViewModelFixture(
     val locationPort: LocationPort = mock(LocationPort::class.java),
     val locationCalculator: LocationCalculator = mock(),
     val savedState: SavedStateHandle = mock(SavedStateHandle::class.java),
-    val photoHelper: PhotoHelper = mock(PhotoHelper::class.java)
+    val photoHelper: PhotoHelper = mock(PhotoHelper::class.java),
+    val cameraPort: CameraPort = mock(CameraPort::class.java)
 ) {
 
     lateinit var route: Route
@@ -32,13 +34,13 @@ data class SharedViewModelFixture(
         route.treasures.first().qrCode = firstTreasureQrCode
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)
         BDDMockito.given(storage.loadProgress(routeName)).willReturn(null)
-        BDDMockito.given(photoHelper.getCommemorativePhotoTempUri()).willReturn(mock(Uri::class.java))
         val result = SharedViewModel(
             storage,
             locationPort,
             locationCalculator,
             photoHelper,
             savedState,
+            cameraPort,
             testDispatcher
         )
         result.respawn = false;

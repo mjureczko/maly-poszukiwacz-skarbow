@@ -4,7 +4,7 @@ import com.ocadotechnology.gembus.test.CustomArranger
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someObjects
 import com.ocadotechnology.gembus.test.someString
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 
 class RouteArranger : CustomArranger<Route>() {

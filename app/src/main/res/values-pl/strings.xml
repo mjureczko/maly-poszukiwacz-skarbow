@@ -8,7 +8,6 @@
     <string name="not_a_treasure_msg">To nie jest skarb!</string>
     <string name="steps_to_treasure">"[%1$d] %2$d kroków do skarbu"</string>
     <string name="photo_saved">Zdjęcie zostało zapisane</string>
-    <string name="photo_replaced">Zdjęcie zostało zastąpione nowym</string>
     <string name="photo_not_replaced">Zdjęcie nie zostało zastąpione nowym</string>
     <string name="photo_tip">Podpowiedź</string>
     <string name="qr_scanner_msg">Zeskanuj kod QR reprezentujący skarb.</string>
@@ -41,6 +40,7 @@
     <string name="save_failed">Zapis nie powiódł się.</string>
     <string name="select_treasure_dialog_title">Wybierz skarb</string>
     <string name="missing_location_permission">Pozwolenie na dostęp do lokalizacji jest niezbędne do rozgrywki. Uruchom ponownie grę albo przejdź do ustawień żeby przyznać dostęp.</string>
-    <string name="missing_photo_permission">Pozwolenie jest potrzebne do zrobienia pomiątkowego zdjęcia z poszukiwania skarbu. Możesz przyznać je później w ustawieniach aplikacji.</string>
-
+    <string name="missing_commemorative_photo_permission">Pozwolenie jest potrzebne do zrobienia pomiątkowego zdjęcia z poszukiwania skarbu. Możesz przyznać je w ustawieniach aplikacji.</string>
+    <string name="missing_tip_photo_permission">Pozwolenie jest potrzebne do zrobienia zdjęcia z podpowiedzią. Możesz przyznać je w ustawieniach aplikacji.</string>
+    <string name="photo_permission_not_granted">Aby robić zdjęcia, zezwól aplikacji na dostęp do aparatu.</string>
 </resources>

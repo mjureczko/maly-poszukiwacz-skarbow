@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.main
 
 import android.content.res.AssetManager
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 class CustomInitializerForRoute(
     val storageHelper: StorageHelper,

@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.TestContext
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 
 class RouteTestParametrized() {
@@ -74,50 +74,6 @@ class RouteTest {
         //then
         assertThat(actual).isNull()
     }
-
-    @Test
-    fun `SHOULD remove treasureDescription files WHEN removing the TreasureDescription from Route`() {
-        //given
-        val route = RouteArranger.savedWithTipFiles(storageHelper)
-        val toRemove = route.treasures[0]
-
-        //when
-        route.remove(toRemove, storageHelper)
-
-        //then
-        assertThat(route.treasures).doesNotContain(toRemove)
-        assertThat(File(toRemove.photoFileName).exists()).isFalse()
-        assertThat(File(toRemove.tipFileName).exists()).isFalse()
-    }
-
-    @Test
-    fun `SHOULD remove selected treasure from progress WHEN the removed TreasureDescription was selected`() {
-        //given
-        val fixture = RouteAndProgressFixture.savedWithSelectedTreasure(storageHelper)
-        val toRemove = fixture.progress.selectedTreasure
-
-        //when
-        fixture.route.remove(toRemove, storageHelper)
-
-        //then
-        val actualProgress = storageHelper.loadProgress(fixture.route.name)!!
-        assertThat(actualProgress.selectedTreasure).isNotEqualTo(toRemove)
-    }
-
-    @Test
-    fun `SHOULD not alter the progress WHEN the removed TreasureDescription was not selected`() {
-        //given
-        val fixture = RouteAndProgressFixture.savedWithoutSelectedTreasure(storageHelper)
-        val toRemove = fixture.route.treasures[1]
-
-        //when
-        fixture.route.remove(toRemove, storageHelper)
-
-        //then
-        val actualProgress = storageHelper.loadProgress(fixture.route.name)
-        assertThat(actualProgress).usingRecursiveComparison().isEqualTo(fixture.progress)
-    }
-
 
     @Test
     fun `SHOULD add prefix to each photo and sound file`() {

@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.usecase
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 class AddTreasureDescriptionToRoute (
     private val storage: StorageHelper

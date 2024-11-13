@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Inject
 
 @HiltViewModel

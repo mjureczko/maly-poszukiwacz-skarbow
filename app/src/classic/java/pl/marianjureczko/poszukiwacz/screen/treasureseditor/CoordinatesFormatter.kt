@@ -3,7 +3,6 @@ package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 import java.text.NumberFormat
 import java.util.Locale
 
-//TODO t: to remove?
 class CoordinatesFormatter {
 
     fun format(cord: Double?): String {

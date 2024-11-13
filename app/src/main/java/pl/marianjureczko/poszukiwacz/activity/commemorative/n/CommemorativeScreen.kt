@@ -3,9 +3,6 @@ package pl.marianjureczko.poszukiwacz.activity.commemorative.n
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,21 +25,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.CommemorativeSharedState
 import pl.marianjureczko.poszukiwacz.activity.searching.n.CommemorativeSharedViewModel
+import pl.marianjureczko.poszukiwacz.activity.searching.n.DoCommemorative
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -65,10 +67,12 @@ fun CommemorativeScreen(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CommemorativeScreenBody(
     viewModelStoreOwner: NavBackStackEntry
 ) {
+    val cameraPermission: PermissionState = handlePermission(RequirementsForDoingCommemorativePhoto)
     val sharedViewModel: CommemorativeSharedViewModel = getViewModel(viewModelStoreOwner)
     val sharedState = sharedViewModel.state.value as CommemorativeSharedState
     val localViewModel: CommemorativeViewModel = hiltViewModel()
@@ -101,7 +105,7 @@ fun CommemorativeScreenBody(
                         .aspectRatio(aspectRatio),
                     contentScale = ContentScale.FillBounds,
                 )
-                DoPhotoButton(sharedViewModel, sharedState, localState)
+                DoPhotoButton(localState, sharedViewModel, cameraPermission.status.isGranted)
                 Image(
                     painter = painterResource(id = R.drawable.rotate_arc),
                     contentDescription = "Rotate commemorative photo",
@@ -124,33 +128,18 @@ fun CommemorativeScreenBody(
 
 @Composable
 private fun DoPhotoButton(
-    sharedViewModel: CommemorativeSharedViewModel,
-    sharedState: CommemorativeSharedState,
-    localState: CommemorativeState
+    localState: CommemorativeState,
+    doCommemorative: DoCommemorative,
+    cameraPermissionGranted: Boolean
 ) {
-    val successMsg = stringResource(R.string.photo_replaced)
-    val failureMsg = stringResource(R.string.photo_not_replaced)
-    val context = LocalContext.current
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture(),
-        onResult = { success ->
-            if (success) {
-                Toast.makeText(context, successMsg, Toast.LENGTH_SHORT).show()
-                sharedViewModel.handleDoCommemorativePhotoResult(
-                    sharedState.route.treasures.find { it.id == localState.treasureDesId }!!
-                )()
-            } else {
-                Toast.makeText(context, failureMsg, Toast.LENGTH_SHORT).show()
-            }
-        }
-    )
+    val doPhoto = doCommemorative.getDoPhoto(cameraPermissionGranted, localState.treasureDesId)
     Image(
         painter = painterResource(id = R.drawable.camera_do_photo),
         contentDescription = "Do a new commemorative photo",
         modifier = Modifier
             .height(50.dp)
             .offset(x = (-10).dp, y = (-10).dp)
-            .clickable { cameraLauncher.launch(localState.tempPhotoFileLocation) },
+            .clickable { doPhoto() },
         contentScale = ContentScale.Inside
     )
 }

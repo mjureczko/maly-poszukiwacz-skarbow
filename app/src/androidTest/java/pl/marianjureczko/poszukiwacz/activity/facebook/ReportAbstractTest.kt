@@ -14,7 +14,7 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.n.ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 abstract class ReportAbstractTest {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext

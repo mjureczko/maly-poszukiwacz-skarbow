@@ -7,8 +7,7 @@
     <string name="treasure_already_taken_msg">"This treasure has already been found!"</string>
     <string name="not_a_treasure_msg">"This is not a treasure!"</string>
     <string name="steps_to_treasure">[%1$d] %2$d steps to treasure</string>
-    <string name="photo_saved">The photo has been saved</string>
-    <string name="photo_replaced">The photo has been replaced with a new one</string>
+    <string name="photo_saved">New photo has been saved</string>
     <string name="photo_not_replaced">New photo has not been saved</string>
     <string name="photo_tip">Hint</string>
     <string name="no_photo_to_show">No hint has been prepared</string>
@@ -44,6 +43,7 @@
     <string name="save_failed">Save failed.</string>
     <string name="select_treasure_dialog_title">Choose a treasure</string>
     <string name="missing_location_permission">Location permission is essential for gameplay. Relaunch the game or go to its settings to grant the permission.</string>
-    <string name="missing_photo_permission">Permission is needed to do a commemorative photo with treasure finding. Enter the application settings to grant it later.</string>
-
+    <string name="missing_commemorative_photo_permission">Permission is needed to do a commemorative photo with treasure finding. Enter the application settings to grant it.</string>
+    <string name="missing_tip_photo_permission">Permission is needed to do a tip photo for stashed treasure. Enter the application settings to grant it.</string>
+    <string name="photo_permission_not_granted">To take photos, allow camera access.</string>">
 </resources>

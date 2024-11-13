@@ -36,7 +36,7 @@ class CommemorativeViewModel @Inject constructor(
     }
 
     fun rotatePhoto() {
-        if(state.value.photoPath != null) {
+        if (state.value.photoPath != null) {
             viewModelScope.launch {
                 PhotoHelper.rotateGraphicClockwise(ioDispatcher, state.value.photoPath!!) {
                     // refresh view
@@ -47,9 +47,10 @@ class CommemorativeViewModel @Inject constructor(
     }
 
     private fun createState(): CommemorativeState {
-        return CommemorativeState(stateHandle.get<Int>(
-            PARAMETER_TREASURE_DESCRIPTION_ID)!!,
+        return CommemorativeState(
+            stateHandle.get<Int>(PARAMETER_TREASURE_DESCRIPTION_ID)!!,
             photoHelper.getCommemorativePhotoTempUri(),
-            null)
+            null
+        )
     }
 }

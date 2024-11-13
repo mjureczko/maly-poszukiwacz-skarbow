@@ -14,7 +14,7 @@ class RemoveTreasureDescriptionFromRouteTest {
     @Test
     fun `SHOULD remove treasure its tips and change selected treasure in progress WHEN both tips exist and removed treasure is selected`() {
         //given
-        val route = some<Route> { treasures = someObjects<TreasureDescription>(2).toMutableList() }
+        val route = some<Route> { treasures = someObjects<TreasureDescription>(2).toList() }
         val fixture = TreasureEditorViewModelFixture(route)
         val toRemove = route.treasures[0]
 
@@ -39,7 +39,7 @@ class RemoveTreasureDescriptionFromRouteTest {
     @Test
     fun `SHOULD remove treasure and its progress WHEN removing the last TreasureDescription`() {
         //given
-        val route = some<Route> { treasures = someObjects<TreasureDescription>(1).toMutableList() }
+        val route = some<Route> { treasures = someObjects<TreasureDescription>(1).toList() }
         val fixture = TreasureEditorViewModelFixture(route)
         val toRemove = route.treasures[0]
 

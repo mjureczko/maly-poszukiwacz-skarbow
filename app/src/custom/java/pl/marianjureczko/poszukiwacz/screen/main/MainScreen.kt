@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
+import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 

@@ -16,7 +16,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import pl.marianjureczko.poszukiwacz.activity.searching.n.STEPS_TO_TREASURE
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
 @HiltAndroidTest
 class SearchingScreenTest : UiTest() {

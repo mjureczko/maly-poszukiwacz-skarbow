@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
 import java.io.File
 
 class StorageHelperTest {

@@ -4,6 +4,7 @@ import com.ocadotechnology.gembus.test.someText
 import org.apache.commons.io.FileUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 
 class PhotoHelperTest  {

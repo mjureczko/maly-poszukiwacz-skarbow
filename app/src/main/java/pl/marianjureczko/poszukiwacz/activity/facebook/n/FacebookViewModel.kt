@@ -15,9 +15,9 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.di.DefaultDispatcher
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Inject
 
 //TODO: should be configurable for the sake of classic version

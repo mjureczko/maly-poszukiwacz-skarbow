@@ -2,7 +2,6 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import android.location.Location
 import android.media.MediaPlayer
-import android.net.Uri
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
@@ -26,7 +25,6 @@ interface SearchingSharedState : HasCommemorativePhoto {
     val stepsToTreasure: Int?
     var needleRotation: Float
     var hunterPath: HunterPath
-    val tempPhotoFileLocation: Uri
     fun treasureFoundAndResultAlreadyPresented(): Boolean
 }
 
@@ -42,14 +40,13 @@ data class SharedState(
     override var currentLocation: Location?,
     override var stepsToTreasure: Int?,
     override var hunterPath: HunterPath,
-    override val tempPhotoFileLocation: Uri,
     override var needleRotation: Float = 0.0f,
     override val distancesInSteps: Map<Int, Int?> = route.treasures
         .associate { it.id to null }
         .toMap(),
 ) : SelectorSharedState, SearchingSharedState, CommemorativeSharedState {
-    constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress, hunterPath: HunterPath, tempPhotoFileLocation: Uri) :
-            this(mediaPlayer, route, treasuresProgress, null, null, hunterPath, tempPhotoFileLocation)
+    constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress, hunterPath: HunterPath) :
+            this(mediaPlayer, route, treasuresProgress, null, null, hunterPath)
 
     override fun isTreasureCollected(treasureId: Int): Boolean =
         treasuresProgress.collectedTreasuresDescriptionId.contains(treasureId)
