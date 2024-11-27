@@ -19,6 +19,12 @@ class TestStoragePort : StorageHelper(mock()) {
         routes[route.name] = route
     }
 
+    fun clear() {
+        routes.clear()
+        requestedTipRemovals.clear()
+        progresses.clear()
+    }
+
     override fun loadAll(): MutableList<Route> = routes.values.toMutableList()
     override fun loadRoute(name: String): Route = routes[name]!!
     override fun save(route: Route) {

@@ -11,11 +11,18 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object PortsModule {
+
+    @Singleton
+    @Provides
+    fun storageHelper(@ApplicationContext appContext: Context): StorageHelper {
+        return StorageHelper(appContext)
+    }
 
     @Singleton
     @Provides

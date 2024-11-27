@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.shared.DeleteRoute
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
@@ -35,6 +34,13 @@ import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
 import pl.marianjureczko.poszukiwacz.ui.components.EnterTextDialog
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
+
+const val NEW_ROUTE_BUTTON = "New route"
+const val CONFIRM_ROUTE_NAME_BUTTON = "Confirm route name"
+const val ENTER_ROUTE_NAME_TITLE = "Enter route name"
+const val ROUTE_NAME_TEXT_EDIT = "Edit route name"
+const val EDIT_ROUTE_BUTTON = "Edit route button"
+const val DELETE_ROUTE_BUTTON = "Delete route button"
 
 @Composable
 fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSearching) {
@@ -46,11 +52,11 @@ fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSe
             modifier = Modifier.weight(0.99f)
         ) {
             items(state.routes) { route ->
-                RouteItem(route, viewModel, { viewModel.deleteRoute(route) }, goToTreasureEditor, goToSearching)
+                RouteItem(route, viewModel, goToTreasureEditor, goToSearching)
             }
         }
         Spacer(modifier = Modifier.weight(0.01f))
-        LargeButton(R.string.new_route_button) {
+        LargeButton(R.string.new_route_button, description = NEW_ROUTE_BUTTON) {
             viewModel.openNewRouteDialog()
         }
         val context = LocalContext.current
@@ -60,7 +66,10 @@ fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSe
         EnterTextDialog(
             visible = state.newRoute.showDialog,
             hideIt = { viewModel.hideNewRouteDialog() },
-            title = R.string.route_name_prompt
+            title = R.string.route_name_prompt,
+            buttonDescription = CONFIRM_ROUTE_NAME_BUTTON,
+            textFieldDescription = ROUTE_NAME_TEXT_EDIT,
+            titleDescription = ENTER_ROUTE_NAME_TITLE
         ) { routeName -> viewModel.createNewRouteByName(routeName, goToTreasureEditor) }
         YesNoDialog(
             state.showOverrideRouteDialog,
@@ -69,6 +78,16 @@ fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSe
         ) {
             viewModel.replaceRouteWithNewOne(state.newRoute.routeName, goToTreasureEditor)
         }
+        YesNoDialog(
+            state = viewModel.state.value.deleteConfirmation.showDialog,
+            hideIt = { viewModel.hideConfirmDeleteDialog() },
+            titleString = viewModel.state.value.deleteConfirmation.confirmationPrompt,
+            onYes = {
+                viewModel.state.value.deleteConfirmation.deleteCandidate?.let { route ->
+                    viewModel.deleteRoute(route)
+                }
+            }
+        )
         AdvertBanner()
     }
 }
@@ -77,7 +96,6 @@ fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSe
 fun RouteItem(
     item: Route,
     viewModel: MainViewModel,
-    onDelete: DeleteRoute,
     goToTreasureEditor: GoToTreasureEditor,
     goToSearching: GoToSearching
 ) {
@@ -102,16 +120,17 @@ fun RouteItem(
                     .fillMaxWidth()
                     .weight(0.5f)
             )
-            EmbeddedButton(Icons.TwoTone.Edit) { goToTreasureEditor(item.name) }
-            EmbeddedButton(Icons.TwoTone.Share) { print("TODO") }
-            EmbeddedButton(Icons.TwoTone.Delete) { viewModel.openConfirmDeleteDialog(item.name) }
-
-            YesNoDialog(
-                state = viewModel.state.value.deleteConfirmation.showDialog,
-                hideIt = { viewModel.hideConfirmDeleteDialog() },
-                titleString = viewModel.state.value.deleteConfirmation.confirmationPrompt,
-                onYes = onDelete
-            )
+            EmbeddedButton(
+                imageVector = Icons.TwoTone.Edit,
+                description = EDIT_ROUTE_BUTTON + item.name
+            ) { goToTreasureEditor(item.name) }
+            EmbeddedButton(imageVector = Icons.TwoTone.Share) { print("TODO") }
+            EmbeddedButton(
+                imageVector = Icons.TwoTone.Delete,
+                description = DELETE_ROUTE_BUTTON + item.name
+            ) {
+                viewModel.openConfirmDeleteDialog(item)
+            }
         }
     }
 }

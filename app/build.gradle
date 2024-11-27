@@ -87,8 +87,13 @@ android {
     sourceSets {
         androidTest {
             manifest.srcFile 'src/androidTest/AndroidManifest.xml'
-            java.srcDirs = ['src/androidTest/java']
+            java.srcDirs = ['src/androidTest/java', 'src/testSharedClone/java']
             res.srcDirs = ['src/androidTest/res']
+            resources.srcDirs = ['src/androidTest/resources', 'src/testSharedClone/resources']
+        }
+        test {
+            java.srcDirs += 'src/testShared/java'
+            resources.srcDirs += 'src/testShared/resources'
         }
     }
     compileOptions {
@@ -148,7 +153,7 @@ dependencies {
     implementation 'com.google.accompanist:accompanist-permissions:0.30.1'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.mapbox.maps:android:10.18.0'
-    implementation 'com.facebook.android:facebook-share:latest.release'
+    implementation 'com.facebook.android:facebook-share:17.0.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'org.apache.commons:commons-math3:3.6.1'
@@ -157,23 +162,28 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
-    testImplementation group: 'com.ocadotechnology.gembus', name: 'test-arranger', version: '1.4.9'
+    testImplementation("com.ocadotechnology.gembus:test-arranger:1.6.4-SNAPSHOT") {
+        exclude group: "dk.brics.automaton", module: "automaton"
+    }
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.26.3'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.12.0'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.4.0'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0'
     testImplementation 'org.mockito.kotlin:mockito-kotlin:5.4.0'
 
+    androidTestImplementation("com.ocadotechnology.gembus:test-arranger:1.6.4-SNAPSHOT") {
+        exclude group: "dk.brics.automaton", module: "automaton"
+    }
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test:core:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.1"
-    androidTestImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
-    androidTestImplementation 'org.mockito:mockito-inline:2.13.0'
+    androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '5.12.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation "com.google.dagger:hilt-android-testing:${hilt_version}"
+
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:${hilt_version}"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"

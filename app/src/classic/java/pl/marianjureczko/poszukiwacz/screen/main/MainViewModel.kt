@@ -40,10 +40,11 @@ class MainViewModel @Inject constructor(
         _state.value = _state.value.copy(showOverrideRouteDialog = false)
     }
 
-    fun openConfirmDeleteDialog(routeName: String) {
+    fun openConfirmDeleteDialog(route: Route) {
         val newValue = _state.value.deleteConfirmation.copy(
             showDialog = true,
-            confirmationPrompt = resources.getString(R.string.route_remove_prompt, routeName)
+            confirmationPrompt = resources.getString(R.string.route_remove_prompt, route.name),
+            deleteCandidate = route
         )
         _state.value = _state.value.copy(deleteConfirmation = newValue)
     }

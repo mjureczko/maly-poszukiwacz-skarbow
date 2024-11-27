@@ -25,11 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
+
+const val TOPBAR_SCREEN_TITLE = "Screen title"
 
 @Composable
 fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
@@ -38,8 +42,8 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 EmbeddedButton(
-                    Icons.Outlined.ArrowBack,
-                    ColorFilter.tint(Color.White)
+                    imageVector = Icons.Outlined.ArrowBack,
+                    colorFilter = ColorFilter.tint(Color.White)
                 ) { navController.navigateUp() }
             }
         },
@@ -59,6 +63,7 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
         },
 
         title = {
+            // TODO t: check replacing Row with Box(maxWidth, Image->left, Text->center)
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,
@@ -73,6 +78,7 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
                     contentScale = ContentScale.FillHeight
                 )
                 Text(
+                    modifier = Modifier.semantics { contentDescription = TOPBAR_SCREEN_TITLE },
                     text = title,
                     color = Color.White,
                     style = MaterialTheme.typography.h6.copy(fontFamily = FontFamily.Default),

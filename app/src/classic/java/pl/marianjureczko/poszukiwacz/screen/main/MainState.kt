@@ -11,7 +11,8 @@ data class MainState(
 
 data class DeleteConfirmation(
     val showDialog: Boolean = false,
-    val confirmationPrompt: String = ""
+    val confirmationPrompt: String = "",
+    val deleteCandidate: Route? = null
 )
 
 data class NewRoute(

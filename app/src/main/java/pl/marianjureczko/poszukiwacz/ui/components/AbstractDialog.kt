@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
@@ -21,6 +23,7 @@ fun AbstractDialog(
     title: Int?,
     titleString: String? = null,
     text: @Composable (() -> Unit)? = null,
+    titleDescription : String = "",
     buttons: @Composable () -> Unit
 ) {
     if (visible) {
@@ -30,7 +33,11 @@ fun AbstractDialog(
             modifier = Modifier.border(width = 1.dp, color = colorResource(R.color.colorPrimary)),
             onDismissRequest = { hideIt() },
             title = { Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .semantics {
+                        contentDescription = titleDescription
+                    },
                 text = titleToShow,
                 style = MaterialTheme.typography.h5,
                 textAlign = TextAlign.Center

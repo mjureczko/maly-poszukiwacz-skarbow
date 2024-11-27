@@ -16,7 +16,7 @@ class MainScreenTest : UiTest() {
 
 
     @Test
-    fun shouldShowGuideWithImages() {
+    fun shouldGuideViewsWithImages_whenArrowIsClicked() {
         //given
 //        composeRule.waitForIdle()
         val text: SemanticsNodeInteraction = getNode(GUIDE_TEXT)

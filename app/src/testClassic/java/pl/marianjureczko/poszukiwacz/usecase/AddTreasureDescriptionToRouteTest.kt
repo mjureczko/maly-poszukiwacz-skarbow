@@ -3,11 +3,9 @@ package pl.marianjureczko.poszukiwacz.usecase
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
-
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.TestStoragePort
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteContainsTreasureWith
@@ -40,7 +38,7 @@ class AddTreasureDescriptionToRouteTest {
     fun shouldAddTreasureDescription_whenAddingSecondTreasureToRoute() {
         //given
         val treasure = some<TreasureDescription>()
-        val route = RouteArranger.saveWithTreasureDescription(treasure, storage)
+        val route = pl.marianjureczko.poszukiwacz.model.RouteArranger.saveWithTreasureDescription(treasure, storage)
 
         //when
         val actualRoute = useCase(route, coordinates)

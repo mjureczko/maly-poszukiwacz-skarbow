@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.main
 
 import android.content.res.Resources
+import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -11,6 +12,7 @@ import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.TestStoragePort
 import pl.marianjureczko.poszukiwacz.eq
+import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 
 class MainViewModelTest {
@@ -67,13 +69,13 @@ class MainViewModelTest {
     fun shouldSetShowDialogAndPromptTextInState_whenRequestingOpeningDeleteConfirmationDialog() {
         //given
         val viewModel = MainViewModel(storage, resources)
-        val routeName = someString()
+        val route = some<Route>()
         val expectedPrompt = someString()
-        given(resources.getString(eq(R.string.route_remove_prompt), eq(routeName)))
+        given(resources.getString(eq(R.string.route_remove_prompt), eq(route.name)))
             .willReturn(expectedPrompt)
 
         //when
-        viewModel.openConfirmDeleteDialog(routeName)
+        viewModel.openConfirmDeleteDialog(route)
 
         //then
         val actual = viewModel.state.value.deleteConfirmation

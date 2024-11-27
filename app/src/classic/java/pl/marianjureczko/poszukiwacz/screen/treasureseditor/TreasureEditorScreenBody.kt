@@ -35,6 +35,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,6 +60,9 @@ import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
+
+const val TREASURE_ITEM_ROW = "Treasure row"
+const val TREASURE_ITEM_TEXT = "Treasure"
 
 @Composable
 fun TreasureEditorScreenBody(
@@ -135,6 +140,7 @@ fun TreasureItem(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth()
+                .semantics { contentDescription = TREASURE_ITEM_ROW }
         ) {
             Text(
                 text = treasure.prettyName(),
@@ -143,6 +149,7 @@ fun TreasureItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(0.5f)
+                    .semantics { contentDescription = "$TREASURE_ITEM_TEXT ${treasure.id}" }
             )
             DoPhotoButton(
                 treasure,
@@ -160,7 +167,7 @@ fun TreasureItem(
                 showOverrideSoundTipDialog,
                 showSoundRecordingDialog
             )
-            EmbeddedButton(Icons.TwoTone.Delete) { removeTreasure(treasure.id) }
+            EmbeddedButton(imageVector = Icons.TwoTone.Delete) { removeTreasure(treasure.id) }
         }
     }
 }
@@ -183,7 +190,7 @@ private fun RecordSoundTipButton(
     }
     val permissionErrorMsg = stringResource(R.string.recording_permission_not_granted)
     val context = LocalContext.current
-    EmbeddedButton(Icons.TwoTone.Mic) {
+    EmbeddedButton(imageVector = Icons.TwoTone.Mic) {
         if (recordingPermissionGranted) {
             if (state.overrideSoundTipQuestionProvider(treasure)) {
                 showOverrideSoundTipDialog()
@@ -216,7 +223,7 @@ private fun DoPhotoButton(
         launchDoPhoto()
     }
 
-    EmbeddedButton(Icons.TwoTone.CameraAlt) {
+    EmbeddedButton(imageVector = Icons.TwoTone.CameraAlt) {
         if (state.overridePhotoQuestionProvider(treasure)) {
             showOverridePhotoDialog()
         } else {

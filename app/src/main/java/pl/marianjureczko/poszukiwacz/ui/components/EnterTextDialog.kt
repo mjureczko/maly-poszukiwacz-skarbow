@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
@@ -33,6 +36,9 @@ fun EnterTextDialog(
     visible: Boolean,
     hideIt: () -> Unit,
     title: Int,
+    textFieldDescription: String = "",
+    buttonDescription: String = "",
+    titleDescription: String = "",
     onClick: (text: String) -> Unit
 ) {
     val text = remember { mutableStateOf("") }
@@ -42,11 +48,16 @@ fun EnterTextDialog(
         visible,
         { text.value = ""; hideIt() },
         title,
+        titleDescription = titleDescription,
         text = {
             Column {
                 TextField(
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .semantics {
+                            contentDescription = textFieldDescription
+                        },
                     textStyle = MaterialTheme.typography.body1,
-                    modifier = Modifier.focusRequester(focusRequester),
                     shape = RoundedCornerShape(0),
                     value = text.value,
                     onValueChange = { text.value = it }
@@ -62,7 +73,11 @@ fun EnterTextDialog(
             ) {
                 Button(
                     shape = Shapes.large,
-                    modifier = Modifier.width(140.dp),
+                    modifier = Modifier
+                        .width(140.dp)
+                        .semantics {
+                            contentDescription = buttonDescription
+                        },
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                     onClick = {
                         hideIt()
@@ -77,11 +92,19 @@ fun EnterTextDialog(
     )
     if (visible) {
         LaunchedEffect(key1 = "on start") {
-            focusRequester.requestFocus()
+            try {
+                focusRequester.requestFocus()
+            } catch (e: Exception) {
+                Log.e("EnterTextDialog", "Ignoring error, we can go on without focus: ${e.message}", )
+            }
         }
         DisposableEffect(key1 = "on dispose") {
             onDispose {
-                focusManager.clearFocus()
+                try {
+                    focusManager.clearFocus()
+                } catch (e: Exception) {
+                    Log.e("EnterTextDialog", "Ignoring error, we can go on without clearing focus: ${e.message}", )
+                }
             }
         }
     }
@@ -90,5 +113,5 @@ fun EnterTextDialog(
 @Preview(showBackground = true, apiLevel = 31)
 @Composable
 fun EnterTextDialogPreview() {
-    EnterTextDialog(true, {}, R.string.app_name, {})
+    EnterTextDialog(true, {}, R.string.app_name) {}
 }

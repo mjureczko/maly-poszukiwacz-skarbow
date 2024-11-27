@@ -65,12 +65,6 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun storageHelper(@ApplicationContext appContext: Context): StorageHelper {
-        return StorageHelper(appContext)
-    }
-
-    @Singleton
-    @Provides
     fun resources(@ApplicationContext appContext: Context): Resources {
         return appContext.resources
     }
