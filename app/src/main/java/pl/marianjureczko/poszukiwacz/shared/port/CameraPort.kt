@@ -17,7 +17,7 @@ open class CameraPort(val context: Context) {
      * @return a callback that should be launched when the do photo button is clicked
      */
     @Composable
-    fun doPhoto(
+    open fun doPhoto(
         permissionGranted: Boolean,
         successMsg: Int,
         failureMsg: Int,

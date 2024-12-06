@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 
 const val YES_BUTTON = "Yes"
+const val NO_BUTTON = "Nope"
 
 @Composable
 fun YesNoDialog(
@@ -45,7 +46,10 @@ fun YesNoDialog(
                             text = stringResource(R.string.yes)
                         )
                     }
-                    TextButton(onClick = { hideIt() }) {
+                    TextButton(
+                        modifier = Modifier.semantics { contentDescription =  NO_BUTTON },
+                        onClick = { hideIt() }
+                    ) {
                         Text(stringResource(R.string.no))
                     }
                 }

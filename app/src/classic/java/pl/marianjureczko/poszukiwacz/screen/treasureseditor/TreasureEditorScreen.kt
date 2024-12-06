@@ -10,6 +10,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingTipPhoto
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForRecordingSound
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
@@ -44,18 +45,18 @@ fun TreasureEditorScreen(
         },
         content = { _ ->
             TreasureEditorScreenBody(
-                state,
-                cameraPermission.status.isGranted,
-                microphonePermission?.status?.isGranted ?: false,
-                { viewModel.hideOverridePhotoDialog() },
-                { viewModel.showOverridePhotoDialog() },
-                { viewModel.hideOverrideSoundTipDialog() },
-                { viewModel.showOverrideSoundTipDialog() },
-                { td -> viewModel.showSoundRecordingDialog(td) },
-                { viewModel.hideSoundRecordingDialog() },
-                { viewModel.addTreasure() },
-                { id -> viewModel.removeTreasure(id) },
-                viewModel
+                state = state,
+                cameraPermissionGranted = cameraPermission.status.isGranted,
+                recordingPermissionGranted = microphonePermission?.status?.isGranted ?: false,
+                hideOverrideSoundTipDialog = { viewModel.hideOverrideSoundTipDialog() },
+                hideOverridePhotoDialog = { viewModel.hideOverridePhotoDialog() },
+                showOverridePhotoDialog = { td: TreasureDescription -> viewModel.showOverridePhotoDialog(td) },
+                showOverrideSoundTipDialog = { td: TreasureDescription -> viewModel.showOverrideSoundTipDialog(td) },
+                showSoundRecordingDialog = { td: TreasureDescription -> viewModel.showSoundRecordingDialog(td) },
+                hideSoundRecordingDialog = { viewModel.hideSoundRecordingDialog() },
+                addTreasure = { viewModel.addTreasure() },
+                removeTreasure = { id -> viewModel.removeTreasure(id) },
+                getDoTipPhoto = viewModel
             )
         }
     )

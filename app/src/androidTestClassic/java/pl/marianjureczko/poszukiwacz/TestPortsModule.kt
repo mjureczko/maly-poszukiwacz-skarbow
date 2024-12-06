@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.mockito.Mockito.mock
+import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
@@ -17,8 +18,8 @@ object TestPortsModule {
 
     val storage = TestStoragePort()
     val locationClient = mock<FusedLocationProviderClient>()
-    val location = mock<LocationPort>()
-    val camera = mock<CameraPort>()
+    val location = TestLocationPort()
+    val camera = TestCameraPort()
 
     @Singleton
     @Provides
@@ -42,5 +43,16 @@ object TestPortsModule {
     @Provides
     fun storageHelper(): StorageHelper {
         return storage
+    }
+
+
+
+    fun getRouteFromStorage() = storage.routes.values.first()
+
+    fun assureRouteIsPresentInStorage() {
+        if (storage.routes.isEmpty()) {
+            val newRoute = RouteArranger.routeWithoutTipFiles()
+            storage.routes[newRoute.name] = newRoute
+        }
     }
 }

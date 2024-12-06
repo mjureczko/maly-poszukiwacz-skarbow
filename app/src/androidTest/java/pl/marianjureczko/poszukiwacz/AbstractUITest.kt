@@ -34,7 +34,7 @@ abstract class AbstractUITest {
         hiltRule.inject()
     }
 
-    fun performClick(contentDescription: String) {
+    fun performTap(contentDescription: String) {
         composeRule
             .onNodeWithContentDescription(contentDescription)
             .assertExists()

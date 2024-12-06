@@ -21,12 +21,13 @@ typealias GoToCommemorative = (Int) -> Unit
 typealias GoToTreasureEditor = (String) -> Unit
 typealias DoPhoto = () -> Unit
 
+//TODO t: use or remove
 typealias DeleteRoute = () -> Unit
 typealias AddTreasure = () -> Unit
 typealias RemoveTreasure = (Int) -> Unit
-typealias ShowOverridePhotoDialog = () -> Unit
+typealias ShowOverridePhotoDialog = (TreasureDescription) -> Unit
 typealias HideOverridePhotoDialog = () -> Unit
-typealias ShowOverrideSoundTipDialog = () -> Unit
+typealias ShowOverrideSoundTipDialog = (TreasureDescription) -> Unit
 typealias HideOverrideSoundTipDialog = () -> Unit
 typealias ShowSoundRecordingDialog = (TreasureDescription) -> Unit
 typealias HideSoundRecordingDialog = () -> Unit

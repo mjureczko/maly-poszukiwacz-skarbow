@@ -13,6 +13,7 @@ class TestStoragePort : StorageHelper(mock()) {
     val requestedTipRemovals: MutableList<Int> = mutableListOf()
     val progresses: MutableMap<String, TreasuresProgress> = mutableMapOf()
     var newPhotoFile: String = someString()
+    var fileNotEmpty = false
 
     init {
         val route = some<Route>()
@@ -49,4 +50,6 @@ class TestStoragePort : StorageHelper(mock()) {
         progresses.remove(routeName)
     }
     override fun newPhotoFile(): String = newPhotoFile
+
+    override fun fileNotEmpty(file: String?) = fileNotEmpty
 }

@@ -14,7 +14,9 @@ data class TreasureEditorState(
     val showSoundRecordingDialog: Boolean = false,
     val fileForTipRecording: String? = null,
     val showOverridePhotoDialog: Boolean = false,
-    val showOverrideSoundTipDialog: Boolean = false
+    val treasureWithPhotoTipToOverride: TreasureDescription? = null,
+    val showOverrideSoundTipDialog: Boolean = false,
+    val treasureWithSoundTipToOverride: TreasureDescription? = null,
 ) {
     fun locationBarData(): LocationBarData {
         val formatter = CoordinatesFormatter()

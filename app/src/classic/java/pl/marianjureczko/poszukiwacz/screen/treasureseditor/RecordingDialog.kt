@@ -19,6 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -26,6 +28,8 @@ import kotlinx.coroutines.delay
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.treasureseditor.formatTime
 import pl.marianjureczko.poszukiwacz.ui.components.AbstractDialog
+
+const val STOP_RECORDING_BUTTON = "stop recording button"
 
 @Composable
 fun RecordingDialog(
@@ -81,11 +85,16 @@ fun RecordingDialog(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(onClick = {
-                    isRecording.value = false
-                    stopRecording(recorder, context)
-                    onDismiss(closedAt.value)
-                }) {
+                TextButton(
+                    onClick = {
+                        isRecording.value = false
+                        stopRecording(recorder, context)
+                        onDismiss(closedAt.value)
+                    },
+                    modifier = Modifier.semantics {
+                        contentDescription = STOP_RECORDING_BUTTON
+                    }
+                ) {
                     Text(text = context.getString(R.string.stop_recording))
                 }
             }

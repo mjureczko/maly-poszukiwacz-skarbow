@@ -63,15 +63,18 @@ import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 
 const val TREASURE_ITEM_ROW = "Treasure row"
 const val TREASURE_ITEM_TEXT = "Treasure"
+const val ADD_TREASURE_BUTTON = "Add treasure button"
+const val RECORD_SOUND_TIP_BUTTON = "Record sound tip button"
+const val DO_PHOTO_TIP_BUTTON = "Do photo tip button"
 
 @Composable
 fun TreasureEditorScreenBody(
     state: TreasureEditorState,
     cameraPermissionGranted: Boolean,
     recordingPermissionGranted: Boolean,
+    hideOverrideSoundTipDialog: HideOverrideSoundTipDialog,
     hideOverridePhotoDialog: HideOverridePhotoDialog,
     showOverridePhotoDialog: ShowOverridePhotoDialog,
-    hideOverrideSoundTipDialog: HideOverrideSoundTipDialog,
     showOverrideSoundTipDialog: ShowOverrideSoundTipDialog,
     showSoundRecordingDialog: ShowSoundRecordingDialog,
     hideSoundRecordingDialog: HideSoundRecordingDialog,
@@ -87,17 +90,15 @@ fun TreasureEditorScreenBody(
             ) {
                 items(state.route.treasures) { treasure ->
                     TreasureItem(
-                        treasure,
-                        cameraPermissionGranted,
-                        recordingPermissionGranted,
-                        state,
-                        hideOverridePhotoDialog,
-                        showOverridePhotoDialog,
-                        hideOverrideSoundTipDialog,
-                        showOverrideSoundTipDialog,
-                        showSoundRecordingDialog,
-                        removeTreasure,
-                        getDoTipPhoto
+                        treasure = treasure,
+                        cameraPermissionGranted = cameraPermissionGranted,
+                        recordingPermissionGranted = recordingPermissionGranted,
+                        state = state,
+                        showOverridePhotoDialog = showOverridePhotoDialog,
+                        showOverrideSoundTipDialog = showOverrideSoundTipDialog,
+                        showSoundRecordingDialog = showSoundRecordingDialog,
+                        removeTreasure = removeTreasure,
+                        getDoTipPhoto = getDoTipPhoto
                     )
                 }
             }
@@ -113,6 +114,17 @@ fun TreasureEditorScreenBody(
         if (state.showSoundRecordingDialog) {
             RecordingDialog(state.fileForTipRecording!!) { _ -> hideSoundRecordingDialog() }
         }
+        if (state.showOverrideSoundTipDialog) {
+            OverrideSoundTipDialog(state, hideOverrideSoundTipDialog, showSoundRecordingDialog)
+        }
+        if (state.showOverridePhotoDialog) {
+            OverridePhotoTipDialog(
+                cameraPermissionGranted = cameraPermissionGranted,
+                state = state,
+                hideOverridePhotoDialog = hideOverridePhotoDialog,
+                getDoPhoto = getDoTipPhoto,
+            )
+        }
     }
 }
 
@@ -122,9 +134,7 @@ fun TreasureItem(
     cameraPermissionGranted: Boolean,
     recordingPermissionGranted: Boolean,
     state: TreasureEditorState,
-    hideOverridePhotoDialog: HideOverridePhotoDialog,
     showOverridePhotoDialog: ShowOverridePhotoDialog,
-    hideOverrideSoundTipDialog: HideOverrideSoundTipDialog,
     showOverrideSoundTipDialog: ShowOverrideSoundTipDialog,
     showSoundRecordingDialog: ShowSoundRecordingDialog,
     removeTreasure: RemoveTreasure,
@@ -152,18 +162,18 @@ fun TreasureItem(
                     .semantics { contentDescription = "$TREASURE_ITEM_TEXT ${treasure.id}" }
             )
             DoPhotoButton(
-                treasure,
-                cameraPermissionGranted,
-                state,
-                hideOverridePhotoDialog,
-                showOverridePhotoDialog,
-                getDoTipPhoto
+                treasure = treasure,
+                cameraPermissionGranted = cameraPermissionGranted,
+                state = state,
+                description = "$DO_PHOTO_TIP_BUTTON ${treasure.id}",
+                showOverridePhotoDialog = showOverridePhotoDialog,
+                getDoPhoto = getDoTipPhoto
             )
             RecordSoundTipButton(
                 treasure,
                 recordingPermissionGranted,
                 state,
-                hideOverrideSoundTipDialog,
+                "$RECORD_SOUND_TIP_BUTTON ${treasure.id}",
                 showOverrideSoundTipDialog,
                 showSoundRecordingDialog
             )
@@ -173,27 +183,38 @@ fun TreasureItem(
 }
 
 @Composable
-private fun RecordSoundTipButton(
-    treasure: TreasureDescription,
-    recordingPermissionGranted: Boolean,
+private fun OverrideSoundTipDialog(
     state: TreasureEditorState,
     hideOverrideSoundTipDialog: HideOverrideSoundTipDialog,
-    showOverrideSoundTipDialog: ShowOverrideSoundTipDialog,
-    showSoundRecordingDialog: ShowSoundRecordingDialog
+    showSoundRecordingDialog: ShowSoundRecordingDialog,
 ) {
     YesNoDialog(
         state.showOverrideSoundTipDialog,
         hideOverrideSoundTipDialog,
         R.string.overwritting_tip
     ) {
-        showSoundRecordingDialog(treasure)
+        showSoundRecordingDialog(state.treasureWithSoundTipToOverride!!)
     }
+}
+
+@Composable
+private fun RecordSoundTipButton(
+    treasure: TreasureDescription,
+    recordingPermissionGranted: Boolean,
+    state: TreasureEditorState,
+    description: String,
+    showOverrideSoundTipDialog: ShowOverrideSoundTipDialog,
+    showSoundRecordingDialog: ShowSoundRecordingDialog
+) {
     val permissionErrorMsg = stringResource(R.string.recording_permission_not_granted)
     val context = LocalContext.current
-    EmbeddedButton(imageVector = Icons.TwoTone.Mic) {
+    EmbeddedButton(
+        imageVector = Icons.TwoTone.Mic,
+        description = description
+    ) {
         if (recordingPermissionGranted) {
             if (state.overrideSoundTipQuestionProvider(treasure)) {
-                showOverrideSoundTipDialog()
+                showOverrideSoundTipDialog(treasure)
             } else {
                 showSoundRecordingDialog(treasure)
             }
@@ -205,16 +226,13 @@ private fun RecordSoundTipButton(
 }
 
 @Composable
-private fun DoPhotoButton(
-    treasure: TreasureDescription,
+private fun OverridePhotoTipDialog(
     cameraPermissionGranted: Boolean,
     state: TreasureEditorState,
     hideOverridePhotoDialog: HideOverridePhotoDialog,
-    showOverridePhotoDialog: ShowOverridePhotoDialog,
-    getDoPhoto: GetDoTipPhoto
+    getDoPhoto: GetDoTipPhoto,
 ) {
-    val launchDoPhoto = getDoPhoto.getDoPhoto(cameraPermissionGranted, treasure)
-
+    val launchDoPhoto = getDoPhoto.getDoPhoto(cameraPermissionGranted, state.treasureWithPhotoTipToOverride!!)
     YesNoDialog(
         state.showOverridePhotoDialog,
         hideOverridePhotoDialog,
@@ -222,10 +240,24 @@ private fun DoPhotoButton(
     ) {
         launchDoPhoto()
     }
+}
 
-    EmbeddedButton(imageVector = Icons.TwoTone.CameraAlt) {
+@Composable
+private fun DoPhotoButton(
+    treasure: TreasureDescription,
+    cameraPermissionGranted: Boolean,
+    state: TreasureEditorState,
+    description: String,
+    showOverridePhotoDialog: ShowOverridePhotoDialog,
+    getDoPhoto: GetDoTipPhoto
+) {
+    val launchDoPhoto = getDoPhoto.getDoPhoto(cameraPermissionGranted, treasure)
+    EmbeddedButton(
+        imageVector = Icons.TwoTone.CameraAlt,
+        description = description
+    ) {
         if (state.overridePhotoQuestionProvider(treasure)) {
-            showOverridePhotoDialog()
+            showOverridePhotoDialog(treasure)
         } else {
             launchDoPhoto()
         }
@@ -254,6 +286,7 @@ fun LiveMap(route: Route) {
         }
     }
 }
+
 
 @Composable
 fun LocationBar(location: LocationBarData, addTreasure: AddTreasure) {
@@ -288,7 +321,7 @@ fun LocationBar(location: LocationBarData, addTreasure: AddTreasure) {
                 .height(50.dp)
                 .width(70.dp)
                 .clickable(enabled = location.buttonEnabled, onClick = addTreasure),
-            contentDescription = "Add treasure button",
+            contentDescription = ADD_TREASURE_BUTTON,
             contentScale = ContentScale.FillBounds,
         )
     }
@@ -303,8 +336,7 @@ fun TreasureEditorScreenBodyPreview() {
             null, { _ -> false },
             { _ -> false }
         ),
-        false, false, {}, {}, {}, {}, { _ -> }, {}, {}, { _ -> },
-        object : GetDoTipPhoto {
+        false, false, {}, {}, {}, { _ -> }, {}, {}, {}, { _ -> }, object : GetDoTipPhoto {
             @Composable
             override fun getDoPhoto(cameraPermissionGranted: Boolean, treasure: TreasureDescription): DoPhoto = {}
         }

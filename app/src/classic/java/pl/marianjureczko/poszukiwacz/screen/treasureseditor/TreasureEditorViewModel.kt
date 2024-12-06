@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -19,6 +18,7 @@ import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
+import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
@@ -90,16 +90,22 @@ class TreasureEditorViewModel @Inject constructor(
         _state.value = _state.value.copy(showOverridePhotoDialog = false)
     }
 
-    fun showOverridePhotoDialog() {
-        _state.value = _state.value.copy(showOverridePhotoDialog = true)
+    fun showOverridePhotoDialog(td: TreasureDescription) {
+        _state.value = _state.value.copy(
+            showOverridePhotoDialog = true,
+            treasureWithPhotoTipToOverride = td
+        )
     }
 
     fun hideOverrideSoundTipDialog() {
         _state.value = _state.value.copy(showOverrideSoundTipDialog = false)
     }
 
-    fun showOverrideSoundTipDialog() {
-        _state.value = _state.value.copy(showOverrideSoundTipDialog = true)
+    fun showOverrideSoundTipDialog(td: TreasureDescription) {
+        _state.value = _state.value.copy(
+            showOverrideSoundTipDialog = true,
+            treasureWithSoundTipToOverride = td
+        )
     }
 
     // visibility for testing
@@ -160,7 +166,9 @@ class TreasureEditorViewModel @Inject constructor(
             route = route2,
             currentLocation = null,
             overridePhotoQuestionProvider = { td: TreasureDescription -> storage.fileNotEmpty(td.photoFileName) },
-            overrideSoundTipQuestionProvider = { td: TreasureDescription -> storage.fileNotEmpty(td.tipFileName) }
+            overrideSoundTipQuestionProvider = { td: TreasureDescription ->
+                storage.fileNotEmpty(td.tipFileName)
+            }
         )
     }
 }

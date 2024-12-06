@@ -9,7 +9,6 @@ import dagger.hilt.android.testing.UninstallModules
 import org.junit.After
 import org.junit.Test
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import pl.marianjureczko.poszukiwacz.screen.main.CONFIRM_ROUTE_NAME_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.DELETE_ROUTE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.EDIT_ROUTE_BUTTON
@@ -25,19 +24,17 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 
+//Prepared for Pixel 6a API 34
 @UninstallModules(PortsModule::class)
 @HiltAndroidTest
 class MainScreenTest : UiTest() {
 
-    var route: Route = getRouteFromStorage()
+    var route: Route = TestPortsModule.getRouteFromStorage()
 
     @After
     fun restoreRoute() {
-          if(TestPortsModule.storage.routes.isEmpty()) {
-              val newRoute = RouteArranger.routeWithoutTipFiles()
-              TestPortsModule.storage.routes[newRoute.name] = newRoute
-          }
-        route = getRouteFromStorage()
+        TestPortsModule.assureRouteIsPresentInStorage()
+        route = TestPortsModule.getRouteFromStorage()
     }
 
     @Test
@@ -59,7 +56,7 @@ class MainScreenTest : UiTest() {
             .performTextInput(routeName)
         composeRule.waitForIdle()
 
-        performClick(CONFIRM_ROUTE_NAME_BUTTON)
+        performTap(CONFIRM_ROUTE_NAME_BUTTON)
 
         getNode(TOPBAR_SCREEN_TITLE)
             .assertTextEquals("${context.getString(R.string.route)} $routeName")
@@ -75,10 +72,9 @@ class MainScreenTest : UiTest() {
 //            // Your composable function that renders the screen
 //            MainScreen { }()
 //        }
-        composeRule.waitForIdle()
 
         //when
-        performClick(EDIT_ROUTE_BUTTON + route.name)
+        goToTreasuresEditorScreen(route.name)
 
         //then
         val screenTitle: SemanticsNodeInteraction = getNode(TOPBAR_SCREEN_TITLE)
@@ -95,13 +91,11 @@ class MainScreenTest : UiTest() {
         composeRule.waitForIdle()
 
         //when
-        performClick(DELETE_ROUTE_BUTTON + route.name)
-        performClick(YES_BUTTON)
+        performTap(DELETE_ROUTE_BUTTON + route.name)
+        performTap(YES_BUTTON)
 
         //then
         getNode(EDIT_ROUTE_BUTTON + route.name)
             .assertDoesNotExist()
     }
-
-    private fun getRouteFromStorage() = TestPortsModule.storage.routes.values.first()
 }
