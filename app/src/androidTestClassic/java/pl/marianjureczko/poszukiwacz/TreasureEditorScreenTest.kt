@@ -15,17 +15,12 @@ import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 import pl.marianjureczko.poszukiwacz.ui.components.NO_BUTTON
 import pl.marianjureczko.poszukiwacz.ui.components.YES_BUTTON
 
+//Prepared for Pixel 6a API 34
 @UninstallModules(PortsModule::class)
 @HiltAndroidTest
 class TreasureEditorScreenTest : UiTest() {
 
     var route: Route = TestPortsModule.getRouteFromStorage()
-//
-//    @After
-//    fun restoreRoute() {
-//        TestPortsModule.assureRouteIsPresentInStorage()
-//        route = TestPortsModule.getRouteFromStorage()
-//    }
 
     @Test
     fun shouldShowAllTreasuresFromRoute_whenEditingTheRoute() {

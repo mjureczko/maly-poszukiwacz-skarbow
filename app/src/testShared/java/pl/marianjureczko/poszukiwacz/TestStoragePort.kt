@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
 import org.mockito.Mockito.mock
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
@@ -14,6 +15,7 @@ class TestStoragePort : StorageHelper(mock()) {
     val progresses: MutableMap<String, TreasuresProgress> = mutableMapOf()
     var newPhotoFile: String = someString()
     var fileNotEmpty = false
+    var hunterPath: HunterPath = some<HunterPath>()
 
     init {
         val route = some<Route>()
@@ -52,4 +54,8 @@ class TestStoragePort : StorageHelper(mock()) {
     override fun newPhotoFile(): String = newPhotoFile
 
     override fun fileNotEmpty(file: String?) = fileNotEmpty
+
+    override fun loadHunterPath(routeName: String): HunterPath? {
+        return hunterPath
+    }
 }

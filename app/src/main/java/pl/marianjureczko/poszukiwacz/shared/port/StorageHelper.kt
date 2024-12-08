@@ -62,7 +62,7 @@ open class StorageHelper(val context: Context) {
         }
     }
 
-    fun loadHunterPath(routeName: String): HunterPath? {
+    open fun loadHunterPath(routeName: String): HunterPath? {
         val file = getHunterPathFile(routeName)
         return if (file.exists()) {
             try {

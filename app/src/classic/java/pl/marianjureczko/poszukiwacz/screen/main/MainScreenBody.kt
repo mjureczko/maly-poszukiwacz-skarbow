@@ -22,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +43,7 @@ const val ENTER_ROUTE_NAME_TITLE = "Enter route name"
 const val ROUTE_NAME_TEXT_EDIT = "Edit route name"
 const val EDIT_ROUTE_BUTTON = "Edit route button"
 const val DELETE_ROUTE_BUTTON = "Delete route button"
+const val ROUTE = "Route"
 
 @Composable
 fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSearching) {
@@ -104,6 +107,7 @@ fun RouteItem(
         modifier = Modifier
             .padding(4.dp)
             .clickable { goToSearching(item.name) }
+            .semantics { contentDescription = "$ROUTE ${item.name}" }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

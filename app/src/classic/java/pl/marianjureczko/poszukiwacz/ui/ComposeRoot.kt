@@ -9,9 +9,11 @@ import androidx.navigation.navArgument
 import pl.marianjureczko.poszukiwacz.activity.facebook.n.FacebookHelper
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_PATH
+import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
+import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.TreasureEditorScreen
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
@@ -45,21 +47,21 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 onClickOnGuide = onClickGuide,
                 onClickOnFacebook = goToFacebook)
         }
-//        composable(
-//            route = SEARCHING_ROUTE,
-//            arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
-//        ) {
-//            SearchingScreen(
-//                navController = navController,
-//                onClickOnGuide = onClickGuide,
-//                goToTipPhoto = { navController.navigate("tipPhoto/$it") },
-//                goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") },
-//                goToMap = { navController.navigate("map/$it") },
-//                goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
-//                goToFacebook = goToFacebook,
-//                goToCommemorative = goToCommemorative,
-//            )
-//        }
+        composable(
+            route = SEARCHING_ROUTE,
+            arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
+        ) {
+            SearchingScreen(
+                navController = navController,
+                onClickOnGuide = onClickGuide,
+                goToTipPhoto = { navController.navigate("tipPhoto/$it") },
+                goToResult = { resultType, treasureId -> /*navController.navigate("$RESULTS_PATH/$resultType/$treasureId") */},
+                goToMap = { navController.navigate("map/$it") },
+                goToTreasureSelector = { /*navController.navigate("$SELECTOR_PATH/$it")*/ },
+                goToFacebook = goToFacebook,
+                goToCommemorative = goToCommemorative,
+            )
+        }
 //        composable(
 //            route = RESULTS_ROUTE,
 //            arguments = listOf(
