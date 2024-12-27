@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity.result.n
+package pl.marianjureczko.poszukiwacz.screen.result
 
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 
@@ -29,7 +29,15 @@ enum class ResultType {
                 TreasureType.RUBY -> RUBY
                 TreasureType.DIAMOND -> DIAMOND
                 TreasureType.KNOWLEDGE -> TREASURE
-                else -> throw IllegalArgumentException("$treasureType is not valid treasure type")
             }
     }
+
+    fun toTreasureType(): TreasureType? =
+        when (this) {
+            GOLD -> TreasureType.GOLD
+            RUBY -> TreasureType.RUBY
+            DIAMOND -> TreasureType.DIAMOND
+            TREASURE -> TreasureType.KNOWLEDGE
+            else -> null
+        }
 }

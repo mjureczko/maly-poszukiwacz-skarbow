@@ -56,7 +56,7 @@ data class TreasuresProgress(
         collectedQrCodes.contains(treasure.id)
 
     /** When collecting KNOWLEDGE collect(treasureDescription: TreasureDescription) must be called as well */
-    fun collect(treasure: Treasure, treasureDescription: TreasureDescription?) {
+    fun collect(treasure: Treasure, treasureDescription: TreasureDescription?): TreasuresProgress {
         treasureDescription?.let {  collectedTreasuresDescriptionId.add(it.id) }
         collectedQrCodes.add(treasure.id)
         when (treasure.type) {
@@ -65,6 +65,7 @@ data class TreasuresProgress(
             TreasureType.RUBY -> rubies += treasure.quantity
             TreasureType.KNOWLEDGE -> knowledge++
         }
+        return this
     }
 
     /** When collecting KNOWLEDGE collect(treasure: Treasure) must be called as well */

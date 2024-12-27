@@ -45,9 +45,9 @@ import com.journeyapps.barcodescanner.ScanOptions
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
-import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.screen.searching.Scores
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook

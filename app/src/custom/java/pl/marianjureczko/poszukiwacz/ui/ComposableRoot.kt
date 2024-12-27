@@ -23,11 +23,11 @@ import pl.marianjureczko.poszukiwacz.activity.map.n.MapScreen
 import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.photo.n.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.activity.photo.n.TipPhotoScreen
-import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_RESULT_TYPE
-import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_TREASURE_ID
-import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_TREASURE_QUANTITY
-import pl.marianjureczko.poszukiwacz.activity.result.n.ResultScreen
-import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
+import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_RESULT_TYPE
+import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
+import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_QUANTITY
+import pl.marianjureczko.poszukiwacz.screen.result.ResultScreen
+import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
@@ -57,7 +57,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navController = navController,
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
-                goToResult = { resultType, treasureId, quantity -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId/$quantity") },
+                goToResult = { resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId/$amount") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
                 goToFacebook = goToFacebook,
@@ -69,7 +69,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
             arguments = listOf(
                 navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) },
                 navArgument(PARAMETER_TREASURE_ID) { type = NavType.IntType },
-                navArgument(PARAMETER_TREASURE_QUANTITY) { type = NavType.IntType },
+                navArgument(PARAMETER_TREASURE_AMOUNT) { type = NavType.IntType },
             )
         ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
         composable(

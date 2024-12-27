@@ -26,12 +26,12 @@ import org.mockito.BDDMockito.times
 import org.mockito.Mockito.mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.argumentCaptor
-import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.any
 import pl.marianjureczko.poszukiwacz.eq
 import pl.marianjureczko.poszukiwacz.model.HunterLocation
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 

@@ -1,8 +1,8 @@
 package pl.marianjureczko.poszukiwacz.shared
 
 import com.journeyapps.barcodescanner.ScanIntentResult
-import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 
 typealias GoToGuide = () -> Unit
 //TODO t: are nullable types supported in navigation?

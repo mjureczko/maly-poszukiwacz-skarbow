@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity.result.n
+package pl.marianjureczko.poszukiwacz.screen.result
 
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -38,6 +39,7 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.ResultSharedViewModel
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
+import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine
@@ -77,7 +79,7 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
                 .background(Color.Transparent)
         )
         if (localState.resultType == ResultType.TREASURE && localState.moviePath != null) {
-            VidePlayerWithButon(
+            VideoPlayerWithButon(
                 localState.isPlayVisible,
                 localViewModel,
                 localState.moviePath,
@@ -85,6 +87,8 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
                 localState.subtitlesPath,
                 localState.localesWithSubtitles
             ) { localViewModel.setSubtitlesLine(it) }
+        } else if (localState.resultType in setOf(ResultType.GOLD, ResultType.RUBY, ResultType.DIAMOND)) {
+            TreasureImage(localState.treasureType, localState.amount!!)
         } else {
             Message(localState)
         }
@@ -94,6 +98,43 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
                 .background(Color.Transparent)
         )
         AdvertBanner()
+    }
+}
+
+/**
+ * @param resultType the type should be one of: GOLD, RUBY, DIAMOND.
+ */
+@Composable
+@Preview(showBackground = true, apiLevel = 31)
+private fun TreasureImage(treasureType: TreasureType? = TreasureType.GOLD, amount: Int = 91) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        treasureType?.let {
+            val treasureImage = when (it) {
+                TreasureType.GOLD -> R.drawable.gold
+                TreasureType.RUBY -> R.drawable.ruby
+                TreasureType.DIAMOND -> R.drawable.diamond
+                TreasureType.KNOWLEDGE -> throw IllegalArgumentException("Show movie for knowledge")
+            }
+            Image(
+                painterResource(treasureImage),
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                contentDescription = "${treasureType.name} treasure",
+                contentScale = ContentScale.Inside,
+            )
+            Text(
+                fontSize = 60.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FANCY_FONT,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                text = "$amount"
+            )
+        }
     }
 }
 
@@ -116,7 +157,7 @@ private fun Message(localState: ResultState) {
 
 @Composable
 @Preview(showBackground = true, apiLevel = 31)
-private fun VidePlayerWithButon(
+private fun VideoPlayerWithButon(
     isPlayVisible: Boolean = true,
     movieController: MovieController = object : MovieController {
         override fun onPlay() {}
@@ -220,7 +261,6 @@ private fun PlayButton(
 ) {
     if (isPlayVisible) {
         Image(
-            //TODO: move play image to custom
             painterResource(R.drawable.play),
             modifier = Modifier
                 .padding(10.dp)

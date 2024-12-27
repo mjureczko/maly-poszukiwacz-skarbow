@@ -14,8 +14,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.result.n.NOTHING_FOUND_TREASURE_ID
-import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.ArcCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.HunterPath
@@ -25,6 +23,8 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
+import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
@@ -92,42 +92,49 @@ class SharedViewModel @Inject constructor(
             /*
             * newCode will contain code like k01001
             * result will be NOT_A_TREASURE or ALREADY_TAKEN or TREASURE
-            * finally goToResults(result, treasureId) is called
-            * goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") }
              */
             var result: ResultType? = null
             var treasureId = NOTHING_FOUND_TREASURE_ID
-            var foundTreasure: Treasure? = null
+            var scannedTreasure: Treasure? = null
             if (scanResult != null && !scanResult.contents.isNullOrEmpty()) {
                 val newCode = scanResult.contents
-                //TODO t: refactor split / extract method
                 try {
-                    foundTreasure = TreasureParser().parse(newCode)
-                    val tdFinder = TreasureDescriptionFinder(state.value.route.treasures)
-                    val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(newCode, foundTreasure)
-                    val treasuresProgress = state.value.treasuresProgress
-                    if (treasuresProgress.contains(foundTreasure)) {
+                    scannedTreasure = TreasureParser().parse(newCode)
+                    val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures)
+                    val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(newCode, scannedTreasure)
+                    var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
+                    if (treasuresProgress.contains(scannedTreasure)) {
                         result = ResultType.ALREADY_TAKEN
                     } else {
-                        if (foundTreasure.type == TreasureType.KNOWLEDGE && state.value.route.treasures.find { t -> newCode == t.qrCode } == null) {
+                        if (scannedTreasure.type == TreasureType.KNOWLEDGE && state.value.route.treasures.find { t -> newCode == t.qrCode } == null) {
                             throw IllegalArgumentException("Unknown knowledge treasure")
                         }
-                        treasuresProgress.collect(foundTreasure, foundTd)
-                        treasuresProgress.resultRequiresPresentation = true
-                        treasuresProgress.justFoundTreasureId = foundTd?.id
-                        treasuresProgress.treasureFoundGoToSelector = true
                         foundTd?.let { treasureId = it.id }
-                        storageHelper.save(treasuresProgress)
-                        result = ResultType.from(foundTreasure.type)
+                        treasuresProgress = updateTreasureProgress(treasuresProgress, scannedTreasure, foundTd)
+                        _state.value = state.value.copy(treasuresProgress = treasuresProgress)
+                        result = ResultType.from(scannedTreasure.type)
                     }
                 } catch (e: IllegalArgumentException) {
                     result = ResultType.NOT_A_TREASURE
                 }
             }
             result?.let {
-                goToResults(it, treasureId, foundTreasure?.quantity)
+                goToResults(it, treasureId, scannedTreasure?.quantity)
             }
         }
+    }
+
+    private fun updateTreasureProgress(
+        treasuresProgress: TreasuresProgress,
+        foundTreasure: Treasure,
+        foundTd: TreasureDescription?
+    ): TreasuresProgress {
+        treasuresProgress.collect(foundTreasure, foundTd)
+        var result: TreasuresProgress = treasuresProgress.copy(resultRequiresPresentation = true)
+        result = result.copy(justFoundTreasureId = foundTd?.id)
+        result = result.copy(treasureFoundGoToSelector = true)
+        storageHelper.save(result)
+        return result
     }
 
     override fun resultPresented() {
@@ -212,6 +219,7 @@ class SharedViewModel @Inject constructor(
         }
     }
 
+    //TODO t: how to handle first search, when no treasure is selected
     private fun createState(): SharedState {
         Log.i(TAG, "Create state")
         val route = loadRoute()

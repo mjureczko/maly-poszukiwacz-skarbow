@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity.result.n
+package pl.marianjureczko.poszukiwacz.screen.result
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 const val PARAMETER_RESULT_TYPE = "result_type"
 const val PARAMETER_TREASURE_ID = "treasure_id"
-const val PARAMETER_TREASURE_QUANTITY = "treasure_quantity"
+const val PARAMETER_TREASURE_AMOUNT = "treasure_amount"
 const val NOTHING_FOUND_TREASURE_ID = -1
 
 interface MovieController {
@@ -62,7 +62,9 @@ class ResultViewModel @Inject constructor(
         }
         val localesWithSubtitles = !"pl".equals(Locale.getDefault().language, true)
         val resultType = stateHandle.get<ResultType>(PARAMETER_RESULT_TYPE) ?: ResultType.NOT_A_TREASURE
-        return ResultState(resultType, null, null, moviePath, null, subtitlesPath, localesWithSubtitles)
+        val treasureType = resultType.toTreasureType()
+        val amount = stateHandle.get<Int>(PARAMETER_TREASURE_AMOUNT) ?: 0
+        return ResultState(resultType, treasureType, amount, moviePath, null, subtitlesPath, localesWithSubtitles)
     }
 
 }
