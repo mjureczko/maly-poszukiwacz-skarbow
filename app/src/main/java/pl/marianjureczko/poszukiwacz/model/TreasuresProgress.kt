@@ -15,6 +15,7 @@ data class TreasuresProgress(
     @field:Element
     var selectedTreasure: TreasureDescription,
 
+    /** Used in treasure selector for marking treasure as found with a delay */
     @field:Element(required = false)
     var justFoundTreasureId: Int? = null,
 
@@ -55,7 +56,8 @@ data class TreasuresProgress(
         collectedQrCodes.contains(treasure.id)
 
     /** When collecting KNOWLEDGE collect(treasureDescription: TreasureDescription) must be called as well */
-    fun collect(treasure: Treasure) {
+    fun collect(treasure: Treasure, treasureDescription: TreasureDescription?) {
+        treasureDescription?.let {  collectedTreasuresDescriptionId.add(it.id) }
         collectedQrCodes.add(treasure.id)
         when (treasure.type) {
             TreasureType.GOLD -> golds += treasure.quantity
@@ -66,8 +68,8 @@ data class TreasuresProgress(
     }
 
     /** When collecting KNOWLEDGE collect(treasure: Treasure) must be called as well */
-    fun collect(treasureDescription: TreasureDescription) =
-        collectedTreasuresDescriptionId.add(treasureDescription.id)
+//    fun collect(treasureDescription: TreasureDescription) =
+//        collectedTreasuresDescriptionId.add(treasureDescription.id)
 
     fun addCommemorativePhoto(treasureDescription: TreasureDescription, commemorativePhoto: String) {
         commemorativePhotosByTreasuresDescriptionIds[treasureDescription.id] = commemorativePhoto

@@ -16,5 +16,20 @@ data class ResultState(
 enum class ResultType {
     NOT_A_TREASURE,
     ALREADY_TAKEN,
+    //TODO t: rename to KNOWLEDGE
     TREASURE,
+    GOLD,
+    RUBY,
+    DIAMOND;
+
+    companion object {
+        fun from(treasureType: TreasureType): ResultType =
+            when (treasureType) {
+                TreasureType.GOLD -> GOLD
+                TreasureType.RUBY -> RUBY
+                TreasureType.DIAMOND -> DIAMOND
+                TreasureType.KNOWLEDGE -> TREASURE
+                else -> throw IllegalArgumentException("$treasureType is not valid treasure type")
+            }
+    }
 }

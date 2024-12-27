@@ -30,6 +30,7 @@ import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.any
 import pl.marianjureczko.poszukiwacz.eq
 import pl.marianjureczko.poszukiwacz.model.HunterLocation
+import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
@@ -92,7 +93,7 @@ class SharedViewModelTest {
 
         //when
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { _: ResultType, _: Int ->
+        val callback = viewModel.scannedTreasureCallback { _: ResultType, _: Int?, _: Int? ->
             wasCalled = true
         }
         callback(qrResult)
@@ -114,7 +115,7 @@ class SharedViewModelTest {
 
         //when & then
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { actual, _ ->
+        val callback = viewModel.scannedTreasureCallback { actual, _, _ ->
             wasCalled = true
             assertThat(actual).isEqualTo(ResultType.NOT_A_TREASURE)
         }
@@ -130,19 +131,20 @@ class SharedViewModelTest {
     @Test
     fun `SHOULD return a treasure WHEN the scanned qr code is not associated with a treasure`() {
         //given
-        val qrCode = someString()
+        val qrCode = TreasureDescriptionArranger.validQrCode("k")
         val fixture = SharedViewModelFixture(dispatcher, firstTreasureQrCode = qrCode)
         val viewModel = fixture.givenMocksForNoProgress()
         val qrResult = fixture.givenScanIntentResultForFirstTreasure()
 
-        //when & then
+        //when
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { actual, _ ->
+        val callback = viewModel.scannedTreasureCallback { actual, _, _ ->
             wasCalled = true
             assertThat(actual).isEqualTo(ResultType.TREASURE)
         }
         callback(qrResult)
 
+        //then
         assertThat(wasCalled).isTrue()
         // should save empty progress when loading new route and later updated with first treasure collected
         then(fixture.storage).should(times(2)).save(any(TreasuresProgress::class.java))
@@ -160,11 +162,11 @@ class SharedViewModelTest {
 
         //when & then
         var callbackUsed = 0
-        val callback1 = viewModel.scannedTreasureCallback { actual, _ ->
+        val callback1 = viewModel.scannedTreasureCallback { actual, _, _ ->
             callbackUsed++
         }
         callback1(qrResult)
-        val callback2 = viewModel.scannedTreasureCallback { actual, _ ->
+        val callback2 = viewModel.scannedTreasureCallback { actual, _, _ ->
             callbackUsed++
             assertThat(actual).isEqualTo(ResultType.ALREADY_TAKEN)
         }

@@ -22,6 +22,8 @@ import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasureParser
+import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
@@ -87,33 +89,43 @@ class SharedViewModel @Inject constructor(
 
     override fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback {
         return { scanResult ->
+            /*
+            * newCode will contain code like k01001
+            * result will be NOT_A_TREASURE or ALREADY_TAKEN or TREASURE
+            * finally goToResults(result, treasureId) is called
+            * goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") }
+             */
             var result: ResultType? = null
             var treasureId = NOTHING_FOUND_TREASURE_ID
+            var foundTreasure: Treasure? = null
             if (scanResult != null && !scanResult.contents.isNullOrEmpty()) {
                 val newCode = scanResult.contents
-                val foundTreasure = state.value.route.treasures.find { treasure ->
-                    newCode == treasure.qrCode
-                }
-                if (foundTreasure == null) {
-                    result = ResultType.NOT_A_TREASURE
-                } else {
+                //TODO t: refactor split / extract method
+                try {
+                    foundTreasure = TreasureParser().parse(newCode)
+                    val tdFinder = TreasureDescriptionFinder(state.value.route.treasures)
+                    val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(newCode, foundTreasure)
                     val treasuresProgress = state.value.treasuresProgress
-                    if (treasuresProgress.collectedTreasuresDescriptionId.contains(foundTreasure.id)) {
+                    if (treasuresProgress.contains(foundTreasure)) {
                         result = ResultType.ALREADY_TAKEN
                     } else {
-                        treasuresProgress.collect(Treasure.knowledgeTreasure(newCode))
-                        treasuresProgress.collect(foundTreasure)
+                        if (foundTreasure.type == TreasureType.KNOWLEDGE && state.value.route.treasures.find { t -> newCode == t.qrCode } == null) {
+                            throw IllegalArgumentException("Unknown knowledge treasure")
+                        }
+                        treasuresProgress.collect(foundTreasure, foundTd)
                         treasuresProgress.resultRequiresPresentation = true
-                        treasuresProgress.justFoundTreasureId = foundTreasure.id
+                        treasuresProgress.justFoundTreasureId = foundTd?.id
                         treasuresProgress.treasureFoundGoToSelector = true
-                        treasureId = foundTreasure.id
+                        foundTd?.let { treasureId = it.id }
                         storageHelper.save(treasuresProgress)
-                        result = ResultType.TREASURE
+                        result = ResultType.from(foundTreasure.type)
                     }
+                } catch (e: IllegalArgumentException) {
+                    result = ResultType.NOT_A_TREASURE
                 }
             }
             result?.let {
-                goToResults(it, treasureId)
+                goToResults(it, treasureId, foundTreasure?.quantity)
             }
         }
     }

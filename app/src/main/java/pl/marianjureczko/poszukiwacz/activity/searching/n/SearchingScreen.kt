@@ -84,7 +84,8 @@ fun SearchingScreen(
     goToFacebook: GoToFacebook,
     goToCommemorative: GoToCommemorative
 ) {
-    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
+    val cameraPermission: PermissionState =
+        handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
     val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasure.id}"
@@ -128,8 +129,8 @@ private fun SearchingScreenBody(
     }
     val scanQrLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
-        onResult = viewModel.scannedTreasureCallback { resultType, treasureId ->
-            goToResult(resultType, treasureId)
+        onResult = viewModel.scannedTreasureCallback { resultType, treasureId, quantity ->
+            goToResult(resultType, treasureId, quantity)
         }
     )
     val prompt = stringResource(R.string.qr_scanner_msg)
@@ -140,16 +141,20 @@ private fun SearchingScreenBody(
     }
     Column {
         Box {
-            Scores(state.treasuresProgress.knowledge, Modifier.align(Alignment.TopStart))
-            Compass(state.needleRotation, Modifier.align(Alignment.Center))
             CommemorativePhotoButton(
                 cameraPermissionState.status.isGranted,
                 state,
                 state.treasuresProgress.selectedTreasure,
                 goToCommemorative,
                 viewModel,
-                Modifier.align(Alignment.TopEnd).padding(15.dp)
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(15.dp)
             )
+            Column {
+                Scores(Modifier.align(Alignment.Start), score = state.treasuresProgress)
+                Compass(state.needleRotation, Modifier.align(Alignment.CenterHorizontally))
+            }
         }
         Steps(state.stepsToTreasure)
         Buttons(
@@ -173,9 +178,9 @@ private fun SearchingScreenBody(
 fun Compass(arcRotation: Float, modifier: Modifier) {
     BoxWithConstraints(
         modifier = modifier
-            .padding(15.dp)
+            .padding(start = 15.dp, end = 15.dp, top = 1.dp, bottom = 1.dp)
             .fillMaxWidth()
-            .height(0.40.dh)
+            .height(0.38.dh)
             .semantics { contentDescription = COMPASS },
         contentAlignment = Alignment.Center
     ) {
@@ -199,7 +204,7 @@ fun Steps(stepsToTreasure: Int?) {
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
-            .height(0.15.dh),
+            .height(0.14.dh),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
     ) {
@@ -217,7 +222,7 @@ fun Steps(stepsToTreasure: Int?) {
         }
         Image(
             painterResource(R.drawable.steps),
-            modifier = Modifier.padding(start = 45.dp),
+            modifier = Modifier.padding(start = 43.dp),
             contentDescription = null,
             contentScale = ContentScale.Inside,
         )
@@ -306,7 +311,9 @@ private fun PhotoTipButton(currentTreasure: TreasureDescription, goToTipPhoto: G
                     goToTipPhoto(encodedFilePath)
                 } else {
                     errorTone()
-                    Toast.makeText(context, noPhotoToShowMsg, Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(context, noPhotoToShowMsg, Toast.LENGTH_LONG)
+                        .show()
                 }
             },
         contentDescription = null,
@@ -327,7 +334,9 @@ private fun SoundTipButton(currentTreasure: TreasureDescription, mediaPlayer: Me
                     SoundTipPlayer.playSound(mediaPlayer, currentTreasure.tipFileName!!)
                 } else {
                     errorTone()
-                    Toast.makeText(context, noTipToPlayMsg, Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(context, noTipToPlayMsg, Toast.LENGTH_LONG)
+                        .show()
                 }
             },
         contentDescription = null,

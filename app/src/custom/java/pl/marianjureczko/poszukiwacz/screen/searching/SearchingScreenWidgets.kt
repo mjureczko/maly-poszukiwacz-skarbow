@@ -14,10 +14,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 
 @Composable
-fun Scores(score: Int, modifier: Modifier) {
+fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
     Row(
         modifier = modifier
             .padding(10.dp)
@@ -25,53 +26,18 @@ fun Scores(score: Int, modifier: Modifier) {
             .background(Color.Transparent)
             .height(0.05.dh),
     ) {
-        //TODO if(isClassicMode)
-        if (false) {
-            Image(
-                painterResource(R.drawable.gold),
-                contentDescription = "gold image",
-                contentScale = ContentScale.Inside,
-            )
-            Text(
-                color = Color.Gray,
-                text = "0",
-                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
-            )
-            Image(
-                painterResource(R.drawable.ruby),
-                contentDescription = "ruby image",
-                contentScale = ContentScale.Inside,
-                modifier = Modifier.padding(start = 20.dp)
-            )
-            Text(
-                color = Color.Gray,
-                text = "0",
-                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
-            )
-            Image(
-                painterResource(R.drawable.diamond),
-                contentDescription = "diamond image",
-                contentScale = ContentScale.Inside,
-                modifier = Modifier.padding(start = 20.dp)
-            )
-            Text(
-                color = Color.Gray,
-                text = "0",
-                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
-            )
-        } else {
-            Image(
-                painterResource(R.drawable.chest_small),
-                contentDescription = "tourist treasure image",
-                contentScale = ContentScale.Inside,
-                modifier = Modifier.padding(end = 5.dp)
-            )
-            Text(
-                color = Color.Gray,
-                text = score.toString(),
-                fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize,
-                modifier = Modifier.padding(end = 5.dp)
-            )
-        }
+        Image(
+            painterResource(R.drawable.chest_small),
+            contentDescription = "tourist treasure image",
+            contentScale = ContentScale.Inside,
+            modifier = Modifier.padding(end = 5.dp)
+        )
+        Text(
+            color = Color.Gray,
+            text = score.knowledge.toString(),
+            fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize,
+            modifier = Modifier.padding(end = 5.dp)
+        )
     }
+
 }

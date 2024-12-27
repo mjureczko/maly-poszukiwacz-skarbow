@@ -18,7 +18,7 @@ open class UiTest: AbstractUITest() {
                 Thread.sleep(100)
             }
         }
-        performClick(START_BUTTON)
+        performTap(START_BUTTON)
         composeRule.waitForIdle()
     }
 }

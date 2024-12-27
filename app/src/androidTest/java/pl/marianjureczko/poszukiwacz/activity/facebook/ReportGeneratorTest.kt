@@ -36,7 +36,7 @@ class ReportGeneratorTest {
         val photos = arrangePhotos(context)
         val treasuresProgress = TreasuresProgress(ROUTE_NAME, TreasureDescription.nullObject())
         val treasure = Treasure("1", 7, TreasureType.DIAMOND)
-        treasuresProgress.collect(treasure)
+        treasuresProgress.collect(treasure, null)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, photos[0])
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, photos[1])
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, photos[2])

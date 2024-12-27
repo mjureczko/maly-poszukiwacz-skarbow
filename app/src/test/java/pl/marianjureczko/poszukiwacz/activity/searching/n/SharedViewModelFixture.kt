@@ -9,6 +9,7 @@ import org.mockito.BDDMockito
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
@@ -17,7 +18,7 @@ import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 data class SharedViewModelFixture(
     val testDispatcher: CoroutineDispatcher,
     val routeName: String = someString(),
-    val firstTreasureQrCode: String = someString(),
+    val firstTreasureQrCode: String = TreasureDescriptionArranger.validQrCode(),
     val storage: StorageHelper = mock(StorageHelper::class.java),
     val locationPort: LocationPort = mock(LocationPort::class.java),
     val locationCalculator: LocationCalculator = mock(),

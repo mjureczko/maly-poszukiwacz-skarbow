@@ -48,6 +48,6 @@ class TreasureParser {
         } else {
             content.substring(1, 3).toInt()
         }
-        return Treasure(content.substring(3), quantity, type)
+        return Treasure(content, quantity, type)
     }
 }

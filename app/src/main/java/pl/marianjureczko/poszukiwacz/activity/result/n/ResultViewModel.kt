@@ -13,6 +13,7 @@ import javax.inject.Inject
 
 const val PARAMETER_RESULT_TYPE = "result_type"
 const val PARAMETER_TREASURE_ID = "treasure_id"
+const val PARAMETER_TREASURE_QUANTITY = "treasure_quantity"
 const val NOTHING_FOUND_TREASURE_ID = -1
 
 interface MovieController {

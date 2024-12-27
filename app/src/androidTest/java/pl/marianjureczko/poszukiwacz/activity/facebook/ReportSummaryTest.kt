@@ -25,7 +25,7 @@ internal class ReportSummaryTest : ReportAbstractTest() {
         canvas.drawColor(Color.WHITE)
 
         val treasure = Treasure("1", 17, TreasureType.GOLD)
-        treasuresProgress.collect(treasure)
+        treasuresProgress.collect(treasure, null)
         storageHelper.save(treasuresProgress)
         val reportSummary = ReportSummary(createFacebookViewModel().state.value, font)
 

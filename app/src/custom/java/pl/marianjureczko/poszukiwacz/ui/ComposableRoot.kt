@@ -13,7 +13,6 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.n.FacebookScreen
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.FACEBOOK_ROUTE
-import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_PATH
@@ -26,12 +25,14 @@ import pl.marianjureczko.poszukiwacz.activity.photo.n.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.activity.photo.n.TipPhotoScreen
 import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_RESULT_TYPE
 import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_TREASURE_ID
+import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_TREASURE_QUANTITY
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultScreen
 import pl.marianjureczko.poszukiwacz.activity.result.n.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.SelectorScreen
+import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
@@ -56,7 +57,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navController = navController,
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
-                goToResult = { resultType, treasureId -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId") },
+                goToResult = { resultType, treasureId, quantity -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId/$quantity") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
                 goToFacebook = goToFacebook,
@@ -67,7 +68,8 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
             route = RESULTS_ROUTE,
             arguments = listOf(
                 navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) },
-                navArgument(PARAMETER_TREASURE_ID) { type = NavType.IntType }
+                navArgument(PARAMETER_TREASURE_ID) { type = NavType.IntType },
+                navArgument(PARAMETER_TREASURE_QUANTITY) { type = NavType.IntType },
             )
         ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
         composable(
@@ -98,6 +100,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navController,
                 navBackStackEntry,
                 onClickGuide,
+                //TODO t: doesn't support classic
                 goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") },
                 goToCommemorative = goToCommemorative,
                 onClickOnFacebook = goToFacebook

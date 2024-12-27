@@ -48,8 +48,8 @@ class TreasuresProgressTest {
         val bag = TreasuresProgress(someString(), some<TreasureDescription>())
 
         //when
-        bag.collect(gold7)
-        bag.collect(gold9)
+        bag.collect(gold7, null)
+        bag.collect(gold9, null)
 
         //then
         assertEquals(gold7.quantity + gold9.quantity, bag.golds)
@@ -63,8 +63,8 @@ class TreasuresProgressTest {
         val bag = TreasuresProgress(someString(), some<TreasureDescription>())
 
         //when
-        bag.collect(diamond17)
-        bag.collect(diamond18)
+        bag.collect(diamond17, null)
+        bag.collect(diamond18, null)
 
         //then
         assertEquals(diamond17.quantity + diamond18.quantity, bag.diamonds)
@@ -78,8 +78,8 @@ class TreasuresProgressTest {
         val bag = TreasuresProgress(someString(), some<TreasureDescription>())
 
         //when
-        bag.collect(ruby27)
-        bag.collect(ruby98)
+        bag.collect(ruby27, null)
+        bag.collect(ruby98, null)
 
         //then
         assertEquals(ruby27.quantity + ruby98.quantity, bag.rubies)
@@ -91,7 +91,7 @@ class TreasuresProgressTest {
     fun detectAlreadyCollectedTreasures() {
         //given
         val bag = TreasuresProgress(someString(), some<TreasureDescription>())
-        bag.collect(gold9)
+        bag.collect(gold9, null)
 
         //then
         assertFalse(bag.contains(gold7))
@@ -105,9 +105,8 @@ class TreasuresProgressTest {
         val routeName = someString()
         val treasuresProgress = TreasuresProgress(routeName, some<TreasureDescription>())
         val treasure = some<Treasure>().copy(type = TreasureType.DIAMOND)
-        treasuresProgress.collect(treasure)
         val description = some<TreasureDescription>()
-        treasuresProgress.collect(description)
+        treasuresProgress.collect(treasure, description)
 
         //when
         val xml = xmlHelper.writeToString(treasuresProgress)

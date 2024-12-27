@@ -13,6 +13,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_RESULT_TYPE
 import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_TREASURE_ID
+import pl.marianjureczko.poszukiwacz.activity.result.n.PARAMETER_TREASURE_QUANTITY
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.ui.ComposeRoot
@@ -24,7 +25,7 @@ val TREASURE_EDITOR_ROUTE = "$TREASURE_EDITOR_PATH/{$PARAMETER_ROUTE_NAME}"
 val SEARCHING_PATH = "searching"
 val SEARCHING_ROUTE = "$SEARCHING_PATH/{$PARAMETER_ROUTE_NAME}"
 val RESULTS_PATH = "result"
-val RESULTS_ROUTE = "$RESULTS_PATH/{$PARAMETER_RESULT_TYPE}/{$PARAMETER_TREASURE_ID}"
+val RESULTS_ROUTE = "$RESULTS_PATH/{$PARAMETER_RESULT_TYPE}/{$PARAMETER_TREASURE_ID}/{$PARAMETER_TREASURE_QUANTITY}"
 val SELECTOR_PATH = "selector"
 val SELECTOR_ROUTE = "$SELECTOR_PATH/{$PARAMETER_JUST_FOUND_TREASURE}"
 val COMMEMORATIVE_PATH = "commemorative"
