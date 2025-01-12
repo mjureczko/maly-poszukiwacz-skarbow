@@ -5,8 +5,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 
 typealias GoToGuide = () -> Unit
-//TODO t: are nullable types supported in navigation?
-typealias GoToResults = (ResultType, Int?, Int?) -> Unit
+typealias GoToResults = (String, ResultType, Int?, Int?) -> Unit
 typealias GoToFacebook = () -> Unit
 typealias GoToSearching = (String) -> Unit
 typealias GoToQrScanner = () -> Unit

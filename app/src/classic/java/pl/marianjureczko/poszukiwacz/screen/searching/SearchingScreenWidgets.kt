@@ -34,7 +34,7 @@ fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
         )
         Text(
             color = Color.Gray,
-            text = "0",
+            text = score.golds.toString(),
             fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
         )
         Image(
@@ -45,7 +45,7 @@ fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
         )
         Text(
             color = Color.Gray,
-            text = "0",
+            text = score.rubies.toString(),
             fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
         )
         Image(
@@ -56,7 +56,7 @@ fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
         )
         Text(
             color = Color.Gray,
-            text = "0",
+            text = score.diamonds.toString(),
             fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize
         )
     }

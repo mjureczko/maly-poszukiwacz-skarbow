@@ -15,7 +15,6 @@ class JustFoundTreasureDescriptionFinder(
     private val TAG = javaClass.simpleName
 
     fun findTreasureDescription(
-        qrCode: String,
         justFoundTreasure: Treasure,
         selectedTreasureDescription: TreasureDescription? = null,
         userLocation: Coordinates? = null,

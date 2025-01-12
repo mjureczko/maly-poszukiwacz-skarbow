@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.util.Locale
 import javax.inject.Inject
 
+const val PARAMETER_ROUTE_NAME = "route_name"
 const val PARAMETER_RESULT_TYPE = "result_type"
 const val PARAMETER_TREASURE_ID = "treasure_id"
 const val PARAMETER_TREASURE_AMOUNT = "treasure_amount"
@@ -52,13 +52,14 @@ class ResultViewModel @Inject constructor(
     private fun createState(): ResultState {
         var moviePath: String? = null
         var subtitlesPath: String? = null
-        //TODO: conditional for custom version
         val treasureDescId = stateHandle.get<Int>(PARAMETER_TREASURE_ID) ?: NOTHING_FOUND_TREASURE_ID
-        if (NOTHING_FOUND_TREASURE_ID != treasureDescId) {
-            val treasureDescription = storageHelper.loadRoute(CustomInitializerForRoute.routeName).treasures
-                .find { it.id == treasureDescId }
-            moviePath = treasureDescription?.movieFileName
-            subtitlesPath = treasureDescription?.subtitlesFileName
+        if (treasureDescriptionHasBeenIdentified(treasureDescId)) {
+            stateHandle.get<String>(PARAMETER_ROUTE_NAME)?.let { routeName ->
+                val treasureDescription = storageHelper.loadRoute(routeName).treasures
+                    .find { it.id == treasureDescId }
+                moviePath = treasureDescription?.movieFileName
+                subtitlesPath = treasureDescription?.subtitlesFileName
+            }
         }
         val localesWithSubtitles = !"pl".equals(Locale.getDefault().language, true)
         val resultType = stateHandle.get<ResultType>(PARAMETER_RESULT_TYPE) ?: ResultType.NOT_A_TREASURE
@@ -66,5 +67,11 @@ class ResultViewModel @Inject constructor(
         val amount = stateHandle.get<Int>(PARAMETER_TREASURE_AMOUNT) ?: 0
         return ResultState(resultType, treasureType, amount, moviePath, null, subtitlesPath, localesWithSubtitles)
     }
+
+    /**
+     * It's possible to find a treasure whose TreasureDescription cannot be identified (for knowledge treasures it's
+     * always possible to identify the TreasureDescription), check JustFoundTreasureDescriptionFinder for details.
+     */
+    private fun treasureDescriptionHasBeenIdentified(treasureDescId: Int) = NOTHING_FOUND_TREASURE_ID != treasureDescId
 
 }

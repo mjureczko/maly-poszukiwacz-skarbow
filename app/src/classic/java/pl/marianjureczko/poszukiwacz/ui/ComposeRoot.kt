@@ -65,7 +65,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navController = navController,
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
-                goToResult = { resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId/$amount") },
+                goToResult = { routeName, resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$routeName/$resultType/$treasureId/$amount") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { /*navController.navigate("$SELECTOR_PATH/$it")*/ },
                 goToFacebook = goToFacebook,
@@ -75,6 +75,9 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
         composable(
             route = RESULTS_ROUTE,
             arguments = listOf(
+                navArgument(pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_ROUTE_NAME) {
+                    type = NavType.StringType
+                },
                 navArgument(PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) },
                 navArgument(PARAMETER_TREASURE_ID) { type = NavType.IntType },
                 navArgument(PARAMETER_TREASURE_AMOUNT) { type = NavType.IntType },

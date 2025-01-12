@@ -24,8 +24,8 @@ import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.photo.n.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.activity.photo.n.TipPhotoScreen
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_RESULT_TYPE
+import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_AMOUNT
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
-import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_QUANTITY
 import pl.marianjureczko.poszukiwacz.screen.result.ResultScreen
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
@@ -57,7 +57,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navController = navController,
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
-                goToResult = { resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$resultType/$treasureId/$amount") },
+                goToResult = { routeName, resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$routeName/$resultType/$treasureId/$amount") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
                 goToFacebook = goToFacebook,
@@ -100,8 +100,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navController,
                 navBackStackEntry,
                 onClickGuide,
-                //TODO t: doesn't support classic
-                goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") },
+                goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.KNOWLEDGE}/$treasureId") },
                 goToCommemorative = goToCommemorative,
                 onClickOnFacebook = goToFacebook
             )

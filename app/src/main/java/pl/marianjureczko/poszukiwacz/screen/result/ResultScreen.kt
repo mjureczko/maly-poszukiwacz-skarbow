@@ -78,7 +78,7 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
                 .weight(0.01f)
                 .background(Color.Transparent)
         )
-        if (localState.resultType == ResultType.TREASURE && localState.moviePath != null) {
+        if (localState.resultType == ResultType.KNOWLEDGE && localState.moviePath != null) {
             VideoPlayerWithButon(
                 localState.isPlayVisible,
                 localViewModel,

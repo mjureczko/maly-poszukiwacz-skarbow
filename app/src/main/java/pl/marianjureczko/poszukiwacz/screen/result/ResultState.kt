@@ -16,8 +16,7 @@ data class ResultState(
 enum class ResultType {
     NOT_A_TREASURE,
     ALREADY_TAKEN,
-    //TODO t: rename to KNOWLEDGE
-    TREASURE,
+    KNOWLEDGE,
     GOLD,
     RUBY,
     DIAMOND;
@@ -28,7 +27,7 @@ enum class ResultType {
                 TreasureType.GOLD -> GOLD
                 TreasureType.RUBY -> RUBY
                 TreasureType.DIAMOND -> DIAMOND
-                TreasureType.KNOWLEDGE -> TREASURE
+                TreasureType.KNOWLEDGE -> KNOWLEDGE
             }
     }
 
@@ -37,7 +36,7 @@ enum class ResultType {
             GOLD -> TreasureType.GOLD
             RUBY -> TreasureType.RUBY
             DIAMOND -> TreasureType.DIAMOND
-            TREASURE -> TreasureType.KNOWLEDGE
+            KNOWLEDGE -> TreasureType.KNOWLEDGE
             else -> null
         }
 }

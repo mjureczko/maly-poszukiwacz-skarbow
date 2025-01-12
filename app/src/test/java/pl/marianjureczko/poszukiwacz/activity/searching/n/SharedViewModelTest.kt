@@ -93,7 +93,7 @@ class SharedViewModelTest {
 
         //when
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { _: ResultType, _: Int?, _: Int? ->
+        val callback = viewModel.scannedTreasureCallback {_ : String, _: ResultType, _: Int?, _: Int? ->
             wasCalled = true
         }
         callback(qrResult)
@@ -115,7 +115,7 @@ class SharedViewModelTest {
 
         //when & then
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { actual, _, _ ->
+        val callback = viewModel.scannedTreasureCallback { _, actual, _, _ ->
             wasCalled = true
             assertThat(actual).isEqualTo(ResultType.NOT_A_TREASURE)
         }
@@ -138,9 +138,9 @@ class SharedViewModelTest {
 
         //when
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback { actual, _, _ ->
+        val callback = viewModel.scannedTreasureCallback { _, actual, _, _ ->
             wasCalled = true
-            assertThat(actual).isEqualTo(ResultType.TREASURE)
+            assertThat(actual).isEqualTo(ResultType.KNOWLEDGE)
         }
         callback(qrResult)
 
@@ -162,11 +162,11 @@ class SharedViewModelTest {
 
         //when & then
         var callbackUsed = 0
-        val callback1 = viewModel.scannedTreasureCallback { actual, _, _ ->
+        val callback1 = viewModel.scannedTreasureCallback { _, actual, _, _ ->
             callbackUsed++
         }
         callback1(qrResult)
-        val callback2 = viewModel.scannedTreasureCallback { actual, _, _ ->
+        val callback2 = viewModel.scannedTreasureCallback { _, actual, _, _ ->
             callbackUsed++
             assertThat(actual).isEqualTo(ResultType.ALREADY_TAKEN)
         }

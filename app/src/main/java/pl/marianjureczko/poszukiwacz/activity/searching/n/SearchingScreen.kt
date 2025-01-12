@@ -129,8 +129,8 @@ private fun SearchingScreenBody(
     }
     val scanQrLauncher = rememberLauncherForActivityResult(
         contract = ScanContract(),
-        onResult = viewModel.scannedTreasureCallback { resultType, treasureId, quantity ->
-            goToResult(resultType, treasureId, quantity)
+        onResult = viewModel.scannedTreasureCallback { routeName, resultType, treasureId, quantity ->
+            goToResult(routeName, resultType, treasureId, quantity)
         }
     )
     val prompt = stringResource(R.string.qr_scanner_msg)

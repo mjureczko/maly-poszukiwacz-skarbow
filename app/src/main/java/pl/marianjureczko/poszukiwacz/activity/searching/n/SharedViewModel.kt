@@ -101,7 +101,7 @@ class SharedViewModel @Inject constructor(
                 try {
                     scannedTreasure = TreasureParser().parse(newCode)
                     val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures)
-                    val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(newCode, scannedTreasure)
+                    val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(scannedTreasure)
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
                     if (treasuresProgress.contains(scannedTreasure)) {
                         result = ResultType.ALREADY_TAKEN
@@ -119,7 +119,7 @@ class SharedViewModel @Inject constructor(
                 }
             }
             result?.let {
-                goToResults(it, treasureId, scannedTreasure?.quantity)
+                goToResults(state.value.route.name, it, treasureId, scannedTreasure?.quantity)
             }
         }
     }
@@ -219,7 +219,6 @@ class SharedViewModel @Inject constructor(
         }
     }
 
-    //TODO t: how to handle first search, when no treasure is selected
     private fun createState(): SharedState {
         Log.i(TAG, "Create state")
         val route = loadRoute()
@@ -228,10 +227,6 @@ class SharedViewModel @Inject constructor(
         val mediaPlayer = MediaPlayer()
         mediaPlayer.isLooping = false
         mediaPlayer.setOnErrorListener { mp, what, extra -> handleMediaPlayerError(what, extra) }
-        if (treasuresProgress.selectedTreasure == null) {
-            treasuresProgress.selectedTreasure = route.treasures[0]
-            storageHelper.save(treasuresProgress)
-        }
         return SharedState(
             mediaPlayer,
             route,

@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 
@@ -28,10 +27,10 @@ class CustomJustFoundTreasureDescriptionFinderTest {
         //given
         val treasureDescription = some<TreasureDescription>()
         val finder = JustFoundTreasureDescriptionFinder(listOf(treasureDescription))
-        val treasure = Treasure(someString(), somePositiveInt(10), TreasureType.KNOWLEDGE)
+        val treasure = Treasure(treasureDescription.qrCode!!, somePositiveInt(10), TreasureType.KNOWLEDGE)
 
         //when
-        val actual = finder.findTreasureDescription(treasureDescription.qrCode!!, treasure)
+        val actual = finder.findTreasureDescription(treasure)
 
         //then
         assertThat(actual).isEqualTo(treasureDescription)
@@ -45,7 +44,7 @@ class CustomJustFoundTreasureDescriptionFinderTest {
         val treasure = Treasure(someString(), somePositiveInt(10), TreasureType.KNOWLEDGE)
 
         //when
-        val actual = finder.findTreasureDescription(TreasureDescriptionArranger.validQrCode("k"), treasure)
+        val actual = finder.findTreasureDescription(treasure)
 
         //then
         assertThat(actual).isNull()
@@ -131,7 +130,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
             //justFoundTreasure, description, userCoordinates, locationCalculator)
 
         //when
-        val actual = finder.findTreasureDescription(someString(), justFoundTreasure, description, userCoordinates)
+        val actual = finder.findTreasureDescription(justFoundTreasure, description, userCoordinates)
 
         //then
         assertThat(actual).isEqualTo(expected)
