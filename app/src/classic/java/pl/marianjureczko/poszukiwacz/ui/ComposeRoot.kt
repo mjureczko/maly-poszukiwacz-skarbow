@@ -12,6 +12,8 @@ import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_ROUTE
+import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_PATH
+import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
@@ -23,6 +25,8 @@ import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.screen.result.ResultScreen
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.TreasureEditorScreen
+import pl.marianjureczko.poszukiwacz.screen.treasureselector.PARAMETER_JUST_FOUND_TREASURE
+import pl.marianjureczko.poszukiwacz.screen.treasureselector.SelectorScreen
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
@@ -66,8 +70,8 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
                 goToResult = { routeName, resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$routeName/$resultType/$treasureId/$amount") },
-                goToMap = { navController.navigate("map/$it") },
-                goToTreasureSelector = { /*navController.navigate("$SELECTOR_PATH/$it")*/ },
+                goToMap = { /*navController.navigate("map/$it")*/ },
+                goToTreasureSelector = { treasureDescriptionId -> navController.navigate("$SELECTOR_PATH/$treasureDescriptionId") },
                 goToFacebook = goToFacebook,
                 goToCommemorative = goToCommemorative,
             )
@@ -103,19 +107,19 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
 //                onClickOnFacebook = goToFacebook
 //            )
 //        }
-//        composable(
-//            route = SELECTOR_ROUTE,
-//            arguments = listOf(navArgument(PARAMETER_JUST_FOUND_TREASURE) { type = NavType.IntType }),
-//        ) { navBackStackEntry ->
-//            SelectorScreen(
-//                navController,
-//                navBackStackEntry,
-//                onClickGuide,
-//                goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.TREASURE}/$treasureId") },
-//                goToCommemorative = goToCommemorative,
-//                onClickOnFacebook = goToFacebook
-//            )
-//        }
+        composable(
+            route = SELECTOR_ROUTE,
+            arguments = listOf(navArgument(PARAMETER_JUST_FOUND_TREASURE) { type = NavType.IntType }),
+        ) { navBackStackEntry ->
+            SelectorScreen(
+                navController,
+                navBackStackEntry,
+                onClickGuide,
+                goToResult = { },
+                goToCommemorative = goToCommemorative,
+                onClickOnFacebook = goToFacebook
+            )
+        }
 //        composable(
 //            route = COMMEMORATIVE_ROUTE,
 //            arguments = listOf(navArgument(PARAMETER_TREASURE_DESCRIPTION_ID) { type = NavType.IntType })

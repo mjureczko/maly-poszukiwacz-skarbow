@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.activity.searching.n
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,7 +40,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
-import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
@@ -127,12 +126,8 @@ private fun SearchingScreenBody(
     ) {
         goToTreasureSelector(state.treasuresProgress.justFoundTreasureId!!)
     }
-    val scanQrLauncher = rememberLauncherForActivityResult(
-        contract = ScanContract(),
-        onResult = viewModel.scannedTreasureCallback { routeName, resultType, treasureId, quantity ->
-            goToResult(routeName, resultType, treasureId, quantity)
-        }
-    )
+    val scanQrLauncher: ActivityResultLauncher<ScanOptions> =
+        viewModel.qrScannerPort.provideLauncher(viewModel, goToResult)
     val prompt = stringResource(R.string.qr_scanner_msg)
     val scanQrCallback: GoToQrScanner = {
         val scanOptions = ScanOptions()

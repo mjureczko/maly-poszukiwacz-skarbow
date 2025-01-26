@@ -46,10 +46,6 @@ object SingletonModule {
     }
 
     @Provides
-    @IoDispatcher
-    fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @Provides
     @MainDispatcher
     fun mainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 

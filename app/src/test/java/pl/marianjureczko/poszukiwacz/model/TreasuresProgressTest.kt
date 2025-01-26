@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someInt
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -117,5 +118,30 @@ class TreasuresProgressTest {
         assertThat(actual.contains(treasure)).isTrue()
         assertThat(actual.diamonds).isEqualTo(treasure.quantity)
         assertThat(actual.collectedTreasuresDescriptionId).containsExactly(description.id)
+    }
+
+    @Test
+    fun `SHOULD add treasure description to collected WHEN has not been yet collected`() {
+        //given
+        val bag = some<TreasuresProgress>()
+        val expected = someInt()
+
+        //when
+        val result = bag.toggleTreasureDescriptionCollected(expected)
+
+        //then
+        assertTrue(result.collectedTreasuresDescriptionId.contains(expected))
+    }
+
+    @Test
+    fun `SHOULD remove treasure description id from collected WHEN was already collected`() {
+        //given
+        val bag = some<TreasuresProgress>()
+
+        //when
+        val result = bag.toggleTreasureDescriptionCollected(bag.collectedTreasuresDescriptionId.first())
+
+        //then
+        assertFalse(result.collectedTreasuresDescriptionId.contains(bag.collectedTreasuresDescriptionId.first()))
     }
 }

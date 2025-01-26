@@ -25,6 +25,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
+import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
@@ -49,6 +50,7 @@ interface ResultSharedViewModel {
 
 interface SearchingViewModel : DoCommemorative {
     val state: State<SharedState>
+    val qrScannerPort: QrScannerPort
     fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback
 }
 
@@ -57,6 +59,7 @@ interface SelectorSharedViewModel : DoCommemorative {
     fun updateJustFoundFromSelector()
     fun selectorPresented()
     fun updateSelectedTreasure(treasure: TreasureDescription)
+    fun toggleTreasureDescriptionCollected(treasureDescriptionId: Int)
 }
 
 interface CommemorativeSharedViewModel : DoCommemorative {
@@ -71,6 +74,7 @@ class SharedViewModel @Inject constructor(
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
     private val cameraPort: CameraPort,
+    override val qrScannerPort: QrScannerPort,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
@@ -88,7 +92,7 @@ class SharedViewModel @Inject constructor(
         get() = _state
 
     override fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback {
-        return { scanResult ->
+        return { scanedContent ->
             /*
             * newCode will contain code like k01001
             * result will be NOT_A_TREASURE or ALREADY_TAKEN or TREASURE
@@ -96,12 +100,16 @@ class SharedViewModel @Inject constructor(
             var result: ResultType? = null
             var treasureId = NOTHING_FOUND_TREASURE_ID
             var scannedTreasure: Treasure? = null
-            if (scanResult != null && !scanResult.contents.isNullOrEmpty()) {
-                val newCode = scanResult.contents
+            if (!scanedContent.isNullOrEmpty()) {
+                val newCode = scanedContent
                 try {
                     scannedTreasure = TreasureParser().parse(newCode)
                     val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures)
-                    val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(scannedTreasure)
+                    val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
+                        justFoundTreasure = scannedTreasure,
+                        selectedTreasureDescription = state.value.treasuresProgress.selectedTreasure,
+                        userLocation = state.value.currentLocation?.let { Coordinates.of(it) }
+                    )
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
                     if (treasuresProgress.contains(scannedTreasure)) {
                         result = ResultType.ALREADY_TAKEN
@@ -129,10 +137,12 @@ class SharedViewModel @Inject constructor(
         foundTreasure: Treasure,
         foundTd: TreasureDescription?
     ): TreasuresProgress {
-        treasuresProgress.collect(foundTreasure, foundTd)
-        var result: TreasuresProgress = treasuresProgress.copy(resultRequiresPresentation = true)
-        result = result.copy(justFoundTreasureId = foundTd?.id)
-        result = result.copy(treasureFoundGoToSelector = true)
+        var result: TreasuresProgress = treasuresProgress.collect(foundTreasure, foundTd)
+        result = result.copy(
+            resultRequiresPresentation = true,
+            justFoundTreasureId = foundTd?.id,
+            treasureFoundGoToSelector = true
+        )
         storageHelper.save(result)
         return result
     }
@@ -159,12 +169,19 @@ class SharedViewModel @Inject constructor(
         storageHelper.save(state.value.treasuresProgress)
     }
 
-    override fun updateSelectedTreasure(treasure: TreasureDescription) {
+    override fun updateSelectedTreasure(td: TreasureDescription) {
         _state.value = state.value.copy(
             treasuresProgress = state.value.treasuresProgress.copy(
-                selectedTreasure = treasure
+                selectedTreasure = td
             )
         )
+    }
+
+    override fun toggleTreasureDescriptionCollected(treasureDescriptionId: Int) {
+        _state.value = state.value.copy(
+            treasuresProgress = state.value.treasuresProgress.toggleTreasureDescriptionCollected(treasureDescriptionId)
+        )
+        storageHelper.save(state.value.treasuresProgress)
     }
 
     override fun onCleared() {

@@ -9,6 +9,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
@@ -17,6 +19,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PortsModule {
+
+    @Provides
+    @IoDispatcher
+    fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Singleton
     @Provides
@@ -47,5 +53,11 @@ object PortsModule {
         @ApplicationContext appContext: Context
     ): CameraPort {
         return CameraPort(appContext)
+    }
+
+    @Singleton
+    @Provides
+    fun qrScannerPort(): QrScannerPort {
+        return QrScannerPort()
     }
 }

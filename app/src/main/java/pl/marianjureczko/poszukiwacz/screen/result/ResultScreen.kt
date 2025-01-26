@@ -24,8 +24,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -48,6 +51,8 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
+const val PLAY_MOVIE_BUTTON = "Play the movie"
+const val TREASURE_QUANTITY = "treasure quantity"
 private const val SUBTITLES_MIME_TYPE = "application/x-subrip"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -79,7 +84,7 @@ fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
                 .background(Color.Transparent)
         )
         if (localState.resultType == ResultType.KNOWLEDGE && localState.moviePath != null) {
-            VideoPlayerWithButon(
+            VideoPlayerWithButton(
                 localState.isPlayVisible,
                 localViewModel,
                 localState.moviePath,
@@ -122,17 +127,19 @@ private fun TreasureImage(treasureType: TreasureType? = TreasureType.GOLD, amoun
                 painterResource(treasureImage),
                 modifier = Modifier
                     .padding(10.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .testTag(treasureImage.toString()),
                 contentDescription = "${treasureType.name} treasure",
                 contentScale = ContentScale.Inside,
             )
             Text(
+                modifier = Modifier.semantics { contentDescription = TREASURE_QUANTITY },
                 fontSize = 60.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = FANCY_FONT,
                 color = Color.Gray,
                 textAlign = TextAlign.Center,
-                text = "$amount"
+                text = "$amount",
             )
         }
     }
@@ -157,7 +164,7 @@ private fun Message(localState: ResultState) {
 
 @Composable
 @Preview(showBackground = true, apiLevel = 31)
-private fun VideoPlayerWithButon(
+private fun VideoPlayerWithButton(
     isPlayVisible: Boolean = true,
     movieController: MovieController = object : MovieController {
         override fun onPlay() {}
@@ -268,7 +275,7 @@ private fun PlayButton(
                     videoView.start()
                     movieController.onPlay()
                 },
-            contentDescription = "Play the movie",
+            contentDescription = PLAY_MOVIE_BUTTON,
             contentScale = ContentScale.Inside,
         )
     }

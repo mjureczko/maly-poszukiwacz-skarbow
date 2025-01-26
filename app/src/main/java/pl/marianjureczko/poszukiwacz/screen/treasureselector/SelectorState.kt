@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity.treasureselector.n
+package pl.marianjureczko.poszukiwacz.screen.treasureselector
 
 import android.net.Uri
 

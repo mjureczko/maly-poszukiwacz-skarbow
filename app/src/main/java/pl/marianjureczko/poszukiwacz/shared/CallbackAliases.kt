@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.shared
 
-import com.journeyapps.barcodescanner.ScanIntentResult
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 
@@ -15,7 +14,7 @@ typealias GoToResultWithTreasure = (Int) -> Unit
 typealias GoToTreasureSelector = (Int) -> Unit
 
 typealias RotatePhoto = (Int) -> Unit
-typealias ScanTreasureCallback = (ScanIntentResult?) -> Unit
+typealias ScanTreasureCallback = (String?) -> Unit
 typealias UpdateSubtitlesLine = (String) -> Unit
 typealias GoToCommemorative = (Int) -> Unit
 typealias GoToTreasureEditor = (String) -> Unit

@@ -5,21 +5,28 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import org.mockito.Mockito.mock
-import pl.marianjureczko.poszukiwacz.model.RouteArranger
+import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
+import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object TestPortsModule {
 
-    val storage = TestStoragePort()
     val locationClient = mock<FusedLocationProviderClient>()
     val location = TestLocationPort()
     val camera = TestCameraPort()
+    val qrScannerPort = TestQrScannerPort()
+    var ioDispatcher = StandardTestDispatcher()
+
+    @Provides
+    @IoDispatcher
+    fun ioDispatcher(): CoroutineDispatcher = ioDispatcher //Dispatchers.IO
 
     @Singleton
     @Provides
@@ -41,18 +48,8 @@ object TestPortsModule {
 
     @Singleton
     @Provides
-    fun storageHelper(): StorageHelper {
-        return storage
+    fun qrScannerPort(): QrScannerPort {
+        return qrScannerPort
     }
 
-
-
-    fun getRouteFromStorage() = storage.routes.values.first()
-
-    fun assureRouteIsPresentInStorage() {
-        if (storage.routes.isEmpty()) {
-            val newRoute = RouteArranger.routeWithoutTipFiles()
-            storage.routes[newRoute.name] = newRoute
-        }
-    }
 }

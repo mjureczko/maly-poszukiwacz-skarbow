@@ -5,7 +5,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.ADD_TREASURE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.DO_PHOTO_TIP_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.RECORD_SOUND_TIP_BUTTON
@@ -20,18 +19,16 @@ import pl.marianjureczko.poszukiwacz.ui.components.YES_BUTTON
 @HiltAndroidTest
 class TreasureEditorScreenTest : UiTest() {
 
-    var route: Route = TestPortsModule.getRouteFromStorage()
-
     @Test
     fun shouldShowAllTreasuresFromRoute_whenEditingTheRoute() {
         //given
         composeRule.waitForIdle()
 
         //when
-        goToTreasuresEditorScreen(route.name)
+        goToTreasuresEditorScreen(route!!.name)
 
         //then
-        route.treasures.forEach { td ->
+        route!!.treasures.forEach { td ->
             getNode("$TREASURE_ITEM_TEXT ${td.id}")
                 .assertTextEquals("[${td.id}] ${td.latitude} ${td.longitude}")
         }
@@ -40,8 +37,8 @@ class TreasureEditorScreenTest : UiTest() {
     @Test
     fun shouldAddTreasure_whenTapOnPlus() {
         //given
-        val newTreasureId = route.nextId()
-        goToTreasuresEditorScreen(route.name)
+        val newTreasureId = route!!.nextId()
+        goToTreasuresEditorScreen(route!!.name)
         val lat = 1.0
         val lng = 2.0
         TestPortsModule.location.updateLocation(lat, lng)
@@ -54,7 +51,7 @@ class TreasureEditorScreenTest : UiTest() {
         val treasureNode = getNode("$TREASURE_ITEM_TEXT $newTreasureId")
         treasureNode.assertTextEquals("[$newTreasureId] $lat $lng")
 
-        val newTreasure = TestPortsModule.getRouteFromStorage().treasures.find { it.id == newTreasureId }!!
+        val newTreasure = getRouteFromStorage().treasures.find { it.id == newTreasureId }!!
         assertEquals(lat, newTreasure.latitude, 0.001)
         assertEquals(lng, newTreasure.longitude, 0.001)
         assertEquals(null, newTreasure.tipFileName)
@@ -65,16 +62,16 @@ class TreasureEditorScreenTest : UiTest() {
     fun shouldRecordAudioTip_whenTapOnMicrophone() {
         //given
         composeRule.waitForIdle()
-        goToTreasuresEditorScreen(route.name)
+        goToTreasuresEditorScreen(route!!.name)
 
         //when
-        performTap("$RECORD_SOUND_TIP_BUTTON ${route.treasures[0].id}")
+        performTap("$RECORD_SOUND_TIP_BUTTON ${route!!.treasures[0].id}")
 
         //then
         Thread.sleep(100)
         performTap(STOP_RECORDING_BUTTON)
-        TestPortsModule.storage.fileNotEmpty = true
-        performTap("$RECORD_SOUND_TIP_BUTTON ${route.treasures[0].id}")
+        BuildVariantSpecificTestPortsModule.storage.fileNotEmpty = true
+        performTap("$RECORD_SOUND_TIP_BUTTON ${route!!.treasures[0].id}")
         getNode(YES_BUTTON).assertExists()
         performTap(NO_BUTTON)
         getNode(YES_BUTTON).assertDoesNotExist()
@@ -83,19 +80,19 @@ class TreasureEditorScreenTest : UiTest() {
     @Test
     fun shouldSavePhotoTip_whenTapOnCamera() {
         //given
-        TestPortsModule.storage.fileNotEmpty = false
+        BuildVariantSpecificTestPortsModule.storage.fileNotEmpty = false
         composeRule.waitForIdle()
-        goToTreasuresEditorScreen(route.name)
+        goToTreasuresEditorScreen(route!!.name)
         TestPortsModule.camera.counter = 0
 
         //when
-        performTap("$DO_PHOTO_TIP_BUTTON ${route.treasures[0].id}")
+        performTap("$DO_PHOTO_TIP_BUTTON ${route!!.treasures[0].id}")
 
         //then
-        TestPortsModule.storage.fileNotEmpty = true
+        BuildVariantSpecificTestPortsModule.storage.fileNotEmpty = true
         assertEquals(1, TestPortsModule.camera.counter)
         composeRule.waitForIdle()
-        performTap("$DO_PHOTO_TIP_BUTTON ${route.treasures[0].id}")
+        performTap("$DO_PHOTO_TIP_BUTTON ${route!!.treasures[0].id}")
         getNode(YES_BUTTON).assertExists()
         performTap(NO_BUTTON)
         getNode(YES_BUTTON).assertDoesNotExist()

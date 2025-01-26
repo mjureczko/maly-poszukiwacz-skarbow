@@ -4,14 +4,28 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import dagger.hilt.android.testing.HiltAndroidTest
+import dagger.hilt.android.testing.UninstallModules
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import pl.marianjureczko.poszukiwacz.activity.searching.n.COMPASS
 import pl.marianjureczko.poszukiwacz.screen.main.GUIDE_TEXT
 import pl.marianjureczko.poszukiwacz.screen.main.NEXT_GUIDE_BUTTON
 
+@UninstallModules(TestPortsModule::class, BuildVariantSpecificTestPortsModule::class)
 @HiltAndroidTest
 class MainScreenTest : UiTest() {
 
+    @Before
+    override fun init() {
+        hiltRule.inject()
+        // do nothing more, this test doesn't use pl.marianjureczko.poszukiwacz.TestPortsModule
+    }
+
+    @After
+    override fun restoreRoute() {
+        // do nothing, this test doesn't use pl.marianjureczko.poszukiwacz.TestPortsModule
+    }
 
     @Test
     fun shouldGuideViewsWithImages_whenArrowIsClicked() {

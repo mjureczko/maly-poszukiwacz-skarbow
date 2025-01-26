@@ -44,7 +44,7 @@ open class StorageHelper(val context: Context) {
         xmlHelper.writeToFile(progress, getProgressFile(progress.routeName))
     }
 
-    fun save(hunterPath: HunterPath) {
+    open fun save(hunterPath: HunterPath) {
         xmlHelper.writeToFile(hunterPath, getHunterPathFile(hunterPath.routeName))
     }
 
@@ -167,7 +167,7 @@ open class StorageHelper(val context: Context) {
             .forEach { it -> remove(it) }
     }
 
-    fun pathToRoutesDir(): String = getRoutesDir().absolutePath
+    open fun pathToRoutesDir(): String = getRoutesDir().absolutePath
 
     //TODO: what about invalid characters in name?
     fun getRouteFile(routeName: String): File = getFile(getRoutesDir(), routeName)

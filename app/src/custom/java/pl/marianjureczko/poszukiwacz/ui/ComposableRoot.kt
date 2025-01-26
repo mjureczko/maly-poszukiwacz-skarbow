@@ -30,8 +30,8 @@ import pl.marianjureczko.poszukiwacz.screen.result.ResultScreen
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.SelectorScreen
+import pl.marianjureczko.poszukiwacz.screen.treasureselector.PARAMETER_JUST_FOUND_TREASURE
+import pl.marianjureczko.poszukiwacz.screen.treasureselector.SelectorScreen
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook

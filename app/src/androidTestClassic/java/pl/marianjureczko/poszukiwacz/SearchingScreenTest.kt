@@ -1,66 +1,40 @@
 package pl.marianjureczko.poszukiwacz
 
-import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertTextEquals
 import androidx.test.espresso.Espresso.pressBack
-import com.ocadotechnology.gembus.test.somePositiveInt
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SCAN_TREASURE_BUTTON
-import pl.marianjureczko.poszukiwacz.activity.searching.n.STEPS_TO_TREASURE
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
-import pl.marianjureczko.poszukiwacz.screen.result.PLAY_MOVIE_BUTTON
+import pl.marianjureczko.poszukiwacz.screen.result.TREASURE_QUANTITY
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.TREASURE_COLLECTED_CHECKBOX
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 
+//Prepared for Pixel 6a API 34
 @UninstallModules(PortsModule::class)
 @HiltAndroidTest
 class SearchingScreenTest : UiTest() {
-
-    @Test
-    fun shouldUpdateNavigationWidgets_whenLocationIsUpdated() {
-        //given
-        composeRule.waitForIdle()
-        TestPortsModule.ioDispatcher.scheduler.runCurrent()
-        goToSearching()
-        val distanceToTreasure = somePositiveInt(999)
-
-        //when
-        TestPortsModule.location.updateLocation(
-            route!!.treasures[0].latitude + 0.01,
-            route!!.treasures[0].longitude + 0.01,
-            distanceToTreasure = distanceToTreasure.toFloat()
-        )
-
-        //then
-        composeRule.waitForIdle()
-        val stepsToTreasure: SemanticsNodeInteraction = getNode(STEPS_TO_TREASURE)
-        val expected = (distanceToTreasure * LocationCalculator.METERS_TOS_STEP_FACTOR).toInt()
-        stepsToTreasure.assertTextEquals(expected.toString())
-    }
-
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun shouldMarkCollectedTreasureAndPromptForNewOne_whenCollectingTreasureCloseToTheSelectedOne() {
         //given
         composeRule.waitForIdle()
-        TestPortsModule.ioDispatcher.scheduler.runCurrent()
-        goToSearching()
+        goToSearchingScreen(route!!)
         val selectedTreasureDef = route!!.treasures.first()
         TestPortsModule.location.updateLocation(selectedTreasureDef.latitude, selectedTreasureDef.longitude)
-        TestPortsModule.qrScannerPort.setContents(selectedTreasureDef.qrCode!!)
+        TestPortsModule.qrScannerPort.setContents("g01001")
         val treasure: Treasure = TreasureParser().parse(TestPortsModule.qrScannerPort.getContents())
 
         //when
         performTap(SCAN_TREASURE_BUTTON)
 
         //then
-        getNode(PLAY_MOVIE_BUTTON).assertExists("Button to play the movie should be displayed")
+        getNode(TREASURE_QUANTITY).assertTextEquals(treasure.quantity.toString())
+        assertImageIsDisplayed(treasure.type.image())
 
         //when
         TestPortsModule.ioDispatcher.scheduler.advanceTimeBy(600)

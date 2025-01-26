@@ -6,7 +6,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
-import org.junit.After
 import org.junit.Test
 import pl.marianjureczko.poszukiwacz.activity.searching.n.COMPASS
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -15,7 +14,6 @@ import pl.marianjureczko.poszukiwacz.screen.main.DELETE_ROUTE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.EDIT_ROUTE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.ENTER_ROUTE_NAME_TITLE
 import pl.marianjureczko.poszukiwacz.screen.main.NEW_ROUTE_BUTTON
-import pl.marianjureczko.poszukiwacz.screen.main.ROUTE
 import pl.marianjureczko.poszukiwacz.screen.main.ROUTE_NAME_TEXT_EDIT
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.TREASURE_ITEM_ROW
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.TREASURE_ITEM_TEXT
@@ -29,14 +27,6 @@ import java.time.ZoneOffset
 @UninstallModules(PortsModule::class)
 @HiltAndroidTest
 class MainScreenTest : UiTest() {
-
-    var route: Route = TestPortsModule.getRouteFromStorage()
-
-    @After
-    fun restoreRoute() {
-        TestPortsModule.assureRouteIsPresentInStorage()
-        route = TestPortsModule.getRouteFromStorage()
-    }
 
     @Test
     fun shouldGoToTreasureEditorScreen_whenCreatingNewRoute() {
@@ -75,12 +65,12 @@ class MainScreenTest : UiTest() {
 //        }
 
         //when
-        goToTreasuresEditorScreen(route.name)
+        goToTreasuresEditorScreen(route!!.name)
 
         //then
         val screenTitle: SemanticsNodeInteraction = getNode(TOPBAR_SCREEN_TITLE)
-        screenTitle.assertTextEquals("${context.getString(R.string.route)} ${route.name}")
-        route.treasures.forEach { treasure ->
+        screenTitle.assertTextEquals("${context.getString(R.string.route)} ${route!!.name}")
+        route!!.treasures.forEach { treasure ->
             val treasureText: SemanticsNodeInteraction = getNode("$TREASURE_ITEM_TEXT ${treasure.id}")
             treasureText.assertTextEquals(treasure.prettyName())
         }
@@ -92,21 +82,21 @@ class MainScreenTest : UiTest() {
         composeRule.waitForIdle()
 
         //when
-        performTap(DELETE_ROUTE_BUTTON + route.name)
+        performTap(DELETE_ROUTE_BUTTON + route!!.name)
         performTap(YES_BUTTON)
 
         //then
-        getNode(EDIT_ROUTE_BUTTON + route.name)
+        getNode(EDIT_ROUTE_BUTTON + route!!.name)
             .assertDoesNotExist()
     }
 
     @Test
     fun shouldGoToSearching_whenTapOnRoute() {
         //given
-        var route: Route = TestPortsModule.getRouteFromStorage()
+        val route: Route = super.route!!
 
         //when
-        performTap("$ROUTE ${route.name}")
+        goToSearchingScreen(route)
 
         //then
         getNode(COMPASS).assertExists()

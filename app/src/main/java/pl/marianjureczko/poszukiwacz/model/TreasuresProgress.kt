@@ -55,9 +55,8 @@ data class TreasuresProgress(
     fun contains(treasure: Treasure): Boolean =
         collectedQrCodes.contains(treasure.id)
 
-    /** When collecting KNOWLEDGE collect(treasureDescription: TreasureDescription) must be called as well */
     fun collect(treasure: Treasure, treasureDescription: TreasureDescription?): TreasuresProgress {
-        treasureDescription?.let {  collectedTreasuresDescriptionId.add(it.id) }
+        treasureDescription?.let { collectedTreasuresDescriptionId.add(it.id) }
         collectedQrCodes.add(treasure.id)
         when (treasure.type) {
             TreasureType.GOLD -> golds += treasure.quantity
@@ -68,9 +67,15 @@ data class TreasuresProgress(
         return this
     }
 
-    /** When collecting KNOWLEDGE collect(treasure: Treasure) must be called as well */
-//    fun collect(treasureDescription: TreasureDescription) =
-//        collectedTreasuresDescriptionId.add(treasureDescription.id)
+    /** To be used for the classic version, ie when user wants to mark as collected despite the treasure wasn't detected autoamtically */
+    fun toggleTreasureDescriptionCollected(treasureDescriptionId: Int): TreasuresProgress {
+        val result = if (collectedTreasuresDescriptionId.contains(treasureDescriptionId)) {
+            (collectedTreasuresDescriptionId - treasureDescriptionId).toMutableSet()
+        } else {
+            (collectedTreasuresDescriptionId + treasureDescriptionId).toMutableSet()
+        }
+        return copy(collectedTreasuresDescriptionId = result)
+    }
 
     fun addCommemorativePhoto(treasureDescription: TreasureDescription, commemorativePhoto: String) {
         commemorativePhotosByTreasuresDescriptionIds[treasureDescription.id] = commemorativePhoto

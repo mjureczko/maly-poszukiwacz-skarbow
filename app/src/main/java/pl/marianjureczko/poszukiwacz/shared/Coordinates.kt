@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.shared
 
+import android.location.Location
 import java.io.Serializable
 
 data class Coordinates(
@@ -11,4 +12,8 @@ data class Coordinates(
      * east–west position, ranging from -180 to 180
      */
     val longitude: Double
-) : Serializable
+) : Serializable {
+    companion object {
+        fun of(location: Location) = Coordinates(location.latitude, location.longitude)
+    }
+}

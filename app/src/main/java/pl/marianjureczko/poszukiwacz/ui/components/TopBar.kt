@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 
 const val TOPBAR_SCREEN_TITLE = "Screen title"
+const val TOPBAR_GO_BACK = "Go back"
 
 @Composable
 fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
@@ -42,6 +43,7 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 EmbeddedButton(
+                    modifier = Modifier.semantics { contentDescription = TOPBAR_GO_BACK },
                     imageVector = Icons.Outlined.ArrowBack,
                     colorFilter = ColorFilter.tint(Color.White)
                 ) { navController.navigateUp() }

@@ -10,11 +10,28 @@ import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import dagger.hilt.android.testing.HiltAndroidRule
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import pl.marianjureczko.poszukiwacz.activity.main.MainActivity
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import javax.inject.Inject
 
 abstract class AbstractUITest {
+
+    @Inject
+    internal lateinit var injectableStorage: StorageHelper
+    var storage: TestStoragePort? = null
+    var route: Route? = null
+        get() {
+            if (field == null) {
+                field = getRouteFromStorage()
+            }
+            return field
+        }
+
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
 
@@ -30,8 +47,16 @@ abstract class AbstractUITest {
     val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before
-    fun init() {
+    open fun init() {
         hiltRule.inject()
+        if (injectableStorage is TestStoragePort) {
+            storage = injectableStorage as TestStoragePort
+        }
+    }
+
+    @After
+    open fun restoreRoute() {
+        BuildVariantSpecificTestPortsModule.assureRouteIsPresentInStorage()
     }
 
     fun performTap(contentDescription: String) {
@@ -49,5 +74,13 @@ abstract class AbstractUITest {
     fun assertImageIsDisplayed(drawableId: Int) {
         composeRule.onNodeWithTag(drawableId.toString())
             .assertIsDisplayed()
+    }
+
+    protected fun getRouteFromStorage(): Route {
+        return if (storage == null) {
+            injectableStorage.loadRoute(CustomInitializerForRoute.routeName)
+        } else {
+            storage!!.routes.values.first()
+        }
     }
 }

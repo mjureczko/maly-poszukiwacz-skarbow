@@ -12,10 +12,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.n.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_RESULT_TYPE
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_AMOUNT
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
+import pl.marianjureczko.poszukiwacz.screen.treasureselector.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.ui.ComposeRoot
 import pl.marianjureczko.poszukiwacz.ui.Screen
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
