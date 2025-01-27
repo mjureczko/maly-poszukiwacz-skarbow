@@ -16,11 +16,13 @@ import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_ROUTE
-import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
-import pl.marianjureczko.poszukiwacz.screen.phototip.TipPhotoScreen
+import pl.marianjureczko.poszukiwacz.activity.map.n.MapScreen
+import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
+import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
+import pl.marianjureczko.poszukiwacz.screen.phototip.TipPhotoScreen
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_RESULT_TYPE
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_AMOUNT
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
@@ -72,7 +74,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 onClickOnGuide = onClickGuide,
                 goToTipPhoto = { navController.navigate("tipPhoto/$it") },
                 goToResult = { routeName, resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$routeName/$resultType/$treasureId/$amount") },
-                goToMap = { /*navController.navigate("map/$it")*/ },
+                goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { treasureDescriptionId -> navController.navigate("$SELECTOR_PATH/$treasureDescriptionId") },
                 goToFacebook = goToFacebook,
                 goToCommemorative = goToCommemorative,
@@ -99,16 +101,16 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 onClickOnFacebook = goToFacebook
             )
         }
-//        composable(
-//            route = "map/{$PARAMETER_ROUTE_NAME_2}",
-//            arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
-//        ) {
-//            MapScreen(
-//                navController = navController,
-//                onClickOnGuide = onClickGuide,
-//                onClickOnFacebook = goToFacebook
-//            )
-//        }
+        composable(
+            route = "map/{$PARAMETER_ROUTE_NAME_2}",
+            arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
+        ) {
+            MapScreen(
+                navController = navController,
+                onClickOnGuide = onClickGuide,
+                onClickOnFacebook = goToFacebook
+            )
+        }
         composable(
             route = SELECTOR_ROUTE,
             arguments = listOf(navArgument(PARAMETER_JUST_FOUND_TREASURE) { type = NavType.IntType }),
