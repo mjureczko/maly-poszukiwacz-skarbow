@@ -1,9 +1,11 @@
 package pl.marianjureczko.poszukiwacz.usecase
 
+import android.content.Context
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.mock
 import pl.marianjureczko.poszukiwacz.TestStoragePort
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -12,7 +14,7 @@ import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteContainsTreasureWith
 
 class AddTreasureDescriptionToRouteTest {
 
-    private val storage = TestStoragePort()
+    private val storage = TestStoragePort(mock<Context>())
     private val useCase = AddTreasureDescriptionToRoute(storage)
     private val coordinates = some<Coordinates>()
 

@@ -12,30 +12,29 @@ import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.DoCommemorative
 import pl.marianjureczko.poszukiwacz.activity.searching.n.HasCommemorativePhoto
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 
 @Composable
 fun CommemorativePhotoButton(
     isPermissionGranted: Boolean,
     hasCommemorativePhoto: HasCommemorativePhoto,
-    treasure: TreasureDescription,
     goToCommemorative: GoToCommemorative,
     doCommemorative: DoCommemorative,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    treasureDescriptionId: Int
 ) {
-    if (hasCommemorativePhoto.hasCommemorativePhoto(treasure.id)) {
+    if (hasCommemorativePhoto.hasCommemorativePhoto(treasureDescriptionId)) {
         Image(
             painterResource(R.drawable.camera_show_photo),
             modifier = modifier
                 .padding(2.dp)
                 .height(35.dp)
-                .clickable { goToCommemorative(treasure.id) },
+                .clickable { goToCommemorative(treasureDescriptionId) },
             contentDescription = "Show commemorative photo",
             contentScale = ContentScale.Inside,
         )
     } else {
-        val doPhoto = doCommemorative.getDoPhoto(isPermissionGranted, treasure.id)
+        val doPhoto = doCommemorative.getDoPhoto(isPermissionGranted, treasureDescriptionId)
         Image(
             painterResource(R.drawable.camera_do_photo),
             modifier = modifier

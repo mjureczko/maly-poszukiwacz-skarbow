@@ -87,7 +87,8 @@ fun SearchingScreen(
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
-    val title = "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasure.id}"
+    val title =
+        "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasureDescriptionId}"
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(navController, title, onClickOnGuide, goToFacebook) },
@@ -139,12 +140,12 @@ private fun SearchingScreenBody(
             CommemorativePhotoButton(
                 cameraPermissionState.status.isGranted,
                 state,
-                state.treasuresProgress.selectedTreasure,
                 goToCommemorative,
                 viewModel,
                 Modifier
                     .align(Alignment.TopEnd)
-                    .padding(15.dp)
+                    .padding(15.dp),
+                state.treasuresProgress.selectedTreasureDescriptionId
             )
             Column {
                 Scores(Modifier.align(Alignment.Start), score = state.treasuresProgress)
@@ -154,7 +155,7 @@ private fun SearchingScreenBody(
         Steps(state.stepsToTreasure)
         Buttons(
             scanQrCallback,
-            state.treasuresProgress.selectedTreasure,
+            state.selectedTreasureDescription(),
             state.route,
             state.mediaPlayer,
             goToTipPhoto,
@@ -227,7 +228,7 @@ fun Steps(stepsToTreasure: Int?) {
 @Composable
 fun Buttons(
     scanQrCallback: GoToQrScanner,
-    currentTreasure: TreasureDescription,
+    currentTreasure: TreasureDescription?,
     route: Route,
     mediaPlayer: MediaPlayer,
     goToTipPhoto: GoToTipPhoto,
@@ -293,7 +294,7 @@ private fun ScanTreasureButton(scanQrCallback: GoToQrScanner) {
 }
 
 @Composable
-private fun PhotoTipButton(currentTreasure: TreasureDescription, goToTipPhoto: GoToTipPhoto) {
+private fun PhotoTipButton(currentTreasure: TreasureDescription?, goToTipPhoto: GoToTipPhoto) {
     val noPhotoToShowMsg = stringResource(R.string.no_photo_to_show)
     val context = LocalContext.current
     Image(
@@ -301,7 +302,7 @@ private fun PhotoTipButton(currentTreasure: TreasureDescription, goToTipPhoto: G
         modifier = Modifier
             .padding(10.dp)
             .clickable {
-                if (currentTreasure.hasPhoto()) {
+                if (currentTreasure?.hasPhoto() == true) {
                     val encodedFilePath = URLEncoder.encode(currentTreasure.photoFileName!!, Charsets.UTF_8.name())
                     goToTipPhoto(encodedFilePath)
                 } else {
@@ -317,7 +318,7 @@ private fun PhotoTipButton(currentTreasure: TreasureDescription, goToTipPhoto: G
 }
 
 @Composable
-private fun SoundTipButton(currentTreasure: TreasureDescription, mediaPlayer: MediaPlayer) {
+private fun SoundTipButton(currentTreasure: TreasureDescription?, mediaPlayer: MediaPlayer) {
     val noTipToPlayMsg = stringResource(R.string.no_tip_to_play)
     val context = LocalContext.current
     Image(
@@ -325,7 +326,7 @@ private fun SoundTipButton(currentTreasure: TreasureDescription, mediaPlayer: Me
         modifier = Modifier
             .padding(10.dp)
             .clickable {
-                if (currentTreasure.tipFileName != null) {
+                if (currentTreasure?.tipFileName != null) {
                     SoundTipPlayer.playSound(mediaPlayer, currentTreasure.tipFileName!!)
                 } else {
                     errorTone()

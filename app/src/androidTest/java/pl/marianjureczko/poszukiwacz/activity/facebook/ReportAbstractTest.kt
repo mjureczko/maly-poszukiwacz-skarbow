@@ -12,7 +12,6 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.facebook.n.FacebookViewModel
 import pl.marianjureczko.poszukiwacz.activity.facebook.n.ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
@@ -21,7 +20,7 @@ abstract class ReportAbstractTest {
     val storageHelper: StorageHelper = StorageHelper(context)
 
     val font: Typeface = ResourcesCompat.getFont(context, R.font.akaya_telivigala)!!
-    val treasuresProgress: TreasuresProgress = TreasuresProgress(ROUTE_NAME, TreasureDescription.nullObject())
+    val treasuresProgress: TreasuresProgress = TreasuresProgress(ROUTE_NAME, 0)
 
     private val testDispatcher = StandardTestDispatcher()
 

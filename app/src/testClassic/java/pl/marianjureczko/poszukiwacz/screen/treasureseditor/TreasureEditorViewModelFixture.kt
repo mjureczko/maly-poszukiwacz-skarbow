@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import com.ocadotechnology.gembus.test.some
 import org.mockito.BDDMockito.given
@@ -20,7 +21,7 @@ class TreasureEditorViewModelFixture(
 ) {
     private val stateHandleMock = mock<SavedStateHandle>()
     val locationPort = pl.marianjureczko.poszukiwacz.TestLocationPort()
-    val storage = TestStoragePort()
+    val storage = TestStoragePort(mock<Context>())
     val routeName = route.name
     val viewModel: TreasureEditorViewModel
     val addTreasureDescriptionToRoute = AddTreasureDescriptionToRoute(storage)
@@ -44,7 +45,7 @@ class TreasureEditorViewModelFixture(
     fun setupProgress(treasureToSelect: TreasureDescription = route.treasures[0]) {
         val progress = some<TreasuresProgress> {
             routeName = route.name
-            selectedTreasure = treasureToSelect
+            selectedTreasureDescriptionId = treasureToSelect.id
         }
         storage.progresses[route.name] = progress
     }

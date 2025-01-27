@@ -6,8 +6,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.journeyapps.barcodescanner.ScanIntentResult
-import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.somePositiveInt
 import com.ocadotechnology.gembus.test.someString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,14 +54,14 @@ class SharedViewModelTest {
 
         val location: Location = mock()
         val locationResult: LocationResult = mock()
-        val latitude = viewModel.state.value.treasuresProgress.selectedTreasure.latitude
-        val longitude = viewModel.state.value.treasuresProgress.selectedTreasure.longitude - 1
+        val latitude = viewModel.state.value.selectedTreasureDescription()!!.latitude
+        val longitude = viewModel.state.value.selectedTreasureDescription()!!.longitude - 1
         given(location.getLatitude()).willReturn(latitude)
         given(location.getLongitude()).willReturn(longitude)
         val expectedDistance = somePositiveInt(999_999)
         given(
             fixture.locationCalculator.distanceInSteps(
-                viewModel.state.value.treasuresProgress.selectedTreasure, location
+                viewModel.state.value.selectedTreasureDescription()!!, location
             )
         ).willReturn(expectedDistance)
 
@@ -85,11 +83,11 @@ class SharedViewModelTest {
      * private val scope = TestScope(dispatcher); ... scope.runTest {...} is not used to disable corutines execution
      */
     @Test
-    fun `SHOULD not call goToResults WHEN there is not result of qr code scanning`() {
+    fun `SHOULD not call goToResults WHEN there is no result of qr code scanning`() {
         //given
         val fixture = SharedViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
-        val qrResult = some<ScanIntentResult>(overrides = mapOf("contents" to { "" }))
+        val qrResult = ""
 
         //when
         var wasCalled = false
@@ -111,7 +109,7 @@ class SharedViewModelTest {
         //given
         val fixture = SharedViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
-        val qrResult = some<ScanIntentResult>(overrides = mapOf("contents" to { someString() }))
+        val qrResult = someString()
 
         //when & then
         var wasCalled = false
@@ -134,7 +132,7 @@ class SharedViewModelTest {
         val qrCode = TreasureDescriptionArranger.validQrCode("k")
         val fixture = SharedViewModelFixture(dispatcher, firstTreasureQrCode = qrCode)
         val viewModel = fixture.givenMocksForNoProgress()
-        val qrResult = fixture.givenScanIntentResultForFirstTreasure()
+        val qrResult = fixture.givenScanResultForFirstTreasure()
 
         //when
         var wasCalled = false
@@ -158,7 +156,7 @@ class SharedViewModelTest {
         //given
         val fixture = SharedViewModelFixture(dispatcher)
         val viewModel = fixture.givenMocksForNoProgress()
-        val qrResult = fixture.givenScanIntentResultForFirstTreasure()
+        val qrResult = fixture.givenScanResultForFirstTreasure()
 
         //when & then
         var callbackUsed = 0

@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.screen.result
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import com.ocadotechnology.gembus.test.somePositiveInt
 import org.assertj.core.api.Assertions.assertThat
@@ -15,7 +16,7 @@ class ResultViewModelTest {
     @Test
     fun `SHOULD set type not a treasure ie to default WHEN no parameters given`() {
         // Given
-        val storage = TestStoragePort()
+        val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
 
         // When
@@ -29,7 +30,7 @@ class ResultViewModelTest {
     @Test
     fun `SHOULD set type not a treasure WHEN not a treasure given given as the type`() {
         // Given
-        val storage = TestStoragePort()
+        val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
         given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.NOT_A_TREASURE)
 
@@ -44,7 +45,7 @@ class ResultViewModelTest {
     @Test
     fun `SHOULD set type already taken WHEN already taken given as the type`() {
         // Given
-        val storage = TestStoragePort()
+        val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
         given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.ALREADY_TAKEN)
 
@@ -59,7 +60,7 @@ class ResultViewModelTest {
     @Test
     fun `SHOULD set type to knowledge WHEN knowledge given as the type but no treasure id`() {
         // Given
-        val storage = TestStoragePort()
+        val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
         given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.KNOWLEDGE)
 
@@ -74,7 +75,7 @@ class ResultViewModelTest {
     @Test
     fun `SHOULD set type to knowledge movie and subtitles path and locales WHEN knowledge given as the type and valid treasure id`() {
         // Given
-        val storage = TestStoragePort()
+        val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
         val route: Route = storage.routes.values.first()
         given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.KNOWLEDGE)
@@ -95,7 +96,7 @@ class ResultViewModelTest {
     @Test
     fun `SHOULD set amount and type to gold WHEN gold given as the type and valid treasure id`() {
         // Given
-        val storage = TestStoragePort()
+        val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
         val route: Route = storage.routes.values.first()
         given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.GOLD)

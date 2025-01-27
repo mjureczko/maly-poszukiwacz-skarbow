@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.activity.searching.n
 
 import androidx.lifecycle.SavedStateHandle
-import com.journeyapps.barcodescanner.ScanIntentResult
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
 import kotlinx.coroutines.CoroutineDispatcher
@@ -10,6 +9,7 @@ import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
+import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
@@ -24,7 +24,8 @@ data class SharedViewModelFixture(
     val locationCalculator: LocationCalculator = mock(),
     val savedState: SavedStateHandle = mock(SavedStateHandle::class.java),
     val photoHelper: PhotoHelper = mock(PhotoHelper::class.java),
-    val cameraPort: CameraPort = mock(CameraPort::class.java)
+    val cameraPort: CameraPort = mock(CameraPort::class.java),
+    val qrScannerPort: QrScannerPort = mock(QrScannerPort::class.java),
 ) {
 
     lateinit var route: Route
@@ -36,19 +37,20 @@ data class SharedViewModelFixture(
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)
         BDDMockito.given(storage.loadProgress(routeName)).willReturn(null)
         val result = SharedViewModel(
-            storage,
-            locationPort,
-            locationCalculator,
-            photoHelper,
-            savedState,
-            cameraPort,
-            testDispatcher
+            storageHelper = storage,
+            locationPort = locationPort,
+            locationCalculator = locationCalculator,
+            photoHelper = photoHelper,
+            stateHandle = savedState,
+            cameraPort = cameraPort,
+            qrScannerPort = qrScannerPort,
+            ioDispatcher = testDispatcher,
         )
         result.respawn = false;
         return result
     }
 
-    fun givenScanIntentResultForFirstTreasure(): ScanIntentResult {
-        return some<ScanIntentResult>(overrides = mapOf("contents" to { firstTreasureQrCode }))
+    fun givenScanResultForFirstTreasure(): String {
+        return firstTreasureQrCode
     }
 }

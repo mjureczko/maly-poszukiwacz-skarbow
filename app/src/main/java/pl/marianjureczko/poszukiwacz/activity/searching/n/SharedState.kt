@@ -4,6 +4,7 @@ import android.location.Location
 import android.media.MediaPlayer
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 interface HasCommemorativePhoto {
@@ -26,6 +27,7 @@ interface SearchingSharedState : HasCommemorativePhoto {
     var needleRotation: Float
     var hunterPath: HunterPath
     fun treasureFoundAndResultAlreadyPresented(): Boolean
+    fun selectedTreasureDescription(): TreasureDescription?
 }
 
 interface CommemorativeSharedState {
@@ -59,4 +61,8 @@ data class SharedState(
         treasuresProgress.justFoundTreasureId != null
                 && (treasuresProgress.resultRequiresPresentation == null || treasuresProgress.resultRequiresPresentation == false)
 
+    override fun selectedTreasureDescription(): TreasureDescription? {
+        return route.treasures
+            .firstOrNull { it.id == treasuresProgress.selectedTreasureDescriptionId }
+    }
 }

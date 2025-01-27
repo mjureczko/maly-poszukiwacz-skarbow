@@ -15,7 +15,6 @@ import pl.marianjureczko.poszukiwacz.activity.facebook.n.Type
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
@@ -34,7 +33,7 @@ class ReportGeneratorTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val storageHelper: StorageHelper = StorageHelper(context)
         val photos = arrangePhotos(context)
-        val treasuresProgress = TreasuresProgress(ROUTE_NAME, TreasureDescription.nullObject())
+        val treasuresProgress = TreasuresProgress(ROUTE_NAME, 0)
         val treasure = Treasure("1", 7, TreasureType.DIAMOND)
         treasuresProgress.collect(treasure, null)
         treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, photos[0])

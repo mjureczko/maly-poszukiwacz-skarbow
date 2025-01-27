@@ -30,8 +30,8 @@ class RemoveTreasureDescriptionFromRouteTest {
         assertRouteDoesNotContainTresureWithId(actualRoute, toRemove.id)
         assertRouteDoesNotContainTresureWithId(actualPersistedRoute, toRemove.id)
         assertThat(fixture.storage.requestedTipRemovals).containsExactly(toRemove.id)
-        assertThat(actualPersistedProgress.selectedTreasure.id).isNotEqualTo(toRemove.id)
-        assertThat(actualPersistedProgress.selectedTreasure.id)
+        assertThat(actualPersistedProgress.selectedTreasureDescriptionId).isNotEqualTo(toRemove.id)
+        assertThat(actualPersistedProgress.selectedTreasureDescriptionId)
             .`as`("An existing TreasureDescription should be selected")
             .isEqualTo(actualRoute.treasures[0].id)
     }

@@ -16,6 +16,8 @@ import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.TREASURE_EDITOR_ROUTE
+import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
+import pl.marianjureczko.poszukiwacz.screen.phototip.TipPhotoScreen
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
@@ -87,16 +89,16 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navArgument(PARAMETER_TREASURE_AMOUNT) { type = NavType.IntType },
             )
         ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
-//        composable(
-//            route = "tipPhoto/{$PARAMETER_TIP_PHOTO}",
-//            arguments = listOf(navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType })
-//        ) {
-//            TipPhotoScreen(
-//                navController = navController,
-//                onClickOnGuide = onClickGuide,
-//                onClickOnFacebook = goToFacebook
-//            )
-//        }
+        composable(
+            route = "tipPhoto/{$PARAMETER_TIP_PHOTO}",
+            arguments = listOf(navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType })
+        ) {
+            TipPhotoScreen(
+                navController = navController,
+                onClickOnGuide = onClickGuide,
+                onClickOnFacebook = goToFacebook
+            )
+        }
 //        composable(
 //            route = "map/{$PARAMETER_ROUTE_NAME_2}",
 //            arguments = listOf(navArgument(PARAMETER_ROUTE_NAME) { type = NavType.StringType }),

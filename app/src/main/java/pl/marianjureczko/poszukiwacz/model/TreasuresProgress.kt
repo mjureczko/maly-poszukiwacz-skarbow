@@ -13,7 +13,7 @@ data class TreasuresProgress(
 
     /** Selected for searching */
     @field:Element
-    var selectedTreasure: TreasureDescription,
+    var selectedTreasureDescriptionId: Int,
 
     /** Used in treasure selector for marking treasure as found with a delay */
     @field:Element(required = false)
@@ -48,7 +48,7 @@ data class TreasuresProgress(
     var diamonds: Int = 0,
 ) : Serializable {
 
-    constructor() : this("", TreasureDescription.nullObject()) {
+    constructor() : this("", 0) {
         this.routeName = routeName
     }
 

@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.activity.photo.n
+package pl.marianjureczko.poszukiwacz.screen.phototip
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State

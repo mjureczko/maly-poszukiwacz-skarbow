@@ -12,15 +12,15 @@ class RouteAndProgressFixture(
         fun savedWithSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
             val selected = someFrom(route.treasures)
-            val progress = TreasuresProgress(route.name, route.treasures[0])
-            progress.selectedTreasure = selected
+            val progress = TreasuresProgress(route.name, route.treasures[0].id)
+            progress.selectedTreasureDescriptionId = selected.id
             saveBoth(storageHelper, route, progress)
             return RouteAndProgressFixture(route, progress)
         }
 
         fun savedWithoutSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
-            val progress = TreasuresProgress(route.name, route.treasures[0])
+            val progress = TreasuresProgress(route.name, route.treasures[0].id)
             saveBoth(storageHelper, route, progress)
             return RouteAndProgressFixture(route, progress)
         }

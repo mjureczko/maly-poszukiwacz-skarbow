@@ -130,7 +130,7 @@ fun SelectorScreenBody(
 fun TreasureItem(
     cameraPermission: PermissionState,
     navController: NavController,
-    treasure: TreasureDescription,
+    treasureDescription: TreasureDescription,
     localState: SelectorState,
     state: SelectorSharedState,
     goToResult: GoToResultWithTreasure,
@@ -143,7 +143,7 @@ fun TreasureItem(
         modifier = Modifier
             .padding(4.dp)
             .clickable {
-                sharedViewModel.updateSelectedTreasure(treasure)
+                sharedViewModel.updateSelectedTreasure(treasureDescription)
                 navController.navigateUp()
             }
     ) {
@@ -154,11 +154,11 @@ fun TreasureItem(
                 .padding(8.dp)
                 .fillMaxWidth()
         ) {
-            TreasureCollectedCheckbox(state, localState, treasure, sharedViewModel)
-            val distanceInSteps = state.distancesInSteps[treasure.id]
+            TreasureCollectedCheckbox(state, localState, treasureDescription, sharedViewModel)
+            val distanceInSteps = state.distancesInSteps[treasureDescription.id]
             if (distanceInSteps != null) {
                 Text(
-                    text = stringResource(R.string.steps_to_treasure, treasure.id, distanceInSteps),
+                    text = stringResource(R.string.steps_to_treasure, treasureDescription.id, distanceInSteps),
                     style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Center,
                     fontFamily = FANCY_FONT,
@@ -168,7 +168,7 @@ fun TreasureItem(
                 )
             } else {
                 Text(
-                    text = "[${treasure.id}]",
+                    text = "[${treasureDescription.id}]",
                     style = MaterialTheme.typography.h6,
                     textAlign = TextAlign.Center,
                     fontFamily = FANCY_FONT,
@@ -181,13 +181,13 @@ fun TreasureItem(
                         .padding(end = 50.dp)
                         .semantics { this.contentDescription = "Waiting for GPS" })
             }
-            ShowMovieButton(state, treasure, goToResult)
+            ShowMovieButton(state, treasureDescription, goToResult)
             CommemorativePhotoButton(
                 cameraPermission.status.isGranted,
                 state,
-                treasure,
                 goToCommemorative,
-                sharedViewModel
+                sharedViewModel,
+                treasureDescriptionId = treasureDescription.id
             )
         }
     }

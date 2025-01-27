@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.screen.main
 
+import android.content.Context
 import android.content.res.Resources
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someString
@@ -17,7 +18,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 
 class MainViewModelTest {
 
-    val storage: TestStoragePort = TestStoragePort()
+    val storage: TestStoragePort = TestStoragePort(mock<Context>())
     val resources: Resources = mock()
 
     @Test

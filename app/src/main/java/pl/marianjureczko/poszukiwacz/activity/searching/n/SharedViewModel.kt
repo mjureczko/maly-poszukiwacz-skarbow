@@ -107,7 +107,7 @@ class SharedViewModel @Inject constructor(
                     val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures)
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
-                        selectedTreasureDescription = state.value.treasuresProgress.selectedTreasure,
+                        selectedTreasureDescription = state.value.selectedTreasureDescription(),
                         userLocation = state.value.currentLocation?.let { Coordinates.of(it) }
                     )
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
@@ -172,7 +172,7 @@ class SharedViewModel @Inject constructor(
     override fun updateSelectedTreasure(td: TreasureDescription) {
         _state.value = state.value.copy(
             treasuresProgress = state.value.treasuresProgress.copy(
-                selectedTreasure = td
+                selectedTreasureDescriptionId = td.id
             )
         )
     }
@@ -216,16 +216,20 @@ class SharedViewModel @Inject constructor(
 
     private fun updatedLocationCallback(): UpdateLocationCallback = { location ->
         Log.i(TAG, "location updated")
-        val selectedTreasure = state.value.treasuresProgress.selectedTreasure
+        val selectedTreasure = state.value.selectedTreasureDescription()
         _state.value = _state.value.copy(
             currentLocation = location,
-            stepsToTreasure = locationCalculator.distanceInSteps(selectedTreasure, location),
-            needleRotation = arcCalculator.degree(
-                selectedTreasure.longitude,
-                selectedTreasure.latitude,
-                location.longitude,
-                location.latitude
-            ).toFloat(),
+            stepsToTreasure = if (selectedTreasure != null) {
+                locationCalculator.distanceInSteps(selectedTreasure, location)
+            } else 0,
+            needleRotation = if (selectedTreasure != null) {
+                arcCalculator.degree(
+                    selectedTreasure.longitude,
+                    selectedTreasure.latitude,
+                    location.longitude,
+                    location.latitude
+                ).toFloat()
+            } else 0f,
             distancesInSteps = _state.value.route.treasures
                 .associate { it.id to locationCalculator.distanceInSteps(it, location) }
                 .toMap()
@@ -259,7 +263,7 @@ class SharedViewModel @Inject constructor(
     private fun loadProgress(route: Route): TreasuresProgress {
         var loadedProgress = storageHelper.loadProgress(route.name)
         if (loadedProgress == null) {
-            loadedProgress = TreasuresProgress(route.name, route.treasures[0])
+            loadedProgress = TreasuresProgress(route.name, route.treasures[0].id)
             storageHelper.save(loadedProgress)
         }
         return loadedProgress
