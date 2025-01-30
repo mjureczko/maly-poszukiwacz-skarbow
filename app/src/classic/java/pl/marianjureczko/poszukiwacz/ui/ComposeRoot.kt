@@ -6,8 +6,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import pl.marianjureczko.poszukiwacz.activity.commemorative.n.CommemorativeScreen
+import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.activity.facebook.n.FacebookHelper
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_PATH
+import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_PATH
@@ -124,10 +127,10 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 onClickOnFacebook = goToFacebook
             )
         }
-//        composable(
-//            route = COMMEMORATIVE_ROUTE,
-//            arguments = listOf(navArgument(PARAMETER_TREASURE_DESCRIPTION_ID) { type = NavType.IntType })
-//        ) { navBackStackEntry -> CommemorativeScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
+        composable(
+            route = COMMEMORATIVE_ROUTE,
+            arguments = listOf(navArgument(PARAMETER_TREASURE_DESCRIPTION_ID) { type = NavType.IntType })
+        ) { navBackStackEntry -> CommemorativeScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
 //        composable(
 //            route = FACEBOOK_ROUTE,
 //        ) { navBackStackEntry -> FacebookScreen(navController, onClickGuide) }
