@@ -23,10 +23,8 @@ internal class ReportSummaryTest : ReportAbstractTest() {
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
 
-        val treasureGold = Treasure("1", 17, TreasureType.GOLD)
-        treasuresProgress.collect(treasureGold, null)
-        val treasureRuby = Treasure("2", 23, TreasureType.RUBY)
-        treasuresProgress.collect(treasureRuby, null)
+        val treasure = Treasure("1", 1, TreasureType.KNOWLEDGE)
+        treasuresProgress.collect(treasure, null)
         storageHelper.save(treasuresProgress)
         val reportSummary = ReportSummary(createFacebookViewModel().state.value, font)
 
@@ -34,7 +32,7 @@ internal class ReportSummaryTest : ReportAbstractTest() {
         reportSummary.draw(context, canvas, 0f)
 
         //then
-        //save to hava a reference in case of failing test, image available at /data/data/pl.marianjureczko.poszukiwacz/files/summary.png
+        //save to hava a reference in case of failing test, image available at /data/data/pl.marianjureczko.poszukiwacz.kalinowice/files/summary.png
         val fileName = "summary.png"
         val stream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
