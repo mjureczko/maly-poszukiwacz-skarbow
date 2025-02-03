@@ -63,19 +63,25 @@ fun ResultScreen(
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook
 ) {
+    val sharedViewModel: ResultSharedViewModel =
+        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
     Scaffold(
-        topBar = { TopBar(navController, stringResource(R.string.treasure), onClickOnGuide, onClickOnFacebook) },
-        content = {
-            ResultScreenBody(shareViewModelStoreOwner(navBackStackEntry, navController))
-        }
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = stringResource(R.string.treasure),
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { onClickOnFacebook(sharedViewModel.getRouteName()) },
+            )
+        },
+        content = { ResultScreenBody(sharedViewModel) }
     )
 }
 
 @Composable
-fun ResultScreenBody(viewModelStoreOwner: NavBackStackEntry) {
+fun ResultScreenBody(sharedViewModel: ResultSharedViewModel) {
     val localViewModel: ResultViewModel = hiltViewModel()
     val localState: ResultState = localViewModel.state.value
-    val sharedViewModel: ResultSharedViewModel = getViewModel(viewModelStoreOwner)
     sharedViewModel.resultPresented()
     Column {
         Spacer(

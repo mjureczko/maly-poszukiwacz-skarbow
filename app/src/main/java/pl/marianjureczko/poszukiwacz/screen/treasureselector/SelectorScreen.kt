@@ -62,23 +62,28 @@ fun SelectorScreen(
     goToCommemorative: GoToCommemorative,
     onClickOnFacebook: GoToFacebook
 ) {
-    val cameraPermission: PermissionState = handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
+    val cameraPermission: PermissionState =
+        handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val sharedViewModel: SelectorSharedViewModel =
+        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val sharedState: SelectorSharedState = sharedViewModel.state.value
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
-                navController,
-                stringResource(R.string.select_treasure_dialog_title),
-                onClickOnGuide,
-                onClickOnFacebook
+                navController = navController,
+                title = stringResource(R.string.select_treasure_dialog_title),
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { onClickOnFacebook(sharedState.route.name) }
             )
         },
         content = {
             SelectorScreenBody(
                 cameraPermission,
                 navController,
-                shareViewModelStoreOwner(navBackStackEntry, navController),
+                sharedViewModel,
+                sharedState,
                 goToResult,
                 goToCommemorative
             )
@@ -91,15 +96,14 @@ fun SelectorScreen(
 fun SelectorScreenBody(
     cameraPermission: PermissionState,
     navController: NavController,
-    viewModelStoreOwner: NavBackStackEntry,
+    sharedViewModel: SelectorSharedViewModel,
+    state: SelectorSharedState,
     goToResult: GoToResultWithTreasure,
     goToCommemorative: GoToCommemorative
 ) {
     val localViewModel: SelectorViewModel = hiltViewModel()
     val localState: SelectorState = localViewModel.state.value
-    val sharedViewModel: SelectorSharedViewModel = getViewModel(viewModelStoreOwner)
     sharedViewModel.selectorPresented()
-    val state: SelectorSharedState = sharedViewModel.state.value
     Column(Modifier.background(Color.White)) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),

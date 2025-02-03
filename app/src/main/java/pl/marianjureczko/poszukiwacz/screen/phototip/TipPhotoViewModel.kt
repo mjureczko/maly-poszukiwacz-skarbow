@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 const val PARAMETER_TIP_PHOTO = "tip_photo"
+const val PARAMETER_ROUTE_NAME = "tip_photo"
 
 @HiltViewModel
 class TipPhotoViewModel @Inject constructor(
@@ -20,7 +21,8 @@ class TipPhotoViewModel @Inject constructor(
         get() = _state
 
     private fun createState(): TipPhotoState {
+        val routeName = stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!
         val photoPath = stateHandle.get<String>(PARAMETER_TIP_PHOTO)!!
-        return TipPhotoState(photoPath)
+        return TipPhotoState(photoPath, routeName)
     }
 }

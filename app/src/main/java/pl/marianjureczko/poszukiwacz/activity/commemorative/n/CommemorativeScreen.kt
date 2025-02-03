@@ -56,25 +56,29 @@ fun CommemorativeScreen(
     goToFacebook: GoToFacebook,
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
+    val sharedViewModel: CommemorativeSharedViewModel =
+        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val sharedState = sharedViewModel.state.value as CommemorativeSharedState
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, stringResource(R.string.app_name), onClickOnGuide, goToFacebook) },
-        content = {
-            CommemorativeScreenBody(
-                shareViewModelStoreOwner(navBackStackEntry, navController)
-            )
-        }
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = stringResource(R.string.app_name),
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { goToFacebook(sharedState.route.name) })
+        },
+        content = { CommemorativeScreenBody(sharedViewModel, sharedState) }
     )
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CommemorativeScreenBody(
-    viewModelStoreOwner: NavBackStackEntry
+    sharedViewModel: CommemorativeSharedViewModel,
+    sharedState: CommemorativeSharedState,
 ) {
     val cameraPermission: PermissionState = handlePermission(RequirementsForDoingCommemorativePhoto)
-    val sharedViewModel: CommemorativeSharedViewModel = getViewModel(viewModelStoreOwner)
-    val sharedState = sharedViewModel.state.value as CommemorativeSharedState
     val localViewModel: CommemorativeViewModel = hiltViewModel()
     val localState: CommemorativeState = localViewModel.state.value
     localViewModel.setPhotoPath(

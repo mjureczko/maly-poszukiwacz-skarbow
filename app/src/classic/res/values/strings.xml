@@ -58,4 +58,5 @@
     <string name="missing_external_storage_permission">External storage permission is required for exporting game progress into an image.</string>
     <string name="help_path">https://little-treasure-hunter.netlify.app/#/README_en</string>
     <string name="recording_permission_not_granted">To record hints, allow microphone access.</string>
+    <string name="no_route_to_share">Select a route for the treasure hunt before sharing it on Facebook.</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
@@ -19,7 +20,7 @@ import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 fun MainScreen(
     navController: NavController,
     onClickOnGuide: () -> Unit,
-    onClickOnFacebook: () -> Unit,
+    onClickOnFacebook: GoToFacebook,
     goToSearching: GoToSearching
 ) {
     val isInPreview = LocalInspectionMode.current
@@ -27,7 +28,14 @@ fun MainScreen(
         handlePermissionWithExitOnDenied(RequirementsForNavigation)
     }
     Scaffold(
-        topBar = { TopBar(navController, stringResource(R.string.app_name), onClickOnGuide, onClickOnFacebook) },
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = stringResource(R.string.app_name),
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { onClickOnFacebook(CustomInitializerForRoute.routeName) },
+            )
+        },
         content = { _ -> MainScreenBody(goToSearching) }
     )
 }

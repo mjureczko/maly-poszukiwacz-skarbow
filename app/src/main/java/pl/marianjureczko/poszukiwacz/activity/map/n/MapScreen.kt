@@ -27,18 +27,23 @@ fun MapScreen(
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook
 ) {
+    val viewModel: MapViewModel = hiltViewModel()
+    val state = viewModel.state.value
     Scaffold(
-        topBar = { TopBar(navController, stringResource(R.string.map_activity_title), onClickOnGuide, onClickOnFacebook) },
-        content = {
-            MapScreenBody()
-        }
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = stringResource(R.string.map_activity_title),
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { onClickOnFacebook(state.route.name) },
+            )
+        },
+        content = { MapScreenBody(state) }
     )
 }
 
 @Composable
-fun MapScreenBody() {
-    val viewModel: MapViewModel = hiltViewModel()
-    val state = viewModel.state.value
+fun MapScreenBody(state: MapState) {
     MapboxMap(state.route)
 }
 

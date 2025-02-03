@@ -87,21 +87,23 @@ fun SearchingScreen(
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
+    val state = viewModel.state.value
     val title =
         "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasureDescriptionId}"
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, title, onClickOnGuide, goToFacebook) },
+        topBar = { TopBar(navController, title, onClickOnGuide, { goToFacebook(state.route.name) }) },
         content = {
             SearchingScreenBody(
-                navController,
-                viewModel,
-                goToTipPhoto,
-                goToResult,
-                goToMap,
-                goToTreasureSelector,
-                cameraPermission,
-                goToCommemorative
+                navController = navController,
+                viewModel = viewModel,
+                state = state,
+                goToTipPhoto = goToTipPhoto,
+                goToResult = goToResult,
+                goToMap = goToMap,
+                goToTreasureSelector = goToTreasureSelector,
+                cameraPermissionState = cameraPermission,
+                goToCommemorative = goToCommemorative,
             )
         }
     )
@@ -113,6 +115,7 @@ fun SearchingScreen(
 private fun SearchingScreenBody(
     navController: NavController,
     viewModel: SearchingViewModel,
+    state: SearchingSharedState,
     goToTipPhoto: GoToTipPhoto,
     goToResult: GoToResults,
     goToMap: GoToMap,
@@ -120,7 +123,6 @@ private fun SearchingScreenBody(
     cameraPermissionState: PermissionState,
     goToCommemorative: GoToCommemorative
 ) {
-    val state: SearchingSharedState = viewModel.state.value
     if (!isOnStack(navController, SELECTOR_ROUTE)
         && !isOnStack(navController, RESULTS_ROUTE)
         && state.treasureFoundAndResultAlreadyPresented()
@@ -251,7 +253,7 @@ fun Buttons(
             ScanTreasureButton(scanQrCallback)
         }
         Column(modifier = Modifier.width(0.2.dw)) {
-            PhotoTipButton(currentTreasure, goToTipPhoto)
+            PhotoTipButton(currentTreasure, route.name, goToTipPhoto)
             SoundTipButton(currentTreasure, mediaPlayer)
         }
     }
@@ -294,7 +296,7 @@ private fun ScanTreasureButton(scanQrCallback: GoToQrScanner) {
 }
 
 @Composable
-private fun PhotoTipButton(currentTreasure: TreasureDescription?, goToTipPhoto: GoToTipPhoto) {
+private fun PhotoTipButton(currentTreasure: TreasureDescription?, routeName: String, goToTipPhoto: GoToTipPhoto) {
     val noPhotoToShowMsg = stringResource(R.string.no_photo_to_show)
     val context = LocalContext.current
     Image(
@@ -304,7 +306,7 @@ private fun PhotoTipButton(currentTreasure: TreasureDescription?, goToTipPhoto: 
             .clickable {
                 if (currentTreasure?.hasPhoto() == true) {
                     val encodedFilePath = URLEncoder.encode(currentTreasure.photoFileName!!, Charsets.UTF_8.name())
-                    goToTipPhoto(encodedFilePath)
+                    goToTipPhoto(encodedFilePath, routeName)
                 } else {
                     errorTone()
                     Toast

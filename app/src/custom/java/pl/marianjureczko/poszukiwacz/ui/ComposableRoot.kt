@@ -8,8 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.CommemorativeScreen
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
-import pl.marianjureczko.poszukiwacz.activity.facebook.n.FacebookHelper
-import pl.marianjureczko.poszukiwacz.activity.facebook.n.FacebookScreen
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.FACEBOOK_ROUTE
@@ -23,6 +21,8 @@ import pl.marianjureczko.poszukiwacz.activity.map.n.MapScreen
 import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
+import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookHelper
+import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookScreen
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.screen.phototip.TipPhotoScreen
@@ -56,7 +56,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
             SearchingScreen(
                 navController = navController,
                 onClickOnGuide = onClickGuide,
-                goToTipPhoto = { navController.navigate("tipPhoto/$it") },
+                goToTipPhoto = { tipPhoto, _ -> navController.navigate("tipPhoto/$tipPhoto") },
                 goToResult = { routeName, resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$routeName/$resultType/$treasureId/$amount") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
@@ -111,6 +111,6 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
         ) { navBackStackEntry -> CommemorativeScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
         composable(
             route = FACEBOOK_ROUTE,
-        ) { navBackStackEntry -> FacebookScreen(navController, onClickGuide) }
+        ) { _ -> FacebookScreen(navController, onClickGuide) }
     }
 }

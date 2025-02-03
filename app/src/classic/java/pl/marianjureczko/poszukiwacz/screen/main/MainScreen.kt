@@ -8,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
+import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
@@ -18,7 +19,7 @@ import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 fun MainScreen(
     navController: NavController,
     onClickOnGuide: () -> Unit,
-    onClickOnFacebook: () -> Unit,
+    onClickOnFacebook: GoToFacebook,
     goToTreasureEditor: GoToTreasureEditor,
     goToSearching: GoToSearching
 ) {
@@ -27,7 +28,14 @@ fun MainScreen(
         handlePermissionWithExitOnDenied(RequirementsForNavigation)
     }
     Scaffold(
-        topBar = { TopBar(navController, stringResource(R.string.app_name), onClickOnGuide, onClickOnFacebook) },
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = stringResource(R.string.app_name),
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { onClickOnFacebook("") },
+            )
+        },
         content = { _ -> MainScreenBody(goToTreasureEditor, goToSearching) }
     )
 }

@@ -5,10 +5,10 @@ import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 
 typealias GoToGuide = () -> Unit
 typealias GoToResults = (String, ResultType, Int?, Int?) -> Unit
-typealias GoToFacebook = () -> Unit
+typealias GoToFacebook = (String) -> Unit
 typealias GoToSearching = (String) -> Unit
 typealias GoToQrScanner = () -> Unit
-typealias GoToTipPhoto = (String) -> Unit
+typealias GoToTipPhoto = (String, String) -> Unit
 typealias GoToMap = (String) -> Unit
 typealias GoToResultWithTreasure = (Int) -> Unit
 typealias GoToTreasureSelector = (Int) -> Unit

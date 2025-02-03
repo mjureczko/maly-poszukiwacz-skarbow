@@ -11,8 +11,6 @@ import org.junit.Test
 import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SCAN_TREASURE_BUTTON
 import pl.marianjureczko.poszukiwacz.activity.searching.n.STEPS_TO_TREASURE
-import pl.marianjureczko.poszukiwacz.model.Treasure
-import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.screen.result.PLAY_MOVIE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.TREASURE_COLLECTED_CHECKBOX
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
@@ -46,7 +44,7 @@ class SearchingScreenTest : UiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun shouldMarkCollectedTreasureAndPromptForNewOne_whenCollectingTreasureCloseToTheSelectedOne() {
+    fun shouldMarkCollectedTreasureAndPromptForNewOne() {
         //given
         composeRule.waitForIdle()
         TestPortsModule.ioDispatcher.scheduler.runCurrent()
@@ -54,17 +52,18 @@ class SearchingScreenTest : UiTest() {
         val selectedTreasureDef = route!!.treasures.first()
         TestPortsModule.location.updateLocation(selectedTreasureDef.latitude, selectedTreasureDef.longitude)
         TestPortsModule.qrScannerPort.setContents(selectedTreasureDef.qrCode!!)
-        val treasure: Treasure = TreasureParser().parse(TestPortsModule.qrScannerPort.getContents())
 
         //when
         performTap(SCAN_TREASURE_BUTTON)
 
         //then
+        composeRule.waitForIdle()
         getNode(PLAY_MOVIE_BUTTON).assertExists("Button to play the movie should be displayed")
 
         //when
         TestPortsModule.ioDispatcher.scheduler.advanceTimeBy(600)
         pressBack()
+        composeRule.waitForIdle()
         TestPortsModule.ioDispatcher.scheduler.advanceTimeBy(600)
 
         //then

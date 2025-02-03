@@ -46,6 +46,7 @@ interface DoCommemorative {
 
 interface ResultSharedViewModel {
     fun resultPresented()
+    fun getRouteName(): String
 }
 
 interface SearchingViewModel : DoCommemorative {
@@ -151,10 +152,16 @@ class SharedViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             delay(500)
             if (state.value.treasuresProgress.resultRequiresPresentation == true) {
-                state.value.treasuresProgress.resultRequiresPresentation = false
-                storageHelper.save(state.value.treasuresProgress)
+                _state.value = state.value.copy(
+                    treasuresProgress = state.value.treasuresProgress.copy(resultRequiresPresentation = false)
+                )
+                storageHelper.save(_state.value.treasuresProgress)
             }
         }
+    }
+
+    override fun getRouteName(): String {
+        return state.value.route.name
     }
 
     override fun updateJustFoundFromSelector() {

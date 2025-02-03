@@ -37,10 +37,10 @@ fun TreasureEditorScreen(
     Scaffold(
         topBar = {
             TopBar(
-                navController,
-                "${stringResource(id = R.string.route)} ${state.route.name}",
-                onClickOnGuide,
-                onClickOnFacebook
+                navController = navController,
+                title = "${stringResource(id = R.string.route)} ${state.route.name}",
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { onClickOnFacebook("") },
             )
         },
         content = { _ ->

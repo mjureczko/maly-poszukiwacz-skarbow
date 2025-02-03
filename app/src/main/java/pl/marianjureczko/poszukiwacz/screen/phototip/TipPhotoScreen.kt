@@ -34,18 +34,22 @@ fun TipPhotoScreen(
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook
 ) {
+    val viewModel: TipPhotoViewModel = hiltViewModel()
+    val state: TipPhotoState = viewModel.state.value
     Scaffold(
-        topBar = { TopBar(navController, stringResource(R.string.photo_tip), onClickOnGuide, onClickOnFacebook) },
-        content = {
-            TipPhotoScreenBody()
-        }
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = stringResource(R.string.photo_tip),
+                onClickOnGuide = onClickOnGuide,
+                onClickOnFacebook = { onClickOnFacebook(state.routeName) })
+        },
+        content = { TipPhotoScreenBody(state) }
     )
 }
 
 @Composable
-fun TipPhotoScreenBody() {
-    val viewModel: TipPhotoViewModel = hiltViewModel()
-    val state = viewModel.state.value
+fun TipPhotoScreenBody(state: TipPhotoState) {
     Column {
         Spacer(
             modifier = Modifier

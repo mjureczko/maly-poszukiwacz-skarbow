@@ -31,7 +31,7 @@ val SELECTOR_ROUTE = "$SELECTOR_PATH/{$PARAMETER_JUST_FOUND_TREASURE}"
 val COMMEMORATIVE_PATH = "commemorative"
 val COMMEMORATIVE_ROUTE = "$COMMEMORATIVE_PATH/{$PARAMETER_TREASURE_DESCRIPTION_ID}"
 val FACEBOOK_PATH = "facebook"
-val FACEBOOK_ROUTE = "$FACEBOOK_PATH"
+val FACEBOOK_ROUTE = "$FACEBOOK_PATH/{${pl.marianjureczko.poszukiwacz.screen.facebook.PARAMETER_ROUTE_NAME}}"
 
 /**
  * Routes creation and selection activity

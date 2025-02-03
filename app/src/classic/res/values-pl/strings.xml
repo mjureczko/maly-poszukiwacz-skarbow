@@ -60,4 +60,5 @@
     <string name="missing_external_storage_permission">Pozwolenie na zapisywanie plików jest potrzebne do wyksportowania postępów gry w postaci pliku graficznego.</string>
     <string name="help_path">https://little-treasure-hunter.netlify.app/#/</string>
     <string name="recording_permission_not_granted">Aby nagrywać podpowiedzi, zezwól aplikacji na dostęp do mikrofonu.</string>
+    <string name="no_route_to_share">Wybierz trasę do poszukiwań zanim ją będziesz udostępniać na Facebook.</string>
 </resources>
