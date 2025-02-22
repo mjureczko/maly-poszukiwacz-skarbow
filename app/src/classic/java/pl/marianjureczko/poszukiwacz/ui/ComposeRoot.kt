@@ -8,8 +8,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.CommemorativeScreen
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
-import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookHelper
-import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookScreen
+import pl.marianjureczko.poszukiwacz.activity.main.BLUETOOTH_PATH
+import pl.marianjureczko.poszukiwacz.activity.main.BLUETOOTH_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.FACEBOOK_ROUTE
@@ -25,6 +25,12 @@ import pl.marianjureczko.poszukiwacz.activity.map.n.MapScreen
 import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.BluetoothScreen
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.Mode
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.PARAMETER_MODE
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.PARAMETER_ROUTE_TO_SENT
+import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookHelper
+import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookScreen
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.screen.phototip.TipPhotoScreen
@@ -52,10 +58,11 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
             MainScreen(
-                navController,
-                onClickGuide,
-                goToFacebook,
-                goToEditor
+                navController = navController,
+                onClickOnGuide = onClickGuide,
+                onClickOnFacebook = goToFacebook,
+                goToBluetooth = { mode: Mode, route: String -> navController.navigate("$BLUETOOTH_PATH/$mode/$route") },
+                goToTreasureEditor = goToEditor,
             ) { routeName ->
                 navController.navigate("$SEARCHING_PATH/$routeName")
             }
@@ -144,5 +151,18 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 type = NavType.StringType
             }),
         ) { navBackStackEntry -> FacebookScreen(navController, onClickGuide) }
+        composable(
+            route = BLUETOOTH_ROUTE,
+            arguments = listOf(
+                navArgument(PARAMETER_MODE) { type = NavType.EnumType(Mode::class.java) },
+                navArgument(PARAMETER_ROUTE_TO_SENT) { type = NavType.StringType },
+            ),
+        ) { navBackStackEntry ->
+            BluetoothScreen(
+                navController = navController,
+                onClickOnGuide = onClickGuide,
+                onClickOnFacebook = goToFacebook
+            )
+        }
     }
 }

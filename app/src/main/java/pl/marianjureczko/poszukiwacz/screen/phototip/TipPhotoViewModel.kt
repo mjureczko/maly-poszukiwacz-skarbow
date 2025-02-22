@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 const val PARAMETER_TIP_PHOTO = "tip_photo"
-const val PARAMETER_ROUTE_NAME = "tip_photo"
+const val PARAMETER_ROUTE_NAME = "route_name"
 
 @HiltViewModel
 class TipPhotoViewModel @Inject constructor(

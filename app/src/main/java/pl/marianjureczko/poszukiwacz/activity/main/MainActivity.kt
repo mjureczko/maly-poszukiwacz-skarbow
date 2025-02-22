@@ -12,6 +12,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.PARAMETER_MODE
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.PARAMETER_ROUTE_TO_SENT
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_RESULT_TYPE
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_AMOUNT
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
@@ -32,6 +34,8 @@ val COMMEMORATIVE_PATH = "commemorative"
 val COMMEMORATIVE_ROUTE = "$COMMEMORATIVE_PATH/{$PARAMETER_TREASURE_DESCRIPTION_ID}"
 val FACEBOOK_PATH = "facebook"
 val FACEBOOK_ROUTE = "$FACEBOOK_PATH/{${pl.marianjureczko.poszukiwacz.screen.facebook.PARAMETER_ROUTE_NAME}}"
+val BLUETOOTH_PATH = "bluetooth"
+val BLUETOOTH_ROUTE = "$BLUETOOTH_PATH/{$PARAMETER_MODE}/{$PARAMETER_ROUTE_TO_SENT}"
 
 /**
  * Routes creation and selection activity

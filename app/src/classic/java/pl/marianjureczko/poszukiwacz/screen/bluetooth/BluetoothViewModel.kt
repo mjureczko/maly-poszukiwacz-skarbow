@@ -1,0 +1,146 @@
+package pl.marianjureczko.poszukiwacz.screen.bluetooth
+
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothSocket
+import android.content.res.Resources
+import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
+import javax.inject.Inject
+
+const val PARAMETER_MODE = "mode"
+const val PARAMETER_ROUTE_TO_SENT = "routeName"
+
+interface OnDeviceSelected {
+    fun sentRouteToDevice(deviceName: String)
+}
+
+interface Printer {
+    fun print(msgId: Int)
+    fun print(msgId: Int, vararg formatArgs: Any)
+}
+
+interface RouteReader {
+    fun readRuteFromConnectedSocket(socket: BluetoothSocket)
+}
+
+@SuppressLint("MissingPermission")
+@HiltViewModel
+class BluetoothViewModel @Inject constructor(
+    private val stateHandle: SavedStateHandle,
+    private val xmlHelper: XmlHelper,
+    private val storage: StorageHelper,
+    private val resources: Resources,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+) : ViewModel(), OnDeviceSelected, Printer, RouteReader {
+    private val TAG = javaClass.simpleName
+    private var _state: MutableState<BluetoothState> = mutableStateOf(createState())
+    private val bluetooth: Bluetooth = Bluetooth()
+    private var devices: List<BluetoothDevice>? = null
+
+    val state: State<BluetoothState>
+        get() = _state
+
+    fun init() {
+        try {
+            if (state.value.mode == Mode.SENDING) {
+                devices = bluetooth.findDevices()
+                if (devices!!.isEmpty()) {
+                    print(R.string.no_bluetooth_device)
+                } else {
+                    //TODO t: skip selection when only one device available
+                    _state.value = state.value.copy(devices = devices!!.map { it.name })
+                }
+            } else {
+                AcceptCoroutine(bluetooth, this, this).startAccepting(viewModelScope, ioDispatcher)
+            }
+        } catch (e: BluetoothException) {
+            val msg = resources.getString(e.msgId)
+            Log.w(TAG, "$msg", e)
+            _state.value = state.value.addMessage(msg)
+        }
+    }
+
+    override fun sentRouteToDevice(deviceName: String) {
+        print(R.string.device_was_selected, deviceName)
+        _state.value = state.value.copy(deviceIsSelected = true)
+        val selectedDevice: BluetoothDevice = devices!!.first { it.name == deviceName }
+        print(R.string.connect_to_device, selectedDevice.name)
+        storage.routeToZipOutputStream(state.value.route!!).use { routeStream ->
+            ConnectCoroutine(selectedDevice, routeStream, bluetooth, this).sendRoute(viewModelScope, ioDispatcher)
+        }
+    }
+
+    override fun print(msgId: Int) {
+        viewModelScope.launch(Dispatchers.Main) {
+            _state.value = state.value.addMessage(resources.getString(msgId))
+        }
+    }
+
+    override fun print(msgId: Int, vararg formatArgs: Any) {
+        viewModelScope.launch(Dispatchers.Main) {
+            _state.value = state.value.addMessage(resources.getString(msgId, *formatArgs))
+        }
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun addBluetoothPermission(permission: PermissionState) {
+        _state.value = state.value.copy(
+            permissions = state.value.permissions.copy(bluetoothPermission = permission)
+        )
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun addBluetoothConnectPermission(permission: PermissionState) {
+        _state.value = state.value.copy(
+            permissions = state.value.permissions.copy(bluetoothConnectPermission = permission)
+        )
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun addNearbyWifiDevicesPermission(permission: PermissionState) {
+        _state.value = state.value.copy(
+            permissions = state.value.permissions.copy(nearbyWifiDevicesPermission = permission)
+        )
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun addBluetoothScanPermission(permission: PermissionState) {
+        _state.value = state.value.copy(
+            permissions = state.value.permissions.copy(bluetoothScanPermission = permission)
+        )
+    }
+
+    private fun createState(): BluetoothState {
+        val mode = stateHandle.get<Mode>(PARAMETER_MODE)!!
+        var route: Route? = null
+        if (mode == Mode.SENDING) {
+            route = storage.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_TO_SENT)!!)
+        }
+        return BluetoothState(
+            route = route,
+            mode = mode,
+        )
+    }
+
+    override fun readRuteFromConnectedSocket(socket: BluetoothSocket) {
+        storage.extractZipStream(socket.inputStream, ProgressPrinter(this))
+        print(R.string.extracted_everything)
+    }
+}

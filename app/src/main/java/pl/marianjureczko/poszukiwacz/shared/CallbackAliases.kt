@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.shared
 
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.Mode
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 
 typealias GoToGuide = () -> Unit
@@ -12,6 +13,7 @@ typealias GoToTipPhoto = (String, String) -> Unit
 typealias GoToMap = (String) -> Unit
 typealias GoToResultWithTreasure = (Int) -> Unit
 typealias GoToTreasureSelector = (Int) -> Unit
+typealias GoToBluetooth = (Mode, String) -> Unit
 
 typealias RotatePhoto = (Int) -> Unit
 typealias ScanTreasureCallback = (String?) -> Unit

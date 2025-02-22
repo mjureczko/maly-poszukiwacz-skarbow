@@ -7,6 +7,7 @@
 //import android.util.Log
 //import pl.marianjureczko.poszukiwacz.R
 //import pl.marianjureczko.poszukiwacz.activity.main.Bluetooth
+//import pl.marianjureczko.poszukiwacz.screen.bluetooth.Printer
 //import java.io.ByteArrayOutputStream
 //import java.io.IOException
 //import java.io.OutputStream
@@ -17,9 +18,9 @@
 //    selectedDevice: BluetoothDevice,
 //    private val route: ByteArrayOutputStream,
 //    private val bluetooth: Bluetooth,
-//    memoConsole: MemoConsole,
+//    private val printer: Printer,
 //    private val context: Context
-//) : CancellableThread(memoConsole) {
+//) : CancellableThread(printer) {
 //
 //    private val TAG = javaClass.simpleName
 //
@@ -28,12 +29,12 @@
 //        try {
 //            selectedDevice.createRfcommSocketToServiceRecord(MY_BLUETOOTH_UUID)
 //        } catch (e: Exception) {
-//            reportException(memoConsole, e)
+//            reportException(printer, e)
 //        }
 //    }
 //
-//    private fun reportException(memoConsole: MemoConsole, e: Exception): Nothing? {
-//        printInConsole(context.getString(R.string.bluetooth_connecting_error) + e.message)
+//    private fun reportException(printer: Printer, e: Exception): Nothing? {
+//        printer.print(R.string.bluetooth_connecting_error, e.message ?: "")
 //        return null
 //    }
 //
@@ -45,11 +46,11 @@
 //        socket?.let { socket ->
 //            try {
 //                socket.connect()
-//                printInConsole(context.getString(R.string.bluetooth_connection_created))
+//                printer.print(R.string.bluetooth_connection_created)
 //                writeRouteToSocket(socket)
 //            } catch (e: Exception) {
 //                Log.e(TAG, "Error occurred when creating connection", e)
-//                printInConsole(context.getString(R.string.error_when_creating_connection) + e.message)
+//                printer.print(R.string.error_when_creating_connection, e.message ?: "")
 //            }
 //        }
 //        done.set(true)
@@ -58,12 +59,12 @@
 //    private fun writeRouteToSocket(socket: BluetoothSocket) {
 //        try {
 //            val outStream: OutputStream = socket.outputStream
-//            printInConsole(context.getString(R.string.sending_over_bluetooth))
+//            printer.print(R.string.sending_over_bluetooth)
 //            outStream.write(route.toByteArray())
-//            printInConsole(context.getString(R.string.route_sent_over_bluetooth))
+//            printer.print(R.string.route_sent_over_bluetooth)
 //        } catch (e: IOException) {
 //            Log.e(TAG, "Error occurred when sending data", e)
-//            printInConsole(context.getString(R.string.error_when_sending_route) + e.message)
+//            printer.print(R.string.error_when_sending_route, e.message ?: "")
 //            return
 //        }
 //

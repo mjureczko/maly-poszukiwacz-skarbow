@@ -21,9 +21,6 @@ import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Inject
 
-//TODO: should be configurable for the sake of classic version
-//const val ROUTE_NAME = "custom"
-
 const val PARAMETER_ROUTE_NAME = "route_name"
 
 @HiltViewModel

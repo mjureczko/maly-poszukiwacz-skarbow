@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <!-- presumably is needed for bluetooth for SDK 33+ -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -34,6 +36,7 @@
         android:name="android.hardware.bluetooth"
         android:required="false" />
 
+    <!--    TODO t: how to set testOnly to true for espresso tests? is that required for the espresso tests? -->
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -42,7 +45,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/LaunchTheme"
-        android:testOnly="true">
+        android:testOnly="false">
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

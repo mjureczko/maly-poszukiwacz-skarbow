@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.screen.main
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.twotone.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.screen.bluetooth.Mode
+import pl.marianjureczko.poszukiwacz.shared.GoToBluetooth
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
@@ -45,8 +45,14 @@ const val EDIT_ROUTE_BUTTON = "Edit route button"
 const val DELETE_ROUTE_BUTTON = "Delete route button"
 const val ROUTE = "Route"
 
+private const val NO_ROUTE = "no_route"
+
 @Composable
-fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSearching) {
+fun MainScreenBody(
+    goToBluetooth: GoToBluetooth,
+    goToTreasureEditor: GoToTreasureEditor,
+    goToSearching: GoToSearching
+) {
     val viewModel: MainViewModel = hiltViewModel()
     val state = viewModel.state.value
     Column {
@@ -55,17 +61,14 @@ fun MainScreenBody(goToTreasureEditor: GoToTreasureEditor, goToSearching: GoToSe
             modifier = Modifier.weight(0.99f)
         ) {
             items(state.routes) { route ->
-                RouteItem(route, viewModel, goToTreasureEditor, goToSearching)
+                RouteItem(route, viewModel, goToTreasureEditor, goToSearching, goToBluetooth)
             }
         }
         Spacer(modifier = Modifier.weight(0.01f))
         LargeButton(R.string.new_route_button, description = NEW_ROUTE_BUTTON) {
             viewModel.openNewRouteDialog()
         }
-        val context = LocalContext.current
-        LargeButton(R.string.route_from_bluetooth_button) {
-            Toast.makeText(context, "Clicked Bluetooth", Toast.LENGTH_SHORT).show()
-        }
+        LargeButton(R.string.route_from_bluetooth_button, onClick = { goToBluetooth(Mode.ACCEPTING, NO_ROUTE) })
         EnterTextDialog(
             visible = state.newRoute.showDialog,
             hideIt = { viewModel.hideNewRouteDialog() },
@@ -100,7 +103,8 @@ fun RouteItem(
     item: Route,
     viewModel: MainViewModel,
     goToTreasureEditor: GoToTreasureEditor,
-    goToSearching: GoToSearching
+    goToSearching: GoToSearching,
+    goToBluetooth: GoToBluetooth,
 ) {
     Card(
         elevation = 4.dp,
@@ -128,7 +132,7 @@ fun RouteItem(
                 imageVector = Icons.TwoTone.Edit,
                 description = EDIT_ROUTE_BUTTON + item.name
             ) { goToTreasureEditor(item.name) }
-            EmbeddedButton(imageVector = Icons.TwoTone.Share) { print("TODO") }
+            EmbeddedButton(imageVector = Icons.TwoTone.Share) { goToBluetooth(Mode.SENDING, item.name) }
             EmbeddedButton(
                 imageVector = Icons.TwoTone.Delete,
                 description = DELETE_ROUTE_BUTTON + item.name

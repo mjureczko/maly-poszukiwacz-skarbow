@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 
 @Composable
-fun LargeButton(title: Int, description: String = "", enabled: Boolean = true, onClick: () -> Unit) {
+fun LargeButton(title: String, description: String = "", enabled: Boolean = true, onClick: () -> Unit) {
     val contentColor = if (enabled) {
         Color.Black
     } else {
@@ -39,8 +39,13 @@ fun LargeButton(title: Int, description: String = "", enabled: Boolean = true, o
         onClick = onClick
     ) {
         Text(
-            stringResource(title),
+            title,
             color = contentColor
         )
     }
+}
+
+@Composable
+fun LargeButton(title: Int, description: String = "", enabled: Boolean = true, onClick: () -> Unit) {
+    LargeButton(stringResource(title), description, enabled, onClick)
 }

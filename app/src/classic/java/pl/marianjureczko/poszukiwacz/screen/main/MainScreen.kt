@@ -8,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
+import pl.marianjureczko.poszukiwacz.shared.GoToBluetooth
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
@@ -20,6 +21,7 @@ fun MainScreen(
     navController: NavController,
     onClickOnGuide: () -> Unit,
     onClickOnFacebook: GoToFacebook,
+    goToBluetooth: GoToBluetooth,
     goToTreasureEditor: GoToTreasureEditor,
     goToSearching: GoToSearching
 ) {
@@ -36,6 +38,6 @@ fun MainScreen(
                 onClickOnFacebook = { onClickOnFacebook("") },
             )
         },
-        content = { _ -> MainScreenBody(goToTreasureEditor, goToSearching) }
+        content = { _ -> MainScreenBody(goToBluetooth, goToTreasureEditor, goToSearching) }
     )
 }
