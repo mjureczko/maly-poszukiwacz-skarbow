@@ -12,8 +12,8 @@ class CoordinatesFormatter {
         val nf: NumberFormat = NumberFormat.getInstance(Locale.UK)
         nf.minimumFractionDigits = 5
         nf.maximumFractionDigits = 5
-        nf.minimumIntegerDigits = 2
-        nf.maximumIntegerDigits = 2
+        nf.minimumIntegerDigits = 1
+        nf.maximumIntegerDigits = 3
 
         return nf.format(cord)
     }

@@ -6,21 +6,30 @@ import org.junit.jupiter.api.Test
 class CoordinatesFormatterTest {
 
     @Test
-    fun formatCorrectCord() {
+    fun formatCorrectCoordinates() {
         //when
         val actual = pl.marianjureczko.poszukiwacz.screen.treasureseditor.CoordinatesFormatter().format(2.5433)
 
         //then
-        assertEquals("02.54330", actual)
+        assertEquals("2.54330", actual)
     }
 
     @Test
-    fun formatToBigCord() {
+    fun formatToBigCoordinates() {
         //when
         val actual = pl.marianjureczko.poszukiwacz.screen.treasureseditor.CoordinatesFormatter().format(122.3365645)
 
         //then
-        assertEquals("22.33656", actual)
+        assertEquals("122.33656", actual)
+    }
+
+    @Test
+    fun formatToNegativeCoordinates() {
+        //when
+        val actual = pl.marianjureczko.poszukiwacz.screen.treasureseditor.CoordinatesFormatter().format(-155.9365645)
+
+        //then
+        assertEquals("-155.93656", actual)
     }
 
     @Test

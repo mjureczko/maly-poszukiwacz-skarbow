@@ -18,6 +18,7 @@ import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material.icons.twotone.Share
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
@@ -55,6 +56,9 @@ fun MainScreenBody(
 ) {
     val viewModel: MainViewModel = hiltViewModel()
     val state = viewModel.state.value
+    LaunchedEffect(Unit) {
+        viewModel.refresh()
+    }
     Column {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),

@@ -36,7 +36,6 @@
         android:name="android.hardware.bluetooth"
         android:required="false" />
 
-    <!--    TODO t: how to set testOnly to true for espresso tests? is that required for the espresso tests? -->
     <application
         android:name=".App"
         android:allowBackup="true"

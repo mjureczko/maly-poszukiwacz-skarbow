@@ -59,4 +59,6 @@
     <string name="help_path">https://little-treasure-hunter.netlify.app/#/README_en</string>
     <string name="recording_permission_not_granted">To record hints, allow microphone access.</string>
     <string name="no_route_to_share">Select a route for the treasure hunt before sharing it on Facebook.</string>
+    <string name="no_gps">Location unavailable</string>
+    <string name="cannot_remove_last_treasure">The last treasure cannot be removed</string>
 </resources>

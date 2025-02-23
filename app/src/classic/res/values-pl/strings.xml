@@ -61,4 +61,6 @@
     <string name="help_path">https://little-treasure-hunter.netlify.app/#/</string>
     <string name="recording_permission_not_granted">Aby nagrywać podpowiedzi, zezwól aplikacji na dostęp do mikrofonu.</string>
     <string name="no_route_to_share">Wybierz trasę do poszukiwań zanim ją będziesz udostępniać na Facebook.</string>
+    <string name="no_gps">Lokalizacja niedostępna</string>
+    <string name="cannot_remove_last_treasure">Ostatni skarb nie może zostać usunięty</string>
 </resources>

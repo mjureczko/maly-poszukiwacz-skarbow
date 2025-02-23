@@ -297,6 +297,13 @@ Ports should wrap all external dependencies to make it possible to mock them in 
 
 # Releasing
 
+## Production release
+
+1. Update `versionCode` and `versionName` in `app/build.gradle`.
+2. Build -> Generate Signed Bundle/APK -> Android App Bundle -> ${variantName}Release
+3. Google Play Console: Testuj i publikuj -> Przegląd wersji -> Panel wersji ->  Utwórz nową wersję
+4. Google Play Console: Pakiety aplikacji -> Prześlij (upload the aab file from app/variantName/release/)
+
 To build aab file execute:
 
 ```bash

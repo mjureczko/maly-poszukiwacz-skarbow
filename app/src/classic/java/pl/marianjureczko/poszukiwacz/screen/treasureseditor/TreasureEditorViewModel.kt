@@ -22,6 +22,7 @@ import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
+import java.io.FileNotFoundException
 import javax.inject.Inject
 
 interface GetDoTipPhoto {
@@ -160,10 +161,15 @@ class TreasureEditorViewModel @Inject constructor(
     }
 
     private fun createState(): TreasureEditorState {
-        val route2 = storage.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!)
+        val routeName = stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!
+        val routeToEdit = try {
+            storage.loadRoute(routeName)
+        } catch (e: FileNotFoundException) {
+            Route(routeName)
+        }
 
         return TreasureEditorState(
-            route = route2,
+            route = routeToEdit,
             currentLocation = null,
             overridePhotoQuestionProvider = { td: TreasureDescription -> storage.fileNotEmpty(td.photoFileName) },
             overrideSoundTipQuestionProvider = { td: TreasureDescription ->

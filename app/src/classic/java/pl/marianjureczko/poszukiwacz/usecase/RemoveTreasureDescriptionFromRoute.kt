@@ -15,7 +15,6 @@ class RemoveTreasureDescriptionFromRoute(
                 storage.removeProgress(updatedRoute.name)
             } else {
                 storage.loadProgress(route.name)?.let { progress ->
-                    //TODO t: what if the last treasure is removed?
                     if (progress.selectedTreasureDescriptionId == toRemove.id) {
                         progress.selectedTreasureDescriptionId = updatedRoute.treasures[0].id
                         storage.save(progress)

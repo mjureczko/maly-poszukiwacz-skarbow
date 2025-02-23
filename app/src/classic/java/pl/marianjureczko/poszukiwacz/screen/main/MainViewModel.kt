@@ -59,19 +59,21 @@ class MainViewModel @Inject constructor(
         if (routeExists(routeName)) {
             openOverrideRouteDialog()
         } else {
-            saveNewRoute(routeName)
             goToTreasureEditor.invoke(routeName)
         }
     }
 
     fun replaceRouteWithNewOne(newRouteName: String, goToTreasureEditor: GoToTreasureEditor) {
         storageHelper.removeRouteByName(newRouteName)
-        saveNewRoute(newRouteName)
         goToTreasureEditor.invoke(newRouteName)
     }
 
     fun deleteRoute(route: Route) {
         storageHelper.remove(route)
+        loadAllRoutes()
+    }
+
+    fun refresh() {
         loadAllRoutes()
     }
 
@@ -89,9 +91,4 @@ class MainViewModel @Inject constructor(
         _state.value = _state.value.copy(showOverrideRouteDialog = true)
     }
 
-    private fun saveNewRoute(name: String) {
-        val route = Route(name)
-        storageHelper.save(route)
-        loadAllRoutes()
-    }
 }

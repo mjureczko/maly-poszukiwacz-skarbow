@@ -177,7 +177,24 @@ fun TreasureItem(
                 showOverrideSoundTipDialog,
                 showSoundRecordingDialog
             )
-            EmbeddedButton(imageVector = Icons.TwoTone.Delete) { removeTreasure(treasure.id) }
+            RemoveTreasureButton(state, removeTreasure, treasure)
+        }
+    }
+}
+
+@Composable
+private fun RemoveTreasureButton(
+    state: TreasureEditorState,
+    removeTreasure: RemoveTreasure,
+    treasure: TreasureDescription
+) {
+    val ctx = LocalContext.current
+    EmbeddedButton(imageVector = Icons.TwoTone.Delete) {
+        if (state.hasOnlyOneTreasure()) {
+            errorTone()
+            Toast.makeText(ctx, ctx.getString(R.string.cannot_remove_last_treasure), Toast.LENGTH_SHORT).show()
+        } else {
+            removeTreasure(treasure.id)
         }
     }
 }
@@ -296,11 +313,11 @@ fun LocationBar(location: LocationBarData, addTreasure: AddTreasure) {
     ) {
         Column(modifier = Modifier.padding(4.dp)) {
             Text(
-                text = stringResource(id = R.string.latitude) + ":",
+                text = stringResource(id = R.string.latitude),
                 modifier = Modifier.padding(4.dp)
             )
             Text(
-                text = stringResource(id = R.string.longitude) + ":",
+                text = stringResource(id = R.string.longitude),
                 modifier = Modifier.padding(4.dp)
             )
         }
@@ -314,13 +331,24 @@ fun LocationBar(location: LocationBarData, addTreasure: AddTreasure) {
                 modifier = Modifier.padding(4.dp)
             )
         }
+        val ctx = LocalContext.current
         Image(
             painterResource(R.drawable.chest_add_small),
             modifier = Modifier
                 .padding(start = 70.dp, top = 8.dp)
                 .height(50.dp)
                 .width(70.dp)
-                .clickable(enabled = location.buttonEnabled, onClick = addTreasure),
+                .clickable(
+                    onClick = {
+                        if (location.buttonEnabled) addTreasure()
+                        else {
+                            Toast
+                                .makeText(ctx, ctx.getString(R.string.no_gps), Toast.LENGTH_SHORT)
+                                .show()
+                            errorTone()
+                        }
+                    },
+                ),
             contentDescription = ADD_TREASURE_BUTTON,
             contentScale = ContentScale.FillBounds,
         )

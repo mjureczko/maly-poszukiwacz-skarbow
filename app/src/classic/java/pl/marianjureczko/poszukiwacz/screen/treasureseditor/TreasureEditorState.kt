@@ -25,6 +25,8 @@ data class TreasureEditorState(
         val buttonEnabled = currentLocation != null
         return LocationBarData(latitude, longitude, buttonEnabled)
     }
+
+    fun hasOnlyOneTreasure() = route.treasures.size == 1
 }
 
 data class LocationBarData(
