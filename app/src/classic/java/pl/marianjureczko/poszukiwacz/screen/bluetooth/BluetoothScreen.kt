@@ -2,33 +2,24 @@
 
 package pl.marianjureczko.poszukiwacz.screen.bluetooth
 
+import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetooth
-import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetoothConnect
-import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetoothScan
-import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNearbyWifiDevices
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 
-// Manifest.permission.BLUETOOTH
-// if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)) {
-//     permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
-// }
-// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//     permissions.add(Manifest.permission.NEARBY_WIFI_DEVICES)
-// }
-
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BluetoothScreen(
@@ -39,21 +30,24 @@ fun BluetoothScreen(
     val viewModel: BluetoothViewModel = hiltViewModel()
     val state: State<BluetoothState> = viewModel.state
 
-    val bluetoothPermission: PermissionState = handlePermission(RequirementsForBluetooth)
-    viewModel.addBluetoothPermission(bluetoothPermission)
-    if (state.value.permissions.canAskForBluetoothScanPermission()) {
-        viewModel.addBluetoothScanPermission(handlePermission(RequirementsForBluetoothScan))
-    }
-    if (state.value.permissions.canAskForBluetoothConnectPermission()) {
-        viewModel.addBluetoothConnectPermission(handlePermission(RequirementsForBluetoothConnect))
-    }
-    if (state.value.permissions.canAskForNearbyWifiDevicesPermission()) {
-        viewModel.addNearbyWifiDevicesPermission(handlePermission(RequirementsForNearbyWifiDevices))
-    }
-
-    if (state.value.permissions.canInitViewModel()) {
-        LaunchedEffect(Unit) {
-            viewModel.init()
+    val toRequest = viewModel.getPermissionRequirements()
+    if (toRequest != null) {
+        if (toRequest.shouldRequestOnThiDevice()) {
+            handlePermission(toRequest) {
+                viewModel.goToNextPermission(toRequest)
+            }
+        } else {
+            viewModel.goToNextPermission(toRequest)
+        }
+    } else {
+        val context = LocalContext.current
+        if (viewModel.permissionsHandler.allPermissionsGranted(context)) {
+            LaunchedEffect(Unit) {
+                viewModel.init()
+            }
+        } else {
+            Toast.makeText(context, R.string.bluetooth_permission_not_given, Toast.LENGTH_LONG).show()
+            navController.navigateUp()
         }
     }
 

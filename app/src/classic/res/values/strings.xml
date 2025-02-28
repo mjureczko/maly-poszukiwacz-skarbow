@@ -61,4 +61,5 @@
     <string name="no_route_to_share">Select a route for the treasure hunt before sharing it on Facebook.</string>
     <string name="no_gps">Location unavailable</string>
     <string name="cannot_remove_last_treasure">The last treasure cannot be removed</string>
+    <string name="bluetooth_permission_not_given">Not all permissions required for Bluetooth transfer were granted.</string>
 </resources>

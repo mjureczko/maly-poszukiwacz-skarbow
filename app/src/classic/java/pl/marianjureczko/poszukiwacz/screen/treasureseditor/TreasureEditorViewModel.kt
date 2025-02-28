@@ -14,12 +14,16 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.permissions.Requirements
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingTipPhoto
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForRecordingSound
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.ui.PermissionsHandler
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
 import java.io.FileNotFoundException
@@ -45,6 +49,11 @@ class TreasureEditorViewModel @Inject constructor(
 ) : ViewModel(), GetDoTipPhoto {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<TreasureEditorState> = mutableStateOf(createState())
+    val permissionsHandler: PermissionsHandler = PermissionsHandler(
+        listOf(
+            RequirementsForDoingTipPhoto, RequirementsForRecordingSound
+        )
+    )
 
     val state: State<TreasureEditorState>
         get() = _state
@@ -128,6 +137,15 @@ class TreasureEditorViewModel @Inject constructor(
             showSoundRecordingDialog = false,
             fileForTipRecording = null
         )
+    }
+
+    fun requestNextPermission(previous: Requirements) {
+        val nextPermissionIndex = permissionsHandler.requestNextPermission(previous)
+        _state.value = _state.value.copy(permissionToRequestIndex = nextPermissionIndex)
+    }
+
+    fun getNextPermissionRequest(): Requirements? {
+        return permissionsHandler.getPermissionRequirements(state.value.permissionToRequestIndex)
     }
 
     private fun assureSoundTipFilePresent(treasureDescription: TreasureDescription): Route {

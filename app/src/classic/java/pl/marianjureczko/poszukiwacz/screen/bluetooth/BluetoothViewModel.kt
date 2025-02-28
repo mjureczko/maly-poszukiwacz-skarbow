@@ -11,17 +11,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.permissions.Requirements
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetooth
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetoothConnect
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetoothScan
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNearbyWifiDevices
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
+import pl.marianjureczko.poszukiwacz.ui.PermissionsHandler
 import javax.inject.Inject
 
 const val PARAMETER_MODE = "mode"
@@ -44,7 +47,6 @@ interface RouteReader {
 @HiltViewModel
 class BluetoothViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
-    private val xmlHelper: XmlHelper,
     private val storage: StorageHelper,
     private val resources: Resources,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -53,6 +55,14 @@ class BluetoothViewModel @Inject constructor(
     private var _state: MutableState<BluetoothState> = mutableStateOf(createState())
     private val bluetooth: Bluetooth = Bluetooth()
     private var devices: List<BluetoothDevice>? = null
+    val permissionsHandler: PermissionsHandler = PermissionsHandler(
+        listOf(
+            RequirementsForBluetooth,
+            RequirementsForBluetoothScan,
+            RequirementsForBluetoothConnect,
+            RequirementsForNearbyWifiDevices,
+        )
+    )
 
     val state: State<BluetoothState>
         get() = _state
@@ -72,7 +82,7 @@ class BluetoothViewModel @Inject constructor(
             }
         } catch (e: BluetoothException) {
             val msg = resources.getString(e.msgId)
-            Log.w(TAG, "$msg", e)
+            Log.w(TAG, msg, e)
             _state.value = state.value.addMessage(msg)
         }
     }
@@ -99,32 +109,17 @@ class BluetoothViewModel @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalPermissionsApi::class)
-    fun addBluetoothPermission(permission: PermissionState) {
-        _state.value = state.value.copy(
-            permissions = state.value.permissions.copy(bluetoothPermission = permission)
-        )
+    fun goToNextPermission(previous: Requirements) {
+        val nextPermissionIndex = permissionsHandler.requestNextPermission(previous)
+        _state.value = _state.value.copy(permissionToRequestIndex = nextPermissionIndex)
     }
 
-    @OptIn(ExperimentalPermissionsApi::class)
-    fun addBluetoothConnectPermission(permission: PermissionState) {
-        _state.value = state.value.copy(
-            permissions = state.value.permissions.copy(bluetoothConnectPermission = permission)
-        )
-    }
+    fun getPermissionRequirements(): Requirements? =
+        permissionsHandler.getPermissionRequirements(state.value.permissionToRequestIndex)
 
-    @OptIn(ExperimentalPermissionsApi::class)
-    fun addNearbyWifiDevicesPermission(permission: PermissionState) {
-        _state.value = state.value.copy(
-            permissions = state.value.permissions.copy(nearbyWifiDevicesPermission = permission)
-        )
-    }
-
-    @OptIn(ExperimentalPermissionsApi::class)
-    fun addBluetoothScanPermission(permission: PermissionState) {
-        _state.value = state.value.copy(
-            permissions = state.value.permissions.copy(bluetoothScanPermission = permission)
-        )
+    override fun readRuteFromConnectedSocket(socket: BluetoothSocket) {
+        storage.extractZipStream(socket.inputStream, ProgressPrinter(this))
+        print(R.string.extracted_everything)
     }
 
     private fun createState(): BluetoothState {
@@ -137,10 +132,5 @@ class BluetoothViewModel @Inject constructor(
             route = route,
             mode = mode,
         )
-    }
-
-    override fun readRuteFromConnectedSocket(socket: BluetoothSocket) {
-        storage.extractZipStream(socket.inputStream, ProgressPrinter(this))
-        print(R.string.extracted_everything)
     }
 }

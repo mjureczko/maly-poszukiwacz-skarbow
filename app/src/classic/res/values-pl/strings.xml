@@ -63,4 +63,5 @@
     <string name="no_route_to_share">Wybierz trasę do poszukiwań zanim ją będziesz udostępniać na Facebook.</string>
     <string name="no_gps">Lokalizacja niedostępna</string>
     <string name="cannot_remove_last_treasure">Ostatni skarb nie może zostać usunięty</string>
+    <string name="bluetooth_permission_not_given">Nie wszystkie uprawnienia wymagane przez komunikację Bluetooth zostały przyznane.</string>
 </resources>
