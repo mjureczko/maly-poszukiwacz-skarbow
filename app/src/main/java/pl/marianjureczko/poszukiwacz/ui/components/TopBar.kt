@@ -65,7 +65,6 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
         },
 
         title = {
-            // TODO t: check replacing Row with Box(maxWidth, Image->left, Text->center)
             Row(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically,

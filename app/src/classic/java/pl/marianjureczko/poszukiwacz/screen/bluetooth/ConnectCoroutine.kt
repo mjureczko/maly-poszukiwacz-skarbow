@@ -29,7 +29,6 @@ class ConnectCoroutine(
     private var isDone = AtomicBoolean(false)
     private var socket: BluetoothSocket? = null
 
-    //TODO t: pass dispatcher from viewModel
     fun sendRoute(scope: CoroutineScope, dispatcher: CoroutineDispatcher) {
         connectJob = scope.launch(dispatcher) {
             bluetooth.adapter?.cancelDiscovery() // Cancel discovery to speed up connection

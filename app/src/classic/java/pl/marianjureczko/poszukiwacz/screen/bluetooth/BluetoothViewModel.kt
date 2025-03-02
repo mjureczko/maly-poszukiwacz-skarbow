@@ -74,8 +74,11 @@ class BluetoothViewModel @Inject constructor(
                 if (devices!!.isEmpty()) {
                     print(R.string.no_bluetooth_device)
                 } else {
-                    //TODO t: skip selection when only one device available
-                    _state.value = state.value.copy(devices = devices!!.map { it.name })
+                    if (devices!!.size == 1) {
+                        sentRouteToDevice(devices!![0].name)
+                    } else {
+                        _state.value = state.value.copy(devices = devices!!.map { it.name })
+                    }
                 }
             } else {
                 AcceptCoroutine(bluetooth, this, this).startAccepting(viewModelScope, ioDispatcher)
@@ -93,7 +96,8 @@ class BluetoothViewModel @Inject constructor(
         val selectedDevice: BluetoothDevice = devices!!.first { it.name == deviceName }
         print(R.string.connect_to_device, selectedDevice.name)
         storage.routeToZipOutputStream(state.value.route!!).use { routeStream ->
-            ConnectCoroutine(selectedDevice, routeStream, bluetooth, this).sendRoute(viewModelScope, ioDispatcher)
+            ConnectCoroutine(selectedDevice, routeStream, bluetooth, this)
+                .sendRoute(viewModelScope, ioDispatcher)
         }
     }
 

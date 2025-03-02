@@ -87,13 +87,27 @@ Each stateful activity has a view model class (a class extending the `ViewModel`
 
 # Permissions
 
-https://medium.com/@rzmeneghelo/how-to-request-permissions-in-jetpack-compose-a-step-by-step-guide-7ce4b7782bd7
+Solution based on:
 
-https://stackoverflow.com/questions/60608101/how-request-permissions-with-jetpack-compose
+- https://medium.com/@rzmeneghelo/how-to-request-permissions-in-jetpack-compose-a-step-by-step-guide-7ce4b7782bd7
+- https://stackoverflow.com/questions/60608101/how-request-permissions-with-jetpack-compose
+- https://google.github.io/accompanist/permissions/
+- https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/permissions
 
-https://google.github.io/accompanist/permissions/
+The permission is requested on the screen there it is needed for the first time.
+What permission is needed is declared by implmenting the `Requirement` interface.
+Implementation shall deliver three values:
 
-https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/permissions
+- the actual permission from the `Manifest.permission` class
+- message to be displayed when the permission is denied
+- predicate that checks if the permission is needed on the current device
+
+The permissions are handled using the functions from `Permissions.kt`.
+
+In case a screen requires multiple permissions, they are requested one by one.
+The callback form first permission is called when user answers to the request for granting permission and is used to
+record in state that now the second permission should be requested.
+The logic is delivered in the `PermissionsHandler` class.
 
 ## Structure
 
