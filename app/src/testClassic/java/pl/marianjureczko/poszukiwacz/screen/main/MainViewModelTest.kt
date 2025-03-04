@@ -113,9 +113,8 @@ class MainViewModelTest {
     }
 
     @Test
-    fun shoulSaveNewRoute_whenRouteNameIsUnique() {
+    fun shouldGoToTreasureEditor_whenRouteNameIsUnique() {
         //given
-        val route = storage.loadAll()[0]
         val viewModel = MainViewModel(storage, resources)
         val newRouteName = someString()
         var calledName = ""
@@ -128,9 +127,6 @@ class MainViewModelTest {
         val actualState = viewModel.state.value
         assertThat(actualState.newRoute.routeName).isEqualTo(newRouteName)
         assertFalse(actualState.showOverrideRouteDialog)
-        assertThat(storage.routes.values).contains(route)
-        assertThat(storage.routes[newRouteName]!!.name).isEqualTo(newRouteName)
-        assertThat(storage.routes[newRouteName]!!.treasures).isEmpty()
         assertThat(calledName).isEqualTo(newRouteName)
     }
 
@@ -147,8 +143,7 @@ class MainViewModelTest {
         viewModel.replaceRouteWithNewOne(routeName, goToTreasureEditor)
 
         //then
-        assertThat(storage.routes[routeName]!!.name).isEqualTo(routeName)
-        assertThat(storage.routes[routeName]!!.treasures).isEmpty()
+        assertThat(storage.routes[routeName]).isNull()
         assertThat(calledName).isEqualTo(routeName)
     }
 

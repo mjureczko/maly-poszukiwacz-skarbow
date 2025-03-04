@@ -8,8 +8,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.CommemorativeScreen
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
-import pl.marianjureczko.poszukiwacz.activity.main.BLUETOOTH_PATH
-import pl.marianjureczko.poszukiwacz.activity.main.BLUETOOTH_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.FACEBOOK_ROUTE
@@ -46,6 +44,10 @@ import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
+
+
+val BLUETOOTH_PATH = "bluetooth"
+val BLUETOOTH_ROUTE = "$BLUETOOTH_PATH/{$PARAMETER_MODE}/{$PARAMETER_ROUTE_TO_SENT}"
 
 @Composable
 fun ComposeRoot(onClickGuide: GoToGuide) {

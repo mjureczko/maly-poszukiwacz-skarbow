@@ -162,7 +162,7 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
-    testImplementation("com.ocadotechnology.gembus:test-arranger:1.6.4-SNAPSHOT") {
+    testImplementation("com.ocadotechnology.gembus:test-arranger:1.6.3") {
         exclude group: "dk.brics.automaton", module: "automaton"
     }
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.26.3'

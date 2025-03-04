@@ -63,6 +63,9 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Removes the existing route and delegates the creation to TreasureEditor
+     */
     fun replaceRouteWithNewOne(newRouteName: String, goToTreasureEditor: GoToTreasureEditor) {
         storageHelper.removeRouteByName(newRouteName)
         goToTreasureEditor.invoke(newRouteName)
