@@ -35,7 +35,7 @@ jobs:
 
       # Cache Gradle dependencies and Gradle Wrapper
       - name: Setup Gradle Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
