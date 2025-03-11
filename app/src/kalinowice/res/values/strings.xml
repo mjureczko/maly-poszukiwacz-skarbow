@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kalinowice</string>
-    <string name="custom_lead1">[WARNING the route is being prepared] We invite you on a special journey through a seemingly ordinary village. Our guide will be Mr. Andrzej Legrand, a resident of Kalinowice and a lover of local history. Thanks to him, we will learn about the biggest local secrets and discover priceless treasures of knowledge.</string>
+    <string name="custom_lead1">We invite you on a special journey through a seemingly ordinary village. Our guide will be Mr. Andrzej Legrand, a resident of Kalinowice and a lover of local history. Thanks to him, we will learn about the biggest local secrets and discover priceless treasures of knowledge.</string>
     <string name="custom_lead2">The exact route depends on your choices, but you can expect it to be about 13 km long. Consider breaking the journey into a few days or using a bike.</string>
     <string name="custom_title">Kalinowice Adventure Trip</string>
     <string name="help_path">https://kalinowice-little-treasure-hunter.netlify.app/#/README_en</string>

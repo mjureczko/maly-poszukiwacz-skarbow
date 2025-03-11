@@ -17,6 +17,8 @@ import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.SEARCHING_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
+import pl.marianjureczko.poszukiwacz.activity.main.TIP_PHOTO_PATH
+import pl.marianjureczko.poszukiwacz.activity.main.TIP_PHOTO_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.map.n.MapScreen
 import pl.marianjureczko.poszukiwacz.activity.map.n.PARAMETER_ROUTE_NAME_2
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
@@ -41,7 +43,8 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
-    val goToCommemorative: GoToCommemorative = { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") }
+    val goToCommemorative: GoToCommemorative =
+        { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") }
 
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
@@ -56,7 +59,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
             SearchingScreen(
                 navController = navController,
                 onClickOnGuide = onClickGuide,
-                goToTipPhoto = { tipPhoto, _ -> navController.navigate("tipPhoto/$tipPhoto") },
+                goToTipPhoto = { tipPhoto, _ -> navController.navigate("$TIP_PHOTO_PATH/$tipPhoto/custom") },
                 goToResult = { routeName, resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$routeName/$resultType/$treasureId/$amount") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
@@ -73,8 +76,13 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
             )
         ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
         composable(
-            route = "tipPhoto/{$PARAMETER_TIP_PHOTO}",
-            arguments = listOf(navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType })
+            route = TIP_PHOTO_ROUTE,
+            arguments = listOf(
+                navArgument(PARAMETER_TIP_PHOTO) { type = NavType.StringType },
+                navArgument(pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_ROUTE_NAME) {
+                    type = NavType.StringType
+                },
+            )
         ) {
             TipPhotoScreen(
                 navController = navController,

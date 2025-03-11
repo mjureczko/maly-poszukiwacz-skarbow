@@ -26,9 +26,9 @@
         <treasureDescription>
             <!--dąbrówka-->
             <id>3</id>
-            <latitude>50.520650</latitude>
-            <longitude>18.200960</longitude>
-            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <latitude>50.522259</latitude>
+            <longitude>18.202298</longitude>
+            <photoFileName>tip_03.jpg</photoFileName>
             <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
             <qrCode>k01003</qrCode>
             <movieFileName>kalinowice_03.mp4</movieFileName>
@@ -50,7 +50,7 @@
             <id>5</id>
             <latitude>50.51175000</latitude>
             <longitude>18.17950000</longitude>
-            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <photoFileName>tip_05.jpg</photoFileName>
             <tipFileName>sound_ddaa89a4-2925-45a1-a5a1-93f72c04aeff.3gp</tipFileName>
             <qrCode>k01005</qrCode>
             <movieFileName>kalinowice_05.mp4</movieFileName>
@@ -105,7 +105,7 @@
             <id>10</id>
             <latitude>50.50616667</latitude>
             <longitude>18.19222222</longitude>
-            <photoFileName>photo_3035c809-d834-4dc6-a7ef-c8a0b670b945.jpg</photoFileName>
+            <photoFileName>tip_10.jpg</photoFileName>
             <tipFileName>tip_10.m4a</tipFileName>
             <qrCode>k01010</qrCode>
             <movieFileName>kalinowice_10.mp4</movieFileName>
