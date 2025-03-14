@@ -41,6 +41,10 @@ class SelectorViewModel @Inject constructor(
         }
     }
 
+    fun wellDoneShown() {
+        _state.value = _state.value.copy(wellDoneShown = true)
+    }
+
     private fun createState(): SelectorState {
         val justFoundTreasureId = stateHandle.get<Int>(PARAMETER_JUST_FOUND_TREASURE)!!
         return SelectorState(

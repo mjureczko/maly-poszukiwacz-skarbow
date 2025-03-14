@@ -6,4 +6,6 @@
     <string name="custom_title">Kalinowice Adventure Trip</string>
     <string name="help_path">https://kalinowice-little-treasure-hunter.netlify.app/#/README_en</string>
     <string name="pretty_route_name">Kalinowice</string>
+    <string name="well_done_classic_app">→ making own routes</string>
+    <string name="well_done_little_treasure_hunter">Little Treasure Hunter</string>
 </resources>

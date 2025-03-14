@@ -5,4 +5,6 @@
     <string name="custom_lead2">Dokładny przebieg trasy zależy od Twoich decyzji, ale możesz się spodziewać, że jej długość to będzie około 13 km. Rozważ rozbicie poszukiwań na kilka dni albo wspomaganie się rowerem.</string>
     <string name="custom_title">Przygoda w Kalinowicach</string>
     <string name="help_path">https://kalinowice-little-treasure-hunter.netlify.app</string>
+    <string name="well_done_classic_app">→ samodzielne tworzenie tras</string>
+    <string name="well_done_little_treasure_hunter">Mały Poszukiwacz Skarbów</string>
 </resources>

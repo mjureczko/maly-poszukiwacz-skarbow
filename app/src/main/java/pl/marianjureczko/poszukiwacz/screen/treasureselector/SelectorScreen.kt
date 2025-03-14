@@ -1,6 +1,8 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureselector
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,12 +11,15 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -23,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -45,11 +51,13 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
+import pl.marianjureczko.poszukiwacz.ui.components.OkDialog
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
+import pl.marianjureczko.poszukiwacz.ui.theme.Typography
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -60,7 +68,7 @@ fun SelectorScreen(
     onClickOnGuide: GoToGuide,
     goToResult: GoToResultWithTreasure,
     goToCommemorative: GoToCommemorative,
-    onClickOnFacebook: GoToFacebook
+    onClickOnFacebook: GoToFacebook,
 ) {
     val cameraPermission: PermissionState =
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
@@ -85,7 +93,8 @@ fun SelectorScreen(
                 sharedViewModel,
                 sharedState,
                 goToResult,
-                goToCommemorative
+                goToCommemorative,
+                { onClickOnFacebook(sharedState.route.name) },
             )
         }
     )
@@ -99,7 +108,8 @@ fun SelectorScreenBody(
     sharedViewModel: SelectorSharedViewModel,
     state: SelectorSharedState,
     goToResult: GoToResultWithTreasure,
-    goToCommemorative: GoToCommemorative
+    goToCommemorative: GoToCommemorative,
+    onClickOnFacebook: () -> Unit,
 ) {
     val localViewModel: SelectorViewModel = hiltViewModel()
     val localState: SelectorState = localViewModel.state.value
@@ -127,6 +137,67 @@ fun SelectorScreenBody(
     }
     localViewModel.delayedUpdateOfJustFound()
     sharedViewModel.updateJustFoundFromSelector()
+    if (!localState.wellDoneShown) {
+        OkDialog(true, localViewModel::wellDoneShown) {
+            OkDialogContent(onClickOnFacebook)
+        }
+    }
+}
+
+@Composable
+private fun OkDialogContent(onClickOnFacebook: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row {
+            Image(
+                //TODO t: change to tada icon
+                painterResource(R.drawable.chest_small),
+                contentDescription = "tada icon",
+                modifier = Modifier.padding(end = 5.dp, top = 20.dp)
+            )
+            Text(
+                text = stringResource(R.string.well_done),
+                fontSize = Typography.h5.fontSize,
+                textAlign = TextAlign.Center,
+                fontFamily = FANCY_FONT,
+            )
+        }
+        OkDialogText(R.string.well_done_facebook)
+        OutlinedButton(
+            onClick = { },
+            shape = Shapes.small,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.White,
+                contentColor = Color.Black
+            ),
+            border = BorderStroke(2.dp, Color.LightGray),
+            elevation = ButtonDefaults.elevation(4.dp),
+        ) {
+            Text("Facebook")
+            Image(
+                painterResource(R.drawable.facebook),
+                contentDescription = "Facebook icon",
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .clickable { onClickOnFacebook() }
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        OkDialogText(R.string.well_done_more)
+        MoreApps()
+    }
+}
+
+@Composable
+fun OkDialogText(textResourceId: Int) {
+    Text(
+        text = stringResource(textResourceId),
+        fontSize = Typography.h6.fontSize,
+        textAlign = TextAlign.Center,
+        fontFamily = FANCY_FONT,
+    )
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
