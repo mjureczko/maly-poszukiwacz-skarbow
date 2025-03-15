@@ -137,7 +137,7 @@ fun SelectorScreenBody(
     }
     localViewModel.delayedUpdateOfJustFound()
     sharedViewModel.updateJustFoundFromSelector()
-    if (!localState.wellDoneShown) {
+    if (!localState.wellDoneShown && sharedViewModel.state.value.allTreasuresCollected()) {
         OkDialog(true, localViewModel::wellDoneShown) {
             OkDialogContent(onClickOnFacebook)
         }
@@ -152,10 +152,11 @@ private fun OkDialogContent(onClickOnFacebook: () -> Unit) {
     ) {
         Row {
             Image(
-                //TODO t: change to tada icon
-                painterResource(R.drawable.chest_small),
+                painterResource(R.drawable.tada),
                 contentDescription = "tada icon",
-                modifier = Modifier.padding(end = 5.dp, top = 20.dp)
+                modifier = Modifier
+                    .padding(end = 5.dp, top = 20.dp)
+                    .height(60.dp)
             )
             Text(
                 text = stringResource(R.string.well_done),
@@ -166,7 +167,7 @@ private fun OkDialogContent(onClickOnFacebook: () -> Unit) {
         }
         OkDialogText(R.string.well_done_facebook)
         OutlinedButton(
-            onClick = { },
+            onClick = { onClickOnFacebook() },
             shape = Shapes.small,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.White,
@@ -179,9 +180,7 @@ private fun OkDialogContent(onClickOnFacebook: () -> Unit) {
             Image(
                 painterResource(R.drawable.facebook),
                 contentDescription = "Facebook icon",
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .clickable { onClickOnFacebook() }
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

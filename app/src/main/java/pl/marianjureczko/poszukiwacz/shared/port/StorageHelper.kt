@@ -96,7 +96,6 @@ open class StorageHelper(val context: Context) {
         return outputStream
     }
 
-    //TODO t: security issue to fix
     fun extractZipStream(inStream: InputStream, progress: ExtractionProgress) {
         val actualZip = ZipInputStream(inStream)
         var zipEntry: ZipEntry?
