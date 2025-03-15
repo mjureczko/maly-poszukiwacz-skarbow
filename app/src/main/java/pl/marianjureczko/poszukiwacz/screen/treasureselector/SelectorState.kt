@@ -4,5 +4,6 @@ import android.net.Uri
 
 data class SelectorState(
     var justFoundTreasureId: Int,
-    var tempPhotoFileLocation: Uri
+    var tempPhotoFileLocation: Uri,
+    val wellDoneShown: Boolean = false,
 )

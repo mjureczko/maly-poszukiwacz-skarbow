@@ -46,4 +46,7 @@
     <string name="missing_commemorative_photo_permission">Permission is needed to do a commemorative photo with treasure finding. Enter the application settings to grant it.</string>
     <string name="missing_tip_photo_permission">Permission is needed to do a tip photo for stashed treasure. Enter the application settings to grant it.</string>
     <string name="photo_permission_not_granted">To take photos, allow camera access.</string>">
+    <string name="well_done">Congratulations! All the treasures have been found!</string>
+    <string name="well_done_facebook">You can share this achievement on</string>
+    <string name="well_done_more">"Want more adventures? Try</string>
 </resources>

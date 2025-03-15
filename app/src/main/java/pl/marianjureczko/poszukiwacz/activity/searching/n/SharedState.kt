@@ -16,6 +16,7 @@ interface SelectorSharedState : HasCommemorativePhoto {
     val currentLocation: Location?
     val distancesInSteps: Map<Int, Int?>
     fun isTreasureCollected(treasureId: Int): Boolean
+    fun allTreasuresCollected(): Boolean
 }
 
 interface SearchingSharedState : HasCommemorativePhoto {
@@ -52,6 +53,10 @@ data class SharedState(
 
     override fun isTreasureCollected(treasureId: Int): Boolean =
         treasuresProgress.collectedTreasuresDescriptionId.contains(treasureId)
+
+    override fun allTreasuresCollected(): Boolean {
+        return route.treasures.all { isTreasureCollected(it.id) }
+    }
 
     override fun hasCommemorativePhoto(treasureId: Int): Boolean {
         return treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.containsKey(treasureId)

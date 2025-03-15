@@ -43,4 +43,7 @@
     <string name="missing_commemorative_photo_permission">Pozwolenie jest potrzebne do zrobienia pomiątkowego zdjęcia z poszukiwania skarbu. Możesz przyznać je w ustawieniach aplikacji.</string>
     <string name="missing_tip_photo_permission">Pozwolenie jest potrzebne do zrobienia zdjęcia z podpowiedzią. Możesz przyznać je w ustawieniach aplikacji.</string>
     <string name="photo_permission_not_granted">Aby robić zdjęcia, zezwól aplikacji na dostęp do aparatu.</string>
+    <string name="well_done">Gratulacje! Wszystkie skarby zostały odnalezione!</string>
+    <string name="well_done_facebook">Możesz podzielić się tym osiągnięciem na</string>
+    <string name="well_done_more">Chętny na więcej przygód? Wypróbuj</string>
 </resources>
