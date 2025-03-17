@@ -56,6 +56,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToQrScanner
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.GoToTipPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureSelector
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
@@ -64,7 +65,6 @@ import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
-import java.net.URLEncoder
 
 const val COMPASS = "Compass"
 const val STEPS_TO_TREASURE = "Steps to treasure"
@@ -137,17 +137,21 @@ private fun SearchingScreenBody(
         scanOptions.setPrompt(prompt)
         scanQrLauncher.launch(scanOptions)
     }
+    val selectedTreasureDescriptionId = state.treasuresProgress.selectedTreasureDescriptionId
+    val photo = state.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds[selectedTreasureDescriptionId]
     Column {
         Box {
             CommemorativePhotoButton(
                 cameraPermissionState.status.isGranted,
-                state,
-                goToCommemorative,
-                viewModel,
-                Modifier
+                hasCommemorativePhoto = state,
+                goToCommemorative = { treasureDescriptionId -> goToCommemorative(treasureDescriptionId, photo) },
+                doCommemorative = viewModel,
+                modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(15.dp),
-                state.treasuresProgress.selectedTreasureDescriptionId
+                treasureDescriptionId = selectedTreasureDescriptionId,
+                //TODO t: check if refreshing icon works on creating commemorative photo
+                updateImageRefresh = {}
             )
             Column {
                 Scores(Modifier.align(Alignment.Start), score = state.treasuresProgress)
@@ -305,7 +309,7 @@ private fun PhotoTipButton(currentTreasure: TreasureDescription?, routeName: Str
             .padding(10.dp)
             .clickable {
                 if (currentTreasure?.hasPhoto() == true) {
-                    val encodedFilePath = URLEncoder.encode(currentTreasure.photoFileName!!, Charsets.UTF_8.name())
+                    val encodedFilePath = PhotoHelper.encodePhotoPath(currentTreasure.photoFileName!!)
                     goToTipPhoto(encodedFilePath, routeName)
                 } else {
                     errorTone()

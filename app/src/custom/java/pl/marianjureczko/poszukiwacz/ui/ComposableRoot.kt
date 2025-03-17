@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.CommemorativeScreen
+import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_PHOTO_PATH
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_PATH
 import pl.marianjureczko.poszukiwacz.activity.main.COMMEMORATIVE_ROUTE
@@ -25,6 +26,7 @@ import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingScreen
 import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookHelper
 import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookScreen
+import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.screen.phototip.TipPhotoScreen
@@ -38,13 +40,18 @@ import pl.marianjureczko.poszukiwacz.screen.treasureselector.SelectorScreen
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 
 @Composable
 fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
     val goToCommemorative: GoToCommemorative =
-        { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") }
+        { treasureId, photoPath ->
+            navController.navigate(
+                "$COMMEMORATIVE_PATH/$treasureId/${PhotoHelper.encodePhotoPath(photoPath)}"
+            )
+        }
 
     NavHost(navController, startDestination = "main") {
         composable(route = "main") {
@@ -59,7 +66,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
             SearchingScreen(
                 navController = navController,
                 onClickOnGuide = onClickGuide,
-                goToTipPhoto = { tipPhoto, _ -> navController.navigate("$TIP_PHOTO_PATH/$tipPhoto/custom") },
+                goToTipPhoto = { tipPhoto, _ -> navController.navigate("$TIP_PHOTO_PATH/$tipPhoto/${CustomInitializerForRoute.routeName}") },
                 goToResult = { routeName, resultType, treasureId, amount -> navController.navigate("$RESULTS_PATH/$routeName/$resultType/$treasureId/$amount") },
                 goToMap = { navController.navigate("map/$it") },
                 goToTreasureSelector = { navController.navigate("$SELECTOR_PATH/$it") },
@@ -108,14 +115,17 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
                 navController,
                 navBackStackEntry,
                 onClickGuide,
-                goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${ResultType.KNOWLEDGE}/$treasureId") },
+                goToResult = { treasureId -> navController.navigate("$RESULTS_PATH/${CustomInitializerForRoute.routeName}/${ResultType.KNOWLEDGE}/$treasureId/1") },
                 goToCommemorative = goToCommemorative,
                 onClickOnFacebook = goToFacebook
             )
         }
         composable(
             route = COMMEMORATIVE_ROUTE,
-            arguments = listOf(navArgument(PARAMETER_TREASURE_DESCRIPTION_ID) { type = NavType.IntType })
+            arguments = listOf(
+                navArgument(PARAMETER_TREASURE_DESCRIPTION_ID) { type = NavType.IntType },
+                navArgument(PARAMETER_PHOTO_PATH) { type = NavType.StringType },
+            )
         ) { navBackStackEntry -> CommemorativeScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
         composable(
             route = FACEBOOK_ROUTE,

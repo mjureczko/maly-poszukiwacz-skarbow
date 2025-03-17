@@ -19,6 +19,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -91,7 +92,7 @@ fun CommemorativeScreenBody(
                 .background(Color.Transparent)
         )
         if (localState.photoPath != null) {
-            val photo: Bitmap = BitmapFactory.decodeFile(localState.photoPath)
+            val photo: Bitmap = remember(localState.photoVersion) { BitmapFactory.decodeFile(localState.photoPath) }
             val aspectRatio = photo.width.toFloat() / photo.height.toFloat()
             Box(
                 modifier = Modifier
@@ -109,7 +110,9 @@ fun CommemorativeScreenBody(
                         .aspectRatio(aspectRatio),
                     contentScale = ContentScale.FillBounds,
                 )
-                DoPhotoButton(localState, sharedViewModel, cameraPermission.status.isGranted)
+                DoPhotoButton(localState, sharedViewModel, cameraPermission.status.isGranted) {
+                    localViewModel.updatePhotoVersionForRefresh()
+                }
                 Image(
                     painter = painterResource(id = R.drawable.rotate_arc),
                     contentDescription = "Rotate commemorative photo",
@@ -134,9 +137,10 @@ fun CommemorativeScreenBody(
 private fun DoPhotoButton(
     localState: CommemorativeState,
     doCommemorative: DoCommemorative,
-    cameraPermissionGranted: Boolean
+    cameraPermissionGranted: Boolean,
+    updateImageRefresh: () -> Unit,
 ) {
-    val doPhoto = doCommemorative.getDoPhoto(cameraPermissionGranted, localState.treasureDesId)
+    val doPhoto = doCommemorative.getDoPhoto(cameraPermissionGranted, localState.treasureDesId, updateImageRefresh)
     Image(
         painter = painterResource(id = R.drawable.camera_do_photo),
         contentDescription = "Do a new commemorative photo",

@@ -13,6 +13,7 @@ interface HasCommemorativePhoto {
 
 interface SelectorSharedState : HasCommemorativePhoto {
     val route: Route
+    var treasuresProgress: TreasuresProgress
     val currentLocation: Location?
     val distancesInSteps: Map<Int, Int?>
     fun isTreasureCollected(treasureId: Int): Boolean

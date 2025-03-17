@@ -21,7 +21,7 @@ abstract class ReportAbstractTest {
     private val stateHandle: SavedStateHandle = SavedStateHandle(mapOf(PARAMETER_ROUTE_NAME to routeName))
 
     val font: Typeface = ResourcesCompat.getFont(context, R.font.akaya_telivigala)!!
-    val treasuresProgress: TreasuresProgress = TreasuresProgress(routeName, 0)
+    var treasuresProgress: TreasuresProgress = TreasuresProgress(routeName, 0)
 
     private val testDispatcher = StandardTestDispatcher()
 

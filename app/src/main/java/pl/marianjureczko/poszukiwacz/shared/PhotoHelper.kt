@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URLEncoder
 
 class PhotoHelper(
     val context: Context,
@@ -27,14 +28,24 @@ class PhotoHelper(
         /**
          * @param photoFile absolute path to graphic file
          */
-        suspend fun rotateGraphicClockwise(ioDispatcher: CoroutineDispatcher, photoFile: String, postExecute: Runnable) {
+        suspend fun rotateGraphicClockwise(
+            ioDispatcher: CoroutineDispatcher,
+            photoFile: String,
+            postExecute: Runnable
+        ) {
             val result = withContext(ioDispatcher) {
                 val bitmap = BitmapFactory.decodeFile(photoFile)
                 val matrix = Matrix()
                 matrix.postRotate(90f)
                 val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
                 try {
-                    FileOutputStream(photoFile).use { out -> rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 95, out) }
+                    FileOutputStream(photoFile).use { out ->
+                        rotatedBitmap.compress(
+                            Bitmap.CompressFormat.JPEG,
+                            95,
+                            out
+                        )
+                    }
                     true
                 } catch (e: Exception) {
                     Log.e(TAG, e.message, e)
@@ -45,6 +56,8 @@ class PhotoHelper(
                 postExecute.run()
             }
         }
+
+        fun encodePhotoPath(photoPath: String?): String = URLEncoder.encode(photoPath ?: "", Charsets.UTF_8.name())
     }
 
     fun getCommemorativePhotoTempUri(): Uri = createPhotoUri(getCommemorativePhotoTempFile())
@@ -68,7 +81,12 @@ class PhotoHelper(
 
     fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + "/tmp.jpg")
 
-    suspend fun rescaleImageAndSaveInTreasure(photoFile: File, destinationPhotoFile: File, onSuccess: Runnable, onFailure: Runnable) {
+    suspend fun rescaleImageAndSaveInTreasure(
+        photoFile: File,
+        destinationPhotoFile: File,
+        onSuccess: Runnable,
+        onFailure: Runnable
+    ) {
         val result = withContext(Dispatchers.IO) {
             val bm: Bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             val width: Int = bm.width
@@ -77,7 +95,13 @@ class PhotoHelper(
             val resized = Bitmap.createBitmap(bm, 0, 0, width, height, newSizeMatrix, false)
 
             try {
-                FileOutputStream(destinationPhotoFile.absolutePath).use { out -> resized.compress(Bitmap.CompressFormat.JPEG, 95, out) }
+                FileOutputStream(destinationPhotoFile.absolutePath).use { out ->
+                    resized.compress(
+                        Bitmap.CompressFormat.JPEG,
+                        95,
+                        out
+                    )
+                }
             } catch (e: Exception) {
                 Log.e(TAG, e.message, e)
                 false
@@ -100,4 +124,3 @@ class PhotoHelper(
 
     fun createPhotoUri(photoFile: String): Uri = createPhotoUri(File(photoFile))
 }
-

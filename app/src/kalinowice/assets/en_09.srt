@@ -79,9 +79,9 @@ Ginkgo trees are very useful
 They are used to make medicines
 
 21
-00:00:48,000 --> 00:00:49,900
+00:00:48,000 --> 00:00:50,900
 that can help prevent strokes
 
 22
-00:00:50,000 --> 00:00:51,900
+00:00:51,000 --> 00:00:53,900
 and improve memory

@@ -256,12 +256,15 @@ fun TreasureItem(
                         .semantics { this.contentDescription = "Waiting for GPS" })
             }
             ShowMovieButton(state, treasureDescription, goToResult)
+            val photo = state.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds[treasureDescription.id]
             CommemorativePhotoButton(
                 cameraPermission.status.isGranted,
                 state,
-                goToCommemorative,
+                { treasureDescriptionId -> goToCommemorative(treasureDescriptionId, photo) },
                 sharedViewModel,
-                treasureDescriptionId = treasureDescription.id
+                treasureDescriptionId = treasureDescription.id,
+                //TODO t: check if refresh works
+                updateImageRefresh = {},
             )
         }
     }

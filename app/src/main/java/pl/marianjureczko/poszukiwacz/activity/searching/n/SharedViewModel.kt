@@ -41,7 +41,7 @@ const val PARAMETER_ROUTE_NAME = "route_name"
 
 interface DoCommemorative {
     @Composable
-    fun getDoPhoto(cameraPermissionGranted: Boolean, treasureDesId: Int): DoPhoto
+    fun getDoPhoto(cameraPermissionGranted: Boolean, treasureDesId: Int, refreshOnSuccess: () -> Unit): DoPhoto
 }
 
 interface ResultSharedViewModel {
@@ -201,23 +201,33 @@ class SharedViewModel @Inject constructor(
     @Composable
     override fun getDoPhoto(
         cameraPermissionGranted: Boolean,
-        treasureDesId: Int
+        treasureDesId: Int,
+        refreshOnSuccess: () -> Unit,
     ): DoPhoto {
         return this.cameraPort.doPhoto(
             cameraPermissionGranted,
             R.string.photo_saved,
             R.string.photo_not_replaced,
             { photoHelper.getCommemorativePhotoTempUri() },
-            { handleDoCommemorativePhotoResult(state.value.route.treasures.find { it.id == treasureDesId }!!) }
+            handleSuccess = {
+                handleDoCommemorativePhotoResult(state.value.route.treasures.find { it.id == treasureDesId }!!)
+                refreshOnSuccess()
+            }
         )
     }
 
-    private fun handleDoCommemorativePhotoResult(treasure: TreasureDescription) {
-        val target = _state.value.treasuresProgress.getCommemorativePhoto(treasure)
+    private fun handleDoCommemorativePhotoResult(treasureDescription: TreasureDescription) {
+        val target = _state.value.treasuresProgress.getCommemorativePhoto(treasureDescription)
             ?: storageHelper.newCommemorativePhotoFile()
         photoHelper.moveCommemorativePhotoToPermanentLocation(target)
-        state.value.treasuresProgress.addCommemorativePhoto(treasure, target)
-        _state.value = _state.value.copy()
+        val updatedMapOfPhotos = state.value.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds
+            .plus(treasureDescription.id to target)
+            .toMap()
+        _state.value = _state.value.copy(
+            treasuresProgress = state.value.treasuresProgress.copy(
+                commemorativePhotosByTreasuresDescriptionIds = updatedMapOfPhotos
+            )
+        )
         storageHelper.save(state.value.treasuresProgress)
     }
 

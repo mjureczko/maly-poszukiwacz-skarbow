@@ -6,12 +6,12 @@ import com.ocadotechnology.gembus.test.someString
 
 class TreasuresProgressArranger : CustomArranger<TreasuresProgress>() {
     override fun instance(): TreasuresProgress {
-        val instance = super.instance()
+        var instance = super.instance()
         val treasureDescription = some<TreasureDescription>()
         instance.routeName = someString()
         instance.collect(some<Treasure>(), treasureDescription)
-        instance.addCommemorativePhoto(treasureDescription, someString())
-//        instance.hunterPath.addLocation(Coordinates(some<Double>() % 180, some<Double>() % 90))
+        instance =
+            instance.copy(commemorativePhotosByTreasuresDescriptionIds = mapOf(treasureDescription.id to someString()))
         return instance
     }
 }

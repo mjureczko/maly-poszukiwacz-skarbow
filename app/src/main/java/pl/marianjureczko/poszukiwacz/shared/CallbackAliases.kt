@@ -16,7 +16,7 @@ typealias GoToTreasureSelector = (Int) -> Unit
 typealias RotatePhoto = (Int) -> Unit
 typealias ScanTreasureCallback = (String?) -> Unit
 typealias UpdateSubtitlesLine = (String) -> Unit
-typealias GoToCommemorative = (Int) -> Unit
+typealias GoToCommemorative = (Int, String?) -> Unit
 typealias GoToTreasureEditor = (String) -> Unit
 typealias DoPhoto = () -> Unit
 

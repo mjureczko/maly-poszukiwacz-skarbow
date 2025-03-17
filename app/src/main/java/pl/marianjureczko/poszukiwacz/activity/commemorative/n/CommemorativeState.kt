@@ -5,5 +5,7 @@ import android.net.Uri
 data class CommemorativeState(
     val treasureDesId: Int,
     val tempPhotoFileLocation: Uri,
-    val photoPath: String?
+    // For triggering recomposition
+    val photoVersion: Int = 0,
+    val photoPath: String?,
 )

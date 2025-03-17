@@ -14,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import javax.inject.Inject
 
 const val PARAMETER_TREASURE_DESCRIPTION_ID = "treasure_description_id"
+const val PARAMETER_PHOTO_PATH = "photo_path"
 
 @HiltViewModel
 class CommemorativeViewModel @Inject constructor(
@@ -40,17 +41,21 @@ class CommemorativeViewModel @Inject constructor(
             viewModelScope.launch {
                 PhotoHelper.rotateGraphicClockwise(ioDispatcher, state.value.photoPath!!) {
                     // refresh view
-                    _state.value = _state.value.copy()
+                    updatePhotoVersionForRefresh()
                 }
             }
         }
     }
 
+    fun updatePhotoVersionForRefresh() {
+        _state.value = _state.value.copy(photoVersion = _state.value.photoVersion + 1)
+    }
+
     private fun createState(): CommemorativeState {
         return CommemorativeState(
-            stateHandle.get<Int>(PARAMETER_TREASURE_DESCRIPTION_ID)!!,
-            photoHelper.getCommemorativePhotoTempUri(),
-            null
+            treasureDesId = stateHandle.get<Int>(PARAMETER_TREASURE_DESCRIPTION_ID)!!,
+            tempPhotoFileLocation = photoHelper.getCommemorativePhotoTempUri(),
+            photoPath = stateHandle.get<String>(PARAMETER_PHOTO_PATH),
         )
     }
 }

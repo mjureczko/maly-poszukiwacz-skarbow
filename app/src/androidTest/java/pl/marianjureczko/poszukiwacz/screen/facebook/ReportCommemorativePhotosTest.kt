@@ -33,8 +33,13 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, tempPhoto(800, 400))
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, tempPhoto(600, 600))
+        val mapOfPhotos = treasuresProgress.commemorativePhotosByTreasuresDescriptionIds + mapOf(
+            1 to tempPhoto(800, 400),
+            2 to tempPhoto(600, 600),
+        )
+        treasuresProgress = treasuresProgress.copy(
+            commemorativePhotosByTreasuresDescriptionIds = mapOfPhotos.toMutableMap()
+        )
         storageHelper.save(treasuresProgress)
         StorageHelper(context).save(Route(treasuresProgress.routeName))
         val reportPhotos = ReportCommemorativePhotos(createFacebookViewModel().state.value, font, seed)
@@ -54,10 +59,15 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         val bitmap = Bitmap.createBitmap(ReportCommons.REPORT_WIDTH, 800, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, tempPhoto(800, 400))
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, tempPhoto(600, 600))
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, tempPhoto(400, 800))
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(4, tempPhoto(600, 500))
+        val mapOfPhotos = treasuresProgress.commemorativePhotosByTreasuresDescriptionIds + mapOf(
+            1 to tempPhoto(800, 400),
+            2 to tempPhoto(600, 600),
+            3 to tempPhoto(400, 800),
+            4 to tempPhoto(600, 500)
+        )
+        treasuresProgress = treasuresProgress.copy(
+            commemorativePhotosByTreasuresDescriptionIds = mapOfPhotos.toMutableMap()
+        )
         storageHelper.save(treasuresProgress)
         val reportPhotos = ReportCommemorativePhotos(createFacebookViewModel().state.value, font, seed)
 

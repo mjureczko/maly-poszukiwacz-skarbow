@@ -33,7 +33,7 @@ data class TreasuresProgress(
 
 //TODO: remove files on remove tresure bag (restart) and on removing route
     @field:ElementMap(required = false)
-    var commemorativePhotosByTreasuresDescriptionIds: MutableMap<Int, String> = mutableMapOf(),
+    var commemorativePhotosByTreasuresDescriptionIds: Map<Int, String> = mapOf(),
 
     @field:Element(required = false)
     var knowledge: Int = 0,
@@ -75,10 +75,6 @@ data class TreasuresProgress(
             (collectedTreasuresDescriptionId + treasureDescriptionId).toMutableSet()
         }
         return copy(collectedTreasuresDescriptionId = result)
-    }
-
-    fun addCommemorativePhoto(treasureDescription: TreasureDescription, commemorativePhoto: String) {
-        commemorativePhotosByTreasuresDescriptionIds[treasureDescription.id] = commemorativePhoto
     }
 
     fun getCommemorativePhoto(treasureDescription: TreasureDescription): String? =

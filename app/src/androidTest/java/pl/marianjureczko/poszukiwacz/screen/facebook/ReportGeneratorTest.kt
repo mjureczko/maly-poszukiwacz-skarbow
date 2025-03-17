@@ -31,14 +31,19 @@ class ReportGeneratorTest {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val storageHelper: StorageHelper = StorageHelper(context)
         val photos = arrangePhotos(context)
-        val treasuresProgress = TreasuresProgress(routeName, 0)
+        var treasuresProgress = TreasuresProgress(routeName, 0)
         val treasure = Treasure("1", 7, TreasureType.DIAMOND)
         treasuresProgress.collect(treasure, null)
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(1, photos[0])
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(2, photos[1])
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(3, photos[2])
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(13, photos[4])
-        treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.put(0, photos[5])
+        val mapOfPhotos = treasuresProgress.commemorativePhotosByTreasuresDescriptionIds + mapOf(
+            1 to photos[0],
+            2 to photos[1],
+            3 to photos[2],
+            13 to photos[4],
+            0 to photos[5],
+        )
+        treasuresProgress = treasuresProgress.copy(
+            commemorativePhotosByTreasuresDescriptionIds = mapOfPhotos.toMutableMap()
+        )
         storageHelper.save(treasuresProgress)
         val hunterPath = HunterPath(routeName)
         hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))

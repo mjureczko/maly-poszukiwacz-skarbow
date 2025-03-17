@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_PHOTO_PATH
 import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
@@ -30,7 +31,7 @@ val RESULTS_ROUTE = "$RESULTS_PATH/{${pl.marianjureczko.poszukiwacz.screen.resul
 val SELECTOR_PATH = "selector"
 val SELECTOR_ROUTE = "$SELECTOR_PATH/{$PARAMETER_JUST_FOUND_TREASURE}"
 val COMMEMORATIVE_PATH = "commemorative"
-val COMMEMORATIVE_ROUTE = "$COMMEMORATIVE_PATH/{$PARAMETER_TREASURE_DESCRIPTION_ID}"
+val COMMEMORATIVE_ROUTE = "$COMMEMORATIVE_PATH/{$PARAMETER_TREASURE_DESCRIPTION_ID}/{$PARAMETER_PHOTO_PATH}"
 val FACEBOOK_PATH = "facebook"
 val FACEBOOK_ROUTE = "$FACEBOOK_PATH/{${pl.marianjureczko.poszukiwacz.screen.facebook.PARAMETER_ROUTE_NAME}}"
 val TIP_PHOTO_PATH = "tipPhoto"

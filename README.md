@@ -4,6 +4,8 @@ GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
 
 TODO:
 
+- update development guide
+- update release guide
 - move screens from activity package to screen package
 - in TextEdit try KeyboradOptions -> KeyboardType and singleLine=True and maxLines=1
 - make all fields in states immutable
@@ -12,3 +14,7 @@ TODO:
 - remove dead code
 - accept only alphanumeric-_ characters in the route name input
 - zastąpić ??.???? kółkiem progresu dla brakujących wspołrzędnych przy dodawaniu skarbu
+
+- fix subtitles
+- add screens to Play
+- update guide
