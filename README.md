@@ -15,6 +15,4 @@ TODO:
 - accept only alphanumeric-_ characters in the route name input
 - zastąpić ??.???? kółkiem progresu dla brakujących wspołrzędnych przy dodawaniu skarbu
 
-- fix subtitles
-- add screens to Play
 - update guide

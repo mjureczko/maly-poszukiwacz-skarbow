@@ -54,7 +54,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
     val goToCommemorative: GoToCommemorative =
-        { treasureId -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId") }
+        { treasureId, photoPath -> navController.navigate("$COMMEMORATIVE_PATH/$treasureId/$photoPath") }
     val goToEditor: GoToTreasureEditor = { routeName -> navController.navigate("$TREASURE_EDITOR_PATH/$routeName") }
 
     NavHost(navController, startDestination = "main") {

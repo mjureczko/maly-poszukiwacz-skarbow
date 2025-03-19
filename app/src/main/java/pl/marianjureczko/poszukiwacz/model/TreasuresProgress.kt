@@ -32,8 +32,9 @@ data class TreasuresProgress(
     var collectedTreasuresDescriptionId: MutableSet<Int> = mutableSetOf(),
 
 //TODO: remove files on remove tresure bag (restart) and on removing route
+    //TODO: mutable only for deserialization, wrap to limit access from code
     @field:ElementMap(required = false)
-    var commemorativePhotosByTreasuresDescriptionIds: Map<Int, String> = mapOf(),
+    var commemorativePhotosByTreasuresDescriptionIds: MutableMap<Int, String> = mutableMapOf(),
 
     @field:Element(required = false)
     var knowledge: Int = 0,

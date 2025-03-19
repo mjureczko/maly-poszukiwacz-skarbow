@@ -11,7 +11,7 @@ class TreasuresProgressArranger : CustomArranger<TreasuresProgress>() {
         instance.routeName = someString()
         instance.collect(some<Treasure>(), treasureDescription)
         instance =
-            instance.copy(commemorativePhotosByTreasuresDescriptionIds = mapOf(treasureDescription.id to someString()))
+            instance.copy(commemorativePhotosByTreasuresDescriptionIds = mutableMapOf(treasureDescription.id to someString()))
         return instance
     }
 }

@@ -222,7 +222,7 @@ class SharedViewModel @Inject constructor(
         photoHelper.moveCommemorativePhotoToPermanentLocation(target)
         val updatedMapOfPhotos = state.value.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds
             .plus(treasureDescription.id to target)
-            .toMap()
+            .toMutableMap()
         _state.value = _state.value.copy(
             treasuresProgress = state.value.treasuresProgress.copy(
                 commemorativePhotosByTreasuresDescriptionIds = updatedMapOfPhotos

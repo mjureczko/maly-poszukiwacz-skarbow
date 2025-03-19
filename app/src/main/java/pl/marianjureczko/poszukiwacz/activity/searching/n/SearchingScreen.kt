@@ -46,6 +46,7 @@ import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
 import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.screen.searching.Scores
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
@@ -83,13 +84,12 @@ fun SearchingScreen(
     goToFacebook: GoToFacebook,
     goToCommemorative: GoToCommemorative
 ) {
-    val cameraPermission: PermissionState =
-        handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
+    val cameraPermission: PermissionState = handlePermission(RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
     val state = viewModel.state.value
-    val title =
-        "${stringResource(R.string.treasure)} ${viewModel.state.value.treasuresProgress.selectedTreasureDescriptionId}"
+    val selectedTreasureDescriptionId = state.treasuresProgress.selectedTreasureDescriptionId
+    val title = "${stringResource(R.string.treasure)} $selectedTreasureDescriptionId"
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { TopBar(navController, title, onClickOnGuide, { goToFacebook(state.route.name) }) },

@@ -9,6 +9,7 @@ import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import java.io.FileNotFoundException
 
 class TestStoragePort(context: Context) : StorageHelper(context) {
     val routes: MutableMap<String, Route> = mutableMapOf()
@@ -35,7 +36,8 @@ class TestStoragePort(context: Context) : StorageHelper(context) {
 
     override fun loadAll(): MutableList<Route> = routes.values.toMutableList()
     override fun loadRoute(name: String): Route {
-        return routes[name]!!
+        val result = routes[name] ?: throw FileNotFoundException()
+        return result
     }
 
     override fun save(route: Route) {
