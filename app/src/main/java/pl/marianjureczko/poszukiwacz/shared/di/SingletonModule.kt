@@ -10,8 +10,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper

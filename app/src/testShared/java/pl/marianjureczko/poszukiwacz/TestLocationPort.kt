@@ -5,7 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
-import pl.marianjureczko.poszukiwacz.activity.searching.n.UpdateLocationCallback
+import pl.marianjureczko.poszukiwacz.screen.searching.UpdateLocationCallback
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 
 class TestLocationPort : LocationPort(mock(), mock(), mock(), mock()) {

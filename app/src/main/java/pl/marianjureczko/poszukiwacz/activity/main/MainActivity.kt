@@ -10,13 +10,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_PHOTO_PATH
-import pl.marianjureczko.poszukiwacz.activity.commemorative.n.PARAMETER_TREASURE_DESCRIPTION_ID
-import pl.marianjureczko.poszukiwacz.activity.searching.n.PARAMETER_ROUTE_NAME
+import pl.marianjureczko.poszukiwacz.screen.commemorative.PARAMETER_PHOTO_PATH
+import pl.marianjureczko.poszukiwacz.screen.commemorative.PARAMETER_TREASURE_DESCRIPTION_ID
 import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_RESULT_TYPE
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_AMOUNT
 import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
+import pl.marianjureczko.poszukiwacz.screen.searching.PARAMETER_ROUTE_NAME
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.ui.ComposeRoot
 import pl.marianjureczko.poszukiwacz.ui.Screen

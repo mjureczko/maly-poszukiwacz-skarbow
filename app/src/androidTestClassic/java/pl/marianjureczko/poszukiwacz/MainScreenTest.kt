@@ -7,7 +7,6 @@ import androidx.compose.ui.test.performTextInput
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import org.junit.Test
-import pl.marianjureczko.poszukiwacz.activity.searching.n.COMPASS
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.screen.main.CONFIRM_ROUTE_NAME_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.DELETE_ROUTE_BUTTON
@@ -15,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.screen.main.EDIT_ROUTE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.ENTER_ROUTE_NAME_TITLE
 import pl.marianjureczko.poszukiwacz.screen.main.NEW_ROUTE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.ROUTE_NAME_TEXT_EDIT
+import pl.marianjureczko.poszukiwacz.screen.searching.COMPASS
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.TREASURE_ITEM_ROW
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.TREASURE_ITEM_TEXT
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule

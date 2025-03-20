@@ -8,10 +8,10 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SCAN_TREASURE_BUTTON
-import pl.marianjureczko.poszukiwacz.activity.searching.n.STEPS_TO_TREASURE
 import pl.marianjureczko.poszukiwacz.screen.result.PLAY_MOVIE_BUTTON
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.screen.searching.SCAN_TREASURE_BUTTON
+import pl.marianjureczko.poszukiwacz.screen.searching.STEPS_TO_TREASURE
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.TREASURE_COLLECTED_CHECKBOX
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 

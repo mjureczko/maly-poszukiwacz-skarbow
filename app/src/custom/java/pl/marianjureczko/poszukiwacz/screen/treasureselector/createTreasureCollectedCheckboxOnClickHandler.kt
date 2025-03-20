@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureselector
 
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedViewModel
 
 /**
  * In the custom version user cannot change the "is collected" status.

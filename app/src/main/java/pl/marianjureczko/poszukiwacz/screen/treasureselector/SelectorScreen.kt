@@ -41,10 +41,10 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedState
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedState
+import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedViewModel
+import pl.marianjureczko.poszukiwacz.screen.searching.SharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide

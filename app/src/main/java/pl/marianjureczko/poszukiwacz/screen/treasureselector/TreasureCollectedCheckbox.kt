@@ -10,9 +10,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedState
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SelectorSharedViewModel
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedState
+import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedViewModel
 
 const val TREASURE_COLLECTED_CHECKBOX = "Treasure collected"
 const val TREASURE_NOT_COLLECTED_CHECKBOX = "Treasure not collected"

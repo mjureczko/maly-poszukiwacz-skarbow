@@ -40,9 +40,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.searching.n.ResultSharedViewModel
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SharedViewModel
 import pl.marianjureczko.poszukiwacz.model.TreasureType
+import pl.marianjureczko.poszukiwacz.screen.searching.ResultSharedViewModel
+import pl.marianjureczko.poszukiwacz.screen.searching.SharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine

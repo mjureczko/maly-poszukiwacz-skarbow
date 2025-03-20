@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import pl.marianjureczko.poszukiwacz.activity.searching.n.UpdateLocationCallback
+import pl.marianjureczko.poszukiwacz.screen.searching.UpdateLocationCallback
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.di.MainDispatcher
 import kotlin.coroutines.suspendCoroutine

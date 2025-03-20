@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
 
 open class QrScannerPort {

@@ -8,9 +8,9 @@ import dagger.hilt.android.testing.UninstallModules
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import pl.marianjureczko.poszukiwacz.activity.searching.n.COMPASS
 import pl.marianjureczko.poszukiwacz.screen.main.GUIDE_TEXT
 import pl.marianjureczko.poszukiwacz.screen.main.NEXT_GUIDE_BUTTON
+import pl.marianjureczko.poszukiwacz.screen.searching.COMPASS
 
 @UninstallModules(TestPortsModule::class, BuildVariantSpecificTestPortsModule::class)
 @HiltAndroidTest

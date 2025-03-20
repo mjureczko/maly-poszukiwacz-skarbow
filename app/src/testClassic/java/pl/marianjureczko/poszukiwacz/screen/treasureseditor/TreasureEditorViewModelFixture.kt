@@ -19,7 +19,7 @@ class TreasureEditorViewModelFixture(
     val route: Route,
     val photoHelper: PhotoHelper = mock(PhotoHelper::class.java)
 ) {
-    private val stateHandleMock = mock<SavedStateHandle>()
+    val stateHandleMock = mock<SavedStateHandle>()
     val locationPort = pl.marianjureczko.poszukiwacz.TestLocationPort()
     val storage = TestStoragePort(mock<Context>())
     val routeName = route.name
@@ -31,7 +31,11 @@ class TreasureEditorViewModelFixture(
     init {
         storage.routes[routeName] = route
         given(stateHandleMock.get<String>(any(String::class.java))).willReturn(routeName)
-        viewModel = TreasureEditorViewModel(
+        viewModel = initializeViewModel()
+    }
+
+    fun initializeViewModel(): TreasureEditorViewModel {
+        return TreasureEditorViewModel(
             storage,
             stateHandleMock,
             locationPort,

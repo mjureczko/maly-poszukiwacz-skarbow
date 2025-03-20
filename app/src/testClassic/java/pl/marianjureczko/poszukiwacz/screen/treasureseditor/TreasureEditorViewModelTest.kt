@@ -15,6 +15,34 @@ import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteDoesNotContainTresur
 class TreasureEditorViewModelTest {
 
     @Test
+    fun `SHOULD initialize with route loaded from file WHEN route name exists in the state`() {
+        //given
+        val route = some<Route>()
+        val fixture = TreasureEditorViewModelFixture(route)
+
+        //when
+        val sut = fixture.viewModel
+
+        //then
+        val actual = sut.state.value.route
+        assertThat(actual).isEqualTo(fixture.storage.routes[route.name])
+    }
+
+    @Test
+    fun `SHOULD initialize with empty route with given name WHEN there is no file with the given route name`() {
+        //given
+        val fixture = TreasureEditorViewModelFixture(some<Route>())
+        fixture.storage.clear()
+
+        //when
+        val sut = fixture.initializeViewModel() // createTreasureEditorViewModel()
+
+        //then
+        val actual = sut.state.value.route
+        assertThat(actual).isEqualTo(Route(fixture.routeName))
+    }
+
+    @Test
     fun `SHOULD hide sound recording dialog WHEN calling the corresponding method`() {
         //given
         val fixture = TreasureEditorViewModelFixture(some<Route>())

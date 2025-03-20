@@ -6,8 +6,8 @@ import com.journeyapps.barcodescanner.ScanOptions
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
-import pl.marianjureczko.poszukiwacz.activity.searching.n.SearchingViewModel
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
+import pl.marianjureczko.poszukiwacz.screen.searching.SearchingViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
 
 class TestQrScannerPort : QrScannerPort() {

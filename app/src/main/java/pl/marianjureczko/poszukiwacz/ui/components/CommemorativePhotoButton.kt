@@ -10,8 +10,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.searching.n.DoCommemorative
-import pl.marianjureczko.poszukiwacz.activity.searching.n.HasCommemorativePhoto
+import pl.marianjureczko.poszukiwacz.screen.searching.DoCommemorative
+import pl.marianjureczko.poszukiwacz.screen.searching.HasCommemorativePhoto
 
 @Composable
 fun CommemorativePhotoButton(
