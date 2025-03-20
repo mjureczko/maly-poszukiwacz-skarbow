@@ -42,11 +42,10 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.journeyapps.barcodescanner.ScanOptions
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.main.RESULTS_ROUTE
-import pl.marianjureczko.poszukiwacz.activity.main.SELECTOR_ROUTE
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
@@ -122,8 +121,8 @@ private fun SearchingScreenBody(
     cameraPermissionState: PermissionState,
     goToCommemorative: GoToCommemorative
 ) {
-    if (!isOnStack(navController, SELECTOR_ROUTE)
-        && !isOnStack(navController, RESULTS_ROUTE)
+    if (!isOnStack(navController, Screens.Selector.ROUTE)
+        && !isOnStack(navController, Screens.Results.ROUTE)
         && state.treasureFoundAndResultAlreadyPresented()
     ) {
         goToTreasureSelector(state.treasuresProgress.justFoundTreasureId!!)

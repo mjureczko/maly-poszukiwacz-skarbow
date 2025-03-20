@@ -21,6 +21,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureParser
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
@@ -33,8 +34,6 @@ import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Inject
-
-const val PARAMETER_ROUTE_NAME = "route_name"
 
 interface DoCommemorative {
     @Composable
@@ -271,7 +270,7 @@ class SharedViewModel @Inject constructor(
     }
 
     private fun loadRoute(): Route {
-        return storageHelper.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!)
+        return storageHelper.loadRoute(stateHandle.get<String>(Screens.TreasureEditor.PARAMETER_ROUTE_NAME)!!)
     }
 
     private fun loadProgress(route: Route): TreasuresProgress {

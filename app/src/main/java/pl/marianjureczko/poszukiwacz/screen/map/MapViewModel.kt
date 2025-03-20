@@ -7,10 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import javax.inject.Inject
-
-const val PARAMETER_ROUTE_NAME_2 = "route_name"
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
@@ -24,7 +23,7 @@ class MapViewModel @Inject constructor(
         get() = _state
 
     private fun createState(): MapState {
-        val routeName = stateHandle.get<String>(PARAMETER_ROUTE_NAME_2)!!
+        val routeName = stateHandle.get<String>(Screens.Map.PARAMETER_ROUTE_NAME)!!
         return MapState(loadRoute(routeName))
     }
 

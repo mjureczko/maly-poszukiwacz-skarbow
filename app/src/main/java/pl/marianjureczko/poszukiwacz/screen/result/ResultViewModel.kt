@@ -6,14 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.util.Locale
 import javax.inject.Inject
 
-const val PARAMETER_ROUTE_NAME = "route_name"
-const val PARAMETER_RESULT_TYPE = "result_type"
-const val PARAMETER_TREASURE_ID = "treasure_id"
-const val PARAMETER_TREASURE_AMOUNT = "treasure_amount"
 const val NOTHING_FOUND_TREASURE_ID = -1
 
 interface MovieController {
@@ -52,9 +49,9 @@ class ResultViewModel @Inject constructor(
     private fun createState(): ResultState {
         var moviePath: String? = null
         var subtitlesPath: String? = null
-        val treasureDescId = stateHandle.get<Int>(PARAMETER_TREASURE_ID) ?: NOTHING_FOUND_TREASURE_ID
+        val treasureDescId = stateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_ID) ?: NOTHING_FOUND_TREASURE_ID
         if (treasureDescriptionHasBeenIdentified(treasureDescId)) {
-            stateHandle.get<String>(PARAMETER_ROUTE_NAME)?.let { routeName ->
+            stateHandle.get<String>(Screens.Results.PARAMETER_ROUTE_NAME)?.let { routeName ->
                 val treasureDescription = storageHelper.loadRoute(routeName).treasures
                     .find { it.id == treasureDescId }
                 moviePath = treasureDescription?.movieFileName
@@ -62,9 +59,9 @@ class ResultViewModel @Inject constructor(
             }
         }
         val localesWithSubtitles = !"pl".equals(Locale.getDefault().language, true)
-        val resultType = stateHandle.get<ResultType>(PARAMETER_RESULT_TYPE) ?: ResultType.NOT_A_TREASURE
+        val resultType = stateHandle.get<ResultType>(Screens.Results.PARAMETER_RESULT_TYPE) ?: ResultType.NOT_A_TREASURE
         val treasureType = resultType.toTreasureType()
-        val amount = stateHandle.get<Int>(PARAMETER_TREASURE_AMOUNT) ?: 0
+        val amount = stateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_AMOUNT) ?: 0
         return ResultState(resultType, treasureType, amount, moviePath, null, subtitlesPath, localesWithSubtitles)
     }
 

@@ -6,10 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import javax.inject.Inject
-
-const val PARAMETER_TIP_PHOTO = "tip_photo"
-const val PARAMETER_ROUTE_NAME = "route_name"
 
 @HiltViewModel
 class TipPhotoViewModel @Inject constructor(
@@ -21,8 +19,8 @@ class TipPhotoViewModel @Inject constructor(
         get() = _state
 
     private fun createState(): TipPhotoState {
-        val routeName = stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!
-        val photoPath = stateHandle.get<String>(PARAMETER_TIP_PHOTO)!!
+        val routeName = stateHandle.get<String>(Screens.TipPhoto.PARAMETER_ROUTE_NAME)!!
+        val photoPath = stateHandle.get<String>(Screens.TipPhoto.PARAMETER_TIP_PHOTO)!!
         return TipPhotoState(photoPath, routeName)
     }
 }

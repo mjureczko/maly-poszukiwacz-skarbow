@@ -10,33 +10,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.screen.commemorative.PARAMETER_PHOTO_PATH
-import pl.marianjureczko.poszukiwacz.screen.commemorative.PARAMETER_TREASURE_DESCRIPTION_ID
-import pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_TIP_PHOTO
-import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_RESULT_TYPE
-import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_AMOUNT
-import pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_TREASURE_ID
-import pl.marianjureczko.poszukiwacz.screen.searching.PARAMETER_ROUTE_NAME
-import pl.marianjureczko.poszukiwacz.screen.treasureselector.PARAMETER_JUST_FOUND_TREASURE
 import pl.marianjureczko.poszukiwacz.ui.ComposeRoot
 import pl.marianjureczko.poszukiwacz.ui.Screen
 import pl.marianjureczko.poszukiwacz.ui.theme.AppTheme
-
-val TREASURE_EDITOR_PATH = "treasureeditor"
-val TREASURE_EDITOR_ROUTE = "$TREASURE_EDITOR_PATH/{$PARAMETER_ROUTE_NAME}"
-val SEARCHING_PATH = "searching"
-val SEARCHING_ROUTE = "$SEARCHING_PATH/{$PARAMETER_ROUTE_NAME}"
-val RESULTS_PATH = "result"
-val RESULTS_ROUTE = "$RESULTS_PATH/{${pl.marianjureczko.poszukiwacz.screen.result.PARAMETER_ROUTE_NAME}}/{$PARAMETER_RESULT_TYPE}/{$PARAMETER_TREASURE_ID}/{$PARAMETER_TREASURE_AMOUNT}"
-val SELECTOR_PATH = "selector"
-val SELECTOR_ROUTE = "$SELECTOR_PATH/{$PARAMETER_JUST_FOUND_TREASURE}"
-val COMMEMORATIVE_PATH = "commemorative"
-val COMMEMORATIVE_ROUTE = "$COMMEMORATIVE_PATH/{$PARAMETER_TREASURE_DESCRIPTION_ID}/{$PARAMETER_PHOTO_PATH}"
-val FACEBOOK_PATH = "facebook"
-val FACEBOOK_ROUTE = "$FACEBOOK_PATH/{${pl.marianjureczko.poszukiwacz.screen.facebook.PARAMETER_ROUTE_NAME}}"
-val TIP_PHOTO_PATH = "tipPhoto"
-val TIP_PHOTO_ROUTE =
-    "$TIP_PHOTO_PATH/{$PARAMETER_TIP_PHOTO}/{${pl.marianjureczko.poszukiwacz.screen.phototip.PARAMETER_ROUTE_NAME}}"
 
 /**
  * Routes creation and selection activity

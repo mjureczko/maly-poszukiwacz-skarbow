@@ -16,7 +16,8 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.permissions.Requirements
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingTipPhoto
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForRecordingSound
-import pl.marianjureczko.poszukiwacz.screen.searching.PARAMETER_ROUTE_NAME
+import pl.marianjureczko.poszukiwacz.screen.Screens
+import pl.marianjureczko.poszukiwacz.screen.searching.Scores
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
@@ -179,7 +180,7 @@ class TreasureEditorViewModel @Inject constructor(
     }
 
     private fun createState(): TreasureEditorState {
-        val routeName = stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!
+        val routeName = stateHandle.get<String>(Screens.TreasureEditor.PARAMETER_ROUTE_NAME)!!
         val routeToEdit = try {
             storage.loadRoute(routeName)
         } catch (e: FileNotFoundException) {

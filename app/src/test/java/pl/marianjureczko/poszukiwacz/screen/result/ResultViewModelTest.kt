@@ -10,6 +10,7 @@ import org.mockito.kotlin.mock
 import pl.marianjureczko.poszukiwacz.TestStoragePort
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureType
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import java.util.Locale
 
 class ResultViewModelTest {
@@ -32,7 +33,7 @@ class ResultViewModelTest {
         // Given
         val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
-        given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.NOT_A_TREASURE)
+        given(savedStateHandle.get<ResultType>(Screens.Results.PARAMETER_RESULT_TYPE)).willReturn(ResultType.NOT_A_TREASURE)
 
         // When
         val actual = ResultViewModel(savedStateHandle, storage)
@@ -47,7 +48,7 @@ class ResultViewModelTest {
         // Given
         val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
-        given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.ALREADY_TAKEN)
+        given(savedStateHandle.get<ResultType>(Screens.Results.PARAMETER_RESULT_TYPE)).willReturn(ResultType.ALREADY_TAKEN)
 
         // When
         val actual = ResultViewModel(savedStateHandle, storage)
@@ -62,7 +63,7 @@ class ResultViewModelTest {
         // Given
         val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
-        given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.KNOWLEDGE)
+        given(savedStateHandle.get<ResultType>(Screens.Results.PARAMETER_RESULT_TYPE)).willReturn(ResultType.KNOWLEDGE)
 
         // When
         val actual = ResultViewModel(savedStateHandle, storage)
@@ -78,9 +79,9 @@ class ResultViewModelTest {
         val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
         val route: Route = storage.routes.values.first()
-        given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.KNOWLEDGE)
-        given(savedStateHandle.get<Int>(PARAMETER_TREASURE_ID)).willReturn(route.treasures.first().id)
-        given(savedStateHandle.get<String>(PARAMETER_ROUTE_NAME)).willReturn(route.name)
+        given(savedStateHandle.get<ResultType>(Screens.Results.PARAMETER_RESULT_TYPE)).willReturn(ResultType.KNOWLEDGE)
+        given(savedStateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_ID)).willReturn(route.treasures.first().id)
+        given(savedStateHandle.get<String>(Screens.Results.PARAMETER_ROUTE_NAME)).willReturn(route.name)
 
         // When
         val actual = ResultViewModel(savedStateHandle, storage)
@@ -99,11 +100,11 @@ class ResultViewModelTest {
         val storage = TestStoragePort(mock<Context>())
         val savedStateHandle = mock<SavedStateHandle>()
         val route: Route = storage.routes.values.first()
-        given(savedStateHandle.get<ResultType>(PARAMETER_RESULT_TYPE)).willReturn(ResultType.GOLD)
-        given(savedStateHandle.get<Int>(PARAMETER_TREASURE_ID)).willReturn(route.treasures.first().id)
-        given(savedStateHandle.get<String>(PARAMETER_ROUTE_NAME)).willReturn(route.name)
+        given(savedStateHandle.get<ResultType>(Screens.Results.PARAMETER_RESULT_TYPE)).willReturn(ResultType.GOLD)
+        given(savedStateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_ID)).willReturn(route.treasures.first().id)
+        given(savedStateHandle.get<String>(Screens.Results.PARAMETER_ROUTE_NAME)).willReturn(route.name)
         val amount = somePositiveInt(100)
-        given(savedStateHandle.get<Int>(PARAMETER_TREASURE_AMOUNT)).willReturn(amount)
+        given(savedStateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_AMOUNT)).willReturn(amount)
 
         // When
         val actual = ResultViewModel(savedStateHandle, storage)

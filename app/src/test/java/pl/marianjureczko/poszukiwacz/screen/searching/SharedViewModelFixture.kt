@@ -8,6 +8,7 @@ import org.mockito.BDDMockito
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
@@ -29,7 +30,7 @@ data class SharedViewModelFixture(
     lateinit var route: Route
 
     fun givenMocksForNoProgress(): SharedViewModel {
-        BDDMockito.given(savedState.get<String>(PARAMETER_ROUTE_NAME)).willReturn(routeName)
+        BDDMockito.given(savedState.get<String>(Screens.Searching.PARAMETER_ROUTE_NAME)).willReturn(routeName)
         route = some<Route>().copy(name = routeName)
         route.treasures.first().qrCode = firstTreasureQrCode
         BDDMockito.given(storage.loadRoute(routeName)).willReturn(route)

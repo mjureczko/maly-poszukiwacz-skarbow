@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.activity.main.FACEBOOK_PATH
+import pl.marianjureczko.poszukiwacz.screen.Screens
 
 object FacebookHelper {
     private const val facebookPackage = "com.facebook.katana"
@@ -24,7 +24,7 @@ object FacebookHelper {
                 if (routeName.isBlank()) {
                     Toast.makeText(context, noRouteToShareErrorMsg, Toast.LENGTH_LONG).show()
                 } else {
-                    navController.navigate("$FACEBOOK_PATH/$routeName")
+                    navController.navigate(Screens.Facebook.doRoute(routeName))
                 }
             } else {
                 Toast.makeText(context, noFacebookErrorMsg, Toast.LENGTH_LONG).show()

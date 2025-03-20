@@ -11,12 +11,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import javax.inject.Inject
-
-const val PARAMETER_JUST_FOUND_TREASURE = "just_found_treasure_id"
 
 @HiltViewModel
 class SelectorViewModel @Inject constructor(
@@ -46,7 +45,7 @@ class SelectorViewModel @Inject constructor(
     }
 
     private fun createState(): SelectorState {
-        val justFoundTreasureId = stateHandle.get<Int>(PARAMETER_JUST_FOUND_TREASURE)!!
+        val justFoundTreasureId = stateHandle.get<Int>(Screens.Selector.PARAMETER_JUST_FOUND_TREASURE)!!
         return SelectorState(
             justFoundTreasureId,
             photoHelper.getCommemorativePhotoTempUri()

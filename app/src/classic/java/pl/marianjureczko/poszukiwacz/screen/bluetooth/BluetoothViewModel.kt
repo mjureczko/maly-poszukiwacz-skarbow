@@ -22,13 +22,11 @@ import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetooth
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetoothConnect
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetoothScan
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNearbyWifiDevices
+import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.ui.PermissionsHandler
 import javax.inject.Inject
-
-const val PARAMETER_MODE = "mode"
-const val PARAMETER_ROUTE_TO_SENT = "routeName"
 
 interface OnDeviceSelected {
     fun sentRouteToDevice(deviceName: String)
@@ -127,10 +125,10 @@ class BluetoothViewModel @Inject constructor(
     }
 
     private fun createState(): BluetoothState {
-        val mode = stateHandle.get<Mode>(PARAMETER_MODE)!!
+        val mode = stateHandle.get<Mode>(Screens.Bluetooth.PARAMETER_MODE)!!
         var route: Route? = null
         if (mode == Mode.SENDING) {
-            route = storage.loadRoute(stateHandle.get<String>(PARAMETER_ROUTE_TO_SENT)!!)
+            route = storage.loadRoute(stateHandle.get<String>(Screens.Bluetooth.PARAMETER_ROUTE_TO_SENT)!!)
         }
         return BluetoothState(
             route = route,
