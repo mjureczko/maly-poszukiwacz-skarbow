@@ -8,6 +8,7 @@ import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
 
 class XmlHelperTest {
 
@@ -60,22 +61,6 @@ class XmlHelperTest {
         //given
         val xmlHelper = XmlHelper()
         var bag = some<TreasuresProgress>()
-
-        //when
-        val xml = xmlHelper.writeToString(bag)
-        val actual = xmlHelper.loadFromString<TreasuresProgress>(xml)
-
-        //then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
-    }
-
-    @Test
-    fun should_writeToAndLoadFromStringTreasureBagWithoutSelectedTreasure() {
-        //given
-        val xmlHelper = XmlHelper()
-        var bag = some<TreasuresProgress> {
-            selectedTreasure = null
-        }
 
         //when
         val xml = xmlHelper.writeToString(bag)

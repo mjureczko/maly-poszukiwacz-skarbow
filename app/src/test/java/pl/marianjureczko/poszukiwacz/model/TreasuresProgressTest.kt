@@ -1,13 +1,14 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someInt
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import pl.marianjureczko.poszukiwacz.shared.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
 
 class TreasuresProgressTest {
 
@@ -45,11 +46,11 @@ class TreasuresProgressTest {
     @Test
     fun addGoldToBag() {
         //given
-        val bag = TreasuresProgress(someString())
+        val bag = TreasuresProgress(someString(), someInt())
 
         //when
-        bag.collect(gold7)
-        bag.collect(gold9)
+        bag.collect(gold7, null)
+        bag.collect(gold9, null)
 
         //then
         assertEquals(gold7.quantity + gold9.quantity, bag.golds)
@@ -60,11 +61,11 @@ class TreasuresProgressTest {
     @Test
     fun addDiamondsToBag() {
         //given
-        val bag = TreasuresProgress(someString())
+        val bag = TreasuresProgress(someString(), someInt())
 
         //when
-        bag.collect(diamond17)
-        bag.collect(diamond18)
+        bag.collect(diamond17, null)
+        bag.collect(diamond18, null)
 
         //then
         assertEquals(diamond17.quantity + diamond18.quantity, bag.diamonds)
@@ -75,11 +76,11 @@ class TreasuresProgressTest {
     @Test
     fun addRubiesToBag() {
         //given
-        val bag = TreasuresProgress(someString())
+        val bag = TreasuresProgress(someString(), someInt())
 
         //when
-        bag.collect(ruby27)
-        bag.collect(ruby98)
+        bag.collect(ruby27, null)
+        bag.collect(ruby98, null)
 
         //then
         assertEquals(ruby27.quantity + ruby98.quantity, bag.rubies)
@@ -90,8 +91,8 @@ class TreasuresProgressTest {
     @Test
     fun detectAlreadyCollectedTreasures() {
         //given
-        val bag = TreasuresProgress(someString())
-        bag.collect(gold9)
+        val bag = TreasuresProgress(someString(), someInt())
+        bag.collect(gold9, null)
 
         //then
         assertFalse(bag.contains(gold7))
@@ -103,11 +104,10 @@ class TreasuresProgressTest {
         //given
         val xmlHelper = XmlHelper()
         val routeName = someString()
-        val treasuresProgress = TreasuresProgress(routeName)
+        val treasuresProgress = TreasuresProgress(routeName, someInt())
         val treasure = some<Treasure>().copy(type = TreasureType.DIAMOND)
-        treasuresProgress.collect(treasure)
         val description = some<TreasureDescription>()
-        treasuresProgress.collect(description)
+        treasuresProgress.collect(treasure, description)
 
         //when
         val xml = xmlHelper.writeToString(treasuresProgress)
@@ -118,5 +118,30 @@ class TreasuresProgressTest {
         assertThat(actual.contains(treasure)).isTrue()
         assertThat(actual.diamonds).isEqualTo(treasure.quantity)
         assertThat(actual.collectedTreasuresDescriptionId).containsExactly(description.id)
+    }
+
+    @Test
+    fun `SHOULD add treasure description to collected WHEN has not been yet collected`() {
+        //given
+        val bag = some<TreasuresProgress>()
+        val expected = someInt()
+
+        //when
+        val result = bag.toggleTreasureDescriptionCollected(expected)
+
+        //then
+        assertTrue(result.collectedTreasuresDescriptionId.contains(expected))
+    }
+
+    @Test
+    fun `SHOULD remove treasure description id from collected WHEN was already collected`() {
+        //given
+        val bag = some<TreasuresProgress>()
+
+        //when
+        val result = bag.toggleTreasureDescriptionCollected(bag.collectedTreasuresDescriptionId.first())
+
+        //then
+        assertFalse(result.collectedTreasuresDescriptionId.contains(bag.collectedTreasuresDescriptionId.first()))
     }
 }

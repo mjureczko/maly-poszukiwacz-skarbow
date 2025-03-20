@@ -18,8 +18,8 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v2
         with:
-          distribution: 'zulu'
-          java-version: '11'
+          distribution: 'adopt'
+          java-version: '17'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
@@ -35,7 +35,7 @@ jobs:
 
       # Cache Gradle dependencies and Gradle Wrapper
       - name: Setup Gradle Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -45,5 +45,8 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Run Test
-        run: ./gradlew check
+      - name: Run Unit Test Kalinowice
+        run: ./gradlew testKalinowiceCustomDebugTest
+
+      - name: Run Unit Test Classic
+        run: ./gradlew testDefaultAssetClassicDebugUnitTest

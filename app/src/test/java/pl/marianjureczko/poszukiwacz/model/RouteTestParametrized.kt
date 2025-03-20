@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someInt
 import org.apache.commons.io.FileUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.TestContext
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 
 class RouteTestParametrized() {
@@ -50,47 +51,29 @@ class RouteTest {
     }
 
     @Test
-    fun `SHOULD remove treasureDescription files WHEN removing the TreasureDescription from Route`() {
+    fun `SHOULD return TreasureDescription WHEN there is a match with requested id`() {
         //given
-        val route = RouteArranger.savedWithTipFiles(storageHelper)
-        val toRemove = route.treasures[0]
+        val route = some<Route>()
+        val existingId = route.treasures.last().id
 
         //when
-        route.remove(toRemove, storageHelper)
+        val actual = route.getTreasureDescriptionById(existingId)
 
         //then
-        assertThat(route.treasures).doesNotContain(toRemove)
-        assertThat(File(toRemove.photoFileName).exists()).isFalse()
-        assertThat(File(toRemove.tipFileName).exists()).isFalse()
+        assertThat(actual).isEqualTo(route.treasures.last())
     }
 
     @Test
-    fun `SHOULD remove selected treasure from progress WHEN the removed TreasureDescription was selected`() {
+    fun `SHOULD return null WHEN there is no TreasureDescription with requested id`() {
         //given
-        val fixture = RouteAndProgressFixture.savedWithSelectedTreasure(storageHelper)
+        val route = some<Route>()
 
         //when
-        fixture.route.remove(fixture.selectedTreasure()!!, storageHelper)
+        val actual = route.getTreasureDescriptionById(someInt())
 
         //then
-        val actualProgress = storageHelper.loadProgress(fixture.route.name)!!
-        assertThat(actualProgress.selectedTreasure).isNull()
+        assertThat(actual).isNull()
     }
-
-    @Test
-    fun `SHOULD not alter the progress WHEN the removed TreasureDescription was not selected`() {
-        //given
-        val fixture = RouteAndProgressFixture.savedWithoutSelectedTreasure(storageHelper)
-        val toRemove = fixture.route.treasures[0]
-
-        //when
-        fixture.route.remove(toRemove, storageHelper)
-
-        //then
-        val actualProgress = storageHelper.loadProgress(fixture.route.name)
-        assertThat(actualProgress).usingRecursiveComparison().isEqualTo(fixture.progress)
-    }
-
 
     @Test
     fun `SHOULD add prefix to each photo and sound file`() {

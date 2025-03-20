@@ -4,8 +4,8 @@ import org.apache.commons.math3.stat.StatUtils
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
-import pl.marianjureczko.poszukiwacz.activity.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.activity.treasureselector.Coordinates
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import java.io.Serializable
 import java.util.Date
 
@@ -25,6 +25,10 @@ class HunterPath() : Serializable {
      */
     @field:ElementList
     private var locations = mutableListOf<HunterLocation>()
+
+    // Public getter for test purpose
+    val publicLocations: List<HunterLocation>
+        get() = locations
 
     @field:Element(required = false)
     private var start: Date? = null

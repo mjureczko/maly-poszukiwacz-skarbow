@@ -3,13 +3,12 @@ package pl.marianjureczko.poszukiwacz.model
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
 import java.io.Serializable
 
 @Root
 data class Route(
     @field:Element var name: String,
-    @field:ElementList var treasures: MutableList<TreasureDescription>
+    @field:ElementList var treasures: List<TreasureDescription>
 ) : Serializable {
     constructor() : this("", ArrayList())
     constructor(name: String) : this(name, ArrayList())
@@ -31,17 +30,7 @@ data class Route(
         }
     }
 
-    fun remove(td: TreasureDescription, storageHelper: StorageHelper) {
-        treasures.remove(td)
-        storageHelper.removeTipFiles(td)
-
-        storageHelper.loadProgress(name)?.let {
-            if (it.selectedTreasure?.id == td.id) {
-                it.selectedTreasure = null
-                storageHelper.save(it)
-            }
-        }
-    }
+    fun getTreasureDescriptionById(id: Int): TreasureDescription? = treasures.find { it.id == id }
 
     fun addPrefixToFilesPaths(prefix: String) {
         treasures.iterator().forEach { treasure ->
