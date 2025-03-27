@@ -38,7 +38,7 @@ When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_
     CapturePhotoIntent --> CommemorativeScreen
     CommemorativeScreen --> TreasureSelectorScreen
     SearchingScreen --> CommemorativeScreen
-    CommemorativeScreen -- SearchingScreen
+    CommemorativeScreen --> SearchingScreen
 
     MainScreen --> FacebookScreen
     FacebookScreen --> Mainv
