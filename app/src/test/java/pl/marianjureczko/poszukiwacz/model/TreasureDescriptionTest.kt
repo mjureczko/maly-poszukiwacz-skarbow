@@ -9,8 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import pl.marianjureczko.poszukiwacz.shared.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
+//FIXME: clean files created during tests
 @ExtendWith(MockitoExtension::class)
 class TreasureDescriptionTest {
 

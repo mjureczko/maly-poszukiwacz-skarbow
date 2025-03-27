@@ -1,37 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.main.MainActivity"
-    android:orientation="vertical">
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    tools:context=".activity.main.MainActivity">
 
     <ImageView
         android:id="@+id/resultImg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.0"
+        android:layout_weight="10.0"
         android:gravity="top"
-        android:padding="4dp" />
+        android:layout_marginTop="50dp" />
 
     <TextView
         android:id="@+id/resultDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.1"
+        android:layout_weight="1.0"
         android:layout_marginBottom="40dp"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:padding="4dp"
         android:textSize="60dp"
         android:fontFamily="@font/akaya_telivigala" />
+
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/doPhoto"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="fitCenter"
+                android:background="@android:color/transparent"
+                android:src="@drawable/camera_do_photo"
+                android:padding="10dp"
+                android:layout_margin="4dp" />
+
+        </LinearLayout>
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         ads:adSize="BANNER"
         ads:adUnitId="@string/main_ad"></com.google.android.gms.ads.AdView>
 

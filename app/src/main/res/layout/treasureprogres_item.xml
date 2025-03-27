@@ -17,12 +17,22 @@
         app:srcCompat="@drawable/checkbox_empty" />
 
     <Button
-        android:id="@+id/treasure_info"
+        android:id="@+id/treasureInfo"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:fontFamily="@font/akaya_telivigala"
         android:text="Treasure info"
         android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/showDetails"
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        android:adjustViewBounds="true"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/camera_show_photo"
+        android:background="@null" />
 
 </LinearLayout>

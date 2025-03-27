@@ -4,9 +4,11 @@ import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.model.TreasureBag
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
 
 class XmlHelperTest {
 
@@ -58,29 +60,27 @@ class XmlHelperTest {
     fun should_writeToAndLoadFromStringTreasureBag() {
         //given
         val xmlHelper = XmlHelper()
-        var bag = some<TreasureBag>()
+        var bag = some<TreasuresProgress>()
 
         //when
         val xml = xmlHelper.writeToString(bag)
-        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+        val actual = xmlHelper.loadFromString<TreasuresProgress>(xml)
 
         //then
         assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
     }
 
     @Test
-    fun should_writeToAndLoadFromStringTreasureBagWithoutSelectedTreasure() {
+    fun should_writeToAndLoadFromStringHunterPath() {
         //given
         val xmlHelper = XmlHelper()
-        var bag = some<TreasureBag> {
-            selectedTreasure = null
-        }
+        val path = some<HunterPath>()
 
         //when
-        val xml = xmlHelper.writeToString(bag)
-        val actual = xmlHelper.loadFromString<TreasureBag>(xml)
+        val xml = xmlHelper.writeToString(path)
+        val actual = xmlHelper.loadFromString<HunterPath>(xml)
 
         //then
-        assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
+        assertThat(actual).usingRecursiveComparison().isEqualTo(path)
     }
 }
