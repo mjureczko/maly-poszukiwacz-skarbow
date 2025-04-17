@@ -4,7 +4,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 
 typealias GoToGuide = () -> Unit
-typealias GoToResults = (String, ResultType, Int?, Int?) -> Unit
+typealias GoToResults = (String, ResultType, Int, Int) -> Unit
 typealias GoToFacebook = (String) -> Unit
 typealias GoToSearching = (String) -> Unit
 typealias GoToQrScanner = () -> Unit

@@ -35,25 +35,26 @@ class PhotoHelper(
             postExecute: Runnable
         ) {
             val result = withContext(ioDispatcher) {
-                val bitmap = BitmapFactory.decodeFile(photoFile)
-                val matrix = Matrix()
-                matrix.postRotate(90f)
-                val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-                try {
-                    FileOutputStream(photoFile).use { out ->
-                        rotatedBitmap.compress(
-                            Bitmap.CompressFormat.JPEG,
-                            95,
-                            out
-                        )
+                BitmapFactory.decodeFile(photoFile)?.let { bitmap ->
+                    val matrix = Matrix()
+                    matrix.postRotate(90f)
+                    val rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                    try {
+                        FileOutputStream(photoFile).use { out ->
+                            rotatedBitmap.compress(
+                                Bitmap.CompressFormat.JPEG,
+                                95,
+                                out
+                            )
+                        }
+                        true
+                    } catch (e: Exception) {
+                        Log.e(TAG, e.message, e)
+                        false
                     }
-                    true
-                } catch (e: Exception) {
-                    Log.e(TAG, e.message, e)
-                    false
                 }
             }
-            if (result) {
+            if (true == result) {
                 postExecute.run()
             }
         }
