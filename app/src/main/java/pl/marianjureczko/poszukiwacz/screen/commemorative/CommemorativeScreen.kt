@@ -43,6 +43,7 @@ import pl.marianjureczko.poszukiwacz.screen.searching.DoCommemorative
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
@@ -92,7 +93,9 @@ fun CommemorativeScreenBody(
                 .background(Color.Transparent)
         )
         if (localState.photoPath != null) {
-            val photo: Bitmap = remember(localState.photoVersion) { BitmapFactory.decodeFile(localState.photoPath) }
+            val photo: Bitmap = remember(localState.photoVersion) {
+                BitmapFactory.decodeFile(PhotoHelper.decodePhotoPath(localState.photoPath))
+            }
             val aspectRatio = photo.width.toFloat() / photo.height.toFloat()
             Box(
                 modifier = Modifier

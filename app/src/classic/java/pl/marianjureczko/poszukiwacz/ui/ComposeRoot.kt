@@ -29,8 +29,9 @@ import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
-    val goToCommemorative: GoToCommemorative =
-        { treasureId, photoPath -> navController.navigate(Screens.Commemorative.doRoute(treasureId, photoPath)) }
+    val goToCommemorative: GoToCommemorative = { treasureId, photoPath ->
+        navController.navigate(Screens.Commemorative.doRoute(treasureId, photoPath))
+    }
     val goToEditor: GoToTreasureEditor =
         { routeName -> navController.navigate(Screens.TreasureEditor.doRoute(routeName)) }
 

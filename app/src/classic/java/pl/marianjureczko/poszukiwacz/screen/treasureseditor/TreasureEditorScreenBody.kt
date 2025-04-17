@@ -27,6 +27,9 @@ import androidx.compose.material.icons.twotone.CameraAlt
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Mic
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -283,6 +286,7 @@ private fun DoPhotoButton(
 
 @Composable
 fun LiveMap(route: Route) {
+    val treasures = route.treasures
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -293,9 +297,10 @@ fun LiveMap(route: Route) {
         val isInPreview = LocalInspectionMode.current
         if (!isInPreview) {
             val context = LocalContext.current
-            val mapView = MapView(context)
+            // remember to enforce recomposition on route change
+            val mapView = remember { MapView(context) }
 
-            MapHelper.renderTreasures(context, route, mapView)
+            MapHelper.renderTreasures(context, treasures, mapView)
             mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
 
             AndroidView({ mapView }, Modifier.fillMaxSize())

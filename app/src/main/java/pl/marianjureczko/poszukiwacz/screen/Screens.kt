@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.screen
 
 import pl.marianjureczko.poszukiwacz.screen.bluetooth.Mode
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
+import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 
 object Screens {
 
@@ -68,7 +69,9 @@ object Screens {
         private const val PATH = "commemorative"
         const val ROUTE = "$PATH/{$PARAMETER_TREASURE_DESCRIPTION_ID}/{$PARAMETER_PHOTO_PATH}"
 
-        fun doRoute(treasureDescriptionId: Int, photoPath: String?) = "$PATH/$treasureDescriptionId/$photoPath"
+        fun doRoute(treasureDescriptionId: Int, photoPath: String?): String {
+            return "$PATH/$treasureDescriptionId/${PhotoHelper.encodePhotoPath(photoPath)}"
+        }
     }
 
     object Facebook {

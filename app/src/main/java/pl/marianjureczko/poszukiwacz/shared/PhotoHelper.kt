@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URLDecoder
 import java.net.URLEncoder
 
 class PhotoHelper(
@@ -58,6 +59,8 @@ class PhotoHelper(
         }
 
         fun encodePhotoPath(photoPath: String?): String = URLEncoder.encode(photoPath ?: "", Charsets.UTF_8.name())
+
+        fun decodePhotoPath(encodedPath: String?): String = URLDecoder.decode(encodedPath ?: "", Charsets.UTF_8.name())
     }
 
     fun getCommemorativePhotoTempUri(): Uri = createPhotoUri(getCommemorativePhotoTempFile())

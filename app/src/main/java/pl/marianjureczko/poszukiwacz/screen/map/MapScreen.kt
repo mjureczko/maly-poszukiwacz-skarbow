@@ -52,7 +52,7 @@ fun MapboxMap(route: Route) {
     val context = LocalContext.current
     val mapView = MapView(context)
 
-    MapHelper.renderTreasures(context, route, mapView)
+    MapHelper.renderTreasures(context, route.treasures, mapView)
     mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) { style -> hideRoads(style) }
 
     AndroidView({ mapView }, Modifier.fillMaxSize())

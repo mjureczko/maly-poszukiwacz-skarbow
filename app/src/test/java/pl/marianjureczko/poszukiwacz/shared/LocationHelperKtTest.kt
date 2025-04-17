@@ -18,7 +18,7 @@ internal class LocationHelperKtTest {
         val route = some<Route>().copy(treasures = mutableListOf(treasure))
 
         //when
-        val actual = LocationHelper(route).center()
+        val actual = LocationHelper(route.treasures).center()
 
         //then
         assertThat(actual).isEqualTo(Point.fromLngLat(treasure.longitude, treasure.latitude))
@@ -30,7 +30,7 @@ internal class LocationHelperKtTest {
         val route = some<Route>().copy(treasures = mutableListOf())
 
         //when
-        val actual = LocationHelper(route).center()
+        val actual = LocationHelper(route.treasures).center()
 
         //then
         assertThat(actual).isEqualTo(Point.fromLngLat(0.0, 0.0))
@@ -45,7 +45,7 @@ internal class LocationHelperKtTest {
         val route = some<Route>().copy(treasures = mutableListOf(min, max, other))
 
         //when
-        val actual = LocationHelper(route).center()
+        val actual = LocationHelper(route.treasures).center()
 
         //then
         val long = (min.longitude + max.longitude) / 2
@@ -61,7 +61,7 @@ internal class LocationHelperKtTest {
         val route = some<Route>().copy(treasures = mutableListOf(min, max))
 
         //when
-        val actual = LocationHelper(route).southwest()
+        val actual = LocationHelper(route.treasures).southwest()
 
         //then
         assertThat(actual).isEqualTo(Point.fromLngLat(min.longitude, min.latitude))
@@ -75,7 +75,7 @@ internal class LocationHelperKtTest {
         val route = some<Route>().copy(treasures = mutableListOf(min, max))
 
         //when
-        val actual = LocationHelper(route).northeast()
+        val actual = LocationHelper(route.treasures).northeast()
 
         //then
         assertThat(actual).isEqualTo(Point.fromLngLat(max.longitude, max.latitude))

@@ -44,22 +44,22 @@ class MapHelper {
     }
 
     companion object {
-        fun renderTreasures(context: Context, route: Route, mapView: MapView) {
+        fun renderTreasures(context: Context, treasures: List<TreasureDescription>, mapView: MapView) {
             mapView.getMapboxMap().loadStyleUri(Style.OUTDOORS)
             val cameraPosition = CameraOptions.Builder()
-                .center(LocationHelper(route).center())
+                .center(LocationHelper(treasures).center())
                 .build()
             mapView.getMapboxMap().setCamera(cameraPosition)
 
             val treasureOnMapHelper = TreasureOnMapHelper(context.resources, mapView)
-            route.treasures.forEach {
+            treasures.forEach {
                 treasureOnMapHelper.addTreasure(it)
             }
         }
 
         fun positionMapOnTreasures(route: Route, mapView: MapView, tightness: Double) {
             val mapboxMap: MapboxMap = mapView.getMapboxMap()
-            val locationHelper = LocationHelper(route)
+            val locationHelper = LocationHelper(route.treasures)
             //according to mapbox doc, executing below code in onCreate may be nondeterministic
             val cameraOptions = mapboxMap.cameraForCoordinateBounds(
                 CoordinateBounds(locationHelper.southwest(), locationHelper.northeast(), false),

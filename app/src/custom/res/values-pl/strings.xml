@@ -1,6 +1,6 @@
 <resources>
     <string name="custom_lets_start">ZACZYNAMY POSZUKIWANIA</string>
-    <string name="custom_lead3">W trakcie zabawy należy odszukać ukryte skarby reprezentowane przez kody QR. Wszystkie kod znajdują się w publicznie dostępnych miejscach. Poszukiwania nie zwalaniają z obowiązku przestrzegania przepisów - akcje w terenie podejmujesz na własną odpowiedzialność, zachowaj więc ostrożność. Kody QR będą przypominać ten widoczny poniżej:</string>
+    <string name="custom_lead3">W trakcie zabawy należy odszukać ukryte skarby reprezentowane przez kody QR. Wszystkie kody znajdują się w publicznie dostępnych miejscach. Poszukiwania nie zwalaniają z obowiązku przestrzegania przepisów - akcje w terenie podejmujesz na własną odpowiedzialność, zachowaj więc ostrożność. Kody QR będą przypominać ten widoczny poniżej:</string>
     <string name="custom_lead4">Aby poznać kryjące się za kodem QR tajemnice należy go zeskanować naciskając na:</string>
     <string name="custom_lead5">Gra będzie nam pomagać podając ile kroków w linii prostej pozostało do skarbu oraz wskazując czy trzeba pójść na północ, południe, wschód czy zachód. Kierunki trzeba jednak odnaleźć samodzielnie. Nie przejmuj się tym gdyż pod tymi przyciskami będziesz mógł znaleźć podpowiedzi:</string>
     <string name="custom_lead6">Do odnalezienia jest kilka skarbów. Ten aktualnie poszukiwany można zmienić przyciskiem:</string>

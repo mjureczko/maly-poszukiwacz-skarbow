@@ -17,7 +17,6 @@ import pl.marianjureczko.poszukiwacz.permissions.Requirements
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingTipPhoto
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForRecordingSound
 import pl.marianjureczko.poszukiwacz.screen.Screens
-import pl.marianjureczko.poszukiwacz.screen.searching.Scores
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
@@ -73,8 +72,8 @@ class TreasureEditorViewModel @Inject constructor(
 
     fun addTreasure() {
         state.value.currentLocation?.let { location ->
-            val updateRoute: Route = addTreasureUseCase(state.value.route, location)
-            _state.value = _state.value.copy(route = updateRoute)
+            val updatedRoute: Route = addTreasureUseCase(state.value.route, location)
+            _state.value = _state.value.copy(route = updatedRoute)
         }
     }
 

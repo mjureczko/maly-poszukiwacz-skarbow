@@ -13,10 +13,6 @@ data class Route(
     constructor() : this("", ArrayList())
     constructor(name: String) : this(name, ArrayList())
 
-    companion object {
-        fun nullObject(): Route = Route("???")
-    }
-
     //todo: validate name
     fun fileName(): String {
         return name

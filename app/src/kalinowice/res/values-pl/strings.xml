@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Kalinowice</string>
     <string name="custom_lead1">Zapraszamy na wyjątkową podróż po pozornie zwyczajnej opolskiej wiosce. Zabierze nas w nią mieszkaniec Kalinowic i pasjonat lokalnej historii Pan Andrzej Legrand. Dzięki niemu poznamy największe okoliczne tajemnice i odkryjemy bezcenne skarby wiedzy.</string>
-    <string name="custom_lead2">Dokładny przebieg trasy zależy od Twoich decyzji, ale możesz się spodziewać, że jej długość to będzie około 13 km. Rozważ rozbicie poszukiwań na kilka dni albo wspomaganie się rowerem.</string>
+    <string name="custom_lead2">Dokładny przebieg trasy zależy od Twoich decyzji ale możesz się spodziewać, że jej długość to będzie około 13 km. Rozważ rozbicie poszukiwań na kilka dni albo wspomaganie się rowerem.</string>
     <string name="custom_title">Przygoda w Kalinowicach</string>
     <string name="help_path">https://kalinowice-little-treasure-hunter.netlify.app</string>
     <string name="well_done_classic_app">→ samodzielne tworzenie tras</string>

@@ -98,12 +98,12 @@ class ReportMap(
         )
         snapshotter.setStyleUri(Style.OUTDOORS)
         val cameraPosition = CameraOptions.Builder()
-            .center(LocationHelper(route).center())
+            .center(LocationHelper(route.treasures).center())
             .build()
         snapshotter.setCamera(cameraPosition)
         //TODO: different padding on x and y in order to adjust to route shape
         val padding = 50.0
-        val locationHelper = LocationHelper(route)
+        val locationHelper = LocationHelper(route.treasures)
         val cameraCoordinates = snapshotter.cameraForCoordinates(
             listOf(locationHelper.northeast(), locationHelper.southwest()),
             EdgeInsets(padding, padding, padding, padding),
