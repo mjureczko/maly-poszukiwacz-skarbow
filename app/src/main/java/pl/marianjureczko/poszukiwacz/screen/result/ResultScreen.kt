@@ -53,6 +53,7 @@ import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 const val PLAY_MOVIE_BUTTON = "Play the movie"
 const val TREASURE_QUANTITY = "treasure quantity"
+const val DO_NOT_SHOW_TREASURE_MSG = "Cannot show treasure"
 private const val SUBTITLES_MIME_TYPE = "application/x-subrip"
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -159,12 +160,13 @@ private fun Message(localState: ResultState) {
         stringResource(R.string.treasure_already_taken_msg)
     }
     Text(
+        modifier = Modifier.semantics { contentDescription = DO_NOT_SHOW_TREASURE_MSG },
         fontSize = 60.sp,
         fontWeight = FontWeight.Bold,
         fontFamily = FANCY_FONT,
         color = Color.Gray,
         textAlign = TextAlign.Center,
-        text = text
+        text = text,
     )
 }
 

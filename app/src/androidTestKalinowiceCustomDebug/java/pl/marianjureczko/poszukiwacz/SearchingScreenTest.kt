@@ -4,10 +4,12 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertTextEquals
 import androidx.test.espresso.Espresso.pressBack
 import com.ocadotechnology.gembus.test.somePositiveInt
+import com.ocadotechnology.gembus.test.someString
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
+import pl.marianjureczko.poszukiwacz.screen.result.DO_NOT_SHOW_TREASURE_MSG
 import pl.marianjureczko.poszukiwacz.screen.result.PLAY_MOVIE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SCAN_TREASURE_BUTTON
@@ -69,5 +71,21 @@ class SearchingScreenTest : UiTest() {
         //then
         composeRule.waitForIdle()
         getNode(TREASURE_COLLECTED_CHECKBOX).assertExists()
+    }
+
+    @Test
+    fun shouldErrorNotTreasure_whenScanningRandomQrCode() {
+        //given
+        composeRule.waitForIdle()
+        TestPortsModule.ioDispatcher.scheduler.runCurrent()
+        goToSearching()
+        TestPortsModule.qrScannerPort.setContents(someString())
+
+        //when
+        performTap(SCAN_TREASURE_BUTTON)
+
+        //then
+        composeRule.waitForIdle()
+        getNode(DO_NOT_SHOW_TREASURE_MSG).assertExists()
     }
 }
