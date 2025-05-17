@@ -36,6 +36,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun prevLeadMessage() {
+        if (_state.value.messageIndex > 0) {
+            _state.value = _state.value.copy(messageIndex = _state.value.messageIndex - 1)
+        }
+    }
+
     fun restartMessages() {
         viewModelScope.launch(dispatcher) {
             delay(1_000)

@@ -19,6 +19,10 @@ data class MainState(
     fun isLastMessage(): Boolean {
         return messageIndex >= messages.size - 1
     }
+
+    fun isFirstMessage(): Boolean {
+        return messageIndex == 0
+    }
 }
 
 data class Message(

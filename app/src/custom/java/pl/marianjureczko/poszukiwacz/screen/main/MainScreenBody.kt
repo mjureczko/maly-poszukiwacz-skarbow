@@ -10,17 +10,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
@@ -40,6 +43,7 @@ import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 const val GUIDE_TEXT = "Guide text"
 const val GUIDE_IMAGE = "Guide image"
 const val NEXT_GUIDE_BUTTON = "Next guide button"
+const val PREV_GUIDE_BUTTON = "Previous guide button"
 const val START_BUTTON = "Start button"
 
 @Composable
@@ -90,14 +94,17 @@ fun MainScreenBody(goToSearching: GoToSearching) {
                 .padding(20.dp),
             horizontalArrangement = Arrangement.End,
         ) {
+            if (!state.isFirstMessage()) {
+                PrevButton(viewModel)
+                Spacer(modifier = Modifier.width(8.dp))
+            }
             if (!state.isLastMessage()) {
                 NextButton(viewModel)
+            } else {
+                Spacer(modifier = Modifier.width(40.dp))
             }
         }
-        Spacer(
-            modifier = Modifier
-                .weight(0.01f)
-        )
+        Spacer(modifier = Modifier.weight(0.01f))
         LargeButton(R.string.custom_lets_start, START_BUTTON, enabled = state.assetsCopied) {
             viewModel.restartMessages()
             goToSearching.invoke(CustomInitializerForRoute.routeName)
@@ -108,19 +115,29 @@ fun MainScreenBody(goToSearching: GoToSearching) {
 
 @Composable
 private fun NextButton(viewModel: MainViewModel) {
+    ArrowButton(NEXT_GUIDE_BUTTON, Icons.Rounded.ArrowForward) { viewModel.nextLeadMessage() }
+}
+
+@Composable
+private fun PrevButton(viewModel: MainViewModel) {
+    ArrowButton(PREV_GUIDE_BUTTON, Icons.Rounded.ArrowBack) { viewModel.prevLeadMessage() }
+}
+
+@Composable
+private fun ArrowButton(description: String, arrowIcon: ImageVector, onClickAction: () -> Unit) {
     OutlinedButton(
         shape = Shapes.small,
-        onClick = { viewModel.nextLeadMessage() },
+        onClick = onClickAction,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.White,
             contentColor = Color.Black
         ),
         border = BorderStroke(2.dp, Color.LightGray), // Border color and thickness
         elevation = ButtonDefaults.elevation(4.dp),
-        modifier = Modifier.semantics { contentDescription = NEXT_GUIDE_BUTTON },
+        modifier = Modifier.semantics { contentDescription = description },
         content = {
             Image(
-                imageVector = Icons.Rounded.ArrowForward,
+                imageVector = arrowIcon,
                 contentDescription = null,
                 modifier = Modifier.background(color = Color.Transparent),
                 colorFilter = ColorFilter.tint(Color.Black)
