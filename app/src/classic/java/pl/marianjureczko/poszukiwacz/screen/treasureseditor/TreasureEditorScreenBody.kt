@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,9 +26,6 @@ import androidx.compose.material.icons.twotone.CameraAlt
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Mic
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,8 +39,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -54,7 +48,6 @@ import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.HideOverridePhotoDialog
 import pl.marianjureczko.poszukiwacz.shared.HideOverrideSoundTipDialog
 import pl.marianjureczko.poszukiwacz.shared.HideSoundRecordingDialog
-import pl.marianjureczko.poszukiwacz.shared.MapHelper
 import pl.marianjureczko.poszukiwacz.shared.RemoveTreasure
 import pl.marianjureczko.poszukiwacz.shared.ShowOverridePhotoDialog
 import pl.marianjureczko.poszukiwacz.shared.ShowOverrideSoundTipDialog
@@ -62,6 +55,7 @@ import pl.marianjureczko.poszukiwacz.shared.ShowSoundRecordingDialog
 import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
+import pl.marianjureczko.poszukiwacz.ui.components.TreasureHunterMap
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 
 const val TREASURE_ITEM_ROW = "Treasure row"
@@ -286,7 +280,6 @@ private fun DoPhotoButton(
 
 @Composable
 fun LiveMap(route: Route) {
-    val treasures = route.treasures
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -296,15 +289,7 @@ fun LiveMap(route: Route) {
     ) {
         val isInPreview = LocalInspectionMode.current
         if (!isInPreview) {
-            val context = LocalContext.current
-            // remember to enforce recomposition on route change
-            val mapView = remember { MapView(context) }
-
-            MapHelper.renderTreasures(context, treasures, mapView)
-            mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
-
-            AndroidView({ mapView }, Modifier.fillMaxSize())
-            MapHelper.positionMapOnTreasures(route, mapView, 400.0)
+            TreasureHunterMap(route.treasures, Style.OUTDOORS)
         }
     }
 }

@@ -7,8 +7,6 @@ TODO:
 - in TextEdit try KeyboradOptions -> KeyboardType and singleLine=True and maxLines=1
 - make all fields in states immutable
 - reduce code duplication in ComposeRoot
-- adjust screens titles to provide additional context
-- remove dead code
 - accept only alphanumeric-_ characters in the route name input
 - zastąpić ??.???? kółkiem progresu dla brakujących wspołrzędnych przy dodawaniu skarbu
 

@@ -46,4 +46,5 @@
     <string name="well_done">Gratulacje! Wszystkie skarby zostały odnalezione!</string>
     <string name="well_done_facebook">Możesz podzielić się tym osiągnięciem na</string>
     <string name="well_done_more">Chętny na więcej przygód? Wypróbuj</string>
+    <string name="error_on_exporting_map">Błąd eksportu mapy - raport nie będzie jej zawierał</string>
 </resources>
