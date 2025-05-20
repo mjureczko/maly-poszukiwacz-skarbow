@@ -106,13 +106,24 @@ class ReportMap(
         val padding = 50.0
         val locationHelper = LocationHelper(route.treasures)
         val cameraCoordinates = snapshotter.cameraForCoordinates(
-            listOf(locationHelper.northeast(), locationHelper.southwest()),
+            establishBoundingBoxCoordinates(locationHelper),
             EdgeInsets(padding, padding, padding, padding),
             0.0,
             0.0
         )
         snapshotter.setCamera(cameraCoordinates)
         return snapshotter
+    }
+
+    private fun establishBoundingBoxCoordinates(locationHelper: LocationHelper): List<Point> {
+        var ne = locationHelper.northeast()
+        var sw = locationHelper.southwest()
+        if (ne.coordinates() == sw.coordinates()) {
+            val marginForSingleTreasure = 0.005
+            ne = Point.fromLngLat(ne.longitude() + marginForSingleTreasure, ne.latitude() + marginForSingleTreasure)
+            sw = Point.fromLngLat(sw.longitude() - marginForSingleTreasure, sw.latitude() - marginForSingleTreasure)
+        }
+        return listOf(ne, sw)
     }
 
     private fun drawChests(resources: Resources, route: Route, snapshot: SnapshotOverlay, progress: TreasuresProgress) {

@@ -49,7 +49,7 @@ class ReportMapSummary(
     }
 
     private fun timeText(context: Context, hunterPath: HunterPath?): String {
-        val loc = Locale("en", "US")
+        val loc = Locale.getDefault()
         val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, loc)
         val dateFormat: DateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, loc)
 
