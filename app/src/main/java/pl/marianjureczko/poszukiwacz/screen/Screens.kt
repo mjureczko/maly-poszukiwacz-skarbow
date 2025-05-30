@@ -6,6 +6,10 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 
 object Screens {
 
+    object Main {
+        const val ROUTE = "map"
+    }
+
     object TreasureEditor {
         const val PARAMETER_ROUTE_NAME = "route_name"
         private const val PATH = "treasureeditor"
@@ -89,6 +93,5 @@ object Screens {
         const val ROUTE = "$PATH/{$PARAMETER_MODE}/{$PARAMETER_ROUTE_TO_SENT}"
 
         fun doRoute(mode: Mode, routeToSent: String) = "$PATH/$mode/$routeToSent"
-
     }
 }
