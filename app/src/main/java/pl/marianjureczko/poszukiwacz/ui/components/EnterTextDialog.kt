@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -26,10 +27,14 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
+
+private val allowedChars: Set<Char> = setOf(' ', '_', '-')
 
 @Composable
 fun EnterTextDialog(
@@ -57,10 +62,17 @@ fun EnterTextDialog(
                         .semantics {
                             contentDescription = textFieldDescription
                         },
+                    singleLine = true,
                     textStyle = MaterialTheme.typography.body1,
                     shape = RoundedCornerShape(0),
                     value = text.value,
-                    onValueChange = { text.value = it }
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    onValueChange = { input ->
+                        text.value = input.filter { it.isLetterOrDigit() || allowedChars.contains(it) }
+                    }
                 )
             }
         },
@@ -95,7 +107,7 @@ fun EnterTextDialog(
             try {
                 focusRequester.requestFocus()
             } catch (e: Exception) {
-                Log.e("EnterTextDialog", "Ignoring error, we can go on without focus: ${e.message}", )
+                Log.e("EnterTextDialog", "Ignoring error, we can go on without focus: ${e.message}")
             }
         }
         DisposableEffect(key1 = "on dispose") {
@@ -103,7 +115,7 @@ fun EnterTextDialog(
                 try {
                     focusManager.clearFocus()
                 } catch (e: Exception) {
-                    Log.e("EnterTextDialog", "Ignoring error, we can go on without clearing focus: ${e.message}", )
+                    Log.e("EnterTextDialog", "Ignoring error, we can go on without clearing focus: ${e.message}")
                 }
             }
         }
