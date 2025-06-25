@@ -8,11 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
+
+const val SHOW_MOVIE_BUTTON = "Show movie button"
 
 @Composable
 fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, goToResult: GoToResultWithTreasure) {
@@ -20,6 +24,7 @@ fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, g
         Image(
             painterResource(R.drawable.movie),
             modifier = Modifier
+                .semantics { contentDescription = SHOW_MOVIE_BUTTON }
                 .padding(2.dp)
                 .height(35.dp)
                 .clickable { goToResult(treasure.id) },

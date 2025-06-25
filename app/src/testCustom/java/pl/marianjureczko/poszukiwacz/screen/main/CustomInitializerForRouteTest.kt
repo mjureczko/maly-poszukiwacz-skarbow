@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.main
 
 import android.content.res.AssetManager
+import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -10,6 +11,7 @@ import org.mockito.BDDMockito.then
 import org.mockito.BDDMockito.times
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
+import pl.marianjureczko.poszukiwacz.BuildConfig
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
@@ -50,8 +52,35 @@ class CustomInitializerForRouteTest {
     }
 
     @Test
-    fun copyRouteToLocalStorage() {
+    fun shouldReportAlreadyCopied_whenMarkerContainsCurrentVersionCode() {
         //given
+        given(storage.getFileContent(CustomInitializerForRoute.markerFile)).willReturn(BuildConfig.VERSION_CODE.toString())
+        val initializer = CustomInitializerForRoute(storage, assetManager)
+
+        //when
+        val actual = initializer.isAlreadyCopied()
+
+        //then
+        assertThat(actual).isTrue()
+    }
+
+    @Test
+    fun shouldReportNotCopied_whenMarkerContainsRandomCode() {
+        //given
+        given(storage.getFileContent(CustomInitializerForRoute.markerFile)).willReturn(someString())
+        val initializer = CustomInitializerForRoute(storage, assetManager)
+
+        //when
+        val actual = initializer.isAlreadyCopied()
+
+        //then
+        assertThat(actual).isFalse()
+    }
+
+    @Test
+    fun shouldCopyRouteToLocalStorage_whenNoMarkerPresent() {
+        //given
+        given(storage.getFileContent(CustomInitializerForRoute.markerFile)).willCallRealMethod()
         given(storage.pathToRoutesDir()).willReturn(pathToDestination)
         given(storage.getRouteFile(CustomInitializerForRoute.routeName)).willReturn(File(destinationRoute))
         given(assetManager.open("${CustomInitializerForRoute.routeName}.xml"))

@@ -178,6 +178,16 @@ open class StorageHelper(val context: Context) {
 
     open fun fileNotEmpty(file: String?) = file?.let { File(it).length() > 0 } ?: false
 
+    fun getFileContent(fileName: String): String {
+        val file = File(pathToRoutesDir() + File.separator + fileName)
+        val result = if (file.exists()) {
+            file.readText(StandardCharsets.UTF_8)
+        } else {
+            ""
+        }
+        return result
+    }
+
     private fun extractFile(zipEntry: ZipEntry, actualZip: ZipInputStream, routesDir: String) {
         FileOutputStream("${routesDir}${zipEntry.name}").use {
             IOUtils.copy(actualZip, it)

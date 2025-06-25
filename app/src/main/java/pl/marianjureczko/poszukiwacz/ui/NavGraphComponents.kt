@@ -68,7 +68,7 @@ fun NavGraphBuilder.selector(
             navController,
             navBackStackEntry,
             onClickGuide,
-            goToResult = { },
+            goToResult = goToResultsFromSelector,
             goToCommemorative = goToCommemorative,
             onClickOnFacebook = goToFacebook
         )
