@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.main
 
 import android.content.res.AssetManager
+import pl.marianjureczko.poszukiwacz.BuildConfig
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import java.io.File
 import java.io.FileOutputStream
@@ -11,9 +12,13 @@ class CustomInitializerForRoute(
 ) {
     companion object {
         const val routeName = "custom"
+
+        //visibility for tests
+        const val markerFile = "copied_marker.txt"
+        private val currentVersion = BuildConfig.VERSION_CODE.toString()
     }
 
-    private val markerFile = "copied_marker.txt"
+
     private val pathToDestination = storageHelper.pathToRoutesDir() + File.separator
     fun copyRouteToLocalStorage() {
         if (!isAlreadyCopied()) {
@@ -24,7 +29,7 @@ class CustomInitializerForRoute(
     }
 
     fun isAlreadyCopied(): Boolean {
-        return File(pathToDestination + markerFile).exists()
+        return storageHelper.getFileContent(markerFile) == currentVersion
     }
 
     private fun copyRouteDefinition() {
@@ -51,7 +56,7 @@ class CustomInitializerForRoute(
     }
 
     private fun markIsCopied() {
-        File(pathToDestination + markerFile).createNewFile()
+        File(pathToDestination + markerFile).writeText(currentVersion)
     }
 
     private fun copy(assetFileName: String, outputFile: File): String {

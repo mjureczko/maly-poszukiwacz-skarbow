@@ -1,59 +1,63 @@
 1
-00:00:00,300 --> 00:00:03,900
-Have you heard about the Swedish Deluge?
+00:00:00,000 --> 00:00:03,000
+Do you know where Sweden is?
 
 2
-00:00:04,000 --> 00:00:05,900
-Despite what the name might suggest
+00:00:03,000 --> 00:00:06,000
+It's far away from here
 
 3
-00:00:06,000 --> 00:00:07,900
-it was a terrible war
+00:00:06,000 --> 00:00:09,000
+300 years ago, Sweden had strong soldiers
 
 4
-00:00:08,000 --> 00:00:10,900
-that took place nearly 400 years ago
+00:00:09,000 --> 00:00:14,000
+They were called cuirassiers — feared in all Europe
 
 5
-00:00:11,000 --> 00:00:12,900
-It claimed many victims
+00:00:14,000 --> 00:00:19,000
+Back then, there were no cars or planes
 
 6
-00:00:13,000 --> 00:00:14,900
-and the shrine visible here
+00:00:19,000 --> 00:00:23,000
+The cuirassiers came here during big wars
 
 7
-00:00:15,000 --> 00:00:16,900
-is intended to perpetuate their memory
+00:00:23,000 --> 00:00:26,000
+Like the Northern War and the Swedish Deluge
 
 8
-00:00:17,000 --> 00:00:18,900
-It is also worth mentioning
+00:00:26,000 --> 00:00:29,000
+Even earlier, they came in another war
 
 9
-00:00:19,000 --> 00:00:23,900
-that a town called Gorzowy was located somewhere in the fields here
+00:00:29,000 --> 00:00:32,000
+a very bloody one: the Thirty Years’ War
 
 10
-00:00:24,000 --> 00:00:25,900
-During the military operations
+00:00:32,000 --> 00:00:35,000
+Many people died back then.
 
 11
-00:00:26,000 --> 00:00:27,900
-it burned down completely
+00:00:35,000 --> 00:00:40,000
+This little chapel helps us remember them.
 
 12
-00:00:28,000 --> 00:00:29,900
-and now it is not certain
+00:00:40,000 --> 00:00:47,000
+There was a town here called Gorzowy.
 
 13
-00:00:30,000 --> 00:00:32,900
-where exactly the buildings were located
+00:00:47,000 --> 00:00:50,000
+It burned down
 
 14
-00:00:33,000 --> 00:00:35,900
-Maybe one of you will become an archaeologist one day
+00:00:50,000 --> 00:00:53,000
+during the fighting.
 
 15
-00:00:36,000 --> 00:00:38,900
-and will be able to find its trace
+00:00:53,000 --> 00:00:56,000
+Later, only ruins were found in the forest.
+
+16
+00:00:56,000 --> 00:01:00,000
+Maybe you’ll find more one day!

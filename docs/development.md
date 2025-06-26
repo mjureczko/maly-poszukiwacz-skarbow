@@ -141,6 +141,11 @@ $ ./gradlew testCustomDebugUnitTest
 ```
 The above line will execute tests from the "custom" flavors as well as from the "unflavoured" source set, i.e. src/test.
 
+For classic execute:
+
+```
+$ ./gradlew testClassicDebugUnitTest
+```
 
 # Source sets
 

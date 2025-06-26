@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 abstract class AbstractUITest {
 
+    /** For custom (e.g. Kalinowice) tests it is the not test storage */
     @Inject
     internal lateinit var injectableStorage: StorageHelper
     var storage: TestStoragePort? = null

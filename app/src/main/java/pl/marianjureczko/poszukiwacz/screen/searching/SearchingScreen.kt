@@ -68,6 +68,7 @@ import pl.marianjureczko.poszukiwacz.ui.isOnStack
 const val COMPASS = "Compass"
 const val STEPS_TO_TREASURE = "Steps to treasure"
 const val SCAN_TREASURE_BUTTON = "Scan treasure"
+const val CHANGE_TREASURE_BUTTON = "Change treasure"
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -279,6 +280,7 @@ private fun ChangeTreasureButton(goToTreasureSelector: () -> Unit) {
         painterResource(R.drawable.change_chest),
         modifier = Modifier
             .padding(10.dp)
+            .semantics { contentDescription = CHANGE_TREASURE_BUTTON }
             .clickable { goToTreasureSelector() },
         contentDescription = "Change treasure button",
         contentScale = ContentScale.Inside,
