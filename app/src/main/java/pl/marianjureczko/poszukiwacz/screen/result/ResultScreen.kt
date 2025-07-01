@@ -47,6 +47,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
@@ -71,8 +72,7 @@ fun ResultScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.treasure),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(sharedViewModel.getRouteName()) },
+                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(sharedViewModel.getRouteName()) }),
             )
         },
         content = { ResultScreenBody(sharedViewModel) }

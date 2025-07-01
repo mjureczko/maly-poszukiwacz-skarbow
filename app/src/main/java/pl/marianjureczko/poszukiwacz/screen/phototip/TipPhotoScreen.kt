@@ -25,6 +25,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -41,8 +42,8 @@ fun TipPhotoScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.photo_tip),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(state.routeName) })
+                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(state.routeName) })
+            )
         },
         content = { TipPhotoScreenBody(state) }
     )

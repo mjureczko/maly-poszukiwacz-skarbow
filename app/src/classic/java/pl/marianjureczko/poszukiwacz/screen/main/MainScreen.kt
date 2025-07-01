@@ -12,6 +12,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToBluetooth
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 
@@ -34,8 +35,7 @@ fun MainScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.app_name),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook("") },
+                menuConfig = MenuConfig(onClickOnGuide),
             )
         },
         content = { _ -> MainScreenBody(goToBluetooth, goToTreasureEditor, goToSearching) }

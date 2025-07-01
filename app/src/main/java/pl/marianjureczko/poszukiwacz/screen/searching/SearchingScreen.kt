@@ -61,6 +61,7 @@ import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
@@ -91,7 +92,13 @@ fun SearchingScreen(
     val title = "${stringResource(R.string.treasure)} $selectedTreasureDescriptionId"
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, title, onClickOnGuide, { goToFacebook(state.route.name) }) },
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = title,
+                menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(state.route.name) })
+            )
+        },
         content = {
             SearchingScreenBody(
                 navController = navController,

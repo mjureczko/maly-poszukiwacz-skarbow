@@ -45,6 +45,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
@@ -67,8 +68,8 @@ fun CommemorativeScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.app_name),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { goToFacebook(sharedState.route.name) })
+                menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(sharedState.route.name) }),
+            )
         },
         content = { CommemorativeScreenBody(sharedViewModel, sharedState) }
     )

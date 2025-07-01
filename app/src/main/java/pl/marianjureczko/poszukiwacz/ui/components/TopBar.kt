@@ -36,8 +36,21 @@ import pl.marianjureczko.poszukiwacz.R
 const val TOPBAR_SCREEN_TITLE = "Screen title"
 const val TOPBAR_GO_BACK = "Go back"
 
+/**
+ * Do not show entries for onClickHandlers that are null.
+ */
+data class MenuConfig(
+    val onClickOnGuide: (() -> Unit)?,
+    val onClickOnFacebook: (() -> Unit)? = null,
+    val onClickOnRestart: (() -> Unit)? = null
+)
+
 @Composable
-fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
+fun TopBar(
+    navController: NavController,
+    title: String,
+    menuConfig: MenuConfig
+) {
     val showMenu = remember { mutableStateOf(false) }
     TopAppBar(
         navigationIcon = {
@@ -58,8 +71,15 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
                     expanded = showMenu.value,
                     onDismissRequest = { showMenu.value = false }
                 ) {
-                    MenuEntry(R.drawable.question_mark, R.string.menu_help, onClickOnGuide)
-                    MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClickOnFacebook)
+                    menuConfig.onClickOnGuide?.let {
+                        MenuEntry(R.drawable.question_mark, R.string.menu_help, it)
+                    }
+                    menuConfig.onClickOnFacebook?.let {
+                        MenuEntry(R.drawable.facebook, R.string.menu_facebook, it)
+                    }
+                    menuConfig.onClickOnRestart?.let {
+                        MenuEntry(R.drawable.restart, R.string.menu_facebook, it)
+                    }
                 }
             }
         },

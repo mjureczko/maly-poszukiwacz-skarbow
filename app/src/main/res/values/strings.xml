@@ -16,6 +16,7 @@
     <string name="map_activity_title">Treasures map</string>
     <string name="menu_help">Guide</string>
     <string name="menu_facebook">Share on Facebook</string>
+    <string name="menu_restart">Restart route</string>
     <string name="facebook_app_id" translatable="false">732722584920929</string>
     <string name="title_activity_facebook">Share on Facebook</string>
     <string name="facebook_screen_subheader">Select elements to share</string>

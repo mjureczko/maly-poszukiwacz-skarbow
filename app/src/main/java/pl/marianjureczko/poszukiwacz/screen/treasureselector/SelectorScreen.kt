@@ -51,6 +51,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.OkDialog
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
@@ -82,8 +83,7 @@ fun SelectorScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.select_treasure_dialog_title),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(sharedState.route.name) }
+                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(sharedState.route.name) })
             )
         },
         content = {

@@ -10,6 +10,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.MapHelper.DEFAULT_STYLE
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.TreasureHunterMap
 
@@ -27,8 +28,7 @@ fun MapScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.map_activity_title),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(state.route.name) },
+                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(state.route.name) }),
             )
         },
         content = { MapScreenBody(state) }
