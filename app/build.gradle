@@ -7,13 +7,12 @@ plugins {
     id 'dagger.hilt.android.plugin'
 }
 
-//TODO t: update targetSdkVersion to 35
 android {
-    compileSdkVersion 34
+    compileSdk 35
     defaultConfig {
         applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 23
-        targetSdkVersion 34
+        targetSdkVersion 35
         versionCode 15
         versionName "2.4.6"
         testInstrumentationRunner "pl.marianjureczko.poszukiwacz.CustomTestRunner"
