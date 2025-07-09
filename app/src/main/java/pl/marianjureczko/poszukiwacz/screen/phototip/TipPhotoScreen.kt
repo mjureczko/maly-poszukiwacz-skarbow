@@ -30,8 +30,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
-import pl.marianjureczko.poszukiwacz.ui.getViewModel
-import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
+import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -43,7 +42,7 @@ fun TipPhotoScreen(
 ) {
     val viewModel: TipPhotoViewModel = hiltViewModel()
     val state: TipPhotoState = viewModel.state.value
-    val shared: RestarterSharedViewModel = getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val shared: RestarterSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val restarter = ViewModelProgressRestarter { shared.restartProgress() }
     Scaffold(
         topBar = {

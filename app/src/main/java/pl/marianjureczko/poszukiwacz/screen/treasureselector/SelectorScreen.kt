@@ -54,9 +54,8 @@ import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.OkDialog
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
-import pl.marianjureczko.poszukiwacz.ui.getViewModel
+import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
-import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 import pl.marianjureczko.poszukiwacz.ui.theme.Typography
@@ -75,8 +74,7 @@ fun SelectorScreen(
     val cameraPermission: PermissionState =
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val sharedViewModel: SelectorSharedViewModel =
-        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val sharedViewModel: SelectorSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val sharedState: SelectorSharedState = sharedViewModel.state.value
     val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
     Scaffold(

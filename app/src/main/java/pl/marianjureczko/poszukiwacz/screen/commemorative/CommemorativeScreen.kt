@@ -46,9 +46,8 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
-import pl.marianjureczko.poszukiwacz.ui.getViewModel
+import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
-import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -59,8 +58,7 @@ fun CommemorativeScreen(
     goToFacebook: GoToFacebook,
 ) {
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val sharedViewModel: CommemorativeSharedViewModel =
-        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val sharedViewModel: CommemorativeSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val sharedState = sharedViewModel.state.value as CommemorativeSharedState
     Scaffold(
         scaffoldState = scaffoldState,

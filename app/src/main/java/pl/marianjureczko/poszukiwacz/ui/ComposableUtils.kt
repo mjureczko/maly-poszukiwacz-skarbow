@@ -9,13 +9,24 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedViewModel
 
+/**
+ * Retrieves the `SharedViewModel` instance originally created for the searching screen.
+ *
+ * This function traverses the navigation stack to find the `NavBackStackEntry`
+ * associated with the searching screen (`Screens.Searching.ROUTE`), so that
+ * the shared ViewModel is always tied to the searching screen, regardless of
+ * the current screen in the navigation flow.
+ */
 @Composable
-inline fun <reified T : SharedViewModel> getViewModel(viewModelStoreOwner: ViewModelStoreOwner): T {
+inline fun <reified T : SharedViewModel> getSharedViewModel(
+    navBackStackEntry: NavBackStackEntry,
+    navController: NavController
+): T {
+    val viewModelStoreOwner: ViewModelStoreOwner = shareViewModelStoreOwner(navBackStackEntry, navController)
     val sharedViewModel: SharedViewModel = hiltViewModel(viewModelStoreOwner)
     return sharedViewModel as T
 }
 
-//TODO t: use in getViewModel to make the calls from screens simpler
 @Composable
 fun shareViewModelStoreOwner(navBackStackEntry: NavBackStackEntry, navController: NavController): NavBackStackEntry {
     //https://stackoverflow.com/a/72336036/8471555

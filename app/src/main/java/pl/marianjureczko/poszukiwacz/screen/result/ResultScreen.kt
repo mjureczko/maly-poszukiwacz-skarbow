@@ -49,8 +49,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
-import pl.marianjureczko.poszukiwacz.ui.getViewModel
-import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
+import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 const val PLAY_MOVIE_BUTTON = "Play the movie"
@@ -66,8 +65,7 @@ fun ResultScreen(
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook
 ) {
-    val sharedViewModel: ResultSharedViewModel =
-        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val sharedViewModel: ResultSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
     Scaffold(
         topBar = {
