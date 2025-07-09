@@ -6,6 +6,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.somePositiveInt
 import com.ocadotechnology.gembus.test.someString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,14 +25,17 @@ import org.mockito.BDDMockito.times
 import org.mockito.Mockito.mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.atLeastOnce
 import pl.marianjureczko.poszukiwacz.any
 import pl.marianjureczko.poszukiwacz.eq
 import pl.marianjureczko.poszukiwacz.model.HunterLocation
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+
 
 @ExtendWith(MockitoExtension::class)
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -39,6 +43,79 @@ class SharedViewModelTest {
 
     private val dispatcher: TestDispatcher = StandardTestDispatcher()
     private val scope = TestScope(dispatcher)
+
+    @Test
+    fun `SHOULD remove commemorative photos WHEN restarting progress`() {
+        //given
+        val fixture = SharedViewModelFixture(dispatcher/*, storage = storage*/)
+        val progress = some<TreasuresProgress>().apply {
+            routeName = fixture.routeName
+        }
+        val viewModel = fixture.givenMocksForProgress(progress)
+
+        //when
+        viewModel.restartProgress()
+
+        //then
+        progress.commemorativePhotosByTreasuresDescriptionIds.values.forEach {
+            then(fixture.storage).should(times(1)).removeFile(it)
+        }
+        assertThat(viewModel.state.value.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds).isEmpty()
+        assertThat(viewModel.state.value.treasuresProgress.selectedTreasureDescriptionId).isEqualTo(progress.selectedTreasureDescriptionId)
+        assertThat(viewModel.state.value.treasuresProgress.routeName).isEqualTo(fixture.routeName)
+    }
+
+    @Test
+    fun `SHOULD remove data from progress and persist it WHEN restarting progress`() {
+        // given
+        val fixture = SharedViewModelFixture(dispatcher)
+        val progress = some<TreasuresProgress>().apply {
+            routeName = fixture.routeName
+        }
+        val viewModel = fixture.givenMocksForProgress(progress)
+
+        // when
+        viewModel.restartProgress()
+
+        // then
+        val updatedProgress = viewModel.state.value.treasuresProgress
+        assertThat(updatedProgress.justFoundTreasureId).isNull()
+        assertThat(updatedProgress.resultRequiresPresentation).isFalse()
+        assertThat(updatedProgress.treasureFoundGoToSelector).isFalse()
+        assertThat(updatedProgress.collectedQrCodes).isEmpty()
+        assertThat(updatedProgress.collectedTreasuresDescriptionId).isEmpty()
+        assertThat(updatedProgress.knowledge).isEqualTo(0)
+        assertThat(updatedProgress.golds).isEqualTo(0)
+        assertThat(updatedProgress.rubies).isEqualTo(0)
+        assertThat(updatedProgress.diamonds).isEqualTo(0)
+        assertThat(updatedProgress.routeName).isEqualTo(progress.routeName)
+        assertThat(updatedProgress.selectedTreasureDescriptionId).isEqualTo(progress.selectedTreasureDescriptionId)
+        then(fixture.storage).should(times(1)).save(updatedProgress)
+    }
+
+    @Test
+    fun `SHOULD remove data from hunterPath and persist it WHEN restarting progress`() {
+        // given
+        val fixture = SharedViewModelFixture(dispatcher)
+        val progress = some<TreasuresProgress>().apply {
+            routeName = fixture.routeName
+        }
+        val viewModel = fixture.givenMocksForProgress(progress)
+
+        // when
+        viewModel.restartProgress()
+
+        //then
+        val emptyHunterPath = HunterPath(fixture.routeName)
+        assertThat(viewModel.state.value.hunterPath)
+            .usingRecursiveComparison()
+            .isEqualTo(emptyHunterPath)
+        val captor = argumentCaptor<HunterPath>()
+        then(fixture.storage).should(atLeastOnce()).save(captor.capture())
+        assertThat(captor.lastValue)
+            .usingRecursiveComparison()
+            .isEqualTo(emptyHunterPath)
+    }
 
     @Test
     fun `SHOULD update location`() = scope.runTest {
@@ -91,7 +168,7 @@ class SharedViewModelTest {
 
         //when
         var wasCalled = false
-        val callback = viewModel.scannedTreasureCallback {_ : String, _: ResultType, _: Int?, _: Int? ->
+        val callback = viewModel.scannedTreasureCallback { _: String, _: ResultType, _: Int?, _: Int? ->
             wasCalled = true
         }
         callback(qrResult)

@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.ui.components
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -42,8 +44,12 @@ const val TOPBAR_GO_BACK = "Go back"
 data class MenuConfig(
     val onClickOnGuide: (() -> Unit)?,
     val onClickOnFacebook: (() -> Unit)? = null,
-    val onClickOnRestart: (() -> Unit)? = null
+    val onClickOnRestart: (ViewModelProgressRestarter)? = null
 )
+
+fun interface ViewModelProgressRestarter {
+    operator fun invoke()
+}
 
 @Composable
 fun TopBar(
@@ -52,6 +58,7 @@ fun TopBar(
     menuConfig: MenuConfig
 ) {
     val showMenu = remember { mutableStateOf(false) }
+    val context = LocalContext.current
     TopAppBar(
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
@@ -63,6 +70,16 @@ fun TopBar(
             }
         },
         actions = {
+            val showRestartDialog = remember { mutableStateOf(false) }
+            YesNoDialog(
+                showRestartDialog.value,
+                hideIt = { showRestartDialog.value = false },
+                title = R.string.restart_msg,
+            ) {
+                showRestartDialog.value = false
+                menuConfig.onClickOnRestart!!()
+                Toast.makeText(context, R.string.restart_confirmation, Toast.LENGTH_LONG).show()
+            }
             IconButton(onClick = { showMenu.value = !showMenu.value }) {
                 Icon(imageVector = Icons.Filled.Menu, contentDescription = null, tint = Color.White)
             }
@@ -77,8 +94,11 @@ fun TopBar(
                     menuConfig.onClickOnFacebook?.let {
                         MenuEntry(R.drawable.facebook, R.string.menu_facebook, it)
                     }
-                    menuConfig.onClickOnRestart?.let {
-                        MenuEntry(R.drawable.restart, R.string.menu_facebook, it)
+                    menuConfig.onClickOnRestart?.let { _ ->
+                        MenuEntry(R.drawable.restart, R.string.menu_restart) {
+                            showMenu.value = false
+                            showRestartDialog.value = true
+                        }
                     }
                 }
             }

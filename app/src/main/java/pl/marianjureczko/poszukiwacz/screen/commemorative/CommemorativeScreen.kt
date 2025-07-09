@@ -40,13 +40,13 @@ import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorati
 import pl.marianjureczko.poszukiwacz.screen.searching.CommemorativeSharedState
 import pl.marianjureczko.poszukiwacz.screen.searching.CommemorativeSharedViewModel
 import pl.marianjureczko.poszukiwacz.screen.searching.DoCommemorative
-import pl.marianjureczko.poszukiwacz.screen.searching.SharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.getViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 
@@ -154,11 +154,4 @@ private fun DoPhotoButton(
             .clickable { doPhoto() },
         contentScale = ContentScale.Inside
     )
-}
-
-//TODO: learn more about sharing view model
-@Composable
-private fun getViewModel(viewModelStoreOwner: NavBackStackEntry): CommemorativeSharedViewModel {
-    val viewModelDoNotInline: SharedViewModel = hiltViewModel(viewModelStoreOwner)
-    return viewModelDoNotInline
 }

@@ -63,6 +63,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
 import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
 
@@ -90,13 +91,15 @@ fun SearchingScreen(
     val state = viewModel.state.value
     val selectedTreasureDescriptionId = state.treasuresProgress.selectedTreasureDescriptionId
     val title = "${stringResource(R.string.treasure)} $selectedTreasureDescriptionId"
+    val restarter = ViewModelProgressRestarter { viewModel.restartProgress() }
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
                 title = title,
-                menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(state.route.name) })
+                menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(state.route.name) }, restarter)
             )
         },
         content = {
