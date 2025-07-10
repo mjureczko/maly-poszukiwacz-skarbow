@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz
+package pl.marianjureczko.poszukiwacz.screen.searching
 
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertTextEquals
@@ -9,11 +9,10 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
+import pl.marianjureczko.poszukiwacz.TestPortsModule
+import pl.marianjureczko.poszukiwacz.UiTest
 import pl.marianjureczko.poszukiwacz.screen.result.DO_NOT_SHOW_TREASURE_MSG
 import pl.marianjureczko.poszukiwacz.screen.result.PLAY_MOVIE_BUTTON
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.screen.searching.SCAN_TREASURE_BUTTON
-import pl.marianjureczko.poszukiwacz.screen.searching.STEPS_TO_TREASURE
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.TREASURE_COLLECTED_CHECKBOX
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 

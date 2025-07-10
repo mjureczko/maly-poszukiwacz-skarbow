@@ -159,7 +159,6 @@ private fun SearchingScreenBody(
                     .align(Alignment.TopEnd)
                     .padding(15.dp),
                 treasureDescriptionId = selectedTreasureDescriptionId,
-                //TODO t: check if refreshing icon works on creating commemorative photo
                 updateImageRefresh = {}
             )
             Column {

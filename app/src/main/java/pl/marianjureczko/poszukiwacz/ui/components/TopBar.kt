@@ -37,6 +37,8 @@ import pl.marianjureczko.poszukiwacz.R
 
 const val TOPBAR_SCREEN_TITLE = "Screen title"
 const val TOPBAR_GO_BACK = "Go back"
+const val TOPBAR_MENU_BUTTON = "Open menu"
+const val TOPBAR_MENU_RESTART = "Restart menu entry"
 
 /**
  * Do not show entries for onClickHandlers that are null.
@@ -80,7 +82,10 @@ fun TopBar(
                 menuConfig.onClickOnRestart!!()
                 Toast.makeText(context, R.string.restart_confirmation, Toast.LENGTH_LONG).show()
             }
-            IconButton(onClick = { showMenu.value = !showMenu.value }) {
+            IconButton(
+                onClick = { showMenu.value = !showMenu.value },
+                modifier = Modifier.semantics { contentDescription = TOPBAR_MENU_BUTTON }
+            ) {
                 Icon(imageVector = Icons.Filled.Menu, contentDescription = null, tint = Color.White)
             }
             MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(0.dp))) {
@@ -89,13 +94,17 @@ fun TopBar(
                     onDismissRequest = { showMenu.value = false }
                 ) {
                     menuConfig.onClickOnGuide?.let {
-                        MenuEntry(R.drawable.question_mark, R.string.menu_help, it)
+                        MenuEntry(R.drawable.question_mark, R.string.menu_help, onClick = it)
                     }
                     menuConfig.onClickOnFacebook?.let {
-                        MenuEntry(R.drawable.facebook, R.string.menu_facebook, it)
+                        MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClick = it)
                     }
                     menuConfig.onClickOnRestart?.let { _ ->
-                        MenuEntry(R.drawable.restart, R.string.menu_restart) {
+                        MenuEntry(
+                            R.drawable.restart,
+                            R.string.menu_restart,
+                            modifier = Modifier.semantics { contentDescription = TOPBAR_MENU_RESTART }
+                        ) {
                             showMenu.value = false
                             showRestartDialog.value = true
                         }

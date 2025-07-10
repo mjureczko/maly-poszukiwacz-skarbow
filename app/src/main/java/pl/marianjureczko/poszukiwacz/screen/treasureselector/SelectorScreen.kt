@@ -263,7 +263,6 @@ fun TreasureItem(
                 { treasureDescriptionId -> goToCommemorative(treasureDescriptionId, photo) },
                 sharedViewModel,
                 treasureDescriptionId = treasureDescription.id,
-                //TODO t: check if refresh works
                 updateImageRefresh = {},
             )
         }
