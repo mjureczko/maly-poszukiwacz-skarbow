@@ -61,7 +61,9 @@ import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
 
@@ -89,9 +91,17 @@ fun SearchingScreen(
     val state = viewModel.state.value
     val selectedTreasureDescriptionId = state.treasuresProgress.selectedTreasureDescriptionId
     val title = "${stringResource(R.string.treasure)} $selectedTreasureDescriptionId"
+    val restarter = ViewModelProgressRestarter { viewModel.restartProgress() }
+
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, title, onClickOnGuide, { goToFacebook(state.route.name) }) },
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = title,
+                menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(state.route.name) }, restarter)
+            )
+        },
         content = {
             SearchingScreenBody(
                 navController = navController,
@@ -149,7 +159,6 @@ private fun SearchingScreenBody(
                     .align(Alignment.TopEnd)
                     .padding(15.dp),
                 treasureDescriptionId = selectedTreasureDescriptionId,
-                //TODO t: check if refreshing icon works on creating commemorative photo
                 updateImageRefresh = {}
             )
             Column {

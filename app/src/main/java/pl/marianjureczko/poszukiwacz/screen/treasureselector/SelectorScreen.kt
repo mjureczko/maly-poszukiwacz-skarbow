@@ -44,17 +44,18 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedViewModel
-import pl.marianjureczko.poszukiwacz.screen.searching.SharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.OkDialog
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
+import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
-import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 import pl.marianjureczko.poszukiwacz.ui.theme.Typography
@@ -73,17 +74,16 @@ fun SelectorScreen(
     val cameraPermission: PermissionState =
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
     val scaffoldState: ScaffoldState = rememberScaffoldState()
-    val sharedViewModel: SelectorSharedViewModel =
-        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val sharedViewModel: SelectorSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val sharedState: SelectorSharedState = sharedViewModel.state.value
+    val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.select_treasure_dialog_title),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(sharedState.route.name) }
+                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(sharedState.route.name) }, restarter)
             )
         },
         content = {
@@ -263,17 +263,10 @@ fun TreasureItem(
                 { treasureDescriptionId -> goToCommemorative(treasureDescriptionId, photo) },
                 sharedViewModel,
                 treasureDescriptionId = treasureDescription.id,
-                //TODO t: check if refresh works
                 updateImageRefresh = {},
             )
         }
     }
-}
-
-@Composable
-private fun getViewModel(viewModelStoreOwner: NavBackStackEntry): SelectorSharedViewModel {
-    val viewModelDoNotInline: SharedViewModel = hiltViewModel(viewModelStoreOwner)
-    return viewModelDoNotInline
 }
 
 //@Preview(showBackground = true, apiLevel = 31)

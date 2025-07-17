@@ -15,8 +15,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MenuEntry(drawableId: Int, textId: Int, onClick: () -> Unit) {
-    DropdownMenuItem(onClick = onClick) {
+fun MenuEntry(
+    drawableId: Int,
+    textId: Int,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    DropdownMenuItem(
+        onClick = onClick,
+        modifier = modifier
+    ) {
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,

@@ -24,8 +24,8 @@ import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.ui.PermissionsHandler
-import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
-import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
+import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRouteUC
+import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRouteUC
 import java.io.FileNotFoundException
 import javax.inject.Inject
 
@@ -44,8 +44,8 @@ class TreasureEditorViewModel @Inject constructor(
     private val locationPort: LocationPort,
     private val cameraPort: CameraPort,
     private val photoHelper: PhotoHelper,
-    private val addTreasureUseCase: AddTreasureDescriptionToRoute,
-    private val removeTreasureDescriptionFromRoute: RemoveTreasureDescriptionFromRoute
+    private val addTreasureUseCase: AddTreasureDescriptionToRouteUC,
+    private val removeTreasureDescriptionFromRouteUC: RemoveTreasureDescriptionFromRouteUC
 ) : ViewModel(), GetDoTipPhoto {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<TreasureEditorState> = mutableStateOf(createState())
@@ -78,7 +78,7 @@ class TreasureEditorViewModel @Inject constructor(
     }
 
     fun removeTreasure(treasureDescriptionId: Int) {
-        val updatedRoute = removeTreasureDescriptionFromRoute(state.value.route, treasureDescriptionId)
+        val updatedRoute = removeTreasureDescriptionFromRouteUC(state.value.route, treasureDescriptionId)
         _state.value = state.value.copy(route = updatedRoute)
     }
 

@@ -20,29 +20,37 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.screen.searching.RestarterSharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
+import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TipPhotoScreen(
     navController: NavController,
+    navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook
 ) {
     val viewModel: TipPhotoViewModel = hiltViewModel()
     val state: TipPhotoState = viewModel.state.value
+    val shared: RestarterSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
+    val restarter = ViewModelProgressRestarter { shared.restartProgress() }
     Scaffold(
         topBar = {
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.photo_tip),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(state.routeName) })
+                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(state.routeName) }, restarter)
+            )
         },
         content = { TipPhotoScreenBody(state) }
     )

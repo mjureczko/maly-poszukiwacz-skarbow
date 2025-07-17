@@ -11,6 +11,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 
@@ -32,8 +33,7 @@ fun MainScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.app_name),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(CustomInitializerForRoute.routeName) },
+                menuConfig = MenuConfig(onClickOnGuide),
             )
         },
         content = { _ -> MainScreenBody(goToSearching) }

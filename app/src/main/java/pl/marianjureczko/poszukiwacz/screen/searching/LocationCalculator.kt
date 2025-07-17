@@ -8,7 +8,7 @@ import pl.marianjureczko.poszukiwacz.shared.Coordinates
 class LocationCalculator {
 
     companion object {
-        const val METERS_TOS_STEP_FACTOR = 1.8
+        const val METERS_TO_STEPS_FACTOR = 1.8
     }
 
     fun distanceInKm(start: HunterLocation, end: HunterLocation): Double {
@@ -29,7 +29,7 @@ class LocationCalculator {
     }
 
     private fun calculateDistanceInSteps(userLocation: Location, treasureLocation: Location) =
-        (METERS_TOS_STEP_FACTOR * userLocation.distanceTo(treasureLocation)).toInt()
+        (METERS_TO_STEPS_FACTOR * userLocation.distanceTo(treasureLocation)).toInt()
 
     private fun coordinatesToLocation(coordinates: Coordinates): Location {
         val treasureLocation = Location("")

@@ -102,9 +102,10 @@ fun NavGraphBuilder.tipPhoto(
             navArgument(Screens.TipPhoto.PARAMETER_TIP_PHOTO) { type = NavType.StringType },
             navArgument(Screens.TipPhoto.PARAMETER_ROUTE_NAME) { type = NavType.StringType },
         )
-    ) {
+    ) { navBackStackEntry ->
         TipPhotoScreen(
             navController = navController,
+            navBackStackEntry = navBackStackEntry,
             onClickOnGuide = onClickGuide,
             onClickOnFacebook = goToFacebook
         )
@@ -119,9 +120,10 @@ fun NavGraphBuilder.map(
     composable(
         route = Screens.Map.ROUTE,
         arguments = listOf(navArgument(Screens.Map.PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
-    ) {
+    ) { navBackStackEntry ->
         MapScreen(
             navController = navController,
+            navBackStackEntry = navBackStackEntry,
             onClickOnGuide = onClickGuide,
             onClickOnFacebook = goToFacebook
         )

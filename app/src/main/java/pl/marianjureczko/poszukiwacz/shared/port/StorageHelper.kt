@@ -19,6 +19,7 @@ interface ExtractionProgress {
     fun fileExtracted(fileName: String)
 }
 
+//TODO: rename to StoragePort
 open class StorageHelper(val context: Context) {
 
     private val TAG = javaClass.simpleName
@@ -154,11 +155,15 @@ open class StorageHelper(val context: Context) {
 
     open fun removeTipFiles(treasureDescription: TreasureDescription) {
         if (treasureDescription.tipFileName != null) {
-            File(treasureDescription.tipFileName!!).delete()
+            removeFile(treasureDescription.tipFileName!!)
         }
         if (treasureDescription.hasPhoto()) {
-            File(treasureDescription.photoFileName!!).delete()
+            removeFile(treasureDescription.photoFileName!!)
         }
+    }
+
+    fun removeFile(fileAbsolutePath: String) {
+        File(fileAbsolutePath).delete()
     }
 
     open fun removeRouteByName(name: String) {

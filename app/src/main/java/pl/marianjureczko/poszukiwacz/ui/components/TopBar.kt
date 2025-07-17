@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.ui.components
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -35,10 +37,30 @@ import pl.marianjureczko.poszukiwacz.R
 
 const val TOPBAR_SCREEN_TITLE = "Screen title"
 const val TOPBAR_GO_BACK = "Go back"
+const val TOPBAR_MENU_BUTTON = "Open menu"
+const val TOPBAR_MENU_RESTART = "Restart menu entry"
+
+/**
+ * Do not show entries for onClickHandlers that are null.
+ */
+data class MenuConfig(
+    val onClickOnGuide: (() -> Unit)?,
+    val onClickOnFacebook: (() -> Unit)? = null,
+    val onClickOnRestart: (ViewModelProgressRestarter)? = null
+)
+
+fun interface ViewModelProgressRestarter {
+    operator fun invoke()
+}
 
 @Composable
-fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Unit, onClickOnFacebook: () -> Unit) {
+fun TopBar(
+    navController: NavController,
+    title: String,
+    menuConfig: MenuConfig
+) {
     val showMenu = remember { mutableStateOf(false) }
+    val context = LocalContext.current
     TopAppBar(
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
@@ -50,7 +72,20 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
             }
         },
         actions = {
-            IconButton(onClick = { showMenu.value = !showMenu.value }) {
+            val showRestartDialog = remember { mutableStateOf(false) }
+            YesNoDialog(
+                showRestartDialog.value,
+                hideIt = { showRestartDialog.value = false },
+                title = R.string.restart_msg,
+            ) {
+                showRestartDialog.value = false
+                menuConfig.onClickOnRestart!!()
+                Toast.makeText(context, R.string.restart_confirmation, Toast.LENGTH_LONG).show()
+            }
+            IconButton(
+                onClick = { showMenu.value = !showMenu.value },
+                modifier = Modifier.semantics { contentDescription = TOPBAR_MENU_BUTTON }
+            ) {
                 Icon(imageVector = Icons.Filled.Menu, contentDescription = null, tint = Color.White)
             }
             MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(0.dp))) {
@@ -58,8 +93,22 @@ fun TopBar(navController: NavController, title: String, onClickOnGuide: () -> Un
                     expanded = showMenu.value,
                     onDismissRequest = { showMenu.value = false }
                 ) {
-                    MenuEntry(R.drawable.question_mark, R.string.menu_help, onClickOnGuide)
-                    MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClickOnFacebook)
+                    menuConfig.onClickOnGuide?.let {
+                        MenuEntry(R.drawable.question_mark, R.string.menu_help, onClick = it)
+                    }
+                    menuConfig.onClickOnFacebook?.let {
+                        MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClick = it)
+                    }
+                    menuConfig.onClickOnRestart?.let { _ ->
+                        MenuEntry(
+                            R.drawable.restart,
+                            R.string.menu_restart,
+                            modifier = Modifier.semantics { contentDescription = TOPBAR_MENU_RESTART }
+                        ) {
+                            showMenu.value = false
+                            showRestartDialog.value = true
+                        }
+                    }
                 }
             }
         },

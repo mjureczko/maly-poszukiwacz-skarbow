@@ -12,10 +12,10 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteContainsTreasureWith
 
-class AddTreasureDescriptionToRouteTest {
+class AddTreasureDescriptionToRouteUCTest {
 
     private val storage = TestStoragePort(mock<Context>())
-    private val useCase = AddTreasureDescriptionToRoute(storage)
+    private val useCase = AddTreasureDescriptionToRouteUC(storage)
     private val coordinates = some<Coordinates>()
 
     @Test

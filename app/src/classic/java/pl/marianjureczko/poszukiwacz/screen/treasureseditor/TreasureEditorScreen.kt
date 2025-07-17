@@ -14,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingTipPhoto
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForRecordingSound
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isPermissionGranted
@@ -42,8 +43,7 @@ fun TreasureEditorScreen(
             TopBar(
                 navController = navController,
                 title = "${stringResource(id = R.string.route)} ${state.route.name}",
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook("") },
+                menuConfig = MenuConfig(onClickOnGuide),
             )
         },
         content = { _ ->

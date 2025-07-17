@@ -12,10 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
+
+val KNOWLEDGE_SCORE_TEXT = "Knowledge score"
 
 @Composable
 fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
@@ -36,7 +40,9 @@ fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
             color = Color.Gray,
             text = score.knowledge.toString(),
             fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize,
-            modifier = Modifier.padding(end = 5.dp)
+            modifier = Modifier
+                .padding(end = 5.dp)
+                .semantics { contentDescription = KNOWLEDGE_SCORE_TEXT }
         )
     }
 

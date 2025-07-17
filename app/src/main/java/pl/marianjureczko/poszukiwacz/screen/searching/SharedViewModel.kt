@@ -33,14 +33,20 @@ import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import javax.inject.Inject
 
-interface DoCommemorative {
+interface RestarterSharedViewModel {
+    fun restartProgress()
+}
+
+interface DoCommemorative : RestarterSharedViewModel {
     @Composable
     fun getDoPhoto(cameraPermissionGranted: Boolean, treasureDesId: Int, refreshOnSuccess: () -> Unit): DoPhoto
 }
 
 interface ResultSharedViewModel {
+    fun restartProgress()
     fun resultPresented()
     fun getRouteName(): String
 }
@@ -65,13 +71,14 @@ interface CommemorativeSharedViewModel : DoCommemorative {
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    private val storageHelper: StorageHelper,
+    private val storage: StorageHelper,
     private val locationPort: LocationPort,
     private val locationCalculator: LocationCalculator,
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
     private val cameraPort: CameraPort,
     override val qrScannerPort: QrScannerPort,
+    private val resetProgressUC: ResetProgressUC,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
@@ -87,6 +94,10 @@ class SharedViewModel @Inject constructor(
 
     override val state: State<SharedState>
         get() = _state
+
+    override fun restartProgress() {
+        resetProgressUC(_state)
+    }
 
     override fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback {
         return { scanedContent ->
@@ -140,7 +151,7 @@ class SharedViewModel @Inject constructor(
             justFoundTreasureId = foundTd?.id,
             treasureFoundGoToSelector = true
         )
-        storageHelper.save(result)
+        storage.save(result)
         return result
     }
 
@@ -151,7 +162,7 @@ class SharedViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     treasuresProgress = state.value.treasuresProgress.copy(resultRequiresPresentation = false)
                 )
-                storageHelper.save(_state.value.treasuresProgress)
+                storage.save(_state.value.treasuresProgress)
             }
         }
     }
@@ -163,13 +174,13 @@ class SharedViewModel @Inject constructor(
     override fun updateJustFoundFromSelector() {
         if (state.value.treasuresProgress.justFoundTreasureId != null) {
             state.value.treasuresProgress.justFoundTreasureId = null
-            storageHelper.save(state.value.treasuresProgress)
+            storage.save(state.value.treasuresProgress)
         }
     }
 
     override fun selectorPresented() {
         state.value.treasuresProgress.treasureFoundGoToSelector = false
-        storageHelper.save(state.value.treasuresProgress)
+        storage.save(state.value.treasuresProgress)
     }
 
     override fun updateSelectedTreasure(td: TreasureDescription) {
@@ -184,7 +195,7 @@ class SharedViewModel @Inject constructor(
         _state.value = state.value.copy(
             treasuresProgress = state.value.treasuresProgress.toggleTreasureDescriptionCollected(treasureDescriptionId)
         )
-        storageHelper.save(state.value.treasuresProgress)
+        storage.save(state.value.treasuresProgress)
     }
 
     override fun onCleared() {
@@ -214,7 +225,7 @@ class SharedViewModel @Inject constructor(
 
     private fun handleDoCommemorativePhotoResult(treasureDescription: TreasureDescription) {
         val target = _state.value.treasuresProgress.getCommemorativePhoto(treasureDescription)
-            ?: storageHelper.newCommemorativePhotoFile()
+            ?: storage.newCommemorativePhotoFile()
         photoHelper.moveCommemorativePhotoToPermanentLocation(target)
         val updatedMapOfPhotos = state.value.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds
             .plus(treasureDescription.id to target)
@@ -224,7 +235,7 @@ class SharedViewModel @Inject constructor(
                 commemorativePhotosByTreasuresDescriptionIds = updatedMapOfPhotos
             )
         )
-        storageHelper.save(state.value.treasuresProgress)
+        storage.save(state.value.treasuresProgress)
     }
 
     private fun updatedLocationCallback(): UpdateLocationCallback = { location ->
@@ -249,7 +260,7 @@ class SharedViewModel @Inject constructor(
         )
         val currentCoordinates = Coordinates(location.latitude, location.longitude)
         if (state.value.hunterPath.addLocation(currentCoordinates)) {
-            storageHelper.save(state.value.hunterPath)
+            storage.save(state.value.hunterPath)
         }
     }
 
@@ -260,7 +271,7 @@ class SharedViewModel @Inject constructor(
         val hunterPath = loadHunterPath(route.name)
         val mediaPlayer = MediaPlayer()
         mediaPlayer.isLooping = false
-        mediaPlayer.setOnErrorListener { mp, what, extra -> handleMediaPlayerError(what, extra) }
+        mediaPlayer.setOnErrorListener { _, what, extra -> handleMediaPlayerError(what, extra) }
         return SharedState(
             mediaPlayer,
             route,
@@ -270,23 +281,23 @@ class SharedViewModel @Inject constructor(
     }
 
     private fun loadRoute(): Route {
-        return storageHelper.loadRoute(stateHandle.get<String>(Screens.TreasureEditor.PARAMETER_ROUTE_NAME)!!)
+        return storage.loadRoute(stateHandle.get<String>(Screens.TreasureEditor.PARAMETER_ROUTE_NAME)!!)
     }
 
     private fun loadProgress(route: Route): TreasuresProgress {
-        var loadedProgress = storageHelper.loadProgress(route.name)
+        var loadedProgress = storage.loadProgress(route.name)
         if (loadedProgress == null) {
             loadedProgress = TreasuresProgress(route.name, route.treasures[0].id)
-            storageHelper.save(loadedProgress)
+            storage.save(loadedProgress)
         }
         return loadedProgress
     }
 
     private fun loadHunterPath(routeName: String): HunterPath {
-        var hunterPath = storageHelper.loadHunterPath(routeName)
+        var hunterPath = storage.loadHunterPath(routeName)
         if (hunterPath == null) {
             hunterPath = HunterPath(routeName)
-            storageHelper.save(hunterPath)
+            storage.save(hunterPath)
         }
         return hunterPath
     }

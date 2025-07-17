@@ -42,13 +42,14 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.screen.searching.ResultSharedViewModel
-import pl.marianjureczko.poszukiwacz.screen.searching.SharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
-import pl.marianjureczko.poszukiwacz.ui.shareViewModelStoreOwner
+import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
+import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 const val PLAY_MOVIE_BUTTON = "Play the movie"
@@ -64,15 +65,18 @@ fun ResultScreen(
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook
 ) {
-    val sharedViewModel: ResultSharedViewModel =
-        getViewModel(shareViewModelStoreOwner(navBackStackEntry, navController))
+    val sharedViewModel: ResultSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
+    val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
     Scaffold(
         topBar = {
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.treasure),
-                onClickOnGuide = onClickOnGuide,
-                onClickOnFacebook = { onClickOnFacebook(sharedViewModel.getRouteName()) },
+                menuConfig = MenuConfig(
+                    onClickOnGuide,
+                    { onClickOnFacebook(sharedViewModel.getRouteName()) },
+                    restarter
+                ),
             )
         },
         content = { ResultScreenBody(sharedViewModel) }
@@ -297,10 +301,4 @@ private fun findTrackIndexFor(mediaTrackType: Int, trackInfo: Array<TrackInfo>):
         }
     }
     return index
-}
-
-@Composable
-private fun getViewModel(viewModelStoreOwner: NavBackStackEntry): ResultSharedViewModel {
-    val viewModelDoNotInline: SharedViewModel = hiltViewModel(viewModelStoreOwner)
-    return viewModelDoNotInline
 }

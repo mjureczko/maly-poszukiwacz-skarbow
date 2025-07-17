@@ -48,6 +48,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
@@ -64,7 +65,13 @@ fun FacebookScreen(
     val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = { TopBar(navController, stringResource(R.string.title_activity_facebook), onClickOnGuide, {}) },
+        topBar = {
+            TopBar(
+                navController = navController,
+                title = stringResource(R.string.title_activity_facebook),
+                menuConfig = MenuConfig(onClickOnGuide)
+            )
+        },
         content = { FacebookScreenBody() }
     )
 }

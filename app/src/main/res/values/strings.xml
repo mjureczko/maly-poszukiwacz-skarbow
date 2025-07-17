@@ -16,6 +16,9 @@
     <string name="map_activity_title">Treasures map</string>
     <string name="menu_help">Guide</string>
     <string name="menu_facebook">Share on Facebook</string>
+    <string name="menu_restart">Restart route</string>
+    <string name="restart_msg">Are you sure you want remove all the searching progress?</string>
+    <string name="restart_confirmation">The searching progress was removed</string>
     <string name="facebook_app_id" translatable="false">732722584920929</string>
     <string name="title_activity_facebook">Share on Facebook</string>
     <string name="facebook_screen_subheader">Select elements to share</string>
