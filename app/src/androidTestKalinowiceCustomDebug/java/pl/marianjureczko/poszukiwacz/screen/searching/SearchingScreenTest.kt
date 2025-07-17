@@ -42,7 +42,6 @@ class SearchingScreenTest : UiTest() {
         stepsToTreasure.assertTextEquals(expected.toString())
     }
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun shouldMarkCollectedTreasureAndPromptForNewOne() {

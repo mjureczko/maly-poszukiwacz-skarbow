@@ -5,8 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
-import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
-import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
+import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRouteUC
+import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRouteUC
 import javax.inject.Singleton
 
 @Module
@@ -14,13 +14,13 @@ import javax.inject.Singleton
 object ClassicVariantModule {
     @Singleton
     @Provides
-    fun addTreasureDescriptionToTouteUseCase(storage: StorageHelper): AddTreasureDescriptionToRoute {
-        return AddTreasureDescriptionToRoute(storage)
+    fun addTreasureDescriptionToTouteUseCase(storage: StorageHelper): AddTreasureDescriptionToRouteUC {
+        return AddTreasureDescriptionToRouteUC(storage)
     }
 
     @Singleton
     @Provides
-    fun removeTreasureDescriptionFromRouteUseCase(storage: StorageHelper): RemoveTreasureDescriptionFromRoute {
-        return RemoveTreasureDescriptionFromRoute(storage)
+    fun removeTreasureDescriptionFromRouteUseCase(storage: StorageHelper): RemoveTreasureDescriptionFromRouteUC {
+        return RemoveTreasureDescriptionFromRouteUC(storage)
     }
 }

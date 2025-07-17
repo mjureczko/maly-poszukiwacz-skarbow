@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.usecase
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
-class RemoveTreasureDescriptionFromRoute(
+class RemoveTreasureDescriptionFromRouteUC(
     private val storage: StorageHelper
 ) {
     operator fun invoke(route: Route, treasureDescriptionId: Int): Route {

@@ -33,6 +33,7 @@ import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import javax.inject.Inject
 
 interface RestarterSharedViewModel {
@@ -77,6 +78,7 @@ class SharedViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
     private val cameraPort: CameraPort,
     override val qrScannerPort: QrScannerPort,
+    private val resetProgressUC: ResetProgressUC,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
@@ -94,22 +96,7 @@ class SharedViewModel @Inject constructor(
         get() = _state
 
     override fun restartProgress() {
-        state.value.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.values.forEach {
-            storage.removeFile(it)
-        }
-        val restartedProgress = TreasuresProgress().copy(
-            routeName = state.value.treasuresProgress.routeName,
-            selectedTreasureDescriptionId = state.value.treasuresProgress.selectedTreasureDescriptionId
-        )
-        _state.value = state.value.copy(
-            treasuresProgress = restartedProgress,
-        )
-        storage.save(restartedProgress)
-        val emptyHunterPath = HunterPath(state.value.route.name)
-        _state.value = state.value.copy(
-            hunterPath = emptyHunterPath,
-        )
-        storage.save(emptyHunterPath)
+        resetProgressUC(_state)
     }
 
     override fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback {

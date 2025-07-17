@@ -12,8 +12,8 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
-import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRoute
-import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRoute
+import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRouteUC
+import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRouteUC
 
 class TreasureEditorViewModelFixture(
     val route: Route,
@@ -24,8 +24,8 @@ class TreasureEditorViewModelFixture(
     val storage = TestStoragePort(mock<Context>())
     val routeName = route.name
     val viewModel: TreasureEditorViewModel
-    val addTreasureDescriptionToRoute = AddTreasureDescriptionToRoute(storage)
-    val removeTreasureDescriptionFromRoute = RemoveTreasureDescriptionFromRoute(storage)
+    val addTreasureDescriptionToRouteUC = AddTreasureDescriptionToRouteUC(storage)
+    val removeTreasureDescriptionFromRouteUC = RemoveTreasureDescriptionFromRouteUC(storage)
     val cameraPort = mock(CameraPort::class.java)
 
     init {
@@ -41,8 +41,8 @@ class TreasureEditorViewModelFixture(
             locationPort,
             cameraPort,
             photoHelper,
-            addTreasureDescriptionToRoute,
-            removeTreasureDescriptionFromRoute
+            addTreasureDescriptionToRouteUC,
+            removeTreasureDescriptionFromRouteUC
         )
     }
 

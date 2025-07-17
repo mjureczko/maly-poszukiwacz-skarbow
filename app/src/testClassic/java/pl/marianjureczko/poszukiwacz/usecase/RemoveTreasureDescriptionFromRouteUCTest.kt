@@ -10,7 +10,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.screen.treasureseditor.TreasureEditorViewModelFixture
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteDoesNotContainTresureWithId
 
-class RemoveTreasureDescriptionFromRouteTest {
+class RemoveTreasureDescriptionFromRouteUCTest {
     @Test
     fun `SHOULD remove treasure its tips and change selected treasure in progress WHEN both tips exist and removed treasure is selected`() {
         //given
@@ -19,7 +19,7 @@ class RemoveTreasureDescriptionFromRouteTest {
         val toRemove = route.treasures[0]
 
         fixture.setupProgress(treasureToSelect = toRemove)
-        val useCase = fixture.removeTreasureDescriptionFromRoute
+        val useCase = fixture.removeTreasureDescriptionFromRouteUC
 
         //when
         val actualRoute = useCase(route, toRemove.id)
@@ -44,7 +44,7 @@ class RemoveTreasureDescriptionFromRouteTest {
         val toRemove = route.treasures[0]
 
         fixture.setupProgress()
-        val useCase = fixture.removeTreasureDescriptionFromRoute
+        val useCase = fixture.removeTreasureDescriptionFromRouteUC
 
         //when
         val actualRoute = useCase(route, toRemove.id)
@@ -65,7 +65,7 @@ class RemoveTreasureDescriptionFromRouteTest {
         val route = some<Route>()
         val fixture = TreasureEditorViewModelFixture(route)
         val expectedRoute = route.copy()
-        val useCase = fixture.removeTreasureDescriptionFromRoute
+        val useCase = fixture.removeTreasureDescriptionFromRouteUC
 
         //when
         val actualRoute = useCase(route, someInt())

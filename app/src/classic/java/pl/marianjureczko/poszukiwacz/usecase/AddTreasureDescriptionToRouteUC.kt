@@ -5,7 +5,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 
-class AddTreasureDescriptionToRoute (
+class AddTreasureDescriptionToRouteUC(
     private val storage: StorageHelper
 ) {
     operator fun invoke(route: Route, coordinates: Coordinates): Route {

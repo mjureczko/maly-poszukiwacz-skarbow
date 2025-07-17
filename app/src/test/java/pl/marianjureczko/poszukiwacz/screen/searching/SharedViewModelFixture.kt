@@ -14,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 
 data class SharedViewModelFixture(
     val testDispatcher: CoroutineDispatcher,
@@ -27,6 +28,8 @@ data class SharedViewModelFixture(
     val cameraPort: CameraPort = mock(CameraPort::class.java),
     val qrScannerPort: QrScannerPort = mock(QrScannerPort::class.java),
 ) {
+
+    val resetProgressUC = ResetProgressUC(storage)
 
     var route: Route = some<Route>().copy(name = routeName)
 
@@ -52,6 +55,7 @@ data class SharedViewModelFixture(
             stateHandle = savedState,
             cameraPort = cameraPort,
             qrScannerPort = qrScannerPort,
+            resetProgressUC = resetProgressUC,
             ioDispatcher = testDispatcher,
         )
         result.respawn = false
