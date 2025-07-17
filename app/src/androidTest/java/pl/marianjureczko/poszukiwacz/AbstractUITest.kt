@@ -58,6 +58,9 @@ abstract class AbstractUITest {
     @After
     open fun restoreRoute() {
         BuildVariantSpecificTestPortsModule.assureRouteIsPresentInStorage()
+        route?.let {
+            injectableStorage.removeProgress(it.name)
+        }
     }
 
     fun performTap(contentDescription: String) {

@@ -271,7 +271,7 @@ class SharedViewModel @Inject constructor(
         val hunterPath = loadHunterPath(route.name)
         val mediaPlayer = MediaPlayer()
         mediaPlayer.isLooping = false
-        mediaPlayer.setOnErrorListener { mp, what, extra -> handleMediaPlayerError(what, extra) }
+        mediaPlayer.setOnErrorListener { _, what, extra -> handleMediaPlayerError(what, extra) }
         return SharedState(
             mediaPlayer,
             route,

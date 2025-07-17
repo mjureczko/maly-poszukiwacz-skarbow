@@ -38,7 +38,8 @@ class SearchingScreenTest : UiTest() {
         //then
         composeRule.waitForIdle()
         val stepsToTreasure: SemanticsNodeInteraction = getNode(STEPS_TO_TREASURE)
-        val expected = (distanceToTreasure * LocationCalculator.METERS_TOS_STEP_FACTOR).toInt()
+        composeRule.waitForIdle()
+        val expected = (distanceToTreasure * LocationCalculator.METERS_TO_STEPS_FACTOR).toInt()
         stepsToTreasure.assertTextEquals(expected.toString())
     }
 
