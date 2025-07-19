@@ -23,7 +23,7 @@ object BuildVariantSpecificTestPortsModule {
         return storage
     }
 
-    fun assureRouteIsPresentInStorage() {
+    fun assureRouteIsPresentInStorage(context: Context) {
         if (storage.routes.isEmpty()) {
             storage.initRoute(someString())
         }

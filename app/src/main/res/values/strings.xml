@@ -52,5 +52,5 @@
     <string name="well_done">Congratulations! All the treasures have been found!</string>
     <string name="well_done_facebook">You can share this achievement on</string>
     <string name="well_done_more">"Want more adventures? Try</string>
-    <string name="error_on_exporting_map">Map export error – the report will not include it</string>
+    <string name="error_on_exporting_map">Map export error – try exporting without map</string>
 </resources>

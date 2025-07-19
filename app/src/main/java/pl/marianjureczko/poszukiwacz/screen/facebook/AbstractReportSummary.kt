@@ -7,6 +7,9 @@ import android.graphics.Typeface
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
+/**
+ * The common part of ReportSummary across build variants.
+ */
 abstract class AbstractReportSummary(
     private val model: FacebookReportModel,
     private val font: Typeface
@@ -24,7 +27,7 @@ abstract class AbstractReportSummary(
             val summaryText = summaryText(context, model.progress, numberOfTreasuresOfFirstType())
             val summarySize = textPaint.measureText(summaryText)
             val textY = currentTop + 50
-            var x = ReportCommons.REPORT_MARGIN
+            val x = ReportCommons.REPORT_MARGIN
             canvas.drawText(summaryText, x, textY, textPaint)
 
             partWithIcons(context, x, summarySize, canvas, currentTop, textPaint, textY)
@@ -48,17 +51,17 @@ abstract class AbstractReportSummary(
         val treasure2 = context.getString(R.string.treasure2)
         val treasureMany = context.getString(R.string.treasure_many)
         val count = progress.numberOfCollectedTreasures()
-        var treasures = treasureAsWord(treasure1, treasure2, treasureMany, count)
+        val treasures = treasureAsWord(treasure1, treasure2, treasureMany, count)
         return "${context.getString(R.string.we_found)} $count $treasures: $numberOfTreasuresOfFirstType"
     }
 }
 
 fun treasureAsWord(one: String, two: String, many: String, quantity: Int): String {
     return if (quantity == 1) {
-        one;
+        one
     } else if (quantity in 2..4) {
-        two;
+        two
     } else {
-        many;
+        many
     }
 }

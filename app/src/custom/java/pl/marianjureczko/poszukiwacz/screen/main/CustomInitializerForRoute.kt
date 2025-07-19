@@ -18,10 +18,10 @@ class CustomInitializerForRoute(
         private val currentVersion = BuildConfig.VERSION_CODE.toString()
     }
 
-
     private val pathToDestination = storageHelper.pathToRoutesDir() + File.separator
-    fun copyRouteToLocalStorage() {
-        if (!isAlreadyCopied()) {
+
+    fun copyRouteToLocalStorage(forceCopy: Boolean = false) {
+        if (forceCopy || !isAlreadyCopied()) {
             copyRouteDefinition()
             copyMedia()
             markIsCopied()
