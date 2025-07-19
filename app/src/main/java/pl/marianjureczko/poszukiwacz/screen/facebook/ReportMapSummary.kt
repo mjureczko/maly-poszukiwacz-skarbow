@@ -24,7 +24,7 @@ class ReportMapSummary(
         }
 
     fun draw(context: Context, canvas: Canvas, currentTop: Float) {
-        if (model.getSummaryElement().isSelected) {
+        if (model.getMapSummary()?.isSelected == true) {
             userLocale = userLocale(context)
             val textPaint = ReportCommons.getTextPaint(font, Paint.Align.LEFT)
             var textY = currentTop + 50

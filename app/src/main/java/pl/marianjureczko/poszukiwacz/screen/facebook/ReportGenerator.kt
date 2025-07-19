@@ -60,7 +60,7 @@ class ReportGenerator {
         mapHeader.draw(context, canvas, currentTop)
         currentTop += mapHeader.height()
 
-        map.draw(context, canvas, currentTop) { reportPublisher(bitmap) }
+        val published = map.draw(context, canvas, currentTop) { reportPublisher(bitmap) }
         currentTop += map.height()
 
         mapSummary.draw(context, canvas, currentTop)
@@ -68,6 +68,9 @@ class ReportGenerator {
 
         footer.draw(context.resources, canvas, currentTop)
 
+        if (!published) {
+            reportPublisher(bitmap)
+        }
         return bitmap
     }
 

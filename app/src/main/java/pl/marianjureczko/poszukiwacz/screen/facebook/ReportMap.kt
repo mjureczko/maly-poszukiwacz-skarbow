@@ -38,7 +38,10 @@ class ReportMap(
         }
     }
 
-    fun draw(context: Context, reportCanvas: Canvas, currentTop: Float, publishReport: () -> Unit) {
+    /**
+     * @return true if report publication was scheduled; false if the map was not selected and the report needs to be published elsewhere
+     */
+    fun draw(context: Context, reportCanvas: Canvas, currentTop: Float, publishReport: () -> Unit): Boolean {
         if (mapSelected()) {
             val snapshotter = configureSnapshotter(context, model.route)
             snapshotter.start(
@@ -57,6 +60,7 @@ class ReportMap(
                 }
             }
         }
+        return mapSelected()
     }
 
     private fun drawMapOnReportCanvas(reportCanvas: Canvas, bitmap: Bitmap, currentTop: Float) {
@@ -69,7 +73,8 @@ class ReportMap(
             val mapCanvas = overlay.canvas
             val locations = it.pathAsCoordinates().toList()
             if (locations.size > 1) {
-                var previousXY = overlay.screenCoordinate(Point.fromLngLat(locations[0].longitude, locations[0].latitude))
+                var previousXY =
+                    overlay.screenCoordinate(Point.fromLngLat(locations[0].longitude, locations[0].latitude))
                 locations.asSequence()
                     .drop(1)
                     .forEach {

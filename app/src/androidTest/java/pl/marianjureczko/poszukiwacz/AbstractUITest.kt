@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz
 
 import android.Manifest
+import android.content.Context
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -45,7 +46,7 @@ abstract class AbstractUITest {
         Manifest.permission.CAMERA,
         Manifest.permission.RECORD_AUDIO
     )
-    val context = InstrumentationRegistry.getInstrumentation().targetContext
+    val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Before
     open fun init() {
@@ -53,14 +54,15 @@ abstract class AbstractUITest {
         if (injectableStorage is TestStoragePort) {
             storage = injectableStorage as TestStoragePort
         }
+        BuildVariantSpecificTestPortsModule.assureRouteIsPresentInStorage(context)
+        route?.let {
+            injectableStorage.removeProgress(it.name)
+        }
     }
 
     @After
     open fun restoreRoute() {
-        BuildVariantSpecificTestPortsModule.assureRouteIsPresentInStorage()
-        route?.let {
-            injectableStorage.removeProgress(it.name)
-        }
+
     }
 
     fun performTap(contentDescription: String) {
