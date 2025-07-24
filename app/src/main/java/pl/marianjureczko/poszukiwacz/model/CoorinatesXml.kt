@@ -7,7 +7,7 @@ import java.io.Serializable
 /**
  * Serializable to xml version of Coordinates
  */
-class HunterLocation : Serializable {
+class CoorinatesXml : Serializable {
 
     constructor(longitude: Double, latitude: Double) {
         this.longitude = longitude
@@ -29,7 +29,7 @@ class HunterLocation : Serializable {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as HunterLocation
+        other as CoorinatesXml
 
         if (longitude != other.longitude) return false
         return latitude == other.latitude

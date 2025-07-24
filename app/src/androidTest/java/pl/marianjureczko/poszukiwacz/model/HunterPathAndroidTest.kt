@@ -8,7 +8,7 @@ import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
-class HunterPathTest {
+class HunterPathAndroidTest {
 
     @Test
     fun shouldCalculateDistance() {

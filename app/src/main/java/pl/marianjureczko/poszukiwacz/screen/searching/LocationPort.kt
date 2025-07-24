@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
-import android.location.Location
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
-typealias UpdateLocationCallback = (Location) -> Unit
+//TODO t: introduce type
+typealias UpdateLocationCallback = (AndroidLocation) -> Unit
 

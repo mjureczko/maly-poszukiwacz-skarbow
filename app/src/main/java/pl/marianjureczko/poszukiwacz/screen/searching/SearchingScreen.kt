@@ -4,6 +4,11 @@ import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +18,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +30,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -163,7 +170,7 @@ private fun SearchingScreenBody(
             )
             Column {
                 Scores(Modifier.align(Alignment.Start), score = state.treasuresProgress)
-                Compass(state.needleRotation, Modifier.align(Alignment.CenterHorizontally))
+                Compass(state.needleRotation, state.gpsAccuracy, Modifier.align(Alignment.CenterHorizontally))
             }
         }
         Steps(state.stepsToTreasure)
@@ -185,7 +192,17 @@ private fun SearchingScreenBody(
 }
 
 @Composable
-fun Compass(arcRotation: Float, modifier: Modifier) {
+fun Compass(arcRotation: Float, gpsAccuracy: GpsAccuracy, modifier: Modifier) {
+    val infiniteTransition = rememberInfiniteTransition()
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
     BoxWithConstraints(
         modifier = modifier
             .padding(start = 15.dp, end = 15.dp, top = 1.dp, bottom = 1.dp)
@@ -205,6 +222,24 @@ fun Compass(arcRotation: Float, modifier: Modifier) {
             contentScale = ContentScale.Inside,
             modifier = Modifier.rotate(arcRotation)
         )
+        if (gpsAccuracy != GpsAccuracy.Fine) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                val textResId = when (gpsAccuracy) {
+                    GpsAccuracy.Medium -> R.string.medium_gps_signal
+                    GpsAccuracy.Low -> R.string.low_gps_signal
+                    else -> R.string.no_gps_signal
+                }
+                Text(
+                    text = stringResource(textResId),
+                    style = MaterialTheme.typography.body2,
+                    color = Color.Red.copy(alpha = alpha),
+                    modifier = Modifier.padding(end = 1.dp, bottom = 1.dp)
+                )
+            }
+        }
     }
 }
 

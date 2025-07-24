@@ -24,10 +24,10 @@ class HunterPath() : Serializable {
      * Measurements are sorted by time increasingly.
      */
     @field:ElementList
-    private var locations = mutableListOf<HunterLocation>()
+    private var locations = mutableListOf<CoorinatesXml>()
 
     // Public getter for test purpose
-    val publicLocations: List<HunterLocation>
+    val publicLocations: List<CoorinatesXml>
         get() = locations
 
     @field:Element(required = false)
@@ -41,9 +41,10 @@ class HunterPath() : Serializable {
 
     /**
      * Chunks are in chronological order.
+     * Each chunk represnts a collection of observed coordinates that were processed to produce a single coordinate.
      */
     @field:ElementList
-    private var chunkedCoordinates = mutableListOf<HunterLocation>()
+    private var chunkedCoordinates = mutableListOf<AveragedCoordinateXml>()
 
     fun getStartTime(): Date? {
         return start
@@ -58,7 +59,7 @@ class HunterPath() : Serializable {
      * @return  true if chunked changed
      */
     fun addLocation(coordinates: Coordinates, date: Date = Date()): Boolean {
-        val newLocation = HunterLocation(coordinates)
+        val newLocation = CoorinatesXml(coordinates)
         establishEnd(date)
         establishStart(date)
         return establishLocations(newLocation, date)
@@ -69,13 +70,23 @@ class HunterPath() : Serializable {
         var result = 0.0
         chunkedCoordinates.forEachIndexed { index, location ->
             if (index > 0) {
-                result += calculator.distanceInKm(chunkedCoordinates[index - 1], location)
+                result += calculator.distanceInKm(
+                    chunkedCoordinates[index - 1].toCoordinates(),
+                    location.toCoordinates()
+                )
             }
         }
         return result
     }
 
-    fun pathAsCoordinates(): List<Coordinates> = chunkedCoordinates.map { Coordinates(it.latitude, it.longitude) }
+    fun pathAsCoordinates(): List<Coordinates> =
+        chunkedCoordinates.map { it.toCoordinates() }
+
+    fun isLocationBeingUpdated(): Boolean {
+        if (end == null) return true
+        val now = Date()
+        return (now.time - end!!.time) < 5000
+    }
 
     private fun establishEnd(date: Date) {
         end = date
@@ -93,11 +104,11 @@ class HunterPath() : Serializable {
     /**
      * @return  true if chunked changed
      */
-    private fun establishLocations(newLocation: HunterLocation, date: Date): Boolean {
+    private fun establishLocations(newLocation: CoorinatesXml, date: Date): Boolean {
         val result = if (collectedForChunk(date)) {
             val longitude = StatUtils.percentile(locations.map { it.longitude }.toList().toDoubleArray(), 50.0)
             val latitude = StatUtils.percentile(locations.map { it.latitude }.toList().toDoubleArray(), 50.0)
-            chunkedCoordinates.add(HunterLocation(longitude, latitude))
+            chunkedCoordinates.add(AveragedCoordinateXml(longitude, latitude))
             chunkStart = date
             locations.clear()
             true

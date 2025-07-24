@@ -16,6 +16,7 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
+import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -83,5 +84,11 @@ object SingletonModule {
     @Provides
     fun resetProgressUseCase(storage: StorageHelper): ResetProgressUC {
         return ResetProgressUC(storage)
+    }
+
+    @Singleton
+    @Provides
+    fun updateLocationUC(storage: StorageHelper, locationCalculator: LocationCalculator): UpdateLocationUC {
+        return UpdateLocationUC(storage, locationCalculator)
     }
 }

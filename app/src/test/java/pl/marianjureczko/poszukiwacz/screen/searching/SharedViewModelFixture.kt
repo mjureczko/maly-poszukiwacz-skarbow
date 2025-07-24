@@ -15,6 +15,7 @@ import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
+import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 
 data class SharedViewModelFixture(
     val testDispatcher: CoroutineDispatcher,
@@ -50,12 +51,12 @@ data class SharedViewModelFixture(
         val result = SharedViewModel(
             storage = storage,
             locationPort = locationPort,
-            locationCalculator = locationCalculator,
             photoHelper = photoHelper,
             stateHandle = savedState,
             cameraPort = cameraPort,
             qrScannerPort = qrScannerPort,
             resetProgressUC = resetProgressUC,
+            updateLocationUC = UpdateLocationUC(storage, locationCalculator),
             ioDispatcher = testDispatcher,
         )
         result.respawn = false

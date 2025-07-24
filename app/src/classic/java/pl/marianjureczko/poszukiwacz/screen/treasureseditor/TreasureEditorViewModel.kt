@@ -60,7 +60,7 @@ class TreasureEditorViewModel @Inject constructor(
 
     init {
         locationPort.startFetching(viewModelScope) { location ->
-            _state.value = _state.value.copy(currentLocation = Coordinates(location.latitude, location.longitude))
+            _state.value = _state.value.copy(currentLocation = Coordinates.of(location))
         }
     }
 
