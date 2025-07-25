@@ -10,7 +10,7 @@ import org.mockito.kotlin.mock
 import pl.marianjureczko.poszukiwacz.screen.searching.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.util.stream.Stream
 
 class UpdateLocationUCTest {
@@ -51,7 +51,7 @@ class UpdateLocationUCTest {
                 hunterPath = mock()
             )
         )
-        val storage = mock<StorageHelper>()
+        val storage = mock<StoragePort>()
 
         // when
         UpdateLocationUC(storage, LocationCalculator()).invoke(location, state)

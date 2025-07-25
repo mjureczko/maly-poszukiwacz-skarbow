@@ -17,14 +17,14 @@ import org.junit.Rule
 import pl.marianjureczko.poszukiwacz.activity.main.MainActivity
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Inject
 
 abstract class AbstractUITest {
 
     /** For custom (e.g. Kalinowice) tests it is the not test storage */
     @Inject
-    internal lateinit var injectableStorage: StorageHelper
+    internal lateinit var injectableStorage: StoragePort
     var storage: TestStoragePort? = null
     var route: Route? = null
         get() {

@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.someFrom
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 class RouteAndProgressFixture(
     val route: Route,
@@ -9,25 +9,25 @@ class RouteAndProgressFixture(
 ) {
 
     companion object {
-        fun savedWithSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
+        fun savedWithSelectedTreasure(storagePort: StoragePort): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
             val selected = someFrom(route.treasures)
             val progress = TreasuresProgress(route.name, route.treasures[0].id)
             progress.selectedTreasureDescriptionId = selected.id
-            saveBoth(storageHelper, route, progress)
+            saveBoth(storagePort, route, progress)
             return RouteAndProgressFixture(route, progress)
         }
 
-        fun savedWithoutSelectedTreasure(storageHelper: StorageHelper): RouteAndProgressFixture {
+        fun savedWithoutSelectedTreasure(storagePort: StoragePort): RouteAndProgressFixture {
             val route = RouteArranger.routeWithoutTipFiles()
             val progress = TreasuresProgress(route.name, route.treasures[0].id)
-            saveBoth(storageHelper, route, progress)
+            saveBoth(storagePort, route, progress)
             return RouteAndProgressFixture(route, progress)
         }
 
-        private fun saveBoth(storageHelper: StorageHelper, route: Route, progress: TreasuresProgress) {
-            storageHelper.save(route)
-            storageHelper.save(progress)
+        private fun saveBoth(storagePort: StoragePort, route: Route, progress: TreasuresProgress) {
+            storagePort.save(route)
+            storagePort.save(progress)
         }
     }
 }

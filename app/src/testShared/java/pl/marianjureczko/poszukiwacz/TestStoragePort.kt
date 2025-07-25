@@ -8,10 +8,10 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.FileNotFoundException
 
-class TestStoragePort(context: Context) : StorageHelper(context) {
+class TestStoragePort(context: Context) : StoragePort(context) {
     val routes: MutableMap<String, Route> = mutableMapOf()
     val requestedTipRemovals: MutableList<Int> = mutableListOf()
     val progresses: MutableMap<String, TreasuresProgress> = mutableMapOf()

@@ -1,10 +1,10 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
 import android.location.Location
-import pl.marianjureczko.poszukiwacz.model.CoorinatesXml
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.CoorinatesXml
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class LocationCalculator {

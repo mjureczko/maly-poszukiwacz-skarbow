@@ -2,12 +2,12 @@ package pl.marianjureczko.poszukiwacz.screen.main
 
 import android.content.res.AssetManager
 import pl.marianjureczko.poszukiwacz.BuildConfig
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 import java.io.FileOutputStream
 
 class CustomInitializerForRoute(
-    private val storageHelper: StorageHelper,
+    private val storageHelper: StoragePort,
     private val assetManager: AssetManager
 ) {
     companion object {

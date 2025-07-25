@@ -14,7 +14,7 @@ class HunterPathTest {
         val hunterPath = HunterPath()
 
         //when
-        val actual = hunterPath.getStartTime()
+        val actual = hunterPath.start
 
         //then
         assertThat(actual).isNull()
@@ -26,7 +26,7 @@ class HunterPathTest {
         val hunterPath = HunterPath()
 
         //when
-        val actual = hunterPath.getEndTime()
+        val actual = hunterPath.end
 
         //then
         assertThat(actual).isNull()
@@ -41,7 +41,7 @@ class HunterPathTest {
         hunterPath.addLocation(some())
 
         //when
-        val actual = hunterPath.getStartTime()
+        val actual = hunterPath.start
 
         //then
         assertThat(actual).isEqualTo(firstMeasurement)
@@ -56,7 +56,7 @@ class HunterPathTest {
         hunterPath.addLocation(some(), lastMeasurement)
 
         //when
-        val actual = hunterPath.getEndTime()
+        val actual = hunterPath.end
 
         //then
         assertThat(actual).isEqualTo(lastMeasurement)

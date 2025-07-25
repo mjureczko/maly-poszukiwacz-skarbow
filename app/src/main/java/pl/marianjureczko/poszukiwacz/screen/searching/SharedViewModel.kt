@@ -34,7 +34,7 @@ import pl.marianjureczko.poszukiwacz.shared.ScanTreasureCallback
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import javax.inject.Inject
@@ -74,7 +74,7 @@ interface CommemorativeSharedViewModel : DoCommemorative {
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    private val storage: StorageHelper,
+    private val storage: StoragePort,
     private val locationPort: LocationPort,
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,

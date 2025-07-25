@@ -15,7 +15,7 @@ import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 import java.util.Date
 
@@ -29,7 +29,7 @@ class ReportGeneratorTest {
         val routeName = "custom"
         val report = ReportGenerator()
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val storageHelper: StorageHelper = StorageHelper(context)
+        val storagePort: StoragePort = StoragePort(context)
         val photos = arrangePhotos(context)
         var treasuresProgress = TreasuresProgress(routeName, 0)
         val treasure = Treasure("1", 7, TreasureType.DIAMOND)
@@ -44,18 +44,18 @@ class ReportGeneratorTest {
         treasuresProgress = treasuresProgress.copy(
             commemorativePhotosByTreasuresDescriptionIds = mapOfPhotos.toMutableMap()
         )
-        storageHelper.save(treasuresProgress)
+        storagePort.save(treasuresProgress)
         val hunterPath = HunterPath(routeName)
         hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
         hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
         hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
-        storageHelper.save(hunterPath)
-        StorageHelper(context).save(Route(treasuresProgress.routeName))
+        storagePort.save(hunterPath)
+        StoragePort(context).save(Route(treasuresProgress.routeName))
         val stateHandle: SavedStateHandle = SavedStateHandle(mapOf(PARAMETER_ROUTE_NAME to routeName))
 
         //when
         val model =
-            FacebookViewModel(stateHandle, StorageHelper(context), context.resources, testDispatcher, testDispatcher)
+            FacebookViewModel(stateHandle, StoragePort(context), context.resources, testDispatcher, testDispatcher)
 //        //MapBox doesn't work in tests
         var state = model.state.value
         val mapIdx = state.elements.indices.find { state.elements[it].type == Type.MAP }!!

@@ -9,7 +9,7 @@ import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 import java.util.UUID
 
@@ -40,8 +40,8 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress = treasuresProgress.copy(
             commemorativePhotosByTreasuresDescriptionIds = mapOfPhotos.toMutableMap()
         )
-        storageHelper.save(treasuresProgress)
-        StorageHelper(context).save(Route(treasuresProgress.routeName))
+        storagePort.save(treasuresProgress)
+        StoragePort(context).save(Route(treasuresProgress.routeName))
         val reportPhotos = ReportCommemorativePhotos(createFacebookViewModel().state.value, font, seed)
 
         //when
@@ -68,7 +68,7 @@ internal class ReportCommemorativePhotosTest : ReportAbstractTest() {
         treasuresProgress = treasuresProgress.copy(
             commemorativePhotosByTreasuresDescriptionIds = mapOfPhotos.toMutableMap()
         )
-        storageHelper.save(treasuresProgress)
+        storagePort.save(treasuresProgress)
         val reportPhotos = ReportCommemorativePhotos(createFacebookViewModel().state.value, font, seed)
 
         //when

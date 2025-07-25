@@ -7,10 +7,10 @@ import pl.marianjureczko.poszukiwacz.screen.searching.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 class UpdateLocationUC(
-    private val storage: StorageHelper,
+    private val storage: StoragePort,
     private val locationCalculator: LocationCalculator,
 ) {
 

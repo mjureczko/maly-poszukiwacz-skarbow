@@ -28,7 +28,6 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
 import pl.marianjureczko.poszukiwacz.any
 import pl.marianjureczko.poszukiwacz.eq
-import pl.marianjureczko.poszukiwacz.model.CoorinatesXml
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
@@ -36,6 +35,7 @@ import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.CoorinatesXml
 
 
 @ExtendWith(MockitoExtension::class)
@@ -153,7 +153,7 @@ class SharedViewModelTest {
         assertThat(viewModel.state.value.currentLocation).isEqualTo(LocationWrapper(location))
         assertThat(viewModel.state.value.stepsToTreasure).isEqualTo(expectedDistance)
         assertThat(viewModel.state.value.needleRotation).isCloseTo(90.0f, Offset.offset(0.01f))
-        assertThat(viewModel.state.value.hunterPath.publicLocations)
+        assertThat(viewModel.state.value.hunterPath.locations)
             .containsExactly(CoorinatesXml(Coordinates(latitude, longitude)))
 
         viewModel.gpsJob!!.cancel()

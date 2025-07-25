@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Singleton
 
 @Module
@@ -18,7 +18,7 @@ object BuildVariantSpecificTestPortsModule {
 
     @Singleton
     @Provides
-    fun storageHelper(@ApplicationContext appContext: Context): StorageHelper {
+    fun storagePort(@ApplicationContext appContext: Context): StoragePort {
         storage = TestStoragePort(appContext)
         return storage
     }

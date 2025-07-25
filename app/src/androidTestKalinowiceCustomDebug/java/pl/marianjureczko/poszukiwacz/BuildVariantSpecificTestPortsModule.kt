@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Singleton
 
 @Module
@@ -17,12 +17,12 @@ object BuildVariantSpecificTestPortsModule {
 
     @Singleton
     @Provides
-    fun storageHelper(@ApplicationContext appContext: Context): StorageHelper {
-        return StorageHelper(appContext)
+    fun storagePort(@ApplicationContext appContext: Context): StoragePort {
+        return StoragePort(appContext)
     }
 
     fun assureRouteIsPresentInStorage(appContext: Context) {
-        val storage: StorageHelper = StorageHelper(appContext)
+        val storage: StoragePort = StoragePort(appContext)
         val assetManager: AssetManager = appContext.assets
         val initializer = CustomInitializerForRoute(storage, assetManager)
         initializer.copyRouteToLocalStorage(forceCopy = true)

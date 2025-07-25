@@ -1,58 +1,58 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import org.apache.commons.math3.stat.StatUtils
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Root
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.Coordinates
-import java.io.Serializable
+import pl.marianjureczko.poszukiwacz.shared.port.storage.CoorinatesXml
 import java.util.Date
 
-@Root
-class HunterPath() : Serializable {
+class HunterPath() {
 
     constructor(routeName: String) : this() {
         this.routeName = routeName
     }
 
-    @field:Element
+    constructor(
+        routeName: String,
+        locations: MutableList<CoorinatesXml>,
+        start: Date?,
+        end: Date?,
+        chunkStart: Date?,
+        chunkedCoordinates: MutableList<AveragedCoordinateXml>
+    ) : this() {
+        this.routeName = routeName
+        this.locations = locations
+        this.start = start
+        this.end = end
+        this.chunkStart = chunkStart
+        this.chunkedCoordinates = chunkedCoordinates
+    }
+
     lateinit var routeName: String
 
     /**
      * Measurements for the next chunk. When te chunk creation criteria are met, the measurements are used to produce the chunk and are remove.
      * Measurements are sorted by time increasingly.
      */
-    @field:ElementList
-    private var locations = mutableListOf<CoorinatesXml>()
-
     // Public getter for test purpose
-    val publicLocations: List<CoorinatesXml>
-        get() = locations
+    var locations = mutableListOf<CoorinatesXml>()
+        private set
 
-    @field:Element(required = false)
-    private var start: Date? = null
+    var start: Date? = null
+        private set
 
-    @field:Element(required = false)
-    private var end: Date? = null
+    var end: Date? = null
+        private set
 
-    @field:Element(required = false)
-    private var chunkStart: Date? = null
+    var chunkStart: Date? = null
+        private set
 
     /**
      * Chunks are in chronological order.
-     * Each chunk represnts a collection of observed coordinates that were processed to produce a single coordinate.
+     * Each chunk represents a collection of observed coordinates that were processed to produce a single coordinate.
      */
-    @field:ElementList
-    private var chunkedCoordinates = mutableListOf<AveragedCoordinateXml>()
-
-    fun getStartTime(): Date? {
-        return start
-    }
-
-    fun getEndTime(): Date? {
-        return end
-    }
+    var chunkedCoordinates = mutableListOf<AveragedCoordinateXml>()
+        private set
 
     /**
      * @param date exposed for test, production relies on the default value

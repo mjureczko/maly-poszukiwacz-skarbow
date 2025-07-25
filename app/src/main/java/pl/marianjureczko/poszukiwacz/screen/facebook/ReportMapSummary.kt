@@ -53,10 +53,10 @@ class ReportMapSummary(
         val timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT, loc)
         val dateFormat: DateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, loc)
 
-        hunterPath?.getStartTime()?.let { start ->
+        hunterPath?.start?.let { start ->
             val startDate = dateFormat.format(start)
             val startTime = timeFormat.format(start)
-            hunterPath.getEndTime()?.let { end ->
+            hunterPath.end?.let { end ->
                 val endDate = dateFormat.format(end)
                 val endTime = timeFormat.format(end)
                 return "${context.getString(R.string.expedition_started)} $startDate, $startTime ${context.getString(R.string.expedition_ended)} $endDate, $endTime."

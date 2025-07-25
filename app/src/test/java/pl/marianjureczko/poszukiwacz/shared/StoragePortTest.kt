@@ -13,20 +13,20 @@ import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.RouteArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 import java.io.File
 
-class StorageHelperTest {
+class StoragePortTest {
 
     private val context = TestContext()
-    private val storageHelper = StorageHelper(context)
+    private val storagePort = StoragePort(context)
     private val xmlHelper = XmlHelper()
 
     @BeforeEach
     fun cleanup() {
-        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.routesDirectory))
-        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.progressDirectory))
+        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StoragePort.routesDirectory))
+        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StoragePort.progressDirectory))
     }
 
     @Test
@@ -35,8 +35,8 @@ class StorageHelperTest {
         val route = some<Route>()
 
         //when
-        storageHelper.save(route)
-        val actual = storageHelper.loadAll()
+        storagePort.save(route)
+        val actual = storagePort.loadAll()
 
         //then
         val matching = actual.first { it.name == route.name }
@@ -47,11 +47,11 @@ class StorageHelperTest {
     fun `SHOULD save and remove route`() {
         //given
         val route = some<Route>()
-        storageHelper.save(route)
+        storagePort.save(route)
 
         //when
-        storageHelper.remove(route)
-        val actual = storageHelper.loadAll()
+        storagePort.remove(route)
+        val actual = storagePort.loadAll()
 
         //then
         val matching = actual.firstOrNull { it.name == route.name }
@@ -61,12 +61,12 @@ class StorageHelperTest {
     @Test
     fun `SHOULD ignore invalid files WHEN loading treasures`() {
         //given
-        storageHelper.save(some<Route>())
-        File(context.filesDir.absolutePath + StorageHelper.routesDirectory + "/invalid.file.xml")
+        storagePort.save(some<Route>())
+        File(context.filesDir.absolutePath + StoragePort.routesDirectory + "/invalid.file.xml")
             .writeText("it's not a xml")
 
         //when
-        val actual = storageHelper.loadAll()
+        val actual = storagePort.loadAll()
 
         //then
         assertEquals(1, actual.size)
@@ -75,7 +75,7 @@ class StorageHelperTest {
     @Test
     fun `SHOULD generate name for new sound file`() {
         //when
-        val newSoundFile = storageHelper.newSoundFile()
+        val newSoundFile = storagePort.newSoundFile()
 
         //then
         assertThat(newSoundFile).contains(".3gp")
@@ -85,7 +85,7 @@ class StorageHelperTest {
     @Test
     fun `SHOULD generate name for new photo file`() {
         //when
-        val newPhotoFile = storageHelper.newPhotoFile()
+        val newPhotoFile = storagePort.newPhotoFile()
 
         //then
         assertThat(newPhotoFile).contains(".jpg")
@@ -95,10 +95,10 @@ class StorageHelperTest {
     @Test
     fun `SHOULD remove tip files WHEN removing route`() {
         //given
-        val route = RouteArranger.savedWithTipFiles(storageHelper)
+        val route = RouteArranger.savedWithTipFiles(storagePort)
 
         //when
-        storageHelper.remove(route)
+        storagePort.remove(route)
 
         //then
         route.treasures.forEach { actual ->
@@ -115,25 +115,25 @@ class StorageHelperTest {
     fun `SHOULD remove progress WHEN removing its route`() {
         //given
         val route = some<Route>()
-        storageHelper.save(route)
+        storagePort.save(route)
         val progress = some<TreasuresProgress>(mapOf("routeName" to {route.name}))
-        storageHelper.save(progress)
+        storagePort.save(progress)
 
         //when
-        storageHelper.remove(route)
+        storagePort.remove(route)
 
         //then
-        assertThat(storageHelper.loadProgress(route.name)).isNull()
+        assertThat(storagePort.loadProgress(route.name)).isNull()
     }
 
     @Test
     fun `SHOULD recognize route WHEN the route already exists`() {
         //given
         val route = some<Route>()
-        storageHelper.save(route)
+        storagePort.save(route)
 
         //then
-        assertTrue(storageHelper.routeAlreadyExists(route))
+        assertTrue(storagePort.routeAlreadyExists(route))
     }
 
     @Test
@@ -142,16 +142,16 @@ class StorageHelperTest {
         val route = some<Route>()
 
         //then
-        assertFalse(storageHelper.routeAlreadyExists(route))
+        assertFalse(storagePort.routeAlreadyExists(route))
     }
 
     @Test
     fun `SHOULD remove tip files WHEN removing route by name`() {
         //given
-        val route = RouteArranger.savedWithTipFiles(storageHelper)
+        val route = RouteArranger.savedWithTipFiles(storagePort)
 
         //when
-        storageHelper.removeRouteByName(route.name)
+        storagePort.removeRouteByName(route.name)
 
         //then
         route.treasures.forEach { actual ->
@@ -265,8 +265,8 @@ class StorageHelperTest {
         val bag = some<TreasuresProgress>()
 
         //when
-        storageHelper.save(bag)
-        val actual = storageHelper.loadProgress(bag.routeName)
+        storagePort.save(bag)
+        val actual = storagePort.loadProgress(bag.routeName)
 
         //then
         assertThat(actual).usingRecursiveComparison().isEqualTo(bag)
@@ -278,7 +278,7 @@ class StorageHelperTest {
         val someRouteName = some<String>()
 
         //when
-        val actual = storageHelper.loadProgress(someRouteName)
+        val actual = storagePort.loadProgress(someRouteName)
 
         //then
         assertThat(actual).isNull()
@@ -295,7 +295,7 @@ class StorageHelperTest {
     }
 
     private fun toRelative(s: String) =
-        s.substring(storageHelper.pathToRoutesDir().length + 1)
+        s.substring(storagePort.pathToRoutesDir().length + 1)
 
     private fun assertRouteFiles(actualFiles: MutableSet<String>, route: Route) {
         route.treasures.forEach {

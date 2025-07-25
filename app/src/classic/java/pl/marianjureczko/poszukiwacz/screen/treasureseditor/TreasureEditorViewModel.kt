@@ -22,7 +22,7 @@ import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.ui.PermissionsHandler
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRouteUC
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRouteUC
@@ -39,7 +39,7 @@ interface GetDoTipPhoto {
 
 @HiltViewModel
 class TreasureEditorViewModel @Inject constructor(
-    private val storage: StorageHelper,
+    private val storage: StoragePort,
     private val stateHandle: SavedStateHandle,
     private val locationPort: LocationPort,
     private val cameraPort: CameraPort,

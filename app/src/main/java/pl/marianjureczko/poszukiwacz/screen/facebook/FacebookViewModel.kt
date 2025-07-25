@@ -18,7 +18,7 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.shared.di.DefaultDispatcher
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Inject
 
 const val PARAMETER_ROUTE_NAME = "route_name"
@@ -26,7 +26,7 @@ const val PARAMETER_ROUTE_NAME = "route_name"
 @HiltViewModel
 class FacebookViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
-    private val storageHelper: StorageHelper,
+    private val storagePort: StoragePort,
     private val resources: Resources,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -56,9 +56,9 @@ class FacebookViewModel @Inject constructor(
     private fun createState(): FacebookState {
         var index = 0
         val routeName = stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!
-        val route = storageHelper.loadRoute(routeName)
-        val progress = storageHelper.loadProgress(routeName) ?: TreasuresProgress(routeName, route.treasures[0].id)
-        val path = storageHelper.loadHunterPath(routeName)
+        val route = storagePort.loadRoute(routeName)
+        val progress = storagePort.loadProgress(routeName) ?: TreasuresProgress(routeName, route.treasures[0].id)
+        val path = storagePort.loadHunterPath(routeName)
 
         val elements = mutableListOf<ElementDescription>()
         elements.add(

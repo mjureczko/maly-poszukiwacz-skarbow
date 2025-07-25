@@ -8,12 +8,12 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.screen.Screens
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val storageHelper: StorageHelper,
+    private val storagePort: StoragePort,
     private val stateHandle: SavedStateHandle
 ) : ViewModel()  {
 
@@ -28,6 +28,6 @@ class MapViewModel @Inject constructor(
     }
 
     private fun loadRoute(routeName: String): Route {
-        return storageHelper.loadRoute(routeName)
+        return storagePort.loadRoute(routeName)
     }
 }

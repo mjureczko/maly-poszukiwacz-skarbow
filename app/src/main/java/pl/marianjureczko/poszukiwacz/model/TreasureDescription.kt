@@ -2,7 +2,7 @@ package pl.marianjureczko.poszukiwacz.model
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.Root
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 import java.io.Serializable
 
@@ -27,9 +27,9 @@ data class TreasureDescription(
 
     fun prettyName(): String = "[$id] $latitude $longitude"
 
-    fun instantiatePhotoFile(storageHelper: StorageHelper): File {
+    fun instantiatePhotoFile(storagePort: StoragePort): File {
         if (photoFileName == null) {
-            photoFileName = storageHelper.newPhotoFile()
+            photoFileName = storagePort.newPhotoFile()
         }
         return File(photoFileName)
     }

@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.withContext
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URLDecoder
@@ -19,7 +19,7 @@ import java.net.URLEncoder
 
 class PhotoHelper(
     val context: Context,
-    val storageHelper: StorageHelper
+    val storagePort: StoragePort
 ) {
 
     companion object {
@@ -70,7 +70,7 @@ class PhotoHelper(
      * @return absolute path to the commemorative photo
      */
     fun moveCommemorativePhotoToPermanentLocation(target: String? = null): String {
-        val permanentCommemorativePhotoFile = target ?: this.storageHelper.newCommemorativePhotoFile()
+        val permanentCommemorativePhotoFile = target ?: this.storagePort.newCommemorativePhotoFile()
         getCommemorativePhotoTempFile().let { source ->
             source.copyTo(target = File(permanentCommemorativePhotoFile), overwrite = true)
             source.delete()
@@ -81,9 +81,9 @@ class PhotoHelper(
     fun createTipPhotoUri(): Uri = createPhotoUri(getPhotoTempFile())
 
     /** visibility for tests */
-    fun getCommemorativePhotoTempFile() = File(this.storageHelper.pathToRoutesDir() + TMP_PICTURE_FILE)
+    fun getCommemorativePhotoTempFile() = File(this.storagePort.pathToRoutesDir() + TMP_PICTURE_FILE)
 
-    fun getPhotoTempFile() = File(storageHelper.pathToRoutesDir() + "/tmp.jpg")
+    fun getPhotoTempFile() = File(storagePort.pathToRoutesDir() + "/tmp.jpg")
 
     suspend fun rescaleImageAndSaveInTreasure(
         photoFile: File,

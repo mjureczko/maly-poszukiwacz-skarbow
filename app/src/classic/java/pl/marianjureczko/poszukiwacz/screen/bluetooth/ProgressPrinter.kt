@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.bluetooth
 
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.shared.port.ExtractionProgress
+import pl.marianjureczko.poszukiwacz.shared.port.storage.ExtractionProgress
 
 class ProgressPrinter(private val printer: Printer) : ExtractionProgress {
 

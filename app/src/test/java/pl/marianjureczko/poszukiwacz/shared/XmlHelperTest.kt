@@ -8,7 +8,7 @@ import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 
 class XmlHelperTest {
 

@@ -225,7 +225,7 @@ fun Compass(arcRotation: Float, gpsAccuracy: GpsAccuracy, modifier: Modifier) {
         if (gpsAccuracy != GpsAccuracy.Fine) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.BottomEnd
+                contentAlignment = Alignment.BottomStart
             ) {
                 val textResId = when (gpsAccuracy) {
                     GpsAccuracy.Medium -> R.string.medium_gps_signal

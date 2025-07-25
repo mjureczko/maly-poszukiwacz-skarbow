@@ -9,14 +9,14 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.BDDMockito.given
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 //FIXME: clean files created during tests
 @ExtendWith(MockitoExtension::class)
 class TreasureDescriptionTest {
 
     @Mock
-    lateinit var storageHelper: StorageHelper
+    lateinit var storagePort: StoragePort
 
     @Test
     fun prettyName() {
@@ -35,10 +35,10 @@ class TreasureDescriptionTest {
         //given
         val given = some<TreasureDescription>().copy(photoFileName = null)
         val photoFile = some<String>()
-        given(storageHelper.newPhotoFile()).willReturn(photoFile)
+        given(storagePort.newPhotoFile()).willReturn(photoFile)
 
         //when
-        val actual = given.instantiatePhotoFile(storageHelper)
+        val actual = given.instantiatePhotoFile(storagePort)
 
         //then
         assertThat(actual.name).isEqualTo(photoFile)
@@ -52,7 +52,7 @@ class TreasureDescriptionTest {
         val photoFile = given.photoFileName
 
         //when
-        val actual = given.instantiatePhotoFile(storageHelper)
+        val actual = given.instantiatePhotoFile(storagePort)
 
         //then
         assertThat(actual.name).isEqualTo(photoFile)
@@ -84,12 +84,12 @@ class TreasureDescriptionTest {
         try {
 
             //when
-            given.instantiatePhotoFile(storageHelper).createNewFile()
+            given.instantiatePhotoFile(storagePort).createNewFile()
 
             //then
             assertTrue(given.hasPhoto())
         } finally {
-            given.instantiatePhotoFile(storageHelper).delete()
+            given.instantiatePhotoFile(storagePort).delete()
         }
     }
 }

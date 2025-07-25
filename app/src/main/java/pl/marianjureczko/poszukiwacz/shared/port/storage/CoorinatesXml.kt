@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.model
+package pl.marianjureczko.poszukiwacz.shared.port.storage
 
 import org.simpleframework.xml.Element
 import pl.marianjureczko.poszukiwacz.shared.Coordinates

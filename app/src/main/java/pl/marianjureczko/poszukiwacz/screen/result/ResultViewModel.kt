@@ -7,7 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.screen.Screens
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.util.Locale
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ interface MovieController {
 @HiltViewModel
 class ResultViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
-    private val storageHelper: StorageHelper
+    private val storagePort: StoragePort
 ) : ViewModel(), MovieController {
 
     private var _state: MutableState<ResultState> = mutableStateOf(createState())
@@ -52,7 +52,7 @@ class ResultViewModel @Inject constructor(
         val treasureDescId = stateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_ID) ?: NOTHING_FOUND_TREASURE_ID
         if (treasureDescriptionHasBeenIdentified(treasureDescId)) {
             stateHandle.get<String>(Screens.Results.PARAMETER_ROUTE_NAME)?.let { routeName ->
-                val treasureDescription = storageHelper.loadRoute(routeName).treasures
+                val treasureDescription = storagePort.loadRoute(routeName).treasures
                     .find { it.id == treasureDescId }
                 moviePath = treasureDescription?.movieFileName
                 subtitlesPath = treasureDescription?.subtitlesFileName

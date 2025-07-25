@@ -13,8 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import javax.inject.Qualifier
@@ -44,8 +44,8 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun customInitializerForRoute(storageHelper: StorageHelper, assetManager: AssetManager): CustomInitializerForRoute {
-        return CustomInitializerForRoute(storageHelper, assetManager)
+    fun customInitializerForRoute(storagePort: StoragePort, assetManager: AssetManager): CustomInitializerForRoute {
+        return CustomInitializerForRoute(storagePort, assetManager)
     }
 
     @Provides
@@ -58,8 +58,8 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun photoHelper(@ApplicationContext appContext: Context, storageHelper: StorageHelper): PhotoHelper {
-        return PhotoHelper(appContext, storageHelper)
+    fun photoHelper(@ApplicationContext appContext: Context, storagePort: StoragePort): PhotoHelper {
+        return PhotoHelper(appContext, storagePort)
     }
 
     @Singleton
@@ -82,13 +82,13 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun resetProgressUseCase(storage: StorageHelper): ResetProgressUC {
+    fun resetProgressUseCase(storage: StoragePort): ResetProgressUC {
         return ResetProgressUC(storage)
     }
 
     @Singleton
     @Provides
-    fun updateLocationUC(storage: StorageHelper, locationCalculator: LocationCalculator): UpdateLocationUC {
+    fun updateLocationUC(storage: StoragePort, locationCalculator: LocationCalculator): UpdateLocationUC {
         return UpdateLocationUC(storage, locationCalculator)
     }
 }

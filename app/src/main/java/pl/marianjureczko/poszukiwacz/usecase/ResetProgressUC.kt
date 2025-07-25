@@ -4,10 +4,10 @@ import androidx.compose.runtime.MutableState
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 class ResetProgressUC(
-    private val storage: StorageHelper
+    private val storage: StoragePort
 ) {
     operator fun invoke(state: MutableState<SharedState>) {
         state.value.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds.values.forEach {
