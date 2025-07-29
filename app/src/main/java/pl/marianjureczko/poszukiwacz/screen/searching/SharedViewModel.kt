@@ -26,7 +26,6 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
@@ -117,7 +116,7 @@ class SharedViewModel @Inject constructor(
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
                         selectedTreasureDescription = state.value.selectedTreasureDescription(),
-                        userLocation = state.value.currentLocation?.let { Coordinates.of(it) }
+                        userLocation = state.value.currentLocation
                     )
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
                     if (treasuresProgress.contains(scannedTreasure)) {

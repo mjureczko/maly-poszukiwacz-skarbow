@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteContainsTreasureWith
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteDoesNotContainTresureWithId
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class TreasureEditorViewModelTest {
 
@@ -114,7 +114,7 @@ class TreasureEditorViewModelTest {
     fun shouldUpdateLocationInState_whenLocationPortProvidesNewOne() {
         // given
         val fixture = TreasureEditorViewModelFixture(some<Route>())
-        val newLocation = some<Coordinates>()
+        val newLocation = some<AndroidLocation>()
 
         //when
         fixture.locationPort.updateLocation(newLocation.latitude, newLocation.longitude)
@@ -129,8 +129,8 @@ class TreasureEditorViewModelTest {
     fun shouldAddTreasureWithCurrentCoordinatesToRouteFromState_whenRequested() {
         //given
         val fixture = TreasureEditorViewModelFixture(some<Route> { treasures = listOf() })
-        val newCoordinates = some<Coordinates>()
-        fixture.locationPort.updateLocation(newCoordinates.latitude, newCoordinates.longitude)
+        val newLocation = some<AndroidLocation>()
+        fixture.locationPort.updateLocation(newLocation.latitude, newLocation.longitude)
         val stateValue = fixture.viewModel.state.value
 
         //when
@@ -142,9 +142,9 @@ class TreasureEditorViewModelTest {
             .isNotSameAs(stateValue)
         val actualRoute = fixture.viewModel.state.value.route
         //first TreasureDescription will have id=1
-        assertRouteContainsTreasureWith(actualRoute, 1, newCoordinates)
+        assertRouteContainsTreasureWith(actualRoute, 1, newLocation)
         val actualPersistedRoute = fixture.storage.routes[fixture.routeName]!!
-        assertRouteContainsTreasureWith(actualPersistedRoute, 1, newCoordinates)
+        assertRouteContainsTreasureWith(actualPersistedRoute, 1, newLocation)
     }
 
     @Test

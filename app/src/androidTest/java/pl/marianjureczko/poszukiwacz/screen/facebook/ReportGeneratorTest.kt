@@ -14,10 +14,9 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 import java.io.File
-import java.util.Date
 
 @RunWith(AndroidJUnit4::class)
 class ReportGeneratorTest {
@@ -46,9 +45,9 @@ class ReportGeneratorTest {
         )
         storagePort.save(treasuresProgress)
         val hunterPath = HunterPath(routeName)
-        hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
+        hunterPath.addLocation(TestLocation(10.0, 10.0, observedAt = 1))
+        hunterPath.addLocation(TestLocation(10.0, 11.0, observedAt = 1_000_000))
+        hunterPath.addLocation(TestLocation(10.0, 11.0, observedAt = 2_000_000))
         storagePort.save(hunterPath)
         StoragePort(context).save(Route(treasuresProgress.routeName))
         val stateHandle: SavedStateHandle = SavedStateHandle(mapOf(PARAMETER_ROUTE_NAME to routeName))

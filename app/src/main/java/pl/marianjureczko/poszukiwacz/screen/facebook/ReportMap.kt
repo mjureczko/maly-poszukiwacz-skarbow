@@ -71,7 +71,7 @@ class ReportMap(
     private fun drawRoute(overlay: SnapshotOverlay) {
         model.hunterPath?.let {
             val mapCanvas = overlay.canvas
-            val locations = it.pathAsCoordinates().toList()
+            val locations = it.path().toList()
             if (locations.size > 1) {
                 var previousXY =
                     overlay.screenCoordinate(Point.fromLngLat(locations[0].longitude, locations[0].latitude))

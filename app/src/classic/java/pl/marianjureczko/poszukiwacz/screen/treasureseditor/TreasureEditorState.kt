@@ -2,13 +2,13 @@ package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 typealias OverrideQuestionProvider = (TreasureDescription) -> Boolean
 
 data class TreasureEditorState(
     val route: Route,
-    val currentLocation: Coordinates?,
+    val currentLocation: AndroidLocation?,
     val overridePhotoQuestionProvider: OverrideQuestionProvider,
     val overrideSoundTipQuestionProvider: OverrideQuestionProvider,
     val showSoundRecordingDialog: Boolean = false,

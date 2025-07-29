@@ -1,28 +1,40 @@
 package pl.marianjureczko.poszukiwacz.shared.port
 
 import android.location.Location
+import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class LocationWrapper : AndroidLocation {
     private val location: Location
-    override val observedAt: Long = System.currentTimeMillis()
-        get() = field
+    override var observedAt: Long = System.currentTimeMillis()
+        private set
 
     constructor(location: Location) {
         this.location = location
     }
 
-    constructor(latitude: Double, longitude: Double) {
-        this.location = Location("").apply {
+    constructor(averagedLocation: AveragedLocation) :
+            this(
+                latitude = averagedLocation.latitude,
+                longitude = averagedLocation.longitude,
+                accuracy = 0f,
+                observedAt = 0
+            )
+
+
+    constructor(latitude: Double, longitude: Double, accuracy: Float, observedAt: Long) {
+        this.location = Location("dummy").apply {
             this.latitude = latitude
             this.longitude = longitude
+            this.accuracy = accuracy
         }
+        this.observedAt = observedAt
     }
 
     override fun distanceTo(dest: AndroidLocation): Float {
         val destLocation = when (dest) {
             is LocationWrapper -> dest.location
-            else -> LocationWrapper(dest.latitude, dest.longitude).location
+            else -> LocationWrapper(dest.latitude, dest.longitude, dest.accuracy, dest.observedAt).location
         }
         return location.distanceTo(destLocation)
     }

@@ -32,10 +32,8 @@ import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
-import pl.marianjureczko.poszukiwacz.shared.port.storage.CoorinatesXml
 
 
 @ExtendWith(MockitoExtension::class)
@@ -129,6 +127,7 @@ class SharedViewModelTest {
         given(locationProvider.requestLocationUpdates(any(LocationRequest::class.java), captor.capture(), eq(null)))
             .willReturn(mock())
         val viewModel = fixture.givenMocksForNoProgress()
+        viewModel.gpsJob!!.cancel()
 
         val location: Location = mock()
         val locationResult: LocationResult = mock()
@@ -139,8 +138,8 @@ class SharedViewModelTest {
         given(location.getLongitude()).willReturn(longitude)
         given(location.getAccuracy()).willReturn(0f)
         val expectedDistance: Int = somePositiveInt(999_999)
-        val wrappedLocation = LocationWrapper(location)
-        given(fixture.locationCalculator.distanceInSteps(selectedTreasure, wrappedLocation))
+        val locationWrapper = LocationWrapper(location)
+        given(fixture.locationCalculator.distanceInSteps(selectedTreasure, locationWrapper))
             .willReturn(expectedDistance)
 
         //when
@@ -150,13 +149,12 @@ class SharedViewModelTest {
         locationCallback.onLocationResult(locationResult)
 
         //then
-        assertThat(viewModel.state.value.currentLocation).isEqualTo(LocationWrapper(location))
+        assertThat(viewModel.state.value.currentLocation).isEqualTo(locationWrapper)
         assertThat(viewModel.state.value.stepsToTreasure).isEqualTo(expectedDistance)
         assertThat(viewModel.state.value.needleRotation).isCloseTo(90.0f, Offset.offset(0.01f))
         assertThat(viewModel.state.value.hunterPath.locations)
-            .containsExactly(CoorinatesXml(Coordinates(latitude, longitude)))
+            .containsExactly(locationWrapper)
 
-        viewModel.gpsJob!!.cancel()
         advanceTimeBy(5000L)
     }
 

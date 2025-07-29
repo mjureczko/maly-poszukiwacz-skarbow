@@ -2,8 +2,8 @@ package pl.marianjureczko.poszukiwacz.model
 
 import org.apache.commons.math3.stat.StatUtils
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
-import pl.marianjureczko.poszukiwacz.shared.port.storage.CoorinatesXml
+import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 import java.util.Date
 
 class HunterPath() {
@@ -14,11 +14,11 @@ class HunterPath() {
 
     constructor(
         routeName: String,
-        locations: MutableList<CoorinatesXml>,
+        locations: MutableList<AndroidLocation>,
         start: Date?,
         end: Date?,
         chunkStart: Date?,
-        chunkedCoordinates: MutableList<AveragedCoordinateXml>
+        chunkedCoordinates: MutableList<AveragedLocation>
     ) : this() {
         this.routeName = routeName
         this.locations = locations
@@ -35,7 +35,7 @@ class HunterPath() {
      * Measurements are sorted by time increasingly.
      */
     // Public getter for test purpose
-    var locations = mutableListOf<CoorinatesXml>()
+    var locations = mutableListOf<AndroidLocation>()
         private set
 
     var start: Date? = null
@@ -51,18 +51,17 @@ class HunterPath() {
      * Chunks are in chronological order.
      * Each chunk represents a collection of observed coordinates that were processed to produce a single coordinate.
      */
-    var chunkedCoordinates = mutableListOf<AveragedCoordinateXml>()
+    var chunkedCoordinates = mutableListOf<AveragedLocation>()
         private set
 
     /**
-     * @param date exposed for test, production relies on the default value
      * @return  true if chunked changed
      */
-    fun addLocation(coordinates: Coordinates, date: Date = Date()): Boolean {
-        val newLocation = CoorinatesXml(coordinates)
-        establishEnd(date)
-        establishStart(date)
-        return establishLocations(newLocation, date)
+    fun addLocation(newLocation: AndroidLocation): Boolean {
+        val observationDate = Date(newLocation.observedAt)
+        establishEnd(observationDate)
+        establishStart(observationDate)
+        return establishLocations(newLocation)
     }
 
     fun pathLengthInKm(): Double {
@@ -71,16 +70,15 @@ class HunterPath() {
         chunkedCoordinates.forEachIndexed { index, location ->
             if (index > 0) {
                 result += calculator.distanceInKm(
-                    chunkedCoordinates[index - 1].toCoordinates(),
-                    location.toCoordinates()
+                    LocationWrapper(chunkedCoordinates[index - 1]),
+                    LocationWrapper(location)
                 )
             }
         }
         return result
     }
 
-    fun pathAsCoordinates(): List<Coordinates> =
-        chunkedCoordinates.map { it.toCoordinates() }
+    fun path(): List<AveragedLocation> = chunkedCoordinates
 
     fun isLocationBeingUpdated(): Boolean {
         if (end == null) return true
@@ -104,11 +102,12 @@ class HunterPath() {
     /**
      * @return  true if chunked changed
      */
-    private fun establishLocations(newLocation: CoorinatesXml, date: Date): Boolean {
-        val result = if (collectedForChunk(date)) {
+    private fun establishLocations(newLocation: AndroidLocation): Boolean {
+        val date = Date(newLocation.observedAt)
+        val result = if (collectedForNextChunk(date)) {
             val longitude = StatUtils.percentile(locations.map { it.longitude }.toList().toDoubleArray(), 50.0)
             val latitude = StatUtils.percentile(locations.map { it.latitude }.toList().toDoubleArray(), 50.0)
-            chunkedCoordinates.add(AveragedCoordinateXml(longitude, latitude))
+            chunkedCoordinates.add(AveragedLocation(longitude = longitude, latitude = latitude))
             chunkStart = date
             locations.clear()
             true
@@ -119,7 +118,7 @@ class HunterPath() {
         return result
     }
 
-    private fun collectedForChunk(newMeasurementDate: Date): Boolean =
+    private fun collectedForNextChunk(newMeasurementDate: Date): Boolean =
         (timeSpanInMilis(newMeasurementDate) >= 20_000L) && (locations.isNotEmpty())
 
     private fun timeSpanInMilis(newMeasurementDate: Date): Long =

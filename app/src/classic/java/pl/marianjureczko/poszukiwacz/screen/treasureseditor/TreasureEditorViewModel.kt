@@ -17,7 +17,6 @@ import pl.marianjureczko.poszukiwacz.permissions.Requirements
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingTipPhoto
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForRecordingSound
 import pl.marianjureczko.poszukiwacz.screen.Screens
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
@@ -60,7 +59,7 @@ class TreasureEditorViewModel @Inject constructor(
 
     init {
         locationPort.startFetching(viewModelScope) { location ->
-            _state.value = _state.value.copy(currentLocation = Coordinates.of(location))
+            _state.value = _state.value.copy(currentLocation = location)
         }
     }
 

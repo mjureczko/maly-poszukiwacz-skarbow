@@ -6,7 +6,6 @@ import pl.marianjureczko.poszukiwacz.screen.searching.ArcCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 class UpdateLocationUC(
@@ -39,9 +38,7 @@ class UpdateLocationUC(
                 .toMap()
         )
         updateAccuracy(location, state)
-        val currentCoordinates =
-            Coordinates(location.latitude, location.longitude, location.accuracy, location.observedAt)
-        if (state.value.hunterPath.addLocation(currentCoordinates)) {
+        if (state.value.hunterPath.addLocation(location)) {
             storage.save(state.value.hunterPath)
         }
     }
