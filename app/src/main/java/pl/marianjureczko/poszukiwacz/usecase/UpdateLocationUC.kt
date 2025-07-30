@@ -21,7 +21,7 @@ class UpdateLocationUC(
         Log.i(TAG, "location updated")
         val selectedTreasure = state.value.selectedTreasureDescription()
         state.value = state.value.copy(
-            currentLocation = location,
+            currentLocation = state.value.currentLocation.updateLocation(location),
             stepsToTreasure = if (selectedTreasure != null) {
                 locationCalculator.distanceInSteps(selectedTreasure, location)
             } else 0,

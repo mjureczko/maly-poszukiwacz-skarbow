@@ -46,7 +46,7 @@ class UpdateLocationUCTest {
                 mediaPlayer = mock(),
                 route = mock(),
                 treasuresProgress = mock(),
-                currentLocation = null,
+                currentLocation = LocationHolder(),
                 stepsToTreasure = null,
                 hunterPath = mock()
             )

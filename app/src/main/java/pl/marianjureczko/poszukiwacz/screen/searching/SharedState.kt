@@ -5,7 +5,7 @@ import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
+import pl.marianjureczko.poszukiwacz.usecase.LocationHolder
 
 interface HasCommemorativePhoto {
     fun hasCommemorativePhoto(treasureId: Int): Boolean
@@ -14,7 +14,7 @@ interface HasCommemorativePhoto {
 interface SelectorSharedState : HasCommemorativePhoto {
     val route: Route
     var treasuresProgress: TreasuresProgress
-    val currentLocation: AndroidLocation?
+    val currentLocation: LocationHolder
     val distancesInSteps: Map<Int, Int?>
     fun isTreasureCollected(treasureId: Int): Boolean
     fun allTreasuresCollected(): Boolean
@@ -24,7 +24,7 @@ interface SearchingSharedState : HasCommemorativePhoto {
     val mediaPlayer: MediaPlayer
     val route: Route
     var treasuresProgress: TreasuresProgress
-    val currentLocation: AndroidLocation?
+    val currentLocation: LocationHolder
     val stepsToTreasure: Int?
     var needleRotation: Float
     var hunterPath: HunterPath
@@ -42,7 +42,7 @@ data class SharedState(
     override val mediaPlayer: MediaPlayer,
     override var route: Route,
     override var treasuresProgress: TreasuresProgress,
-    override var currentLocation: AndroidLocation?,
+    override var currentLocation: LocationHolder,
     override var stepsToTreasure: Int?,
     override var hunterPath: HunterPath,
     override var needleRotation: Float = 0.0f,
@@ -52,7 +52,7 @@ data class SharedState(
         .toMap(),
 ) : SelectorSharedState, SearchingSharedState, CommemorativeSharedState {
     constructor(mediaPlayer: MediaPlayer, route: Route, treasuresProgress: TreasuresProgress, hunterPath: HunterPath) :
-            this(mediaPlayer, route, treasuresProgress, null, null, hunterPath)
+            this(mediaPlayer, route, treasuresProgress, LocationHolder(), null, hunterPath)
 
     override fun isTreasureCollected(treasureId: Int): Boolean =
         treasuresProgress.collectedTreasuresDescriptionId.contains(treasureId)

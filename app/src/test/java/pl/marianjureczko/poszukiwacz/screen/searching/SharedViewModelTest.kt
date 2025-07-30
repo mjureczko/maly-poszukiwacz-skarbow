@@ -149,7 +149,7 @@ class SharedViewModelTest {
         locationCallback.onLocationResult(locationResult)
 
         //then
-        assertThat(viewModel.state.value.currentLocation).isEqualTo(locationWrapper)
+        assertThat(viewModel.state.value.currentLocation.getCurrentUserLocation()).isEqualTo(locationWrapper)
         assertThat(viewModel.state.value.stepsToTreasure).isEqualTo(expectedDistance)
         assertThat(viewModel.state.value.needleRotation).isCloseTo(90.0f, Offset.offset(0.01f))
         assertThat(viewModel.state.value.hunterPath.locations)

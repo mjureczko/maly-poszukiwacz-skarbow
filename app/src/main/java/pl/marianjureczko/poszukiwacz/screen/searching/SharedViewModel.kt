@@ -34,6 +34,7 @@ import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.LocationHolder.Companion.GPS_NO_SIGNAL_THRESHOLD_IN_MILIS
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import javax.inject.Inject
@@ -85,7 +86,6 @@ class SharedViewModel @Inject constructor(
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
-    private val arcCalculator = ArcCalculator()
 
     init {
         locationPort.startFetching(viewModelScope, { location -> updateLocationUC(location, _state) })
@@ -116,7 +116,7 @@ class SharedViewModel @Inject constructor(
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
                         selectedTreasureDescription = state.value.selectedTreasureDescription(),
-                        userLocation = state.value.currentLocation
+                        userLocation = state.value.currentLocation.getCurrentUserLocation()
                     )
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
                     if (treasuresProgress.contains(scannedTreasure)) {
@@ -292,7 +292,7 @@ class SharedViewModel @Inject constructor(
     private fun scheduleGpsCheck() {
         gpsJob = viewModelScope.launch(ioDispatcher) {
             while (isActive) {
-                delay(5000) // 5 seconds
+                delay(GPS_NO_SIGNAL_THRESHOLD_IN_MILIS)
                 if (state.value.hunterPath.isLocationBeingUpdated() == false) {
                     _state.value = state.value.copy(gpsAccuracy = GpsAccuracy.NoSignal)
                 }
