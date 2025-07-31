@@ -1,9 +1,9 @@
 package pl.marianjureczko.poszukiwacz.model
 
-import org.apache.commons.math3.stat.StatUtils
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
+import pl.marianjureczko.poszukiwacz.usecase.CalculateAveragedLocationUC
 import java.util.Date
 
 class HunterPath() {
@@ -105,12 +105,15 @@ class HunterPath() {
     private fun establishLocations(newLocation: AndroidLocation): Boolean {
         val date = Date(newLocation.observedAt)
         val result = if (collectedForNextChunk(date)) {
-            val longitude = StatUtils.percentile(locations.map { it.longitude }.toList().toDoubleArray(), 50.0)
-            val latitude = StatUtils.percentile(locations.map { it.latitude }.toList().toDoubleArray(), 50.0)
-            chunkedCoordinates.add(AveragedLocation(longitude = longitude, latitude = latitude))
-            chunkStart = date
-            locations.clear()
-            true
+            val averagedLocation = CalculateAveragedLocationUC().invoke(locations)
+            if (averagedLocation != null) {
+                chunkedCoordinates.add(averagedLocation)
+                chunkStart = date
+                locations.clear()
+                true
+            } else {
+                false
+            }
         } else {
             false
         }

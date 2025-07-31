@@ -30,5 +30,9 @@ class AndroidLocationArranger : CustomArranger<AndroidLocation>() {
                 observedAt = observedAt
             )
         }
+
+        fun withAccuracy(accuracy: Float): AndroidLocation {
+            return some<TestLocation>().copy(accuracy = accuracy)
+        }
     }
 }

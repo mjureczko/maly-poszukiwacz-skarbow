@@ -103,11 +103,11 @@ class HunterPathTest {
         //given
         val hunterPath = HunterPath()
         var time = System.currentTimeMillis()
-        hunterPath.addLocation(TestLocation(1.0, 10.0, observedAt = time))
-        hunterPath.addLocation(TestLocation(2.0, 20.0, observedAt = time + 9_000))
-        hunterPath.addLocation(TestLocation(3.0, 30.0, observedAt = time + 19_000))
-        hunterPath.addLocation(TestLocation(4.0, 3.0, observedAt = time + 25_000))
-        hunterPath.addLocation(TestLocation(4.0, 3.0, observedAt = time + 30_000))
+        hunterPath.addLocation(TestLocation(1.0, 10.0, accuracy = 1f, observedAt = time))
+        hunterPath.addLocation(TestLocation(2.0, 20.0, accuracy = 1f, observedAt = time + 9_000))
+        hunterPath.addLocation(TestLocation(3.0, 30.0, accuracy = 1f, observedAt = time + 19_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 25_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 30_000))
 
         //when
         val actual = hunterPath.path()
@@ -121,16 +121,16 @@ class HunterPathTest {
         //given
         val hunterPath = HunterPath()
         var time = System.currentTimeMillis()
-        hunterPath.addLocation(TestLocation(1.0, 1.0, observedAt = time))
-        hunterPath.addLocation(TestLocation(2.0, 2.0, observedAt = time + 9_000))
-        hunterPath.addLocation(TestLocation(3.0, 3.0, observedAt = time + 19_000))
+        hunterPath.addLocation(TestLocation(1.0, 1.0, accuracy = 1f, observedAt = time))
+        hunterPath.addLocation(TestLocation(2.0, 2.0, accuracy = 1f, observedAt = time + 9_000))
+        hunterPath.addLocation(TestLocation(3.0, 3.0, accuracy = 1f, observedAt = time + 19_000))
 
-        hunterPath.addLocation(TestLocation(4.0, 3.0, observedAt = time + 25_000))
-        hunterPath.addLocation(TestLocation(4.0, 3.0, observedAt = time + 30_000))
-        hunterPath.addLocation(TestLocation(5.0, 3.0, observedAt = time + 35_000))
-        hunterPath.addLocation(TestLocation(5.0, 4.0, observedAt = time + 39_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 25_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 30_000))
+        hunterPath.addLocation(TestLocation(5.0, 3.0, accuracy = 1f, observedAt = time + 35_000))
+        hunterPath.addLocation(TestLocation(5.0, 4.0, accuracy = 1f, observedAt = time + 39_000))
 
-        hunterPath.addLocation(TestLocation(6.0, 6.0, observedAt = time + 50_000))
+        hunterPath.addLocation(TestLocation(6.0, 6.0, accuracy = 1f, observedAt = time + 50_000))
 
         //when
         val actual = hunterPath.path()
