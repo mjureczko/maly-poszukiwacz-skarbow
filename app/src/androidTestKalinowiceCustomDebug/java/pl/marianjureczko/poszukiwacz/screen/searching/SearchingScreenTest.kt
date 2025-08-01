@@ -16,6 +16,7 @@ import pl.marianjureczko.poszukiwacz.screen.result.PLAY_MOVIE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.TREASURE_COLLECTED_CHECKBOX
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 
+//Prepared for Pixel 6a API 34
 @UninstallModules(PortsModule::class)
 @HiltAndroidTest
 class SearchingScreenTest : UiTest() {

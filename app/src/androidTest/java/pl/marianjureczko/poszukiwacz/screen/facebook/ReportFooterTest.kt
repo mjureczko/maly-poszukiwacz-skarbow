@@ -33,6 +33,6 @@ class ReportFooterTest : ReportAbstractTest() {
         stream.close()
 
         TestCase.assertTrue(bitmap.sameAs(expected("footer.png")))
-        //stop at breakpoint and check the image at /data/data/pl.marianjureczko.poszukiwacz/files/map_footer.jpeg
+        //stop at breakpoint and check the image at /data/data/pl.marianjureczko.poszukiwacz/files/footer.jpeg
     }
 }

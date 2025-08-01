@@ -11,6 +11,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 import pl.marianjureczko.poszukiwacz.ui.components.YES_BUTTON
 
+//Prepared for Pixel 6a API 34
 @UninstallModules(PortsModule::class)
 @HiltAndroidTest
 class RestartTest : UiTest() {

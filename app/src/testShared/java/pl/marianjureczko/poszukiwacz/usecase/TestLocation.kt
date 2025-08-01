@@ -10,7 +10,17 @@ data class TestLocation(
     override val observedAt: Long = someLong()
 ) : AndroidLocation {
 
+    private var distance = 0f
+
+    @Synchronized
+    fun getDistance(): Float = distance
+
+    @Synchronized
+    fun setDistance(value: Float) {
+        distance = value
+    }
+
     override fun distanceTo(dest: AndroidLocation): Float {
-        return 0f
+        return getDistance()
     }
 }

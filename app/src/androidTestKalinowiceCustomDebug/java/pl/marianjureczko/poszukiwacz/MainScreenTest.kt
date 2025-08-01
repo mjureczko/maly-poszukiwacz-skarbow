@@ -12,6 +12,7 @@ import pl.marianjureczko.poszukiwacz.screen.main.GUIDE_TEXT
 import pl.marianjureczko.poszukiwacz.screen.main.NEXT_GUIDE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.searching.COMPASS
 
+//Prepared for Pixel 6a API 34
 @UninstallModules(TestPortsModule::class, BuildVariantSpecificTestPortsModule::class)
 @HiltAndroidTest
 class MainScreenTest : UiTest() {
