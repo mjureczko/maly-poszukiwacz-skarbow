@@ -7,16 +7,16 @@ import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
 object XmlMapper {
 
     fun toXml(hunterPath: HunterPath): HunterPathXml {
-        return HunterPathXml().apply {
-            routeName = hunterPath.routeName
-            locations = hunterPath.locations.map { AndroidLocationXml(it) }.toMutableList()
-            start = hunterPath.start
-            end = hunterPath.end
-            chunkStart = hunterPath.chunkStart
+        return HunterPathXml(
+            routeName = hunterPath.routeName,
+            locations = hunterPath.locations.map { AndroidLocationXml(it) }.toMutableList(),
+            start = hunterPath.start,
+            end = hunterPath.end,
+            chunkStart = hunterPath.chunkStart,
             chunkedCoordinates = hunterPath.chunkedCoordinates
                 .map { AveragedLocationXml(latitude = it.latitude, longitude = it.longitude) }
                 .toMutableList()
-        }
+        )
     }
 
     fun toEntity(xml: HunterPathXml): HunterPath {

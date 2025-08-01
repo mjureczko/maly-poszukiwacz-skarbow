@@ -1,18 +1,13 @@
 package pl.marianjureczko.poszukiwacz.shared.port.storage
 
 import org.simpleframework.xml.Element
+import org.simpleframework.xml.Root
 
-class AveragedLocationXml {
-    constructor(longitude: Double, latitude: Double) {
-        this.longitude = longitude
-        this.latitude = latitude
-    }
+@Root//(name = "AveragedLocationXml", strict = false)
+data class AveragedLocationXml(
+    @field:Element(name = "longitude")
+    var longitude: Double = Double.NaN,
 
-    @field:Element
-    var longitude: Double
-        private set
-
-    @field:Element
-    var latitude: Double
-        private set
-}
+    @field:Element(name = "latitude")
+    var latitude: Double = Double.NaN
+)

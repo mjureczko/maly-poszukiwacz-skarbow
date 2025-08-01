@@ -23,7 +23,7 @@ class LocationWrapper : AndroidLocation {
 
 
     constructor(latitude: Double, longitude: Double, accuracy: Float, observedAt: Long) {
-        this.location = Location("dummy").apply {
+        this.location = Location("").apply {
             this.latitude = latitude
             this.longitude = longitude
             this.accuracy = accuracy

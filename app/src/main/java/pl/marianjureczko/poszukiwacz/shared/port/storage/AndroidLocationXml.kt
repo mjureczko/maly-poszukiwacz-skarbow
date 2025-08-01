@@ -47,6 +47,10 @@ class AndroidLocationXml {
         )
     }
 
+    override fun toString(): String {
+        return "longitude=$longitude, latitude=$latitude, accuracy=$accuracy, observedAt=$observedAt"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

@@ -39,6 +39,7 @@ class XmlHelper {
         val xml = xmlFile.readText()
         return serializer.read(TreasuresProgress::class.java, xml)
     }
+
     fun loadHunterPathFromFile(xmlFile: File): HunterPathXml {
         val xml = xmlFile.readText()
         return serializer.read(HunterPathXml::class.java, xml)
