@@ -8,9 +8,8 @@ import junit.framework.TestCase
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.marianjureczko.poszukiwacz.model.HunterPath
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
+import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 import java.io.File
-import java.util.Date
 
 //Prepared for Pixel 6a API 34
 @RunWith(AndroidJUnit4::class)
@@ -23,11 +22,11 @@ class ReportMapSummaryTest : ReportAbstractTest() {
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         val hunterPath = HunterPath(routeName)
-        hunterPath.addLocation(Coordinates(10.0, 10.0), Date(1))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(1_000_000))
-        hunterPath.addLocation(Coordinates(10.0, 11.0), Date(2_000_000))
+        hunterPath.addLocation(TestLocation(10.0, 10.0, accuracy = 1f, observedAt = 1))
+        hunterPath.addLocation(TestLocation(10.0, 11.0, accuracy = 1f, observedAt = 1_000_000))
+        hunterPath.addLocation(TestLocation(10.0, 11.0, accuracy = 1f, observedAt = 2_000_000))
         saveEmptyProgress()
-        storageHelper.save(hunterPath)
+        storagePort.save(hunterPath)
         val reportMapHeader = ReportMapSummary(createFacebookViewModel().state.value, font)
 
         //when

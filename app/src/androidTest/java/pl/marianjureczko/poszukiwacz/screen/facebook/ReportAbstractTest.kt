@@ -12,11 +12,11 @@ import org.junit.Before
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 abstract class ReportAbstractTest {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    val storageHelper: StorageHelper = StorageHelper(context)
+    val storagePort: StoragePort = StoragePort(context)
     val routeName = "custom"
     private val stateHandle: SavedStateHandle = SavedStateHandle(mapOf(PARAMETER_ROUTE_NAME to routeName))
 
@@ -26,9 +26,9 @@ abstract class ReportAbstractTest {
     private val testDispatcher = StandardTestDispatcher()
 
     fun createFacebookViewModel() =
-        FacebookViewModel(stateHandle, storageHelper, context.resources, testDispatcher, testDispatcher)
+        FacebookViewModel(stateHandle, storagePort, context.resources, testDispatcher, testDispatcher)
 
-    fun saveEmptyProgress() = storageHelper.save(treasuresProgress)
+    fun saveEmptyProgress() = storagePort.save(treasuresProgress)
 
     fun expected(fileName: String): Bitmap {
         val inputStream = InstrumentationRegistry.getInstrumentation().context.resources.assets.open(fileName)
@@ -38,6 +38,6 @@ abstract class ReportAbstractTest {
     @Before
     fun setup() {
         val route = Route(routeName)
-        storageHelper.save(route)
+        storagePort.save(route)
     }
 }

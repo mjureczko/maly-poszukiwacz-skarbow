@@ -14,15 +14,15 @@ import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.BuildConfig
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
-import pl.marianjureczko.poszukiwacz.shared.port.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 
 @ExtendWith(MockitoExtension::class)
 class CustomInitializerForRouteTest {
 
     @Mock
-    lateinit var storage: StorageHelper
+    lateinit var storage: StoragePort
 
     @Mock
     lateinit var assetManager: AssetManager

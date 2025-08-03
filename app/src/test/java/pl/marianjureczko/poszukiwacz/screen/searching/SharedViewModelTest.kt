@@ -28,13 +28,12 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
 import pl.marianjureczko.poszukiwacz.any
 import pl.marianjureczko.poszukiwacz.eq
-import pl.marianjureczko.poszukiwacz.model.HunterLocation
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
 
 
 @ExtendWith(MockitoExtension::class)
@@ -128,19 +127,20 @@ class SharedViewModelTest {
         given(locationProvider.requestLocationUpdates(any(LocationRequest::class.java), captor.capture(), eq(null)))
             .willReturn(mock())
         val viewModel = fixture.givenMocksForNoProgress()
+        viewModel.gpsJob!!.cancel()
 
         val location: Location = mock()
         val locationResult: LocationResult = mock()
-        val latitude = viewModel.state.value.selectedTreasureDescription()!!.latitude
-        val longitude = viewModel.state.value.selectedTreasureDescription()!!.longitude - 1
+        val selectedTreasure = viewModel.state.value.selectedTreasureDescription()!!
+        val latitude = selectedTreasure.latitude
+        val longitude = selectedTreasure.longitude - 1
         given(location.getLatitude()).willReturn(latitude)
         given(location.getLongitude()).willReturn(longitude)
-        val expectedDistance = somePositiveInt(999_999)
-        given(
-            fixture.locationCalculator.distanceInSteps(
-                viewModel.state.value.selectedTreasureDescription()!!, location
-            )
-        ).willReturn(expectedDistance)
+        given(location.getAccuracy()).willReturn(0f)
+        val expectedDistance: Int = somePositiveInt(999_999)
+        val locationWrapper = LocationWrapper(location)
+        given(fixture.locationCalculator.distanceInSteps(selectedTreasure, locationWrapper))
+            .willReturn(expectedDistance)
 
         //when
         advanceTimeBy(100L)
@@ -149,11 +149,13 @@ class SharedViewModelTest {
         locationCallback.onLocationResult(locationResult)
 
         //then
-        assertThat(viewModel.state.value.currentLocation).isEqualTo(location)
+        assertThat(viewModel.state.value.currentLocation.getCurrentUserLocation()).isEqualTo(locationWrapper)
         assertThat(viewModel.state.value.stepsToTreasure).isEqualTo(expectedDistance)
         assertThat(viewModel.state.value.needleRotation).isCloseTo(90.0f, Offset.offset(0.01f))
-        assertThat(viewModel.state.value.hunterPath.publicLocations)
-            .containsExactly(HunterLocation(Coordinates(latitude, longitude)))
+        assertThat(viewModel.state.value.hunterPath.locations)
+            .containsExactly(locationWrapper)
+
+        advanceTimeBy(5000L)
     }
 
     /**
@@ -237,7 +239,7 @@ class SharedViewModelTest {
 
         //when & then
         var callbackUsed = 0
-        val callback1 = viewModel.scannedTreasureCallback { _, actual, _, _ ->
+        val callback1 = viewModel.scannedTreasureCallback { _, _, _, _ ->
             callbackUsed++
         }
         callback1(qrResult)

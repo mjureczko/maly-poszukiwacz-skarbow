@@ -4,26 +4,26 @@ import com.ocadotechnology.gembus.test.CustomArranger
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someObjects
 import com.ocadotechnology.gembus.test.someString
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 
 class RouteArranger : CustomArranger<Route>() {
     companion object {
 
-        fun saveWithTreasureDescription(treasureDescription: TreasureDescription, storageHelper: StorageHelper): Route {
+        fun saveWithTreasureDescription(treasureDescription: TreasureDescription, storagePort: StoragePort): Route {
             val route = Route(someString(), mutableListOf(treasureDescription))
-            storageHelper.save(route)
+            storagePort.save(route)
             return route
         }
 
-        fun savedWithTipFiles(storageHelper: StorageHelper): Route {
+        fun savedWithTipFiles(storagePort: StoragePort): Route {
             val route = some<Route>()
             route.treasures.forEach { t ->
-                t.instantiatePhotoFile(storageHelper).createNewFile()
-                t.tipFileName = storageHelper.newSoundFile()
+                t.instantiatePhotoFile(storagePort).createNewFile()
+                t.tipFileName = storagePort.newSoundFile()
                 File(t.tipFileName).createNewFile()
             }
-            storageHelper.save(route)
+            storagePort.save(route)
             return route
         }
 

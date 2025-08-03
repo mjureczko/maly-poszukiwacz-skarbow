@@ -26,13 +26,13 @@ class ReportFooterTest : ReportAbstractTest() {
 
         //then
         //save to hava a reference in case of failing test
-        val fileName = "map_footer.png"
+        val fileName = "footer.png"
         val stream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         stream.flush()
         stream.close()
 
-        TestCase.assertTrue(bitmap.sameAs(expected("map_footer.png")))
-        //stop at breakpoint and check the image at /data/data/pl.marianjureczko.poszukiwacz/files/map_footer.jpeg
+        TestCase.assertTrue(bitmap.sameAs(expected("footer.png")))
+        //stop at breakpoint and check the image at /data/data/pl.marianjureczko.poszukiwacz/files/footer.jpeg
     }
 }

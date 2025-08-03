@@ -8,6 +8,7 @@ import pl.marianjureczko.poszukiwacz.screen.result.PLAY_MOVIE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.SHOW_MOVIE_BUTTON
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 
+//Prepared for Pixel 6a API 34
 @UninstallModules(PortsModule::class)
 @HiltAndroidTest
 class SelectorScreenTest : UiTest() {

@@ -5,7 +5,6 @@ import com.ocadotechnology.gembus.test.someObjects
 import com.ocadotechnology.gembus.test.somePositiveInt
 import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
-
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
@@ -17,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class CustomJustFoundTreasureDescriptionFinderTest {
 
@@ -79,7 +78,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
                     "SHOULD return null WHEN only coordinates is null",
                     someTreasure,
                     null,
-                    some<Coordinates>(),
+                    some<AndroidLocation>(),
                     0,
                     null
                 ),
@@ -87,7 +86,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
                     "SHOULD return null WHEN description is far away from coordinates",
                     someTreasure,
                     someDescription,
-                    some<Coordinates>(),
+                    some<AndroidLocation>(),
                     60,
                     null
                 ),
@@ -95,7 +94,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
                     "SHOULD return description WHEN description is close to coordinates",
                     someTreasure,
                     someDescription,
-                    some<Coordinates>(),
+                    some<AndroidLocation>(),
                     59,
                     someDescription
                 ),
@@ -112,7 +111,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
         comment: String,
         justFoundTreasure: Treasure,
         description: TreasureDescription?,
-        userCoordinates: Coordinates?,
+        userCoordinates: AndroidLocation?,
         coordinatesDistance: Int,
         expected: TreasureDescription?
     ) {

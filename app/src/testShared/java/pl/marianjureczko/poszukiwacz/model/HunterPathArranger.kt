@@ -2,11 +2,12 @@ package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.CustomArranger
 import com.ocadotechnology.gembus.test.some
+import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 
 class HunterPathArranger : CustomArranger<HunterPath>() {
     override fun instance(): HunterPath {
         val instance = super.instance()
-        instance.addLocation(some())
+        instance.addLocation(some<TestLocation>())
         return instance
     }
 }

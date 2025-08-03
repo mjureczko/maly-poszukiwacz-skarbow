@@ -166,7 +166,7 @@ dependencies {
     testImplementation("com.ocadotechnology.gembus:test-arranger:1.6.4") {
         exclude group: "dk.brics.automaton", module: "automaton"
     }
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.26.3'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.15.2'
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.4.0'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0'
@@ -176,6 +176,7 @@ dependencies {
         exclude group: "dk.brics.automaton", module: "automaton"
     }
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
     androidTestImplementation 'androidx.test:core:1.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.1"

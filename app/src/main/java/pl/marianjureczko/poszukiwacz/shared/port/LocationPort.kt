@@ -3,13 +3,13 @@ package pl.marianjureczko.poszukiwacz.shared.port
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -19,6 +19,8 @@ import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.di.MainDispatcher
 import kotlin.coroutines.suspendCoroutine
 
+private const val defaultIntervalMs: Long = 1_000L
+
 open class LocationPort(
     private val context: Context,
     private val fusedLocationClient: FusedLocationProviderClient,
@@ -27,13 +29,13 @@ open class LocationPort(
 ) {
 
     private val TAG = javaClass.simpleName
-    private lateinit var updateLocationCallback: (Location) -> Unit
+    private lateinit var updateLocationCallback: UpdateLocationCallback
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             locationResult.lastLocation?.let {
-                Log.i(TAG, "New location, lat: " + it.latitude + " long: " + it.longitude)
-                updateLocationCallback(it)
+                Log.i(TAG, "New location, lat: ${it.latitude} long: ${it.longitude} accuracy: ${it.accuracy}m")
+                updateLocationCallback(LocationWrapper(it))
             }
         }
     }
@@ -42,12 +44,15 @@ open class LocationPort(
         viewModelScope: CoroutineScope,
         updateLocationCallback: UpdateLocationCallback
     ) {
-        fetch(1_000, viewModelScope, updateLocationCallback)
+        fetch(defaultIntervalMs, viewModelScope, updateLocationCallback)
         // after between screen navigation location updating may stop, hence needs to be retriggered periodically
         viewModelScope.launch(ioDispatcher) {
             delay(20_000)
-            stopFetching()
-            fetch(1_000, viewModelScope, updateLocationCallback)
+            // Switch to main thread for location operations
+            viewModelScope.launch(mainDispatcher) {
+                stopFetching()
+                fetch(defaultIntervalMs, viewModelScope, updateLocationCallback)
+            }
         }
     }
 
@@ -55,19 +60,26 @@ open class LocationPort(
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
+    /**
+     * @param interval The interval in milliseconds between location updates.
+     */
     private fun fetch(
         interval: Long,
         viewModelScope: CoroutineScope,
         updateLocationCallback: UpdateLocationCallback
     ) {
         this.updateLocationCallback = updateLocationCallback
+        // Location updates must be requested on main thread due to Looper requirement
         viewModelScope.launch(mainDispatcher) {
             requestLocation(interval)
         }
     }
 
-    private suspend fun requestLocation(interval: Long = 1_000) {
-        val locationRequest = LocationRequest.Builder(interval).build()
+    private suspend fun requestLocation(interval: Long = defaultIntervalMs) {
+        val locationRequest = LocationRequest.Builder(interval)
+            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)  // Use GPS + Network sensors
+            .build()
+
         return suspendCoroutine { _ ->
             //The permission should be already granted, but Idea reports error when the check is missing
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)

@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.shared.port
+package pl.marianjureczko.poszukiwacz.shared.port.storage
 
 import android.content.Context
 import android.util.Log
@@ -19,8 +19,7 @@ interface ExtractionProgress {
     fun fileExtracted(fileName: String)
 }
 
-//TODO: rename to StoragePort
-open class StorageHelper(val context: Context) {
+open class StoragePort(val context: Context) {
 
     private val TAG = javaClass.simpleName
     private val xmlHelper = XmlHelper()
@@ -46,7 +45,8 @@ open class StorageHelper(val context: Context) {
     }
 
     open fun save(hunterPath: HunterPath) {
-        xmlHelper.writeToFile(hunterPath, getHunterPathFile(hunterPath.routeName))
+        val xml = XmlMapper.toXml(hunterPath)
+        xmlHelper.writeToFile(xml, getHunterPathFile(hunterPath.routeName))
     }
 
     open fun loadProgress(routeName: String): TreasuresProgress? {
@@ -67,7 +67,9 @@ open class StorageHelper(val context: Context) {
         val file = getHunterPathFile(routeName)
         return if (file.exists()) {
             try {
-                xmlHelper.loadHunterPathFromFile(file)
+                xmlHelper.loadHunterPathFromFile(file)?.let {
+                    XmlMapper.toEntity(it)
+                }
             } catch (e: Exception) {
                 Log.e(TAG, e.message, e)
                 null

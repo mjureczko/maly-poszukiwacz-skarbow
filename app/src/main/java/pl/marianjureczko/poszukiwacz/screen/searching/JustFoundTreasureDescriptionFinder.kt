@@ -4,7 +4,7 @@ import android.util.Log
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class JustFoundTreasureDescriptionFinder(
     private val treasureDescriptions: List<TreasureDescription>,
@@ -16,7 +16,7 @@ class JustFoundTreasureDescriptionFinder(
     fun findTreasureDescription(
         justFoundTreasure: Treasure,
         selectedTreasureDescription: TreasureDescription? = null,
-        userLocation: Coordinates? = null,
+        userLocation: AndroidLocation? = null,
     ): TreasureDescription? {
         if (justFoundTreasure.type == TreasureType.KNOWLEDGE) {
             return treasureDescriptions.find { td ->

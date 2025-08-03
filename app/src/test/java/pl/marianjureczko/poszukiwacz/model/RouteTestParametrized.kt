@@ -11,7 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import pl.marianjureczko.poszukiwacz.shared.TestContext
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.io.File
 
 class RouteTestParametrized() {
@@ -43,11 +43,11 @@ class RouteTestParametrized() {
 
 class RouteTest {
     private val context = TestContext()
-    private val storageHelper = StorageHelper(context)
+    private val storagePort = StoragePort(context)
 
     @BeforeEach
     fun cleanup() {
-        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StorageHelper.routesDirectory))
+        FileUtils.deleteDirectory(File(context.filesDir.absolutePath + StoragePort.routesDirectory))
     }
 
     @Test

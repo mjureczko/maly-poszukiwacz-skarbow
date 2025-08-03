@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Singleton
 
 @Module
@@ -26,8 +26,8 @@ object PortsModule {
 
     @Singleton
     @Provides
-    fun storageHelper(@ApplicationContext appContext: Context): StorageHelper {
-        return StorageHelper(appContext)
+    fun storagePort(@ApplicationContext appContext: Context): StoragePort {
+        return StoragePort(appContext)
     }
 
     @Singleton

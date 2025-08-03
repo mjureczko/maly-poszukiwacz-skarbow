@@ -1,67 +1,67 @@
 package pl.marianjureczko.poszukiwacz.model
 
-import org.apache.commons.math3.stat.StatUtils
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.ElementList
-import org.simpleframework.xml.Root
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
-import java.io.Serializable
+import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
+import pl.marianjureczko.poszukiwacz.usecase.CalculateAveragedLocationUC
 import java.util.Date
 
-@Root
-class HunterPath() : Serializable {
+class HunterPath() {
 
     constructor(routeName: String) : this() {
         this.routeName = routeName
     }
 
-    @field:Element
+    constructor(
+        routeName: String,
+        locations: MutableList<AndroidLocation>,
+        start: Date?,
+        end: Date?,
+        chunkStart: Date?,
+        chunkedCoordinates: MutableList<AveragedLocation>
+    ) : this() {
+        this.routeName = routeName
+        this.locations = locations
+        this.start = start
+        this.end = end
+        this.chunkStart = chunkStart
+        this.chunkedCoordinates = chunkedCoordinates
+    }
+
     lateinit var routeName: String
 
     /**
      * Measurements for the next chunk. When te chunk creation criteria are met, the measurements are used to produce the chunk and are remove.
      * Measurements are sorted by time increasingly.
      */
-    @field:ElementList
-    private var locations = mutableListOf<HunterLocation>()
-
     // Public getter for test purpose
-    val publicLocations: List<HunterLocation>
-        get() = locations
+    var locations = mutableListOf<AndroidLocation>()
+        private set
 
-    @field:Element(required = false)
-    private var start: Date? = null
+    var start: Date? = null
+        private set
 
-    @field:Element(required = false)
-    private var end: Date? = null
+    var end: Date? = null
+        private set
 
-    @field:Element(required = false)
-    private var chunkStart: Date? = null
+    var chunkStart: Date? = null
+        private set
 
     /**
      * Chunks are in chronological order.
+     * Each chunk represents a collection of observed coordinates that were processed to produce a single coordinate.
      */
-    @field:ElementList
-    private var chunkedCoordinates = mutableListOf<HunterLocation>()
-
-    fun getStartTime(): Date? {
-        return start
-    }
-
-    fun getEndTime(): Date? {
-        return end
-    }
+    var chunkedCoordinates = mutableListOf<AveragedLocation>()
+        private set
 
     /**
-     * @param date exposed for test, production relies on the default value
      * @return  true if chunked changed
      */
-    fun addLocation(coordinates: Coordinates, date: Date = Date()): Boolean {
-        val newLocation = HunterLocation(coordinates)
-        establishEnd(date)
-        establishStart(date)
-        return establishLocations(newLocation, date)
+    fun addLocation(newLocation: AndroidLocation): Boolean {
+        val observationDate = Date(newLocation.observedAt)
+        establishEnd(observationDate)
+        establishStart(observationDate)
+        return establishLocations(newLocation)
     }
 
     fun pathLengthInKm(): Double {
@@ -69,13 +69,22 @@ class HunterPath() : Serializable {
         var result = 0.0
         chunkedCoordinates.forEachIndexed { index, location ->
             if (index > 0) {
-                result += calculator.distanceInKm(chunkedCoordinates[index - 1], location)
+                result += calculator.distanceInKm(
+                    LocationWrapper(chunkedCoordinates[index - 1]),
+                    LocationWrapper(location)
+                )
             }
         }
         return result
     }
 
-    fun pathAsCoordinates(): List<Coordinates> = chunkedCoordinates.map { Coordinates(it.latitude, it.longitude) }
+    fun path(): List<AveragedLocation> = chunkedCoordinates
+
+    fun isLocationBeingUpdated(): Boolean {
+        if (end == null) return true
+        val now = Date()
+        return (now.time - end!!.time) < 5000
+    }
 
     private fun establishEnd(date: Date) {
         end = date
@@ -93,14 +102,18 @@ class HunterPath() : Serializable {
     /**
      * @return  true if chunked changed
      */
-    private fun establishLocations(newLocation: HunterLocation, date: Date): Boolean {
-        val result = if (collectedForChunk(date)) {
-            val longitude = StatUtils.percentile(locations.map { it.longitude }.toList().toDoubleArray(), 50.0)
-            val latitude = StatUtils.percentile(locations.map { it.latitude }.toList().toDoubleArray(), 50.0)
-            chunkedCoordinates.add(HunterLocation(longitude, latitude))
-            chunkStart = date
-            locations.clear()
-            true
+    private fun establishLocations(newLocation: AndroidLocation): Boolean {
+        val date = Date(newLocation.observedAt)
+        val result = if (collectedForNextChunk(date)) {
+            val averagedLocation = CalculateAveragedLocationUC().invoke(locations)
+            if (averagedLocation != null) {
+                chunkedCoordinates.add(averagedLocation)
+                chunkStart = date
+                locations.clear()
+                true
+            } else {
+                false
+            }
         } else {
             false
         }
@@ -108,7 +121,7 @@ class HunterPath() : Serializable {
         return result
     }
 
-    private fun collectedForChunk(newMeasurementDate: Date): Boolean =
+    private fun collectedForNextChunk(newMeasurementDate: Date): Boolean =
         (timeSpanInMilis(newMeasurementDate) >= 20_000L) && (locations.isNotEmpty())
 
     private fun timeSpanInMilis(newMeasurementDate: Date): Long =

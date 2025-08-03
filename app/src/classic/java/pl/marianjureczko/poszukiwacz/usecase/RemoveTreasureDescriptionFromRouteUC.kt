@@ -1,10 +1,10 @@
 package pl.marianjureczko.poszukiwacz.usecase
 
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 class RemoveTreasureDescriptionFromRouteUC(
-    private val storage: StorageHelper
+    private val storage: StoragePort
 ) {
     operator fun invoke(route: Route, treasureDescriptionId: Int): Route {
         route.getTreasureDescriptionById(treasureDescriptionId)?.let { toRemove ->

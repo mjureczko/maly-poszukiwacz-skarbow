@@ -11,7 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.HunterPath
@@ -24,7 +26,6 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
 import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
@@ -32,8 +33,10 @@ import pl.marianjureczko.poszukiwacz.shared.ScanTreasureCallback
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.LocationHolder.Companion.GPS_NO_SIGNAL_THRESHOLD_IN_MILIS
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
+import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import javax.inject.Inject
 
 interface RestarterSharedViewModel {
@@ -71,25 +74,22 @@ interface CommemorativeSharedViewModel : DoCommemorative {
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(
-    private val storage: StorageHelper,
+    private val storage: StoragePort,
     private val locationPort: LocationPort,
-    private val locationCalculator: LocationCalculator,
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
     private val cameraPort: CameraPort,
     override val qrScannerPort: QrScannerPort,
+    private val updateLocationUC: UpdateLocationUC,
     private val resetProgressUC: ResetProgressUC,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
-    private val arcCalculator = ArcCalculator()
-
-    //for test
-    var respawn: Boolean = true
 
     init {
-        locationPort.startFetching(viewModelScope, updatedLocationCallback())
+        locationPort.startFetching(viewModelScope, { location -> updateLocationUC(location, _state) })
+        scheduleGpsCheck()
     }
 
     override val state: State<SharedState>
@@ -116,7 +116,7 @@ class SharedViewModel @Inject constructor(
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
                         selectedTreasureDescription = state.value.selectedTreasureDescription(),
-                        userLocation = state.value.currentLocation?.let { Coordinates.of(it) }
+                        userLocation = state.value.currentLocation.getCurrentUserLocation()
                     )
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
                     if (treasuresProgress.contains(scannedTreasure)) {
@@ -238,32 +238,6 @@ class SharedViewModel @Inject constructor(
         storage.save(state.value.treasuresProgress)
     }
 
-    private fun updatedLocationCallback(): UpdateLocationCallback = { location ->
-        Log.i(TAG, "location updated")
-        val selectedTreasure = state.value.selectedTreasureDescription()
-        _state.value = _state.value.copy(
-            currentLocation = location,
-            stepsToTreasure = if (selectedTreasure != null) {
-                locationCalculator.distanceInSteps(selectedTreasure, location)
-            } else 0,
-            needleRotation = if (selectedTreasure != null) {
-                arcCalculator.degree(
-                    selectedTreasure.longitude,
-                    selectedTreasure.latitude,
-                    location.longitude,
-                    location.latitude
-                ).toFloat()
-            } else 0f,
-            distancesInSteps = _state.value.route.treasures
-                .associate { it.id to locationCalculator.distanceInSteps(it, location) }
-                .toMap()
-        )
-        val currentCoordinates = Coordinates(location.latitude, location.longitude)
-        if (state.value.hunterPath.addLocation(currentCoordinates)) {
-            storage.save(state.value.hunterPath)
-        }
-    }
-
     private fun createState(): SharedState {
         Log.i(TAG, "Create state")
         val route = loadRoute()
@@ -312,5 +286,24 @@ class SharedViewModel @Inject constructor(
             else -> Log.e(TAG, "An unknown error occurred: $extra")
         }
         return true
+
     }
+
+    private fun scheduleGpsCheck() {
+        gpsJob = viewModelScope.launch(ioDispatcher) {
+            while (isActive) {
+                delay(GPS_NO_SIGNAL_THRESHOLD_IN_MILIS)
+                if (state.value.hunterPath.isLocationBeingUpdated() == false) {
+                    _state.value = state.value.copy(gpsAccuracy = GpsAccuracy.NoSignal)
+                }
+            }
+        }
+    }
+
+    //for test only START
+    var respawn: Boolean = true
+
+    var gpsJob: Job? = null
+    //for test only END
+
 }

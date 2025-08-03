@@ -13,14 +13,15 @@ import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
+import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 
 data class SharedViewModelFixture(
     val testDispatcher: CoroutineDispatcher,
     val routeName: String = someString(),
     val firstTreasureQrCode: String = TreasureDescriptionArranger.validQrCode(),
-    val storage: StorageHelper = mock(StorageHelper::class.java),
+    val storage: StoragePort = mock(StoragePort::class.java),
     val locationPort: LocationPort = mock(LocationPort::class.java),
     val locationCalculator: LocationCalculator = mock(),
     val savedState: SavedStateHandle = mock(SavedStateHandle::class.java),
@@ -50,12 +51,12 @@ data class SharedViewModelFixture(
         val result = SharedViewModel(
             storage = storage,
             locationPort = locationPort,
-            locationCalculator = locationCalculator,
             photoHelper = photoHelper,
             stateHandle = savedState,
             cameraPort = cameraPort,
             qrScannerPort = qrScannerPort,
             resetProgressUC = resetProgressUC,
+            updateLocationUC = UpdateLocationUC(storage, locationCalculator),
             ioDispatcher = testDispatcher,
         )
         result.respawn = false

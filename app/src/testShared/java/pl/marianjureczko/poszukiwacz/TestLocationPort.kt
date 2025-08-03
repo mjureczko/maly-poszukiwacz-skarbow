@@ -1,12 +1,10 @@
 package pl.marianjureczko.poszukiwacz
 
-import android.location.Location
 import kotlinx.coroutines.CoroutineScope
-import org.mockito.ArgumentMatchers.any
-import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.screen.searching.UpdateLocationCallback
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 
 class TestLocationPort : LocationPort(mock(), mock(), mock(), mock()) {
 
@@ -19,10 +17,12 @@ class TestLocationPort : LocationPort(mock(), mock(), mock(), mock()) {
     }
 
     fun updateLocation(latitude: Double, longitude: Double, distanceToTreasure: Float = 0f) {
-        val location = mock<Location>()
-        given(location.latitude).willReturn(latitude)
-        given(location.longitude).willReturn(longitude)
-        given(location.distanceTo(any())).willReturn(distanceToTreasure)
+        val location = TestLocation(
+            latitude = latitude,
+            longitude = longitude,
+            observedAt = System.currentTimeMillis()
+        )
+        location.setDistance(distanceToTreasure)
         callback.invoke(location)
     }
 }

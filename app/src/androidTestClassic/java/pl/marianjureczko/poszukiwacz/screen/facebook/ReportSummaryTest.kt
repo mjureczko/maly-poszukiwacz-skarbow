@@ -27,7 +27,7 @@ internal class ReportSummaryTest : ReportAbstractTest() {
         treasuresProgress.collect(treasureGold, null)
         val treasureRuby = Treasure("2", 23, TreasureType.RUBY)
         treasuresProgress.collect(treasureRuby, null)
-        storageHelper.save(treasuresProgress)
+        storagePort.save(treasuresProgress)
         val reportSummary = ReportSummary(createFacebookViewModel().state.value, font)
 
         //when

@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.model
 import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import pl.marianjureczko.poszukiwacz.shared.Coordinates
+import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 import java.util.Date
 
 class HunterPathTest {
@@ -14,7 +14,7 @@ class HunterPathTest {
         val hunterPath = HunterPath()
 
         //when
-        val actual = hunterPath.getStartTime()
+        val actual = hunterPath.start
 
         //then
         assertThat(actual).isNull()
@@ -26,7 +26,7 @@ class HunterPathTest {
         val hunterPath = HunterPath()
 
         //when
-        val actual = hunterPath.getEndTime()
+        val actual = hunterPath.end
 
         //then
         assertThat(actual).isNull()
@@ -36,30 +36,40 @@ class HunterPathTest {
     fun shouldReturnDateOfFirstMeasurement_whenSomeMeasurementsAreCollected() {
         //given
         val hunterPath = HunterPath()
-        val firstMeasurement = Date()
-        hunterPath.addLocation(some(), firstMeasurement)
-        hunterPath.addLocation(some())
+        val firstDate = System.currentTimeMillis()
+        val firstLocation = some<TestLocation>().copy(
+            observedAt = firstDate
+        )
+        hunterPath.addLocation(firstLocation)
+        val secondLocation = some<TestLocation>().copy(
+            observedAt = firstDate + 1
+        )
+        hunterPath.addLocation(secondLocation)
 
         //when
-        val actual = hunterPath.getStartTime()
+        val actual = hunterPath.start
 
         //then
-        assertThat(actual).isEqualTo(firstMeasurement)
+        assertThat(actual).isEqualTo(Date(firstDate))
     }
 
     @Test
     fun shouldReturnDateOfLastMeasurement_whenSomeMeasurementsAreCollected() {
         //given
         val hunterPath = HunterPath()
-        hunterPath.addLocation(some())
-        val lastMeasurement = Date()
-        hunterPath.addLocation(some(), lastMeasurement)
+        hunterPath.addLocation(some<TestLocation>())
+        val lastMeasurement = System.currentTimeMillis()
+        hunterPath.addLocation(
+            some<TestLocation>().copy(
+                observedAt = lastMeasurement
+            )
+        )
 
         //when
-        val actual = hunterPath.getEndTime()
+        val actual = hunterPath.end
 
         //then
-        assertThat(actual).isEqualTo(lastMeasurement)
+        assertThat(actual).isEqualTo(Date(lastMeasurement))
     }
 
     @Test
@@ -68,7 +78,7 @@ class HunterPathTest {
         val hunterPath = HunterPath()
 
         //when
-        val actual = hunterPath.pathAsCoordinates()
+        val actual = hunterPath.path()
 
         //then
         assertThat(actual).isEmpty()
@@ -78,11 +88,11 @@ class HunterPathTest {
     fun shouldReturnEmptyList_whenCollectedHunterLocationsAreFromTimeSpanSmallerThan20s() {
         //given
         val hunterPath = HunterPath()
-        hunterPath.addLocation(some())
-        hunterPath.addLocation(some())
+        hunterPath.addLocation(some<TestLocation>().copy(observedAt = 1))
+        hunterPath.addLocation(some<TestLocation>().copy(observedAt = 19_999))
 
         //when
-        val actual = hunterPath.pathAsCoordinates().toList()
+        val actual = hunterPath.path().toList()
 
         //then
         assertThat(actual).isEmpty()
@@ -93,17 +103,17 @@ class HunterPathTest {
         //given
         val hunterPath = HunterPath()
         var time = System.currentTimeMillis()
-        hunterPath.addLocation(Coordinates(1.0, 10.0), Date(time))
-        hunterPath.addLocation(Coordinates(2.0, 20.0), Date(time + 9_000))
-        hunterPath.addLocation(Coordinates(3.0, 30.0), Date(time + 19_000))
-        hunterPath.addLocation(Coordinates(4.0, 3.0), Date(time + 25_000))
-        hunterPath.addLocation(Coordinates(4.0, 3.0), Date(time + 30_000))
+        hunterPath.addLocation(TestLocation(1.0, 10.0, accuracy = 1f, observedAt = time))
+        hunterPath.addLocation(TestLocation(2.0, 20.0, accuracy = 1f, observedAt = time + 9_000))
+        hunterPath.addLocation(TestLocation(3.0, 30.0, accuracy = 1f, observedAt = time + 19_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 25_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 30_000))
 
         //when
-        val actual = hunterPath.pathAsCoordinates()
+        val actual = hunterPath.path()
 
         //then
-        assertThat(actual).containsExactly(Coordinates(2.0, 20.0))
+        assertThat(actual).containsExactly(AveragedLocation(latitude = 2.0, longitude = 20.0))
     }
 
     @Test
@@ -111,22 +121,23 @@ class HunterPathTest {
         //given
         val hunterPath = HunterPath()
         var time = System.currentTimeMillis()
-        hunterPath.addLocation(Coordinates(1.0, 1.0), Date(time))
-        hunterPath.addLocation(Coordinates(2.0, 2.0), Date(time + 9_000))
-        hunterPath.addLocation(Coordinates(3.0, 3.0), Date(time + 19_000))
+        hunterPath.addLocation(TestLocation(1.0, 1.0, accuracy = 1f, observedAt = time))
+        hunterPath.addLocation(TestLocation(2.0, 2.0, accuracy = 1f, observedAt = time + 9_000))
+        hunterPath.addLocation(TestLocation(3.0, 3.0, accuracy = 1f, observedAt = time + 19_000))
 
-        hunterPath.addLocation(Coordinates(4.0, 3.0), Date(time + 25_000))
-        hunterPath.addLocation(Coordinates(4.0, 3.0), Date(time + 30_000))
-        hunterPath.addLocation(Coordinates(5.0, 3.0), Date(time + 35_000))
-        hunterPath.addLocation(Coordinates(5.0, 4.0), Date(time + 39_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 25_000))
+        hunterPath.addLocation(TestLocation(4.0, 3.0, accuracy = 1f, observedAt = time + 30_000))
+        hunterPath.addLocation(TestLocation(5.0, 3.0, accuracy = 1f, observedAt = time + 35_000))
+        hunterPath.addLocation(TestLocation(5.0, 4.0, accuracy = 1f, observedAt = time + 39_000))
 
-        hunterPath.addLocation(Coordinates(6.0, 6.0), Date(time + 50_000))
+        hunterPath.addLocation(TestLocation(6.0, 6.0, accuracy = 1f, observedAt = time + 50_000))
 
         //when
-        val actual = hunterPath.pathAsCoordinates()
+        val actual = hunterPath.path()
 
         //then
-        assertThat(actual).containsExactly(Coordinates(2.0, 2.0),Coordinates(4.5, 3.0)
+        assertThat(actual).containsExactly(
+            AveragedLocation(2.0, 2.0), AveragedLocation(latitude = 4.5, longitude = 3.0)
         )
     }
 

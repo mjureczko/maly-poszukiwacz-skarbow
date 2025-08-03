@@ -8,12 +8,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val storageHelper: StorageHelper,
+    private val storagePort: StoragePort,
     private val resources: Resources
 ) : ViewModel() {
 
@@ -67,12 +67,12 @@ class MainViewModel @Inject constructor(
      * Removes the existing route and delegates the creation to TreasureEditor
      */
     fun replaceRouteWithNewOne(newRouteName: String, goToTreasureEditor: GoToTreasureEditor) {
-        storageHelper.removeRouteByName(newRouteName)
+        storagePort.removeRouteByName(newRouteName)
         goToTreasureEditor.invoke(newRouteName)
     }
 
     fun deleteRoute(route: Route) {
-        storageHelper.remove(route)
+        storagePort.remove(route)
         loadAllRoutes()
     }
 
@@ -81,7 +81,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadAllRoutes() {
-        _state.value = _state.value.copy(routes = storageHelper.loadAll())
+        _state.value = _state.value.copy(routes = storagePort.loadAll())
     }
 
     private fun routeExists(routeName: String): Boolean {

@@ -24,7 +24,7 @@ import pl.marianjureczko.poszukiwacz.permissions.RequirementsForBluetoothScan
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNearbyWifiDevices
 import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
-import pl.marianjureczko.poszukiwacz.shared.port.StorageHelper
+import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.ui.PermissionsHandler
 import javax.inject.Inject
 
@@ -45,7 +45,7 @@ interface RouteReader {
 @HiltViewModel
 class BluetoothViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
-    private val storage: StorageHelper,
+    private val storage: StoragePort,
     private val resources: Resources,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(), OnDeviceSelected, Printer, RouteReader {

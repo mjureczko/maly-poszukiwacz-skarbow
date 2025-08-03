@@ -50,4 +50,7 @@
     <string name="well_done_facebook">Możesz podzielić się tym osiągnięciem na</string>
     <string name="well_done_more">Chętny na więcej przygód? Wypróbuj</string>
     <string name="error_on_exporting_map">Błąd eksportu mapy - spróbuj publikować bez mapy</string>
+    <string name="low_gps_signal">Słaby sygnał GPS</string>
+    <string name="medium_gps_signal">Średni sygnał GPS</string>
+    <string name="no_gps_signal">Brak sygnału GPS</string>
 </resources>
