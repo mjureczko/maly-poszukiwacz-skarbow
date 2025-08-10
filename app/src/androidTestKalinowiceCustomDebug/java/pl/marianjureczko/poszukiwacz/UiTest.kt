@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
+import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.main.START_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.searching.CHANGE_TREASURE_BUTTON
@@ -10,7 +11,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.TOPBAR_MENU_BUTTON
 import pl.marianjureczko.poszukiwacz.ui.components.TOPBAR_MENU_RESTART
 import javax.inject.Inject
 
-open class UiTest: AbstractUITest() {
+open class UiTest : AbstractUITest() {
 
     @Inject
     internal lateinit var customInitializerForRoute: CustomInitializerForRoute
@@ -51,5 +52,9 @@ open class UiTest: AbstractUITest() {
     protected fun clickRestartMenuEntry() {
         composeRule.onNodeWithContentDescription(TOPBAR_MENU_RESTART).performClick()
         composeRule.waitForIdle()
+    }
+
+    override fun getRouteFromStorage(): Route {
+        return injectableStorage.loadRoute(CustomInitializerForRoute.routeName)
     }
 }

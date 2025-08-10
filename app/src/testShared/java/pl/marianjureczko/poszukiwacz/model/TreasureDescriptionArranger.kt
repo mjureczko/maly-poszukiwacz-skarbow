@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import com.ocadotechnology.gembus.test.CustomArranger
-import com.ocadotechnology.gembus.test.someDouble
 import com.ocadotechnology.gembus.test.someFrom
 import com.ocadotechnology.gembus.test.someInt
 import com.ocadotechnology.gembus.test.somePositiveInt
@@ -19,8 +18,9 @@ class TreasureDescriptionArranger : CustomArranger<TreasureDescription>() {
     override fun instance(): TreasureDescription {
         return super.instance().copy(
             qrCode = validQrCode(),
-            latitude = someDouble(-90.0, 90.0),
-            longitude = someDouble(-180.0, 180.0)
+            //nextDouble(DD)D not available in class Lorg/jeasy/random/EasyRandom on Android
+            latitude = someInt(-900, 900) / 10.0,
+            longitude = someInt(-1800, 1800) / 10.0
         )
     }
 }

@@ -45,9 +45,9 @@ class ReportGeneratorTest {
         )
         storagePort.save(treasuresProgress)
         val hunterPath = HunterPath(routeName)
-        hunterPath.addLocation(TestLocation(10.0, 10.0, observedAt = 1))
-        hunterPath.addLocation(TestLocation(10.0, 11.0, observedAt = 1_000_000))
-        hunterPath.addLocation(TestLocation(10.0, 11.0, observedAt = 2_000_000))
+            .addLocation(TestLocation(10.0, 10.0, observedAt = 1))
+            .addLocation(TestLocation(10.0, 11.0, observedAt = 1_000_000))
+            .addLocation(TestLocation(10.0, 11.0, observedAt = 2_000_000))
         storagePort.save(hunterPath)
         StoragePort(context).save(Route(treasuresProgress.routeName))
         val stateHandle: SavedStateHandle = SavedStateHandle(mapOf(PARAMETER_ROUTE_NAME to routeName))
@@ -76,7 +76,7 @@ class ReportGeneratorTest {
         //TODO: check the image at /data/data/pl.marianjureczko.poszukiwacz/files/TEST_REPORT.jpeg
     }
 
-    private fun arrangePhotos(context: Context) : List<String>{
+    private fun arrangePhotos(context: Context): List<String> {
         val input = InstrumentationRegistry.getInstrumentation().context.resources.assets.open("sample_photo.jpg")
         val source = BitmapFactory.decodeStream(input)
         return (0..5).map {

@@ -2,11 +2,13 @@ package pl.marianjureczko.poszukiwacz.usecase
 
 import androidx.compose.runtime.mutableStateOf
 import com.ocadotechnology.gembus.test.Arranger
+import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.screen.searching.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
@@ -48,7 +50,7 @@ class UpdateLocationUCTest {
                 treasuresProgress = mock(),
                 currentLocation = LocationHolder(),
                 stepsToTreasure = null,
-                hunterPath = mock()
+                hunterPath = some<HunterPath>()
             )
         )
         val storage = mock<StoragePort>()

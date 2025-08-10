@@ -27,7 +27,9 @@ class XmlMapperTest {
         assertThat(actual.start).isEqualTo(hunterPath.start)
         assertThat(actual.end).isEqualTo(hunterPath.end)
         assertThat(actual.chunkStart).isEqualTo(hunterPath.chunkStart)
-        assertThat(actual.chunkedCoordinates.map { it.toString() })
-            .containsExactlyElementsOf(hunterPath.chunkedCoordinates.map { it.toString() })
+        val expectedChunks = hunterPath.chunkedCoordinates
+            .map { AveragedLocationXml(latitude = it.latitude, longitude = it.longitude) }
+        assertThat(actual.chunkedCoordinates)
+            .containsExactlyElementsOf(expectedChunks)
     }
 }

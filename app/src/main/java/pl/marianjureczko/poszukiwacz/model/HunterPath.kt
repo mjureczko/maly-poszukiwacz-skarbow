@@ -6,62 +6,38 @@ import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 import pl.marianjureczko.poszukiwacz.usecase.CalculateAveragedLocationUC
 import java.util.Date
 
-class HunterPath() {
-
-    constructor(routeName: String) : this() {
-        this.routeName = routeName
-    }
-
-    constructor(
-        routeName: String,
-        locations: MutableList<AndroidLocation>,
-        start: Date?,
-        end: Date?,
-        chunkStart: Date?,
-        chunkedCoordinates: MutableList<AveragedLocation>
-    ) : this() {
-        this.routeName = routeName
-        this.locations = locations
-        this.start = start
-        this.end = end
-        this.chunkStart = chunkStart
-        this.chunkedCoordinates = chunkedCoordinates
-    }
-
-    lateinit var routeName: String
-
+data class HunterPath(
+    val routeName: String,
     /**
      * Measurements for the next chunk. When te chunk creation criteria are met, the measurements are used to produce the chunk and are remove.
      * Measurements are sorted by time increasingly.
      */
-    // Public getter for test purpose
-    var locations = mutableListOf<AndroidLocation>()
-        private set
-
-    var start: Date? = null
-        private set
-
-    var end: Date? = null
-        private set
-
-    var chunkStart: Date? = null
-        private set
-
+    val locations: List<AndroidLocation>,
+    val start: Date?,
+    val end: Date?,
+    val chunkStart: Date?,
     /**
      * Chunks are in chronological order.
      * Each chunk represents a collection of observed coordinates that were processed to produce a single coordinate.
      */
-    var chunkedCoordinates = mutableListOf<AveragedLocation>()
-        private set
+    val chunkedCoordinates: List<AveragedLocation>
+) {
 
-    /**
-     * @return  true if chunked changed
-     */
-    fun addLocation(newLocation: AndroidLocation): Boolean {
+    constructor(routeName: String) : this(
+        routeName = routeName,
+        locations = mutableListOf(),
+        start = null,
+        end = null,
+        chunkStart = null,
+        chunkedCoordinates = mutableListOf()
+    )
+
+    fun addLocation(newLocation: AndroidLocation, relevantChangePersister: (HunterPath) -> Unit = {}): HunterPath {
         val observationDate = Date(newLocation.observedAt)
-        establishEnd(observationDate)
-        establishStart(observationDate)
-        return establishLocations(newLocation)
+        var updated = copy(end = observationDate)
+            .establishStart(observationDate)
+            .establishLocations(newLocation, relevantChangePersister)
+        return updated
     }
 
     fun pathLengthInKm(): Double {
@@ -86,39 +62,38 @@ class HunterPath() {
         return (now.time - end!!.time) < 5000
     }
 
-    private fun establishEnd(date: Date) {
-        end = date
-    }
-
-    private fun establishStart(date: Date) {
+    private fun establishStart(date: Date): HunterPath {
+        var updated = this
         if (start == null) {
-            start = date
+            updated = updated.copy(start = date)
         }
         if (chunkStart == null) {
-            chunkStart = date
+            updated = updated.copy(chunkStart = date)
         }
+        return updated
     }
 
     /**
-     * @return  true if chunked changed
+     * @param relevantChangePersister - will be called when chunked changed
      */
-    private fun establishLocations(newLocation: AndroidLocation): Boolean {
+    private fun establishLocations(
+        newLocation: AndroidLocation,
+        relevantChangePersister: (HunterPath) -> Unit
+    ): HunterPath {
         val date = Date(newLocation.observedAt)
-        val result = if (collectedForNextChunk(date)) {
+        var result = this
+        if (collectedForNextChunk(date)) {
             val averagedLocation = CalculateAveragedLocationUC().invoke(locations)
             if (averagedLocation != null) {
-                chunkedCoordinates.add(averagedLocation)
-                chunkStart = date
-                locations.clear()
-                true
-            } else {
-                false
+                result = result.copy(
+                    chunkedCoordinates = result.chunkedCoordinates.plus(averagedLocation),
+                    chunkStart = date,
+                    locations = listOf()
+                )
+                relevantChangePersister(result)
             }
-        } else {
-            false
         }
-        locations.add(newLocation)
-        return result
+        return result.copy(locations = result.locations.plus(newLocation))
     }
 
     private fun collectedForNextChunk(newMeasurementDate: Date): Boolean =

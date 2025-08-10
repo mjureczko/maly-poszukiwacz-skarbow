@@ -5,6 +5,7 @@ import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 
 @RunWith(AndroidJUnit4::class)
 class XmlMapperTest {
@@ -12,6 +13,7 @@ class XmlMapperTest {
     fun should_mapXmlToHunterPath() {
         // given
         val xml = some<HunterPathXml>()
+            .copy(chunkedCoordinates = mutableListOf(some<AveragedLocationXml>()))
 
         //when
         val actual = XmlMapper.toEntity(xml)
@@ -30,7 +32,9 @@ class XmlMapperTest {
         assertThat(actual.start).isEqualTo(xml.start)
         assertThat(actual.end).isEqualTo(xml.end)
         assertThat(actual.chunkStart).isEqualTo(xml.chunkStart)
-        assertThat(actual.chunkedCoordinates.map { it.toString() })
-            .containsExactlyElementsOf(xml.chunkedCoordinates.map { it.toString() })
+        val expectedChunks = xml.chunkedCoordinates
+            .map { AveragedLocation(longitude = it.longitude, latitude = it.latitude) }
+        assertThat(actual.chunkedCoordinates)
+            .containsExactlyElementsOf(expectedChunks)
     }
 }

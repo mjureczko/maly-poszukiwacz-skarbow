@@ -38,8 +38,8 @@ class UpdateLocationUC(
                 .toMap()
         )
         updateAccuracy(location, state)
-        if (state.value.hunterPath.addLocation(location)) {
-            storage.save(state.value.hunterPath)
+        state.value.hunterPath = state.value.hunterPath.addLocation(location) {
+            storage.save(it)
         }
     }
 

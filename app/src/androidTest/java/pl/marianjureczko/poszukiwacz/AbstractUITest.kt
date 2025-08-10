@@ -16,7 +16,6 @@ import org.junit.Before
 import org.junit.Rule
 import pl.marianjureczko.poszukiwacz.activity.main.MainActivity
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Inject
 
@@ -82,11 +81,5 @@ abstract class AbstractUITest {
             .assertIsDisplayed()
     }
 
-    protected fun getRouteFromStorage(): Route {
-        return if (storage == null) {
-            injectableStorage.loadRoute(CustomInitializerForRoute.routeName)
-        } else {
-            storage!!.routes.values.first()
-        }
-    }
+    abstract protected fun getRouteFromStorage(): Route;
 }
