@@ -17,7 +17,7 @@ import kotlin.math.min
 import kotlin.random.Random
 
 class ReportCommemorativePhotos(
-    model: FacebookReportModel,
+    model: FacebookReportState,
     private val font: Typeface,
     rotationSeed: Long = currentTimeMillis()
 ) : ReportPart {

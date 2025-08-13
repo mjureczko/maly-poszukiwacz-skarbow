@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.usecase
 
-//TODO: create factory to get rid of all LocationWrapper usages in usecase
 interface AndroidLocation {
     fun distanceTo(dest: AndroidLocation): Float
     var longitude: Double

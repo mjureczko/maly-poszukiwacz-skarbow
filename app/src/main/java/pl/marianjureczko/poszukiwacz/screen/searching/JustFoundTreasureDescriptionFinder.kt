@@ -8,7 +8,7 @@ import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class JustFoundTreasureDescriptionFinder(
     private val treasureDescriptions: List<TreasureDescription>,
-    private val locationCalculator: LocationCalculator = LocationCalculator(),
+    private val locationCalculator: LocationCalculator,
 ) {
 
     private val TAG = javaClass.simpleName

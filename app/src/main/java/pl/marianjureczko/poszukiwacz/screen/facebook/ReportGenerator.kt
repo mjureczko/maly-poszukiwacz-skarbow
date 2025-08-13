@@ -9,15 +9,16 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import java.util.Collections
 
 interface ReportPart {
     fun height(): Float
 }
 
-interface FacebookReportModel {
+interface FacebookReportState {
     fun getSummaryElement(): ElementDescription
-    fun getCommemorativePhotoElements():  List<ElementDescription>
+    fun getCommemorativePhotoElements(): List<ElementDescription>
     fun getMap(): ElementDescription?
     fun getMapSummary(): ElementDescription?
     fun getMapRoute(): ElementDescription?
@@ -31,14 +32,19 @@ class ReportGenerator {
     /**
      * @return it is returned for testing purposes
      */
-    fun create(context: Context, model: FacebookReportModel, reportPublisher: (Bitmap) -> Unit): Bitmap {
+    fun create(
+        context: Context,
+        state: FacebookReportState,
+        locationCalculator: LocationCalculator,
+        reportPublisher: (Bitmap) -> Unit
+    ): Bitmap {
         val typeface = ResourcesCompat.getFont(context, R.font.akaya_telivigala)!!
-        val title = ReportTitle(model, typeface)
-        val summary = ReportSummary(model, typeface)
-        val commemorativePhotos = ReportCommemorativePhotos(model, typeface)
-        val mapHeader = ReportMapHeader(model, typeface)
-        val map = ReportMap(model)
-        val mapSummary = ReportMapSummary(model, typeface)
+        val title = ReportTitle(state, typeface)
+        val summary = ReportSummary(state, typeface)
+        val commemorativePhotos = ReportCommemorativePhotos(state, typeface)
+        val mapHeader = ReportMapHeader(state, typeface)
+        val map = ReportMap(state)
+        val mapSummary = ReportMapSummary(state, typeface, locationCalculator)
         val footer = ReportFooter()
         val height =
             title.height() + summary.height() + commemorativePhotos.height() + mapHeader.height() + map.height() + mapSummary.height() + footer.height()

@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.model
 
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 import pl.marianjureczko.poszukiwacz.usecase.CalculateAveragedLocationUC
 import java.util.Date
@@ -40,15 +39,11 @@ data class HunterPath(
         return updated
     }
 
-    fun pathLengthInKm(): Double {
-        val calculator = LocationCalculator()
+    fun pathLengthInKm(calculator: LocationCalculator): Double {
         var result = 0.0
         chunkedCoordinates.forEachIndexed { index, location ->
             if (index > 0) {
-                result += calculator.distanceInKm(
-                    LocationWrapper(chunkedCoordinates[index - 1]),
-                    LocationWrapper(location)
-                )
+                result += calculator.distanceInKm(chunkedCoordinates[index - 1], location)
             }
         }
         return result

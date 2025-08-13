@@ -6,9 +6,9 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import pl.marianjureczko.poszukiwacz.R
 
-class ReportSummary(private val model: FacebookReportModel, font: Typeface) : AbstractReportSummary(model, font) {
+class ReportSummary(private val state: FacebookReportState, font: Typeface) : AbstractReportSummary(state, font) {
     override fun numberOfTreasuresOfFirstType(): Int {
-        return model.progress.golds
+        return state.progress.golds
     }
 
     override fun partWithIcons(
@@ -25,7 +25,7 @@ class ReportSummary(private val model: FacebookReportModel, font: Typeface) : Ab
         currentX += summarySize
         canvas.drawBitmap(gold, currentX, currentTop + 20, null)
 
-        val diamonds = "${model.progress.diamonds}"
+        val diamonds = "${state.progress.diamonds}"
         val diamondsSize = textPaint.measureText(diamonds)
         currentX += gold.width + 20
         canvas.drawText(diamonds, currentX, textY, textPaint)
@@ -33,7 +33,7 @@ class ReportSummary(private val model: FacebookReportModel, font: Typeface) : Ab
         currentX += diamondsSize
         canvas.drawBitmap(diamond, currentX, currentTop + 10, null)
 
-        val rubies = "${model.progress.rubies}"
+        val rubies = "${state.progress.rubies}"
         val rubiesSize = textPaint.measureText(rubies)
         currentX += diamond.width + 20
         canvas.drawText(rubies, currentX, textY, textPaint)

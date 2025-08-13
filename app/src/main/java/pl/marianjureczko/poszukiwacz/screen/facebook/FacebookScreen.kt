@@ -44,6 +44,7 @@ import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
@@ -85,7 +86,7 @@ fun FacebookScreenBody() {
         SubHeader()
         Elements(Modifier.weight(0.99f), state, viewModel, viewModel.rotatePhoto())
         Spacer(modifier = Modifier.weight(0.01f))
-        ShareOnFacebookButton(state)
+        ShareOnFacebookButton(state, viewModel.locationCalculator)
         AdvertBanner()
     }
 }
@@ -120,13 +121,13 @@ private fun Elements(
 }
 
 @Composable
-private fun ShareOnFacebookButton(model: FacebookReportModel) {
+private fun ShareOnFacebookButton(model: FacebookReportState, locationCalculator: LocationCalculator) {
     Box {
         val context = LocalContext.current
         val sharingErrorMsg = stringResource(R.string.facebook_share_error)
         val noFacebookErrorMsg = stringResource(id = R.string.facebook_share_impossible)
         LargeButton(R.string.share_button) {
-            ReportGenerator().create(context, model) { bitmap ->
+            ReportGenerator().create(context, model, locationCalculator) { bitmap ->
                 FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
             }
         }

@@ -13,6 +13,7 @@ import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
@@ -54,6 +55,7 @@ data class SharedViewModelFixture(
             photoHelper = photoHelper,
             stateHandle = savedState,
             cameraPort = cameraPort,
+            locationCalculator = LocationCalculator(AndroidLocationFactoryImpl()),
             qrScannerPort = qrScannerPort,
             resetProgressUC = resetProgressUC,
             updateLocationUC = UpdateLocationUC(storage, locationCalculator),

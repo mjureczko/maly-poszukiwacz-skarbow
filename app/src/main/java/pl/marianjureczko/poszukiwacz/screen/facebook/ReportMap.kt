@@ -21,7 +21,7 @@ import pl.marianjureczko.poszukiwacz.shared.LocationHelper
 import pl.marianjureczko.poszukiwacz.shared.MapHelper.DEFAULT_STYLE
 
 class ReportMap(
-    private val model: FacebookReportModel
+    private val model: FacebookReportState
 ) : ReportPart {
 
     companion object {
@@ -107,7 +107,6 @@ class ReportMap(
             .center(LocationHelper(route.treasures).center())
             .build()
         snapshotter.setCamera(cameraPosition)
-        //TODO: different padding on x and y in order to adjust to route shape
         val padding = 50.0
         val locationHelper = LocationHelper(route.treasures)
         val cameraCoordinates = snapshotter.cameraForCoordinates(

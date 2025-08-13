@@ -1,17 +1,22 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
+import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
+import pl.marianjureczko.poszukiwacz.usecase.AndroidLocationFactory
 
-class LocationCalculator {
+class LocationCalculator(
+    private val locationFactory: AndroidLocationFactory
+) {
 
     companion object {
         const val METERS_TO_STEPS_FACTOR = 1.8
     }
 
-    fun distanceInKm(start: AndroidLocation, end: AndroidLocation): Double {
-        return start.distanceTo(end).toDouble() / 1000
+    fun distanceInKm(start: AveragedLocation, end: AveragedLocation): Double {
+        return locationFactory.of(start)
+            .distanceTo(dest = locationFactory.of(end))
+            .toDouble() / 1000
     }
 
     fun distanceInSteps(treasure: TreasureDescription, userLocation: AndroidLocation): Int {
@@ -23,8 +28,12 @@ class LocationCalculator {
         (METERS_TO_STEPS_FACTOR * userLocation.distanceTo(treasureLocation)).toInt()
 
     private fun treasureLocation(treasure: TreasureDescription): AndroidLocation {
-        val treasureLocation =
-            LocationWrapper(latitude = treasure.latitude, longitude = treasure.longitude, accuracy = 0f, observedAt = 0)
+        val treasureLocation = locationFactory.of(
+            latitude = treasure.latitude,
+            longitude = treasure.longitude,
+            accuracy = 0f,
+            observedAt = 0
+        )
         return treasureLocation
     }
 }

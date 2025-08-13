@@ -11,7 +11,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
  * The common part of ReportSummary across build variants.
  */
 abstract class AbstractReportSummary(
-    private val model: FacebookReportModel,
+    private val model: FacebookReportState,
     private val font: Typeface
 ) : ReportPart {
     override fun height(): Float =

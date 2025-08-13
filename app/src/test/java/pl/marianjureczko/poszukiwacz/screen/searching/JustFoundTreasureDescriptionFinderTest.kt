@@ -16,15 +16,18 @@ import org.mockito.junit.jupiter.MockitoExtension
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
+import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class CustomJustFoundTreasureDescriptionFinderTest {
+
+    private val locationCalculator = LocationCalculator(AndroidLocationFactoryImpl())
 
     @Test
     fun `SHOULD find treasure description by qr code WHEN type is knowledge and qr code is among descriptions`() {
         //given
         val treasureDescription = some<TreasureDescription>()
-        val finder = JustFoundTreasureDescriptionFinder(listOf(treasureDescription))
+        val finder = JustFoundTreasureDescriptionFinder(listOf(treasureDescription), locationCalculator)
         val treasure = Treasure(treasureDescription.qrCode!!, somePositiveInt(10), TreasureType.KNOWLEDGE)
 
         //when
@@ -38,7 +41,7 @@ class CustomJustFoundTreasureDescriptionFinderTest {
     fun `SHOULD return null WHEN type is knowledge but qr code not found in treasure descriptions`() {
         //given
         val descriptions = someObjects<TreasureDescription>(2).toList()
-        val finder = JustFoundTreasureDescriptionFinder(descriptions)
+        val finder = JustFoundTreasureDescriptionFinder(descriptions, locationCalculator)
         val treasure = Treasure(someString(), somePositiveInt(10), TreasureType.KNOWLEDGE)
 
         //when

@@ -12,6 +12,7 @@ import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.screen.searching.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
+import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import java.util.stream.Stream
 
@@ -56,7 +57,7 @@ class UpdateLocationUCTest {
         val storage = mock<StoragePort>()
 
         // when
-        UpdateLocationUC(storage, LocationCalculator()).invoke(location, state)
+        UpdateLocationUC(storage, LocationCalculator(AndroidLocationFactoryImpl())).invoke(location, state)
 
         //then
         assertThat(state.value.gpsAccuracy)

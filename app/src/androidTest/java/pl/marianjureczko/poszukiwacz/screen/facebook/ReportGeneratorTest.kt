@@ -14,6 +14,8 @@ import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 import java.io.File
@@ -53,8 +55,14 @@ class ReportGeneratorTest {
         val stateHandle: SavedStateHandle = SavedStateHandle(mapOf(PARAMETER_ROUTE_NAME to routeName))
 
         //when
-        val model =
-            FacebookViewModel(stateHandle, StoragePort(context), context.resources, testDispatcher, testDispatcher)
+        val model = FacebookViewModel(
+            stateHandle,
+            StoragePort(context),
+            LocationCalculator(AndroidLocationFactoryImpl()),
+            context.resources,
+            testDispatcher,
+            testDispatcher
+        )
 //        //MapBox doesn't work in tests
         var state = model.state.value
         val mapIdx = state.elements.indices.find { state.elements[it].type == Type.MAP }!!
@@ -62,7 +70,7 @@ class ReportGeneratorTest {
         elements[mapIdx] = state.elements[mapIdx].copy(isSelected = false)
         state = state.copy(elements = elements)
 
-        val actual = report.create(context, state) {
+        val actual = report.create(context, state, model.locationCalculator) {
             // do nothing
         }
 
@@ -73,7 +81,7 @@ class ReportGeneratorTest {
         stream.flush()
         stream.close()
 
-        //TODO: check the image at /data/data/pl.marianjureczko.poszukiwacz/files/TEST_REPORT.jpeg
+        //check the image at /data/data/pl.marianjureczko.poszukiwacz/files/TEST_REPORT.jpeg manually
     }
 
     private fun arrangePhotos(context: Context): List<String> {

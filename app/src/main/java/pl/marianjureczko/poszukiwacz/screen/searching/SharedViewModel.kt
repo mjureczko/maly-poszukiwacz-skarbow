@@ -79,6 +79,7 @@ class SharedViewModel @Inject constructor(
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
     private val cameraPort: CameraPort,
+    private val locationCalculator: LocationCalculator,
     override val qrScannerPort: QrScannerPort,
     private val updateLocationUC: UpdateLocationUC,
     private val resetProgressUC: ResetProgressUC,
@@ -112,7 +113,7 @@ class SharedViewModel @Inject constructor(
                 val newCode = scanedContent
                 try {
                     scannedTreasure = TreasureParser().parse(newCode)
-                    val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures)
+                    val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures, locationCalculator)
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
                         selectedTreasureDescription = state.value.selectedTreasureDescription(),

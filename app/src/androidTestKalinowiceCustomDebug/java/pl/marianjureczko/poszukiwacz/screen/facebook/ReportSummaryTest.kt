@@ -32,7 +32,8 @@ internal class ReportSummaryTest : ReportAbstractTest() {
         reportSummary.draw(context, canvas, 0f)
 
         //then
-        //save to hava a reference in case of failing test, image available at /data/data/pl.marianjureczko.poszukiwacz.kalinowice/files/summary.png
+        //save to hava a reference in case of failing test, image available
+        // at /data/data/pl.marianjureczko.poszukiwacz.kalinowice/files/summary.png
         val fileName = "summary.png"
         val stream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)

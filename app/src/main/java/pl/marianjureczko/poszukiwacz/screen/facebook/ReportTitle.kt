@@ -8,7 +8,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 class ReportTitle(
-    private val model: FacebookReportModel,
+    private val model: FacebookReportState,
     private val font: Typeface
 ) : ReportPart {
     override fun height(): Float = 150f

@@ -27,7 +27,9 @@ class ReportMapSummaryTest : ReportAbstractTest() {
             .addLocation(TestLocation(10.0, 11.0, accuracy = 1f, observedAt = 2_000_000))
         saveEmptyProgress()
         storagePort.save(hunterPath)
-        val reportMapHeader = ReportMapSummary(createFacebookViewModel().state.value, font)
+        val facebookViewModel = createFacebookViewModel()
+        val reportMapHeader =
+            ReportMapSummary(facebookViewModel.state.value, font, facebookViewModel.locationCalculator)
 
         //when
         reportMapHeader.draw(context, canvas, 0f)

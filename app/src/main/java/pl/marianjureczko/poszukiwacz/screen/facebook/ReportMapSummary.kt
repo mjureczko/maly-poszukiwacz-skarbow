@@ -7,12 +7,14 @@ import android.graphics.Typeface
 import android.os.Build
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.HunterPath
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import java.text.DateFormat
 import java.util.Locale
 
 class ReportMapSummary(
-    private val model: FacebookReportModel,
-    private val font: Typeface
+    private val model: FacebookReportState,
+    private val font: Typeface,
+    private val locationCalculator: LocationCalculator
 ) : ReportPart {
 
     private var userLocale: Locale = Locale.getDefault()
@@ -43,7 +45,7 @@ class ReportMapSummary(
         }
 
     private fun distanceText(context: Context, hunterPath: HunterPath?): String {
-        val distance = hunterPath?.pathLengthInKm() ?: 0.0
+        val distance = hunterPath?.pathLengthInKm(locationCalculator) ?: 0.0
         val formattedDistance = "%.2f".format(distance)
         return "${context.getString(R.string.walked_route)} $formattedDistance km."
     }

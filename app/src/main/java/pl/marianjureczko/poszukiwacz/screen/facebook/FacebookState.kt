@@ -11,7 +11,7 @@ data class FacebookState(
     override val route: Route,
     val elements: List<ElementDescription>,
     val recompose: Int = Random().nextInt()
-) : FacebookReportModel {
+) : FacebookReportState {
     override fun getSummaryElement(): ElementDescription {
         return elements[0]
     }

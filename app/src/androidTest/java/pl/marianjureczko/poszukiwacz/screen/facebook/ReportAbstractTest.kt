@@ -12,6 +12,8 @@ import org.junit.Before
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 
 abstract class ReportAbstractTest {
@@ -26,7 +28,14 @@ abstract class ReportAbstractTest {
     private val testDispatcher = StandardTestDispatcher()
 
     fun createFacebookViewModel() =
-        FacebookViewModel(stateHandle, storagePort, context.resources, testDispatcher, testDispatcher)
+        FacebookViewModel(
+            stateHandle,
+            storagePort,
+            LocationCalculator(AndroidLocationFactoryImpl()),
+            context.resources,
+            testDispatcher,
+            testDispatcher
+        )
 
     fun saveEmptyProgress() = storagePort.save(treasuresProgress)
 

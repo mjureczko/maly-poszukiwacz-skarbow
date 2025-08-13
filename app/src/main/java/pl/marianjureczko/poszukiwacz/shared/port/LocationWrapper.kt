@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.shared.port
 
 import android.location.Location
-import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class LocationWrapper : AndroidLocation {
@@ -12,15 +11,6 @@ class LocationWrapper : AndroidLocation {
     constructor(location: Location) {
         this.location = location
     }
-
-    constructor(averagedLocation: AveragedLocation) :
-            this(
-                latitude = averagedLocation.latitude,
-                longitude = averagedLocation.longitude,
-                accuracy = 0f,
-                observedAt = 0
-            )
-
 
     constructor(latitude: Double, longitude: Double, accuracy: Float, observedAt: Long) {
         this.location = Location("").apply {
