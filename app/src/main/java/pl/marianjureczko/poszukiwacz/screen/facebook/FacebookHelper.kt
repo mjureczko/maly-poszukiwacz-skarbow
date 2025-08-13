@@ -17,15 +17,9 @@ object FacebookHelper {
     fun createFacebookCallback(navController: NavHostController): (String) -> Unit {
         val context = LocalContext.current
         val noFacebookErrorMsg = stringResource(id = R.string.facebook_share_impossible)
-        val noRouteToShareErrorMsg = noRouteToShareMessage()
         val goToFacebook = { routeName: String ->
             if (isFacebookInstalled(context)) {
-                //TODO: disable option in menu instead of showing a toast
-                if (routeName.isBlank()) {
-                    Toast.makeText(context, noRouteToShareErrorMsg, Toast.LENGTH_LONG).show()
-                } else {
-                    navController.navigate(Screens.Facebook.doRoute(routeName))
-                }
+                navController.navigate(Screens.Facebook.doRoute(routeName))
             } else {
                 Toast.makeText(context, noFacebookErrorMsg, Toast.LENGTH_LONG).show()
             }
