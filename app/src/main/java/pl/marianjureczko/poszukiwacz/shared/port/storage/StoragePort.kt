@@ -155,6 +155,10 @@ open class StoragePort(val context: Context) {
         getProgressFile(routeName).delete()
     }
 
+    open fun removeHunterPath(routeName: String) {
+        getHunterPathFile(routeName).delete()
+    }
+
     open fun removeTipFiles(treasureDescription: TreasureDescription) {
         if (treasureDescription.tipFileName != null) {
             removeFile(treasureDescription.tipFileName!!)
@@ -164,7 +168,7 @@ open class StoragePort(val context: Context) {
         }
     }
 
-    fun removeFile(fileAbsolutePath: String) {
+    open fun removeFile(fileAbsolutePath: String) {
         File(fileAbsolutePath).delete()
     }
 

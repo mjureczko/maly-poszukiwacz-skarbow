@@ -17,7 +17,8 @@ class TestStoragePort(context: Context) : StoragePort(context) {
     val progresses: MutableMap<String, TreasuresProgress> = mutableMapOf()
     var newPhotoFile: String = someString()
     var fileNotEmpty = false
-    var hunterPath: HunterPath = some<HunterPath>()
+    var hunterPaths: MutableMap<String, HunterPath> = mutableMapOf()
+    val removedFiles: MutableList<String> = mutableListOf()
 
     init {
         initRoute(someString())
@@ -70,10 +71,18 @@ class TestStoragePort(context: Context) : StoragePort(context) {
     override fun fileNotEmpty(file: String?) = fileNotEmpty
 
     override fun loadHunterPath(routeName: String): HunterPath? {
-        return hunterPath
+        return hunterPaths.getOrPut(routeName) { some<HunterPath>() }
     }
 
     override fun save(hunterPath: HunterPath) {
-        this.hunterPath = hunterPath
+        this.hunterPaths[hunterPath.routeName] = hunterPath
+    }
+
+    override fun removeHunterPath(routeName: String) {
+        this.hunterPaths.remove(routeName)
+    }
+
+    override fun removeFile(fileAbsolutePath: String) {
+        removedFiles.add(fileAbsolutePath)
     }
 }

@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.usecase
 import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someInt
 import com.ocadotechnology.gembus.test.someObjects
+import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.model.Route
@@ -74,5 +75,23 @@ class RemoveTreasureDescriptionFromRouteUCTest {
         //then
         assertThat(actualRoute).isEqualTo(expectedRoute)
         assertThat(actualPersistedRoute).isEqualTo(expectedRoute)
+    }
+
+    @Test
+    fun `SHOULD remove commemorative photo WHEN one is associated with the removed treasure`() {
+        //given
+        val route = some<Route>()
+        val fixture = TreasureEditorViewModelFixture(route)
+        val photo = someString()
+        val treasureDescriptionId = fixture.setupProgressWithCommemorativePhoto(photo)
+        val useCase = fixture.removeTreasureDescriptionFromRouteUC
+
+        //when
+        useCase(route, treasureDescriptionId)
+
+        //then
+        val actualProgress = fixture.storage.progresses[route.name]!!
+        assertThat(actualProgress.commemorativePhotosByTreasuresDescriptionIds[treasureDescriptionId]).isNull()
+        assertThat(fixture.storage.removedFiles).contains(photo)
     }
 }

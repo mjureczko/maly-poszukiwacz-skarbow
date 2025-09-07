@@ -15,6 +15,8 @@ import pl.marianjureczko.poszukiwacz.TestStoragePort
 import pl.marianjureczko.poszukiwacz.eq
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
+import pl.marianjureczko.poszukiwacz.usecase.RemoveRouteUC
+import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRouteUC
 
 class MainViewModelTest {
 
@@ -24,7 +26,7 @@ class MainViewModelTest {
     @Test
     fun shouldLoadAllRoutes_whenStarting() {
         //when
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
 
         //then
         assertThat(viewModel.state.value.routes).isEqualTo(storage.loadAll())
@@ -33,7 +35,7 @@ class MainViewModelTest {
     @Test
     fun shouldMarkShowDialogAndClearRouteName_whenOpeningNewRouteName() {
         //given
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
 
         //when
         viewModel.openNewRouteDialog()
@@ -45,7 +47,7 @@ class MainViewModelTest {
     @Test
     fun shouldMarkHideDialog_whenHidingNewRouteName() {
         //given
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
 
         //when
         viewModel.hideNewRouteDialog()
@@ -57,7 +59,7 @@ class MainViewModelTest {
     @Test
     fun shouldMarkHideDialog_whenHidingOverridingRoute() {
         //given
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
 
         //when
         viewModel.hideOverrideRouteDialog()
@@ -69,7 +71,7 @@ class MainViewModelTest {
     @Test
     fun shouldSetShowDialogAndPromptTextInState_whenRequestingOpeningDeleteConfirmationDialog() {
         //given
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
         val route = some<Route>()
         val expectedPrompt = someString()
         given(resources.getString(eq(R.string.route_remove_prompt), eq(route.name)))
@@ -87,7 +89,7 @@ class MainViewModelTest {
     @Test
     fun shouldMarkHideDialog_whenHidingDeleteConfirmation() {
         //given
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
 
         //when
         viewModel.hideConfirmDeleteDialog()
@@ -100,7 +102,7 @@ class MainViewModelTest {
     fun shouldOpenOverrideDialog_whenCreatingRouteWithAlreadyExistingName() {
         //given
         val route = storage.loadAll()[0]
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
 
         //when
         viewModel.createNewRouteByName(route.name, {})
@@ -115,7 +117,7 @@ class MainViewModelTest {
     @Test
     fun shouldGoToTreasureEditor_whenRouteNameIsUnique() {
         //given
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
         val newRouteName = someString()
         var calledName = ""
         val goToTreasureEditor: GoToTreasureEditor = { calledName = it }
@@ -134,7 +136,7 @@ class MainViewModelTest {
     fun shouldReplaceRouteWithNewOne() {
         //given
         val route = storage.loadAll()[0]
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel = MainViewModel(storage, resources, mock())
         val routeName = route.name
         var calledName = ""
         val goToTreasureEditor: GoToTreasureEditor = { calledName = it }
@@ -151,7 +153,8 @@ class MainViewModelTest {
     fun shouldDeleteRoute() {
         //given
         val route = storage.loadAll()[0]
-        val viewModel = MainViewModel(storage, resources)
+        val viewModel =
+            MainViewModel(storage, resources, RemoveRouteUC(storage, RemoveTreasureDescriptionFromRouteUC(storage)))
 
         //when
         viewModel.deleteRoute(route)

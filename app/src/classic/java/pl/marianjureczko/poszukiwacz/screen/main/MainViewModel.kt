@@ -9,12 +9,14 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.RemoveRouteUC
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val storagePort: StoragePort,
-    private val resources: Resources
+    private val resources: Resources,
+    private val removeRouteUC: RemoveRouteUC
 ) : ViewModel() {
 
     private var _state = mutableStateOf(MainState())
@@ -72,7 +74,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun deleteRoute(route: Route) {
-        storagePort.remove(route)
+        removeRouteUC(route)
         loadAllRoutes()
     }
 

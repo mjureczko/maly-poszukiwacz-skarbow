@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRouteUC
+import pl.marianjureczko.poszukiwacz.usecase.RemoveRouteUC
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRouteUC
 import javax.inject.Singleton
 
@@ -22,5 +23,11 @@ object ClassicVariantModule {
     @Provides
     fun removeTreasureDescriptionFromRouteUseCase(storage: StoragePort): RemoveTreasureDescriptionFromRouteUC {
         return RemoveTreasureDescriptionFromRouteUC(storage)
+    }
+
+    @Singleton
+    @Provides
+    fun removeRouteUseCase(storage: StoragePort, removeTreasure: RemoveTreasureDescriptionFromRouteUC): RemoveRouteUC {
+        return RemoveRouteUC(storage, removeTreasure)
     }
 }

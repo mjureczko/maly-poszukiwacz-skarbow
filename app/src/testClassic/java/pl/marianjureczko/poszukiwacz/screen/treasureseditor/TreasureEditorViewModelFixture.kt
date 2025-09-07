@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someFrom
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.TestStoragePort
@@ -13,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.usecase.AddTreasureDescriptionToRouteUC
+import pl.marianjureczko.poszukiwacz.usecase.RemoveRouteUC
 import pl.marianjureczko.poszukiwacz.usecase.RemoveTreasureDescriptionFromRouteUC
 
 class TreasureEditorViewModelFixture(
@@ -26,6 +28,7 @@ class TreasureEditorViewModelFixture(
     val viewModel: TreasureEditorViewModel
     val addTreasureDescriptionToRouteUC = AddTreasureDescriptionToRouteUC(storage)
     val removeTreasureDescriptionFromRouteUC = RemoveTreasureDescriptionFromRouteUC(storage)
+    val removeRouteUC = RemoveRouteUC(storage, removeTreasureDescriptionFromRouteUC)
     val cameraPort = mock(CameraPort::class.java)
 
     init {
@@ -52,5 +55,16 @@ class TreasureEditorViewModelFixture(
             selectedTreasureDescriptionId = treasureToSelect.id
         }
         storage.progresses[route.name] = progress
+    }
+
+    /**
+     * @return treasure description id associated with commemorative photo
+     */
+    fun setupProgressWithCommemorativePhoto(photo: String): Int {
+        setupProgress()
+        val progress = storage.progresses[route.name]!!
+        val selected = someFrom(route.treasures).id
+        progress.commemorativePhotosByTreasuresDescriptionIds[selected] = photo
+        return selected
     }
 }
