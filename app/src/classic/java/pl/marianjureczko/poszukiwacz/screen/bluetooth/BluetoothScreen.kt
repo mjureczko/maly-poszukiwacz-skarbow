@@ -4,7 +4,7 @@ package pl.marianjureczko.poszukiwacz.screen.bluetooth
 
 import android.annotation.SuppressLint
 import android.widget.Toast
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State

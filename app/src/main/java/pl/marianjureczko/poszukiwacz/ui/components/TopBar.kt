@@ -4,19 +4,23 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -53,6 +58,7 @@ fun interface ViewModelProgressRestarter {
     operator fun invoke()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     navController: NavController,
@@ -62,11 +68,15 @@ fun TopBar(
     val showMenu = remember { mutableStateOf(false) }
     val context = LocalContext.current
     TopAppBar(
+        windowInsets = WindowInsets.statusBars,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = colorResource(R.color.colorPrimary)
+        ),
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 EmbeddedButton(
                     modifier = Modifier.semantics { contentDescription = TOPBAR_GO_BACK },
-                    imageVector = Icons.Outlined.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
                     colorFilter = ColorFilter.tint(Color.White)
                 ) { navController.navigateUp() }
             }
@@ -131,7 +141,7 @@ fun TopBar(
                     modifier = Modifier.semantics { contentDescription = TOPBAR_SCREEN_TITLE },
                     text = title,
                     color = Color.White,
-                    style = MaterialTheme.typography.h6.copy(fontFamily = FontFamily.Default),
+                    style = MaterialTheme.typography.titleLarge.copy(fontFamily = FontFamily.Default),
                     textAlign = TextAlign.Center
                 )
             }

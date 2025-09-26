@@ -2,10 +2,12 @@ package pl.marianjureczko.poszukiwacz.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +17,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
+import pl.marianjureczko.poszukiwacz.ui.theme.buttonColors
 
 const val YES_BUTTON = "Yes"
 const val NO_BUTTON = "Nope"
@@ -36,7 +40,9 @@ fun YesNoDialog(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButton(
+                    Button(
+                        shape = Shapes.large,
+                        colors = buttonColors(),
                         onClick = {
                             onYes()
                             hideIt()
@@ -46,7 +52,10 @@ fun YesNoDialog(
                             text = stringResource(R.string.yes)
                         )
                     }
-                    TextButton(
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(
+                        shape = Shapes.large,
+                        colors = buttonColors(),
                         modifier = Modifier.semantics { contentDescription =  NO_BUTTON },
                         onClick = { hideIt() }
                     ) {
@@ -57,7 +66,7 @@ fun YesNoDialog(
     )
 }
 
-@Preview(apiLevel = 31)
+@Preview(apiLevel = 35)
 @Composable
 fun YesNoDialogPreview() {
     YesNoDialog(true, {}, null, "title", {})

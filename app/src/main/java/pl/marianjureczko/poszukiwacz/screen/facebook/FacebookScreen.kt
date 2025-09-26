@@ -21,12 +21,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Card
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
@@ -53,19 +50,20 @@ import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
-import pl.marianjureczko.poszukiwacz.ui.theme.Typography
 import java.io.File
 import java.io.FileOutputStream
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+//TODO t: supressLint
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FacebookScreen(
     navController: NavController,
     onClickOnGuide: GoToGuide
 ) {
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
+    //TODO t:
+//    val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
-        scaffoldState = scaffoldState,
+//        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
@@ -96,7 +94,8 @@ private fun SubHeader() {
     Text(
         stringResource(R.string.facebook_screen_subheader),
         modifier = Modifier.fillMaxWidth(),
-        style = MaterialTheme.typography.h5,
+        //TODO t:
+//        style = MaterialTheme.typography.h5,
         textAlign = TextAlign.Center,
         color = Color.Black,
         fontFamily = FANCY_FONT,
@@ -151,7 +150,8 @@ private fun FacebookImage(modifier: Modifier) {
 @Composable
 fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRotatePhoto: RotatePhoto) {
     Card(
-        elevation = 4.dp,
+        //TODO t:
+//        elevation = 4.dp,
         shape = Shapes.large,
         modifier = Modifier.padding(4.dp)
     ) {
@@ -179,7 +179,8 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
             Text(
                 text = it.description,
                 fontFamily = FANCY_FONT,
-                fontSize = Typography.h6.fontSize
+                //TODO t:
+//                fontSize = Typography.h6.fontSize
             )
             it.scaledPhoto?.let { photo ->
                 val imageBitmap = photo.asImageBitmap()

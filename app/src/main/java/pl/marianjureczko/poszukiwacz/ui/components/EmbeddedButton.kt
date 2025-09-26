@@ -4,8 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.TextButton
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +26,8 @@ fun EmbeddedButton(
 ) {
     TextButton(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+        //TODO t:
+//        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         contentPadding = PaddingValues(0.dp),
         modifier = modifier
             .width(35.dp)

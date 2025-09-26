@@ -11,10 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
@@ -61,13 +61,13 @@ fun MainScreenBody(goToSearching: GoToSearching) {
         ) {
             Text(
                 text = stringResource(R.string.custom_title),
-                style = MaterialTheme.typography.h3,
+                style = MaterialTheme.typography.headlineLarge,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = state.messages[state.messageIndex].text,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.semantics { contentDescription = GUIDE_TEXT }
@@ -128,12 +128,11 @@ private fun ArrowButton(description: String, arrowIcon: ImageVector, onClickActi
     OutlinedButton(
         shape = Shapes.small,
         onClick = onClickAction,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.White,
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = Color.White,
             contentColor = Color.Black
         ),
-        border = BorderStroke(2.dp, Color.LightGray), // Border color and thickness
-        elevation = ButtonDefaults.elevation(4.dp),
+        border = BorderStroke(2.dp, Color.LightGray),
         modifier = Modifier.semantics { contentDescription = description },
         content = {
             Image(

@@ -1,8 +1,10 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
 import android.annotation.SuppressLint
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,7 +48,7 @@ fun TreasureEditorScreen(
                 menuConfig = MenuConfig(onClickOnGuide),
             )
         },
-        content = { _ ->
+        content = { paddingValues ->
             TreasureEditorScreenBody(
                 state = state,
                 cameraPermissionGranted = cameraPermission,
@@ -59,7 +61,8 @@ fun TreasureEditorScreen(
                 hideSoundRecordingDialog = { viewModel.hideSoundRecordingDialog() },
                 addTreasure = { viewModel.addTreasure() },
                 removeTreasure = { id -> viewModel.removeTreasure(id) },
-                getDoTipPhoto = viewModel
+                getDoTipPhoto = viewModel,
+                Modifier.padding(paddingValues),
             )
         }
     )

@@ -1,8 +1,7 @@
 package pl.marianjureczko.poszukiwacz.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
@@ -45,7 +44,11 @@ fun TreasureHunterMap(treasureDescriptions: List<TreasureDescription>, mapStyle:
                     iconSize = 1.5
                 }
                 ViewAnnotation(options = viewAnnotationOptions { geometry(Point.fromLngLat(treasure.longitude, treasure.latitude)) }) {
-                    Text(text = treasure.id.toString(), style = MaterialTheme.typography.h5)
+                    Text(
+                        text = treasure.id.toString(),
+                        //TODO t:
+//                        style = MaterialTheme.typography.h5
+                    )
                 }
             }
         }

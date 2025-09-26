@@ -17,14 +17,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CameraAlt
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Mic
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -77,9 +78,13 @@ fun TreasureEditorScreenBody(
     hideSoundRecordingDialog: HideSoundRecordingDialog,
     addTreasure: AddTreasure,
     removeTreasure: RemoveTreasure,
-    getDoTipPhoto: GetDoTipPhoto
+    getDoTipPhoto: GetDoTipPhoto,
+    modifier: Modifier,
 ) {
-    Box(contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
         Column {
             LazyColumn(
                 contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
@@ -138,8 +143,9 @@ fun TreasureItem(
     getDoTipPhoto: GetDoTipPhoto
 ) {
     Card(
-        elevation = 4.dp,
-        modifier = Modifier.padding(4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        modifier = Modifier.padding(6.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -151,7 +157,7 @@ fun TreasureItem(
         ) {
             Text(
                 text = treasure.prettyName(),
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -345,7 +351,7 @@ fun LocationBar(location: LocationBarData, addTreasure: AddTreasure) {
     }
 }
 
-@Preview(showBackground = true, apiLevel = 31, backgroundColor = 0xffffff)
+@Preview(showBackground = true, apiLevel = 35, backgroundColor = 0xffffff)
 @Composable
 fun TreasureEditorScreenBodyPreview() {
     TreasureEditorScreenBody(
@@ -357,6 +363,7 @@ fun TreasureEditorScreenBodyPreview() {
         false, false, {}, {}, {}, { _ -> }, {}, {}, {}, { _ -> }, object : GetDoTipPhoto {
             @Composable
             override fun getDoPhoto(cameraPermissionGranted: Boolean, treasure: TreasureDescription): DoPhoto = {}
-        }
+        },
+        Modifier,
     )
 }
