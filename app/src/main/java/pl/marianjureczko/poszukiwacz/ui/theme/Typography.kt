@@ -44,9 +44,10 @@ val Typography = Typography(
         fontFamily = FANCY_FONT,
         fontSize = 28.sp,
     ),
-//    headlineSmall = TextStyle(
-//        fontFamily = FANCY_FONT,
-//    ),
+    headlineSmall = TextStyle(
+        fontFamily = FANCY_FONT,
+        fontSize = 22.sp,
+    ),
 //    titleLarge = TextStyle(
 //        fontFamily = FANCY_FONT,
 //    ),
