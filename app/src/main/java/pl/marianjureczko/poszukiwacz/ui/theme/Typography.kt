@@ -25,13 +25,6 @@ val Typography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp
     ),
-    labelLarge = TextStyle(
-        fontFamily = FANCY_FONT,
-        fontWeight = FontWeight.W800,
-        fontSize = 19.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.sp
-    ),
     // Set default text style for the entire app
     //TODO t: remove
 //    displayLarge = TextStyle(
@@ -66,8 +59,16 @@ val Typography = Typography(
 //    bodySmall = TextStyle(
 //        fontFamily = FANCY_FONT,
 //    ),
+//    labelLarge = TextStyle(
+//        fontFamily = FANCY_FONT,
+//        fontWeight = FontWeight.W800,
+//        fontSize = 19.sp,
+//        lineHeight = 24.sp,
+//        letterSpacing = 0.sp
+//    ),
 //    labelMedium = TextStyle(
 //        fontFamily = FANCY_FONT,
+//        fontSize = 28.sp,
 //    ),
 //    labelSmall = TextStyle(
 //        fontFamily = FANCY_FONT,

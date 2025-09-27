@@ -295,7 +295,7 @@ fun LiveMap(route: Route) {
     ) {
         val isInPreview = LocalInspectionMode.current
         if (!isInPreview) {
-            TreasureHunterMap(route.treasures, Style.OUTDOORS)
+            TreasureHunterMap(Modifier, route.treasures, Style.OUTDOORS)
         }
     }
 }

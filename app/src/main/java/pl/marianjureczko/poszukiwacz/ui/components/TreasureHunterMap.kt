@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -20,12 +21,15 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.LocationHelper
 
 @Composable
-fun TreasureHunterMap(treasureDescriptions: List<TreasureDescription>, mapStyle: String) {
+fun TreasureHunterMap(
+    modifier: Modifier,
+    treasureDescriptions: List<TreasureDescription>, mapStyle: String
+) {
     val locationHelper = LocationHelper(treasureDescriptions)
     val center = locationHelper.center()
     key(treasureDescriptions.isNotEmpty()) {
         MapboxMap(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             mapViewportState = rememberMapViewportState {
                 setCameraOptions {
                     zoom(if (treasureDescriptions.isEmpty()) 1.0 else 13.0)
@@ -46,8 +50,7 @@ fun TreasureHunterMap(treasureDescriptions: List<TreasureDescription>, mapStyle:
                 ViewAnnotation(options = viewAnnotationOptions { geometry(Point.fromLngLat(treasure.longitude, treasure.latitude)) }) {
                     Text(
                         text = treasure.id.toString(),
-                        //TODO t:
-//                        style = MaterialTheme.typography.h5
+                        style = MaterialTheme.typography.headlineMedium
                     )
                 }
             }
