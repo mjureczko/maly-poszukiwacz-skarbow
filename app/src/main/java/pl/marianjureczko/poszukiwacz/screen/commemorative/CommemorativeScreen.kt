@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.screen.commemorative
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
@@ -47,8 +46,6 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 
-//TODO t: supressLint
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CommemorativeScreen(
     navController: NavController,
@@ -68,13 +65,20 @@ fun CommemorativeScreen(
                 menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(sharedState.route.name) }),
             )
         },
-        content = { CommemorativeScreenBody(sharedViewModel, sharedState) }
+        content = { paddingValues ->
+            CommemorativeScreenBody(
+                Modifier.padding(paddingValues),
+                sharedViewModel,
+                sharedState
+            )
+        }
     )
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CommemorativeScreenBody(
+    modifier: Modifier,
     sharedViewModel: CommemorativeSharedViewModel,
     sharedState: CommemorativeSharedState,
 ) {
@@ -84,7 +88,7 @@ fun CommemorativeScreenBody(
     localViewModel.setPhotoPath(
         sharedState.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds[localState.treasureDesId]!!
     )
-    Column {
+    Column(modifier = modifier) {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)
