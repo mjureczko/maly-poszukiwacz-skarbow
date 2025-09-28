@@ -11,13 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -47,13 +47,13 @@ const val PREV_GUIDE_BUTTON = "Previous guide button"
 const val START_BUTTON = "Start button"
 
 @Composable
-fun MainScreenBody(goToSearching: GoToSearching) {
+fun MainScreenBody(modifier: Modifier, goToSearching: GoToSearching) {
     val viewModel: MainViewModel = hiltViewModel()
     val state = viewModel.state.value
-    LaunchedEffect(key1 = "on start"){
+    LaunchedEffect(key1 = "on start") {
         viewModel.initializeAssets()
     }
-    Column(Modifier.background(colorResource(R.color.colorBackgroundVariant))) {
+    Column(modifier.background(colorResource(R.color.colorBackgroundVariant))) {
         Column(
             modifier = Modifier
                 .padding(10.dp)
@@ -61,13 +61,13 @@ fun MainScreenBody(goToSearching: GoToSearching) {
         ) {
             Text(
                 text = stringResource(R.string.custom_title),
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.displayLarge,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = state.messages[state.messageIndex].text,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleLarge,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.semantics { contentDescription = GUIDE_TEXT }

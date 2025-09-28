@@ -18,8 +18,9 @@ import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
+import pl.marianjureczko.poszukiwacz.ui.theme.ScoresOnSearchingScreenTextStyle
 
-val KNOWLEDGE_SCORE_TEXT = "Knowledge score"
+const val KNOWLEDGE_SCORE_TEXT = "Knowledge score"
 
 @Composable
 fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
@@ -39,7 +40,7 @@ fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
         Text(
             color = Color.Gray,
             text = score.knowledge.toString(),
-            fontSize = pl.marianjureczko.poszukiwacz.ui.theme.Typography.h5.fontSize,
+            style = ScoresOnSearchingScreenTextStyle(),
             modifier = Modifier
                 .padding(end = 5.dp)
                 .semantics { contentDescription = KNOWLEDGE_SCORE_TEXT }

@@ -29,7 +29,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
     }
 
     NavHost(navController, startDestination = Screens.Main.ROUTE) {
-        main(navController, onClickGuide, goToFacebook)
+        main(navController, onClickGuide)
         searching(navController, onClickGuide, goToFacebook, goToCommemorative)
         results(navController, onClickGuide, goToFacebook)
         tipPhoto(navController, onClickGuide, goToFacebook)
@@ -43,13 +43,11 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
 private fun NavGraphBuilder.main(
     navController: NavHostController,
     onClickGuide: GoToGuide,
-    goToFacebook: GoToFacebook
 ) {
     composable(route = Screens.Main.ROUTE) {
         MainScreen(
             navController = navController,
             onClickOnGuide = onClickGuide,
-            onClickOnFacebook = goToFacebook
         ) { routeName ->
             navController.navigate(Screens.Searching.doRoute(routeName))
         }

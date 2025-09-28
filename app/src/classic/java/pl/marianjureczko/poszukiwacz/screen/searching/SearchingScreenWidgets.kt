@@ -75,40 +75,6 @@ fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
 }
 
 @Composable
-fun Steps(stepsToTreasure: Int?) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Transparent)
-            .height(0.14.dh),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.Top,
-    ) {
-        if (stepsToTreasure != null) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 40.dp)
-                    .semantics { contentDescription = STEPS_TO_TREASURE },
-                style = TextStyle(
-                    fontFamily = FANCY_FONT,
-                    fontSize = 88.sp,
-                ),
-                color = Color.Gray,
-                text = stepsToTreasure.toString()
-            )
-        } else {
-            CircularProgressIndicator(Modifier.semantics { this.contentDescription = "Waiting for GPS" })
-        }
-        Image(
-            painterResource(R.drawable.steps),
-            modifier = Modifier.padding(start = 43.dp),
-            contentDescription = null,
-            contentScale = ContentScale.Inside,
-        )
-    }
-}
-
-@Composable
 @Preview(showBackground = true)
 fun ScoresPreview() {
     Scores(score = TreasuresProgress())

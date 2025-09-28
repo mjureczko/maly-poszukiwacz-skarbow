@@ -27,9 +27,10 @@ val Typography = Typography(
     ),
     // Set default text style for the entire app
     //TODO t: remove
-//    displayLarge = TextStyle(
-//        fontFamily = FANCY_FONT,
-//    ),
+    displayLarge = TextStyle(
+        fontFamily = FANCY_FONT,
+        fontSize = 57.sp,
+    ),
 //    displayMedium = TextStyle(
 //        fontFamily = FANCY_FONT,
 //    ),
