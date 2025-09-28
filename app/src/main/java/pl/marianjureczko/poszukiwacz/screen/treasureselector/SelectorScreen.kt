@@ -68,13 +68,10 @@ fun SelectorScreen(
 ) {
     val cameraPermission: PermissionState =
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
-    //TODO t:
-//    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val sharedViewModel: SelectorSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val sharedState: SelectorSharedState = sharedViewModel.state.value
     val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
     Scaffold(
-//        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,

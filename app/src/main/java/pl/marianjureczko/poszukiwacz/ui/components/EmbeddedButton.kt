@@ -26,8 +26,6 @@ fun EmbeddedButton(
 ) {
     TextButton(
         onClick = onClick,
-        //TODO t:
-//        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
         contentPadding = PaddingValues(0.dp),
         modifier = modifier
             .width(35.dp)

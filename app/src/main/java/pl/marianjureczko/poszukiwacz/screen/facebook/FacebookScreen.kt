@@ -56,10 +56,7 @@ fun FacebookScreen(
     navController: NavController,
     onClickOnGuide: GoToGuide
 ) {
-    //TODO t:
-//    val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
-//        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,

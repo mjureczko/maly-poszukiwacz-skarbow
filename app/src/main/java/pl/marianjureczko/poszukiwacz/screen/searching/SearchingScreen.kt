@@ -87,8 +87,6 @@ fun SearchingScreen(
     goToCommemorative: GoToCommemorative
 ) {
     val cameraPermission: PermissionState = handlePermission(RequirementsForDoingCommemorativePhoto)
-    //TODO t:
-//    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
     val state = viewModel.state.value
     val selectedTreasureDescriptionId = state.treasuresProgress.selectedTreasureDescriptionId
@@ -96,7 +94,6 @@ fun SearchingScreen(
     val restarter = ViewModelProgressRestarter { viewModel.restartProgress() }
 
     Scaffold(
-//        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
