@@ -53,11 +53,9 @@ fun CommemorativeScreen(
     onClickOnGuide: GoToGuide,
     goToFacebook: GoToFacebook,
 ) {
-//    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val sharedViewModel: CommemorativeSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val sharedState = sharedViewModel.state.value as CommemorativeSharedState
     Scaffold(
-//        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
