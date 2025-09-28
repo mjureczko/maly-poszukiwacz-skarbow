@@ -21,8 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.CameraAlt
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Mic
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -56,6 +54,7 @@ import pl.marianjureczko.poszukiwacz.shared.ShowSoundRecordingDialog
 import pl.marianjureczko.poszukiwacz.shared.errorTone
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
+import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.TreasureHunterMap
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 
@@ -142,11 +141,7 @@ fun TreasureItem(
     removeTreasure: RemoveTreasure,
     getDoTipPhoto: GetDoTipPhoto
 ) {
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = Modifier.padding(6.dp)
-    ) {
+    MyCard {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,

@@ -15,15 +15,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material.icons.twotone.Share
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +36,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
 import pl.marianjureczko.poszukiwacz.ui.components.EnterTextDialog
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
+import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 
 const val NEW_ROUTE_BUTTON = "New route"
@@ -116,11 +114,8 @@ fun RouteItem(
     goToSearching: GoToSearching,
     goToBluetooth: GoToBluetooth,
 ) {
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+    MyCard(
         modifier = Modifier
-            .padding(6.dp)
             .clickable { goToSearching(item.name) }
             .semantics { contentDescription = "$ROUTE ${item.name}" }
     ) {
