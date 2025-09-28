@@ -22,11 +22,12 @@ import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 
 @Composable
 fun BluetoothScreenBody(
+    modifier: Modifier,
     state: BluetoothState,
     onDeviceSelected: OnDeviceSelected,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = Color.Black),
         verticalArrangement = Arrangement.Bottom
