@@ -74,6 +74,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/files" />
         </provider>
+
+        <property
+            android:name="android:enableEdgeToEdge"
+            android:value="false" />
     </application>
 
 </manifest>

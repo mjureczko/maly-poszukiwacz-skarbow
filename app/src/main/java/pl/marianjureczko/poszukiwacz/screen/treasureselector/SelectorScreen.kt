@@ -1,7 +1,5 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureselector
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,15 +13,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,10 +54,9 @@ import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
-import pl.marianjureczko.poszukiwacz.ui.theme.Typography
+import pl.marianjureczko.poszukiwacz.ui.theme.buttonColors
 
 @OptIn(ExperimentalPermissionsApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SelectorScreen(
     navController: NavController,
@@ -73,12 +68,10 @@ fun SelectorScreen(
 ) {
     val cameraPermission: PermissionState =
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val sharedViewModel: SelectorSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val sharedState: SelectorSharedState = sharedViewModel.state.value
     val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
@@ -86,8 +79,9 @@ fun SelectorScreen(
                 menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(sharedState.route.name) }, restarter)
             )
         },
-        content = {
+        content = { paddingValues ->
             SelectorScreenBody(
+                Modifier.padding(paddingValues),
                 cameraPermission,
                 navController,
                 sharedViewModel,
@@ -103,6 +97,7 @@ fun SelectorScreen(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SelectorScreenBody(
+    modifier: Modifier,
     cameraPermission: PermissionState,
     navController: NavController,
     sharedViewModel: SelectorSharedViewModel,
@@ -114,7 +109,7 @@ fun SelectorScreenBody(
     val localViewModel: SelectorViewModel = hiltViewModel()
     val localState: SelectorState = localViewModel.state.value
     sharedViewModel.selectorPresented()
-    Column(Modifier.background(Color.White)) {
+    Column(modifier = modifier.background(Color.White)) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
             modifier = Modifier.weight(0.99f)
@@ -155,26 +150,16 @@ private fun OkDialogContent(onClickOnFacebook: () -> Unit) {
                 painterResource(R.drawable.tada),
                 contentDescription = "tada icon",
                 modifier = Modifier
-                    .padding(end = 5.dp, top = 20.dp)
-                    .height(60.dp)
+                    .padding(end = 5.dp, top = 0.dp)
+                    .height(55.dp)
             )
-            Text(
-                text = stringResource(R.string.well_done),
-                fontSize = Typography.h5.fontSize,
-                textAlign = TextAlign.Center,
-                fontFamily = FANCY_FONT,
-            )
+            OkDialogText(R.string.well_done)
         }
         OkDialogText(R.string.well_done_facebook)
-        OutlinedButton(
+        Button(
             onClick = { onClickOnFacebook() },
-            shape = Shapes.small,
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.White,
-                contentColor = Color.Black
-            ),
-            border = BorderStroke(2.dp, Color.LightGray),
-            elevation = ButtonDefaults.elevation(4.dp),
+            shape = Shapes.large,
+            colors = buttonColors(),
         ) {
             Text("Facebook")
             Image(
@@ -193,9 +178,8 @@ private fun OkDialogContent(onClickOnFacebook: () -> Unit) {
 fun OkDialogText(textResourceId: Int) {
     Text(
         text = stringResource(textResourceId),
-        fontSize = Typography.h6.fontSize,
+        style = MaterialTheme.typography.headlineSmall,
         textAlign = TextAlign.Center,
-        fontFamily = FANCY_FONT,
     )
 }
 
@@ -212,7 +196,8 @@ fun TreasureItem(
     goToCommemorative: GoToCommemorative
 ) {
     Card(
-        elevation = 4.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = Shapes.large,
         modifier = Modifier
             .padding(4.dp)
@@ -233,7 +218,7 @@ fun TreasureItem(
             if (distanceInSteps != null) {
                 Text(
                     text = stringResource(R.string.steps_to_treasure, treasureDescription.id, distanceInSteps),
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                     fontFamily = FANCY_FONT,
                     modifier = Modifier
@@ -243,7 +228,7 @@ fun TreasureItem(
             } else {
                 Text(
                     text = "[${treasureDescription.id}]",
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                     fontFamily = FANCY_FONT,
                     modifier = Modifier
@@ -269,10 +254,3 @@ fun TreasureItem(
     }
 }
 
-//@Preview(showBackground = true, apiLevel = 31)
-//@Composable
-//fun SelectorDefaultPreview() {
-//    AppTheme {
-//        SelectorScreen(null, App.getResources(), {})
-//    }
-//}

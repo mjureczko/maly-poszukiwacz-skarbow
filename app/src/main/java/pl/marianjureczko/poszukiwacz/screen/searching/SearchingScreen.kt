@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
-import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -14,7 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,12 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -80,7 +75,6 @@ const val SCAN_TREASURE_BUTTON = "Scan treasure"
 const val CHANGE_TREASURE_BUTTON = "Change treasure"
 
 @OptIn(ExperimentalPermissionsApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun SearchingScreen(
     navController: NavController,
@@ -93,7 +87,6 @@ fun SearchingScreen(
     goToCommemorative: GoToCommemorative
 ) {
     val cameraPermission: PermissionState = handlePermission(RequirementsForDoingCommemorativePhoto)
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val viewModel: SearchingViewModel = getViewModel()
     val state = viewModel.state.value
     val selectedTreasureDescriptionId = state.treasuresProgress.selectedTreasureDescriptionId
@@ -101,7 +94,6 @@ fun SearchingScreen(
     val restarter = ViewModelProgressRestarter { viewModel.restartProgress() }
 
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
@@ -109,8 +101,9 @@ fun SearchingScreen(
                 menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(state.route.name) }, restarter)
             )
         },
-        content = {
+        content = { paddingValues ->
             SearchingScreenBody(
+                Modifier.padding(paddingValues),
                 navController = navController,
                 viewModel = viewModel,
                 state = state,
@@ -129,6 +122,7 @@ fun SearchingScreen(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun SearchingScreenBody(
+    modifier: Modifier,
     navController: NavController,
     viewModel: SearchingViewModel,
     state: SearchingSharedState,
@@ -155,7 +149,7 @@ private fun SearchingScreenBody(
     }
     val selectedTreasureDescriptionId = state.treasuresProgress.selectedTreasureDescriptionId
     val photo = state.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds[selectedTreasureDescriptionId]
-    Column {
+    Column(modifier = modifier) {
         Box {
             CommemorativePhotoButton(
                 cameraPermissionState.status.isGranted,
@@ -174,6 +168,7 @@ private fun SearchingScreenBody(
             }
         }
         Steps(state.stepsToTreasure)
+        MySpacer(Modifier.weight(0.01f))
         Buttons(
             scanQrCallback,
             state.selectedTreasureDescription(),
@@ -182,13 +177,14 @@ private fun SearchingScreenBody(
             goToTipPhoto,
             goToMap
         ) { goToTreasureSelector(NOTHING_FOUND_TREASURE_ID) }
-        Spacer(
-            modifier = Modifier
-                .weight(0.01f)
-                .background(Color.Transparent)
-        )
+        MySpacer(Modifier.weight(0.01f))
         AdvertBanner()
     }
+}
+
+@Composable
+fun MySpacer(modifier: Modifier) {
+    Spacer(modifier = modifier.background(Color.Transparent))
 }
 
 @Composable
@@ -203,7 +199,7 @@ fun Compass(arcRotation: Float, gpsAccuracy: GpsAccuracy, modifier: Modifier) {
         )
     )
 
-    BoxWithConstraints(
+    Box(
         modifier = modifier
             .padding(start = 15.dp, end = 15.dp, top = 1.dp, bottom = 1.dp)
             .fillMaxWidth()
@@ -234,43 +230,12 @@ fun Compass(arcRotation: Float, gpsAccuracy: GpsAccuracy, modifier: Modifier) {
                 }
                 Text(
                     text = stringResource(textResId),
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Color.Red.copy(alpha = alpha),
                     modifier = Modifier.padding(end = 1.dp, bottom = 1.dp)
                 )
             }
         }
-    }
-}
-
-@Composable
-fun Steps(stepsToTreasure: Int?) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Transparent)
-            .height(0.14.dh),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.Top,
-    ) {
-        if (stepsToTreasure != null) {
-            Text(
-                modifier = Modifier
-                    .padding(start = 40.dp)
-                    .semantics { contentDescription = STEPS_TO_TREASURE },
-                style = MaterialTheme.typography.h2,
-                color = Color.Gray,
-                text = stepsToTreasure.toString()
-            )
-        } else {
-            CircularProgressIndicator(Modifier.semantics { this.contentDescription = "Waiting for GPS" })
-        }
-        Image(
-            painterResource(R.drawable.steps),
-            modifier = Modifier.padding(start = 43.dp),
-            contentDescription = null,
-            contentScale = ContentScale.Inside,
-        )
     }
 }
 

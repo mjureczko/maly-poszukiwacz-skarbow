@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.screen.facebook
 
-import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -21,12 +20,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
@@ -50,22 +46,17 @@ import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
+import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
-import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
-import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
-import pl.marianjureczko.poszukiwacz.ui.theme.Typography
 import java.io.File
 import java.io.FileOutputStream
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun FacebookScreen(
     navController: NavController,
     onClickOnGuide: GoToGuide
 ) {
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
@@ -73,16 +64,16 @@ fun FacebookScreen(
                 menuConfig = MenuConfig(onClickOnGuide)
             )
         },
-        content = { FacebookScreenBody() }
+        content = { paddingValues -> FacebookScreenBody(Modifier.padding(paddingValues)) }
     )
 }
 
 @Composable
-fun FacebookScreenBody() {
+fun FacebookScreenBody(modifier: Modifier) {
     val viewModel: FacebookViewModel = hiltViewModel()
     val state: FacebookState = viewModel.state.value
 
-    Column(Modifier.background(Color.White)) {
+    Column(modifier.background(Color.White)) {
         SubHeader()
         Elements(Modifier.weight(0.99f), state, viewModel, viewModel.rotatePhoto())
         Spacer(modifier = Modifier.weight(0.01f))
@@ -96,10 +87,9 @@ private fun SubHeader() {
     Text(
         stringResource(R.string.facebook_screen_subheader),
         modifier = Modifier.fillMaxWidth(),
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineMedium,
         textAlign = TextAlign.Center,
         color = Color.Black,
-        fontFamily = FANCY_FONT,
     )
 }
 
@@ -150,11 +140,7 @@ private fun FacebookImage(modifier: Modifier) {
 
 @Composable
 fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRotatePhoto: RotatePhoto) {
-    Card(
-        elevation = 4.dp,
-        shape = Shapes.large,
-        modifier = Modifier.padding(4.dp)
-    ) {
+    MyCard {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
@@ -178,8 +164,7 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
             )
             Text(
                 text = it.description,
-                fontFamily = FANCY_FONT,
-                fontSize = Typography.h6.fontSize
+                style = MaterialTheme.typography.headlineMedium,
             )
             it.scaledPhoto?.let { photo ->
                 val imageBitmap = photo.asImageBitmap()

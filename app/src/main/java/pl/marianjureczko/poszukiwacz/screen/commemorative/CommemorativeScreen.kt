@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.screen.commemorative
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
@@ -15,9 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,7 +46,6 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CommemorativeScreen(
     navController: NavController,
@@ -57,11 +53,9 @@ fun CommemorativeScreen(
     onClickOnGuide: GoToGuide,
     goToFacebook: GoToFacebook,
 ) {
-    val scaffoldState: ScaffoldState = rememberScaffoldState()
     val sharedViewModel: CommemorativeSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val sharedState = sharedViewModel.state.value as CommemorativeSharedState
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopBar(
                 navController = navController,
@@ -69,13 +63,20 @@ fun CommemorativeScreen(
                 menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(sharedState.route.name) }),
             )
         },
-        content = { CommemorativeScreenBody(sharedViewModel, sharedState) }
+        content = { paddingValues ->
+            CommemorativeScreenBody(
+                Modifier.padding(paddingValues),
+                sharedViewModel,
+                sharedState
+            )
+        }
     )
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CommemorativeScreenBody(
+    modifier: Modifier,
     sharedViewModel: CommemorativeSharedViewModel,
     sharedState: CommemorativeSharedState,
 ) {
@@ -85,7 +86,7 @@ fun CommemorativeScreenBody(
     localViewModel.setPhotoPath(
         sharedState.treasuresProgress.commemorativePhotosByTreasuresDescriptionIds[localState.treasureDesId]!!
     )
-    Column {
+    Column(modifier = modifier) {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)

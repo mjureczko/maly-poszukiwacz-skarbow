@@ -1,8 +1,11 @@
 package pl.marianjureczko.poszukiwacz.screen.main
 
-import android.annotation.SuppressLint
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -16,7 +19,6 @@ import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
     navController: NavController,
@@ -31,6 +33,7 @@ fun MainScreen(
         handlePermissionWithExitOnDenied(RequirementsForNavigation)
     }
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopBar(
                 navController = navController,
@@ -38,6 +41,13 @@ fun MainScreen(
                 menuConfig = MenuConfig(onClickOnGuide),
             )
         },
-        content = { _ -> MainScreenBody(goToBluetooth, goToTreasureEditor, goToSearching) }
+        content = { paddingValues ->
+            MainScreenBody(
+                goToBluetooth,
+                goToTreasureEditor,
+                goToSearching,
+                Modifier.padding(paddingValues)
+            )
+        }
     )
 }

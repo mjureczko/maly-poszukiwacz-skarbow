@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +34,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.delay
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.components.AbstractDialog
+import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
+import pl.marianjureczko.poszukiwacz.ui.theme.buttonColors
 
 const val STOP_RECORDING_BUTTON = "stop recording button"
 private const val FILENAME = "filename"
@@ -93,15 +95,15 @@ fun RecordingDialog(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(
+                Button(
+                    shape = Shapes.large,
+                    colors = buttonColors(),
                     onClick = {
                         isRecording.value = false
                         stopRecording(recorder, context)
                         onDismiss(closedAt.value)
                     },
-                    modifier = Modifier.semantics {
-                        contentDescription = STOP_RECORDING_BUTTON
-                    }
+                    modifier = Modifier.semantics { contentDescription = STOP_RECORDING_BUTTON }
                 ) {
                     Text(text = context.getString(R.string.stop_recording))
                 }

@@ -40,14 +40,13 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
         selector(navController, onClickGuide, goToCommemorative, goToFacebook, goToResultsFromSelector)
         commemorative(navController, onClickGuide, goToFacebook)
         facebook(navController, onClickGuide)
-        bluetooth(navController, onClickGuide, goToFacebook)
+        bluetooth(navController, onClickGuide)
     }
 }
 
 private fun NavGraphBuilder.bluetooth(
     navController: NavHostController,
     onClickGuide: GoToGuide,
-    goToFacebook: GoToFacebook
 ) {
     composable(
         route = Screens.Bluetooth.ROUTE,
@@ -56,11 +55,7 @@ private fun NavGraphBuilder.bluetooth(
             navArgument(Screens.Bluetooth.PARAMETER_ROUTE_TO_SENT) { type = NavType.StringType },
         ),
     ) { navBackStackEntry ->
-        BluetoothScreen(
-            navController = navController,
-            onClickOnGuide = onClickGuide,
-            onClickOnFacebook = goToFacebook
-        )
+        BluetoothScreen(navController = navController, onClickOnGuide = onClickGuide)
     }
 }
 

@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,12 +30,11 @@ fun LargeButton(title: String, description: String = "", enabled: Boolean = true
             .fillMaxWidth()
             .semantics { contentDescription = description }
             .clickable { Log.d("LargeButton", "LargeButton: ") },
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.White,
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = Color.LightGray,
             contentColor = contentColor
         ),
         border = BorderStroke(2.dp, Color.LightGray),
-        elevation = ButtonDefaults.elevation(4.dp),
         onClick = onClick
     ) {
         Text(

@@ -11,7 +11,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.screen.Screens
 
 object FacebookHelper {
-    private const val facebookPackage = "com.facebook.katana"
+    private const val FACEBOOK_PACKAGE = "com.facebook.katana"
 
     @Composable
     fun createFacebookCallback(navController: NavHostController): (String) -> Unit {
@@ -31,7 +31,7 @@ object FacebookHelper {
         val packageManager = context.packageManager
         return try {
             //the not deprecated version requires API 33
-            packageManager.getPackageInfo(facebookPackage, PackageManager.GET_ACTIVITIES)
+            packageManager.getPackageInfo(FACEBOOK_PACKAGE, PackageManager.GET_ACTIVITIES)
             true
         } catch (e: PackageManager.NameNotFoundException) {
             false

@@ -1,6 +1,5 @@
 package pl.marianjureczko.poszukiwacz.screen.phototip
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
@@ -10,7 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,7 +31,6 @@ import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
 import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun TipPhotoScreen(
     navController: NavController,
@@ -52,15 +50,20 @@ fun TipPhotoScreen(
                 menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(state.routeName) }, restarter)
             )
         },
-        content = { TipPhotoScreenBody(state) }
+        content = { paddingValues ->
+            TipPhotoScreenBody(Modifier.padding(paddingValues), state)
+        }
     )
 }
 
 @Composable
-fun TipPhotoScreenBody(state: TipPhotoState) {
-    Column {
+fun TipPhotoScreenBody(
+    modifier: Modifier,
+    state: TipPhotoState
+) {
+    Column(modifier = modifier) {
         Spacer(
-            modifier = Modifier
+            modifier = modifier
                 .weight(0.01f)
                 .background(Color.Transparent)
         )

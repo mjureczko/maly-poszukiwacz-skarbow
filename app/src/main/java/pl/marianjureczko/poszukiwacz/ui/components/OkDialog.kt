@@ -1,25 +1,22 @@
 package pl.marianjureczko.poszukiwacz.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
+import pl.marianjureczko.poszukiwacz.ui.theme.buttonColors
 
 @Composable
 fun OkDialog(
@@ -28,36 +25,33 @@ fun OkDialog(
     content: @Composable (() -> Unit)?,
 ) {
     if (visible) {
-        AlertDialog(
-            modifier = Modifier.border(width = 1.dp, color = colorResource(R.color.colorPrimary)),
-            onDismissRequest = { hideIt() },
+        AbstractDialog(
+            visible = visible,
+            hideIt = { hideIt() },
+            text = content,
+            title = null,
+            titleString = "",
             buttons = {
-                Column(
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(all = 16.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
-                    content?.invoke()
-                    Row(
-                        modifier = Modifier
-                            .padding(all = 16.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        TextButton(onClick = { hideIt() }) {
-                            Text(stringResource(R.string.ok))
-                        }
+                    Button(
+                        shape = Shapes.large,
+                        colors = buttonColors(),
+                        onClick = { hideIt() }) {
+                        Text(text = stringResource(R.string.ok))
                     }
                 }
-            },
-            shape = RectangleShape
+            }
         )
     }
 
 }
 
-@Preview(showBackground = true, apiLevel = 31)
+@Preview(showBackground = true, apiLevel = 35)
 @Composable
 fun OkDialogPreview() {
     OkDialog(true, {}) {

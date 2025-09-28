@@ -6,17 +6,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material.icons.twotone.Share
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -36,6 +36,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.EmbeddedButton
 import pl.marianjureczko.poszukiwacz.ui.components.EnterTextDialog
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
+import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.YesNoDialog
 
 const val NEW_ROUTE_BUTTON = "New route"
@@ -52,14 +53,17 @@ private const val NO_ROUTE = "no_route"
 fun MainScreenBody(
     goToBluetooth: GoToBluetooth,
     goToTreasureEditor: GoToTreasureEditor,
-    goToSearching: GoToSearching
+    goToSearching: GoToSearching,
+    modifier: Modifier,
 ) {
     val viewModel: MainViewModel = hiltViewModel()
     val state = viewModel.state.value
     LaunchedEffect(Unit) {
         viewModel.refresh()
     }
-    Column {
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 8.dp),
             modifier = Modifier.weight(0.99f)
@@ -110,10 +114,8 @@ fun RouteItem(
     goToSearching: GoToSearching,
     goToBluetooth: GoToBluetooth,
 ) {
-    Card(
-        elevation = 4.dp,
+    MyCard(
         modifier = Modifier
-            .padding(4.dp)
             .clickable { goToSearching(item.name) }
             .semantics { contentDescription = "$ROUTE ${item.name}" }
     ) {
@@ -126,7 +128,7 @@ fun RouteItem(
         ) {
             Text(
                 text = item.name,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
