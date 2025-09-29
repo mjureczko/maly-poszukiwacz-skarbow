@@ -32,7 +32,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -121,7 +120,6 @@ fun ResultScreenBody(sharedViewModel: ResultSharedViewModel) {
  * @param resultType the type should be one of: GOLD, RUBY, DIAMOND.
  */
 @Composable
-@Preview(showBackground = true, apiLevel = 31)
 private fun TreasureImage(treasureType: TreasureType? = TreasureType.GOLD, amount: Int = 91) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -175,7 +173,6 @@ private fun Message(localState: ResultState) {
 }
 
 @Composable
-@Preview(showBackground = true, apiLevel = 31)
 private fun VideoPlayerWithButton(
     isPlayVisible: Boolean = true,
     movieController: MovieController = object : MovieController {

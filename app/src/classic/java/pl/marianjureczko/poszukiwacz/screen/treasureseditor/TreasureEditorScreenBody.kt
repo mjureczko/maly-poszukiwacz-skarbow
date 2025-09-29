@@ -36,14 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mapbox.maps.Style
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.AddTreasure
-import pl.marianjureczko.poszukiwacz.shared.DoPhoto
 import pl.marianjureczko.poszukiwacz.shared.HideOverridePhotoDialog
 import pl.marianjureczko.poszukiwacz.shared.HideOverrideSoundTipDialog
 import pl.marianjureczko.poszukiwacz.shared.HideSoundRecordingDialog
@@ -346,19 +344,3 @@ fun LocationBar(location: LocationBarData, addTreasure: AddTreasure) {
     }
 }
 
-@Preview(showBackground = true, apiLevel = 35, backgroundColor = 0xffffff)
-@Composable
-fun TreasureEditorScreenBodyPreview() {
-    TreasureEditorScreenBody(
-        TreasureEditorState(
-            Route("name", mutableListOf(TreasureDescription())),
-            null, { _ -> false },
-            { _ -> false }
-        ),
-        false, false, {}, {}, {}, { _ -> }, {}, {}, {}, { _ -> }, object : GetDoTipPhoto {
-            @Composable
-            override fun getDoPhoto(cameraPermissionGranted: Boolean, treasure: TreasureDescription): DoPhoto = {}
-        },
-        Modifier,
-    )
-}

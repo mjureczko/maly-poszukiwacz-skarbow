@@ -23,7 +23,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.errorTone
@@ -116,8 +115,8 @@ fun EnterTextDialog(
     }
 }
 
-@Preview(showBackground = true, apiLevel = 35)
-@Composable
-fun EnterTextDialogPreview() {
-    EnterTextDialog(true, {}, R.string.app_name) {}
-}
+//@Preview(showBackground = true, apiLevel = 35)
+//@Composable
+//fun EnterTextDialogPreview() {
+//    EnterTextDialog(true, {}, R.string.app_name) {}
+//}
