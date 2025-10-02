@@ -13,8 +13,8 @@ android {
         applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 18
-        versionName "2.4.9"
+        versionCode 19
+        versionName "2.4.10"
         testInstrumentationRunner "pl.marianjureczko.poszukiwacz.CustomTestRunner"
         testInstrumentationRunnerArguments["grantPermissions"] = "true"
         manifestPlaceholders = [facebookToken: FACEBOOK_TOKEN]
@@ -152,8 +152,8 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-compose:1.1.0-alpha01'
     implementation 'com.google.accompanist:accompanist-permissions:0.30.1'
     implementation 'commons-io:commons-io:2.11.0'
-    implementation 'com.mapbox.maps:android:11.12.0'
-    implementation 'com.mapbox.extension:maps-compose:11.12.0'
+    implementation 'com.mapbox.maps:android-ndk27:11.14.0'
+    implementation 'com.mapbox.extension:maps-compose-ndk27:11.14.0'
     implementation 'com.facebook.android:facebook-share:17.0.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
