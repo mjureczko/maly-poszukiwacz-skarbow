@@ -94,4 +94,9 @@ object Screens {
 
         fun doRoute(mode: Mode, routeToSent: String) = "$PATH/$mode/$routeToSent"
     }
+
+    object Badges {
+        private const val PATH = "badges"
+        const val ROUTE = PATH
+    }
 }

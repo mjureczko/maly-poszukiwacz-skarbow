@@ -45,7 +45,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
-import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
 import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
@@ -62,7 +62,8 @@ fun ResultScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: GoToGuide,
-    onClickOnFacebook: GoToFacebook
+    onClickOnFacebook: GoToFacebook,
+    onClickBadges: GoToBadgesScreen,
 ) {
     val sharedViewModel: ResultSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
@@ -71,23 +72,25 @@ fun ResultScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.treasure),
-                menuConfig = MenuConfig(
+                menuConfig = resultsMenuConfig(
                     onClickOnGuide,
-                    { onClickOnFacebook(sharedViewModel.getRouteName()) },
-                    restarter
+                    onClickOnFacebook,
+                    sharedViewModel,
+                    restarter,
+                    onClickBadges
                 ),
             )
         },
-        content = { ResultScreenBody(sharedViewModel) }
+        content = { paddingValues -> ResultScreenBody(Modifier.padding(paddingValues), sharedViewModel) }
     )
 }
 
 @Composable
-fun ResultScreenBody(sharedViewModel: ResultSharedViewModel) {
+fun ResultScreenBody(modifier: Modifier, sharedViewModel: ResultSharedViewModel) {
     val localViewModel: ResultViewModel = hiltViewModel()
     val localState: ResultState = localViewModel.state.value
     sharedViewModel.resultPresented()
-    Column {
+    Column(modifier = modifier) {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)

@@ -56,4 +56,5 @@
     <string name="low_gps_signal">Low GPS signal</string>
     <string name="medium_gps_signal">Medium GPS signal</string>
     <string name="no_gps_signal">No GPS signal</string>
+    <string name="achievements">Achievements</string>
 </resources>

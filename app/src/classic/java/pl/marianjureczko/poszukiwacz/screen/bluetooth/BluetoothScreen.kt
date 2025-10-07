@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
@@ -24,6 +25,7 @@ import pl.marianjureczko.poszukiwacz.ui.handlePermission
 fun BluetoothScreen(
     navController: NavController,
     onClickOnGuide: GoToGuide,
+    goToBadges: GoToBadgesScreen,
 ) {
     val viewModel: BluetoothViewModel = hiltViewModel()
     val state: State<BluetoothState> = viewModel.state
@@ -54,7 +56,7 @@ fun BluetoothScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(id = R.string.sending_route),
-                menuConfig = MenuConfig(onClickOnGuide),
+                menuConfig = MenuConfig(onClickOnGuide, onClickBadges = goToBadges),
             )
         },
         content = { paddingValues ->

@@ -46,7 +46,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
-import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.OkDialog
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
@@ -65,6 +65,7 @@ fun SelectorScreen(
     goToResult: GoToResultWithTreasure,
     goToCommemorative: GoToCommemorative,
     onClickOnFacebook: GoToFacebook,
+    onClickBadges: GoToBadgesScreen,
 ) {
     val cameraPermission: PermissionState =
         handlePermission(pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto)
@@ -76,7 +77,13 @@ fun SelectorScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.select_treasure_dialog_title),
-                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(sharedState.route.name) }, restarter)
+                menuConfig = selectorMenuConfig(
+                    onClickOnGuide,
+                    onClickOnFacebook,
+                    sharedState,
+                    restarter,
+                    onClickBadges
+                )
             )
         },
         content = { paddingValues ->

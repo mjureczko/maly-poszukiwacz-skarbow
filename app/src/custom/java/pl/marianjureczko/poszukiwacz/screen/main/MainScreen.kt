@@ -29,9 +29,11 @@ fun MainScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.app_name),
-                menuConfig = MenuConfig(onClickOnGuide),
+                menuConfig = mainMenuConfig(onClickOnGuide),
             )
         },
         content = { paddingValues -> MainScreenBody(Modifier.padding(paddingValues), goToSearching) }
     )
 }
+
+private fun mainMenuConfig(onClickOnGuide: () -> Unit) = MenuConfig(onClickOnGuide)

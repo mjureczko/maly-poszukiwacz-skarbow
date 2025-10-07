@@ -15,6 +15,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 
 //Custom
 @Composable
@@ -27,16 +28,17 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
             Screens.Results.doRoute(CustomInitializerForRoute.routeName, ResultType.KNOWLEDGE, treasureId, 1)
         )
     }
+    val goToBadges = GoToBadgesScreen { navController.navigate(Screens.Badges.ROUTE) }
 
     NavHost(navController, startDestination = Screens.Main.ROUTE) {
         main(navController, onClickGuide)
-        searching(navController, onClickGuide, goToFacebook, goToCommemorative)
-        results(navController, onClickGuide, goToFacebook)
-        tipPhoto(navController, onClickGuide, goToFacebook)
-        map(navController, onClickGuide, goToFacebook)
-        selector(navController, onClickGuide, goToCommemorative, goToFacebook, goToResultsFromSelector)
-        commemorative(navController, onClickGuide, goToFacebook)
-        facebook(navController, onClickGuide)
+        searching(navController, onClickGuide, goToFacebook, goToCommemorative, goToBadges)
+        results(navController, onClickGuide, goToFacebook, goToBadges)
+        tipPhoto(navController, onClickGuide, goToFacebook, goToBadges)
+        map(navController, onClickGuide, goToFacebook, goToBadges)
+        selector(navController, onClickGuide, goToCommemorative, goToFacebook, goToResultsFromSelector, goToBadges)
+        commemorative(navController, onClickGuide, goToFacebook, goToBadges)
+        facebook(navController, onClickGuide, goToBadges)
     }
 }
 

@@ -44,8 +44,8 @@ import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
-import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import java.io.File
@@ -54,14 +54,15 @@ import java.io.FileOutputStream
 @Composable
 fun FacebookScreen(
     navController: NavController,
-    onClickOnGuide: GoToGuide
+    onClickOnGuide: GoToGuide,
+    onClickBadges: GoToBadgesScreen,
 ) {
     Scaffold(
         topBar = {
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.title_activity_facebook),
-                menuConfig = MenuConfig(onClickOnGuide)
+                menuConfig = facebookMenuConfig(onClickOnGuide, onClickBadges)
             )
         },
         content = { paddingValues -> FacebookScreenBody(Modifier.padding(paddingValues)) }
