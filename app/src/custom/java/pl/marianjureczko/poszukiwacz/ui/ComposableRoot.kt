@@ -31,7 +31,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
     val goToBadges = GoToBadgesScreen { navController.navigate(Screens.Badges.ROUTE) }
 
     NavHost(navController, startDestination = Screens.Main.ROUTE) {
-        main(navController, onClickGuide)
+        main(navController, onClickGuide, goToBadges)
         searching(navController, onClickGuide, goToFacebook, goToCommemorative, goToBadges)
         results(navController, onClickGuide, goToFacebook, goToBadges)
         tipPhoto(navController, onClickGuide, goToFacebook, goToBadges)
@@ -45,11 +45,13 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
 private fun NavGraphBuilder.main(
     navController: NavHostController,
     onClickGuide: GoToGuide,
+    onClickBadges: GoToBadgesScreen,
 ) {
     composable(route = Screens.Main.ROUTE) {
         MainScreen(
             navController = navController,
             onClickOnGuide = onClickGuide,
+            onClickBadges = onClickBadges,
         ) { routeName ->
             navController.navigate(Screens.Searching.doRoute(routeName))
         }

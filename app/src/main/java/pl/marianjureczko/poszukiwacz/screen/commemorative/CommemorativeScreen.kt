@@ -42,6 +42,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
+import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
@@ -159,3 +160,9 @@ private fun DoPhotoButton(
         contentScale = ContentScale.Inside
     )
 }
+
+fun commemorativeMenuConfig(
+    onClickOnGuide: GoToGuide,
+    onClickFacebook: () -> Unit,
+    onClickBadges: GoToBadgesScreen
+) = MenuConfig(onClickOnGuide, onClickFacebook, onClickBadges = onClickBadges)

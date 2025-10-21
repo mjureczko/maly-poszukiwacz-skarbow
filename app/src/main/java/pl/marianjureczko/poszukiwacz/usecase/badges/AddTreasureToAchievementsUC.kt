@@ -9,24 +9,27 @@ class AddTreasureToAchievementsUC(
     private val storage: AchievementsStoragePort
 ) {
     operator fun invoke(route: Route, treasure: Treasure, currentProgress: TreasuresProgress): Badge? {
-        var achievs = storage.load() ?: Achievements()
+        var achievements = storage.load() ?: Achievements()
 
         when (treasure.type) {
-            TreasureType.GOLD -> achievs = achievs.copy(golds = achievs.golds + treasure.quantity)
-            TreasureType.RUBY -> achievs = achievs.copy(rubies = achievs.rubies + treasure.quantity)
-            TreasureType.DIAMOND -> achievs = achievs.copy(diamonds = achievs.diamonds + treasure.quantity)
+            TreasureType.GOLD -> achievements = achievements.copy(golds = achievements.golds + treasure.quantity)
+            TreasureType.RUBY -> achievements = achievements.copy(rubies = achievements.rubies + treasure.quantity)
+            TreasureType.DIAMOND -> achievements =
+                achievements.copy(diamonds = achievements.diamonds + treasure.quantity)
 
-            TreasureType.KNOWLEDGE -> {/*no-op*/
+            TreasureType.KNOWLEDGE -> {
+                require(treasure.quantity == 1) { "Knowledge treasure quantity must be 1" }
+                achievements = achievements.copy(knowledge = achievements.knowledge + 1)
             }
         }
-        achievs = achievs.copy(treasures = achievs.treasures + 1)
+        achievements = achievements.copy(treasures = achievements.treasures + 1)
         if (areAllTreasuresFromRouteFound(route, currentProgress)) {
-            achievs = achievs.copy(completedRoutes = achievs.completedRoutes + 1)
-            if (hasCompletedNewLongestRoute(route, achievs)) {
-                achievs = achievs.copy(greatestNumberOfTreasuresOnRoute = route.treasures.size)
+            achievements = achievements.copy(completedRoutes = achievements.completedRoutes + 1)
+            if (hasCompletedNewLongestRoute(route, achievements)) {
+                achievements = achievements.copy(greatestNumberOfTreasuresOnRoute = route.treasures.size)
             }
         }
-        storage.save(achievs)
+        storage.save(achievements)
         return null
     }
 

@@ -10,7 +10,7 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForNavigation
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
-import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 
@@ -18,7 +18,8 @@ import pl.marianjureczko.poszukiwacz.ui.handlePermissionWithExitOnDenied
 fun MainScreen(
     navController: NavController,
     onClickOnGuide: () -> Unit,
-    goToSearching: GoToSearching
+    onClickBadges: GoToBadgesScreen,
+    goToSearching: GoToSearching,
 ) {
     val isInPreview = LocalInspectionMode.current
     if (!isInPreview) {
@@ -29,11 +30,9 @@ fun MainScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.app_name),
-                menuConfig = mainMenuConfig(onClickOnGuide),
+                menuConfig = mainMenuConfig(onClickOnGuide, onClickBadges),
             )
         },
         content = { paddingValues -> MainScreenBody(Modifier.padding(paddingValues), goToSearching) }
     )
 }
-
-private fun mainMenuConfig(onClickOnGuide: () -> Unit) = MenuConfig(onClickOnGuide)

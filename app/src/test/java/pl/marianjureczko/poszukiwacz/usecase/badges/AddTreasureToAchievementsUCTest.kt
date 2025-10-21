@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.usecase.badges
 
 import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -38,6 +39,46 @@ class AddTreasureToAchievementsUCTest {
         assertThat(actual.treasures).isEqualTo(1)
         assertThat(actual.completedRoutes).isEqualTo(0)
         assertThat(actual.greatestNumberOfTreasuresOnRoute).isEqualTo(0)
+    }
+
+    @Test
+    fun `SHOULD store one knowledge treasure WHEN adding first knowledge treasure`() {
+        // given
+        val routeWithTwoTreasures = some<Route>().copy(
+            treasures = listOf(some<TreasureDescription>(), some<TreasureDescription>())
+        )
+        val knowledgeTreasure = some<Treasure>().copy(type = TreasureType.KNOWLEDGE, quantity = 1)
+        val progress = TreasuresProgress()
+
+        // when
+        sut(routeWithTwoTreasures, knowledgeTreasure, progress)
+
+        // then
+        val actual = storage.load()!!
+        assertThat(actual.golds).isEqualTo(0)
+        assertThat(actual.rubies).isEqualTo(0)
+        assertThat(actual.diamonds).isEqualTo(0)
+        assertThat(actual.knowledge).isEqualTo(1)
+        assertThat(actual.allJewelries()).isEqualTo(0)
+        assertThat(actual.treasures).isEqualTo(1)
+        assertThat(actual.completedRoutes).isEqualTo(0)
+        assertThat(actual.greatestNumberOfTreasuresOnRoute).isEqualTo(0)
+    }
+
+    @Test
+    fun `SHOULD throw exception WHEN ading knowledge treasure with quantity greater than 1`() {
+        // given
+        val routeWithTwoTreasures = some<Route>().copy(
+            treasures = listOf(some<TreasureDescription>(), some<TreasureDescription>())
+        )
+        val knowledgeTreasure = some<Treasure>().copy(type = TreasureType.KNOWLEDGE, quantity = 2)
+        val progress = TreasuresProgress()
+
+        // when - then
+        assertThatThrownBy {
+            sut(routeWithTwoTreasures, knowledgeTreasure, progress)
+        }.isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("Knowledge treasure quantity must be 1")
     }
 
     @Test

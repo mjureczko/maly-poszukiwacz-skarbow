@@ -4,6 +4,7 @@ data class Achievements(
     val golds: Int = 0,
     val diamonds: Int = 0,
     val rubies: Int = 0,
+    val knowledge: Int = 0,
     val treasures: Int = 0,
     val completedRoutes: Int = 0,
     val greatestNumberOfTreasuresOnRoute: Int = 0,

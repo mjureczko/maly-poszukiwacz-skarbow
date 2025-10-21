@@ -51,10 +51,3 @@ fun MainScreen(
         }
     )
 }
-
-fun mainMenuConfig(
-    onClickOnGuide: () -> Unit,
-    onClickBadges: GoToBadgesScreen,
-): MenuConfig {
-    return MenuConfig(onClickOnGuide, onClickBadges = onClickBadges)
-}
