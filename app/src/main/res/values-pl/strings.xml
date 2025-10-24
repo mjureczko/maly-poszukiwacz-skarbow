@@ -54,4 +54,15 @@
     <string name="medium_gps_signal">Średni sygnał GPS</string>
     <string name="no_gps_signal">Brak sygnału GPS</string>
     <string name="achievements">Osiągnięcia</string>
+    <string name="badges_header">Earned badges:</string>
+    <string name="total_loot_collected">Łącznie kosztowności:</string>
+    <string name="discovered_treasures">Odkrytych skarbów:</string>
+    <string name="completed_routes">Ukończone wyprawy:</string>
+    <string name="longest_completed_route">Najdłuższa ukończona wyprawa:</string>
+    <string name="badge_for">przyznana za</string>
+    <string name="badge_unit_text_base"> </string>
+    <string name="badge_of_jewelries">- łączna liczba zdobytych kosztowności wszystkich trzech rodzajów</string>
+    <string name="badge_of_treasures">- liczba odkrytych skarbów</string>
+    <string name="badge_of_completed_routes">- liczba ukończonych tras</string>
+    <string name="badge_of_longest_route">- liczba odkrytych skarbów na pojedyńczej ukończonej trasie</string>
 </resources>

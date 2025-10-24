@@ -8,7 +8,10 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 class AddTreasureToAchievementsUC(
     private val storage: AchievementsStoragePort
 ) {
-    operator fun invoke(route: Route, treasure: Treasure, currentProgress: TreasuresProgress): Badge? {
+    /**
+     * @currentProgress - progress AFTER adding the treasure from 2nd parameter
+     */
+    operator fun invoke(route: Route, treasure: Treasure, currentProgress: TreasuresProgress): List<Badge> {
         var achievements = storage.load() ?: Achievements()
 
         when (treasure.type) {
@@ -30,7 +33,7 @@ class AddTreasureToAchievementsUC(
             }
         }
         storage.save(achievements)
-        return null
+        return listOf()
     }
 
     private fun hasCompletedNewLongestRoute(route: Route, achievements: Achievements): Boolean {
