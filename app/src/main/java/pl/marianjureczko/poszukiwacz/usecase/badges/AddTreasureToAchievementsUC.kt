@@ -6,7 +6,8 @@ import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 
 class AddTreasureToAchievementsUC(
-    private val storage: AchievementsStoragePort
+    private val storage: AchievementsStoragePort,
+    private val gainNewBadgesUC: GainNewBadgesUC,
 ) {
     /**
      * @currentProgress - progress AFTER adding the treasure from 2nd parameter
@@ -32,6 +33,7 @@ class AddTreasureToAchievementsUC(
                 achievements = achievements.copy(greatestNumberOfTreasuresOnRoute = route.treasures.size)
             }
         }
+        gainNewBadgesUC(achievements)
         storage.save(achievements)
         return listOf()
     }

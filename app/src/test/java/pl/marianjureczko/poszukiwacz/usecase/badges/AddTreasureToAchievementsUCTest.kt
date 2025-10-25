@@ -15,7 +15,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 class AddTreasureToAchievementsUCTest {
 
     val storage = TestAchievementsStoragePort()
-    val sut = AddTreasureToAchievementsUC(storage)
+    val sut = AddTreasureToAchievementsUC(storage, GainNewBadgesUC())
 
     @ParameterizedTest(name = "SHOULD store {0} in quantity from treasure WHEN adding first treasure which is {0}")
     @EnumSource(value = TreasureType::class, names = ["KNOWLEDGE"], mode = EnumSource.Mode.EXCLUDE)

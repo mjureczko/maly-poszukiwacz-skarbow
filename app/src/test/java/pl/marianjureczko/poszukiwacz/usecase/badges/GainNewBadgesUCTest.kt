@@ -2,16 +2,22 @@ package pl.marianjureczko.poszukiwacz.usecase.badges
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 
 class GainNewBadgesUCTest {
+
+    private val sut = GainNewBadgesUC()
+
     @Test
     fun `SHOULD return empty list WHEN nothing in achievements`() {
         //given
-        val sut = GainNewBadgesUC()
         val emptyAchievements = Achievements()
 
         //when
-        val actual = sut.invoke(emptyAchievements)
+        val actual = sut(emptyAchievements)
 
         //then
         assertThat(actual).isEmpty()
@@ -20,7 +26,6 @@ class GainNewBadgesUCTest {
     @Test
     fun `SHOULD return empty list WHEN everything in progress below 1st badge threshold`() {
         //given
-        val sut = GainNewBadgesUC()
         val lowAchievements = Achievements().copy(
             golds = 49,
             rubies = 49,
@@ -32,85 +37,159 @@ class GainNewBadgesUCTest {
         )
 
         //when
-        val actual = sut.invoke(lowAchievements)
+        val actual = sut(lowAchievements)
 
         //then
         assertThat(actual).isEmpty()
     }
 
-    @Test
-    fun `SHOULD return first gold badge WHEN gold is 50 and no gold badges in achievements`() {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("goldCases")
+    fun gainGoldBadges(comment: String, achievements: Achievements, expectedBadges: List<Badge>) {
         //given
-        val sut = GainNewBadgesUC()
-        val thresholdForFirstBadge = 50
-        val achievements = Achievements().copy(golds = thresholdForFirstBadge)
 
         //when
-        val actual = sut.invoke(achievements)
+        val actual = sut(achievements)
+
+        //then
+        assertThat(actual.filter { it.type == BadgeType.GoldHunter })
+            .hasSize(expectedBadges.size)
+            .usingRecursiveFieldByFieldElementComparatorIgnoringFields(Badge::timestamp.name)
+            .containsExactlyElementsOf(expectedBadges)
+    }
+
+    companion object {
+        @JvmStatic
+        fun goldCases(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                "SHOULD return first gold badge WHEN gold is 50 and no gold badges",
+                Achievements().copy(golds = 50),
+                listOf(Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = 50))
+            ),
+            Arguments.of(
+                "SHOULD return empty list WHEN gold is 50 but gold badge already granted",
+                Achievements().copy(
+                    golds = 50,
+                    badges = listOf(Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = 50))
+                ),
+                emptyList<Badge>()
+            ),
+            Arguments.of(
+                "SHOULD return 3rd gold badge WHEN gold is 150 and only 2 gold badges achieved",
+                Achievements().copy(
+                    golds = 150,
+                    badges = listOf(
+                        Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = 51),
+                        Badge(type = BadgeType.GoldHunter, level = 2, achievementValue = 102)
+                    )
+                ),
+                listOf(Badge(type = BadgeType.GoldHunter, level = 3, achievementValue = 150))
+            ),
+            Arguments.of(
+                "SHOULD empty list WHEN gold is 150 and 3 gold badges already exist",
+                Achievements().copy(
+                    golds = 150,
+                    badges = listOf(
+                        Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = 51),
+                        Badge(type = BadgeType.GoldHunter, level = 2, achievementValue = 102),
+                        Badge(type = BadgeType.GoldHunter, level = 3, achievementValue = 150)
+                    )
+                ),
+                emptyList<Badge>()
+            )
+        )
+    }
+
+    @Test
+    fun `SHOULD return all 4 jewellery badges WHEN each kind above already granted brands`() {
+        //given
+        val golds = 105
+        val rubies = 100
+        val diamonds = 55
+        val achievements = Achievements().copy(
+            golds = golds,
+            rubies = rubies,
+            diamonds = diamonds,
+            badges = listOf(
+                Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = 51),
+                Badge(type = BadgeType.RubyCollector, level = 1, achievementValue = 54)
+            )
+        )
+
+        //when
+        val actual = sut(achievements)
 
         //then
         assertThat(actual)
+            .hasSize(4)
             .usingRecursiveFieldByFieldElementComparatorIgnoringFields(Badge::timestamp.name)
-            .containsExactly(Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = thresholdForFirstBadge))
+            .containsExactlyElementsOf(
+                listOf(
+                    Badge(type = BadgeType.GoldHunter, level = 2, achievementValue = golds),
+                    Badge(type = BadgeType.RubyCollector, level = 2, achievementValue = rubies),
+                    Badge(type = BadgeType.DiamondExplorer, level = 1, achievementValue = diamonds),
+                    Badge(type = BadgeType.Treasurer, level = 1, achievementValue = golds + rubies + diamonds),
+                )
+            )
     }
 
     @Test
-    fun `SHOULD return empty list WHEN gold is 50 and gold badges is already granted`() {
+    fun `SHOULD return all but simple jewellery badges WHEN each remaining kind above already granted brands`() {
         //given
-        val sut = GainNewBadgesUC()
-        val thresholdForFirstBadge = 50
+        val jewelryQuantity = 34
+        val knowledge = 10
+        val completedRoutes = 5
+        val longestRoute = 3
+        val treasures = 10
         val achievements = Achievements().copy(
-            golds = thresholdForFirstBadge,
-            badges = listOf(Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = thresholdForFirstBadge)),
+            golds = jewelryQuantity,
+            rubies = jewelryQuantity,
+            diamonds = jewelryQuantity,
+            treasures = treasures,
+            completedRoutes = completedRoutes,
+            knowledge = knowledge,
+            greatestNumberOfTreasuresOnRoute = longestRoute,
+            badges = listOf()
         )
 
         //when
-        val actual = sut.invoke(achievements)
-
-        //then
-        assertThat(actual).isEmpty()
-    }
-
-    @Test
-    fun `SHOULD return 3rd gold badge WHEN gold is 150 and only 2 gold badges in achievements`() {
-        //given
-        val sut = GainNewBadgesUC()
-        val thresholdFor3rdtBadge = 150
-        val achievements = Achievements().copy(
-            golds = thresholdFor3rdtBadge,
-            badges = listOf(
-                Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = 51),
-                Badge(type = BadgeType.GoldHunter, level = 2, achievementValue = 102),
-            ),
-        )
-
-        //when
-        val actual = sut.invoke(achievements)
+        val actual = sut(achievements)
 
         //then
         assertThat(actual)
+            .hasSize(5)
             .usingRecursiveFieldByFieldElementComparatorIgnoringFields(Badge::timestamp.name)
-            .containsExactly(Badge(type = BadgeType.GoldHunter, level = 3, achievementValue = thresholdFor3rdtBadge))
+            .containsExactlyInAnyOrderElementsOf(
+                listOf(
+                    Badge(type = BadgeType.Treasurer, level = 1, achievementValue = jewelryQuantity * 3),
+                    Badge(type = BadgeType.TreasureSeeker, level = 1, achievementValue = treasures),
+                    Badge(type = BadgeType.KnowledgeHero, level = 1, achievementValue = knowledge),
+                    Badge(type = BadgeType.EnduringTraveler, level = 1, achievementValue = completedRoutes),
+                    Badge(type = BadgeType.Pathfinder, level = 1, achievementValue = longestRoute),
+                )
+            )
     }
 
     @Test
-    fun `SHOULD return empty list WHEN gold is 150 and 3 gold badges in achievements`() {
+    fun `SHOULD grand 2nd pathfinder badge WHEN currently achieved longest route is longer than the one from 1st badge`() {
         //given
-        val sut = GainNewBadgesUC()
-        val thresholdFor3rdtBadge = 50
+        val routeLength = 3
         val achievements = Achievements().copy(
-            golds = thresholdFor3rdtBadge,
-            badges = listOf(
-                Badge(type = BadgeType.GoldHunter, level = 1, achievementValue = 51),
-                Badge(type = BadgeType.GoldHunter, level = 2, achievementValue = 102),
-                Badge(type = BadgeType.GoldHunter, level = 3, achievementValue = 150),
-            ),
+            greatestNumberOfTreasuresOnRoute = routeLength,
+            badges = listOf(Badge(type = BadgeType.Pathfinder, level = 1, achievementValue = 2))
         )
 
         //when
-        val actual = sut.invoke(achievements)
+        val actual = sut(achievements)
 
         //then
-        assertThat(actual).isEmpty()
+        assertThat(actual)
+            .hasSize(1)
+            .usingRecursiveFieldByFieldElementComparatorIgnoringFields(Badge::timestamp.name)
+            .containsExactlyInAnyOrderElementsOf(
+                listOf(
+                    Badge(type = BadgeType.Pathfinder, level = 2, achievementValue = routeLength),
+                )
+            )
     }
 }
