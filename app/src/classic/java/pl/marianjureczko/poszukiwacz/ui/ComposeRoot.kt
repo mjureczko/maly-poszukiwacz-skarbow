@@ -30,7 +30,7 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
     val goToCommemorative: GoToCommemorative = getGoToCommemorative(navController)
     val goToEditor: GoToTreasureEditor =
         { routeName -> navController.navigate(Screens.TreasureEditor.doRoute(routeName)) }
-    val goToResultsFromSelector: GoToResultWithTreasure = {}
+    val goToResultsFromSelector = GoToResultWithTreasure { _, _ -> /*do nothing*/ }
     val goToBadges = GoToBadgesScreen { navController.navigate(Screens.Badges.ROUTE) }
 
     NavHost(navController, startDestination = Screens.Main.ROUTE) {

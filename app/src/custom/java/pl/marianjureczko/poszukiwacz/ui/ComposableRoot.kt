@@ -23,9 +23,15 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
     val goToCommemorative: GoToCommemorative = getGoToCommemorative(navController)
-    val goToResultsFromSelector: GoToResultWithTreasure = { treasureId ->
+    val goToResultsFromSelector = GoToResultWithTreasure { treasureId, isJustFound ->
         navController.navigate(
-            Screens.Results.doRoute(CustomInitializerForRoute.routeName, ResultType.KNOWLEDGE, treasureId, 1)
+            Screens.Results.doRoute(
+                CustomInitializerForRoute.routeName,
+                ResultType.KNOWLEDGE,
+                isJustFound,
+                treasureId,
+                1
+            )
         )
     }
     val goToBadges = GoToBadgesScreen { navController.navigate(Screens.Badges.ROUTE) }

@@ -18,8 +18,9 @@ open class QrScannerPort {
         return rememberLauncherForActivityResult(
             contract = ScanContract(),
             onResult = { result: ScanIntentResult? ->
-                val callback = viewModel.scannedTreasureCallback { routeName, resultType, treasureId, quantity ->
-                    goToResult(routeName, resultType, treasureId, quantity)
+                val callback =
+                    viewModel.scannedTreasureCallback { routeName, resultType, isJustFound, treasureId, quantity ->
+                        goToResult(routeName, resultType, isJustFound, treasureId, quantity)
                 }
                 callback(result?.contents)
             }

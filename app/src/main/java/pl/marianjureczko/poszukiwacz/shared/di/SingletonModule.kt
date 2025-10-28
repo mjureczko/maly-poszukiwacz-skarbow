@@ -19,6 +19,10 @@ import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocationFactory
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
+import pl.marianjureczko.poszukiwacz.usecase.badges.Achievements
+import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
+import pl.marianjureczko.poszukiwacz.usecase.badges.AddTreasureToAchievementsUC
+import pl.marianjureczko.poszukiwacz.usecase.badges.GainNewBadgesUC
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -93,6 +97,27 @@ object SingletonModule {
     fun updateLocationUC(storage: StoragePort, locationCalculator: LocationCalculator): UpdateLocationUC {
         return UpdateLocationUC(storage, locationCalculator)
     }
+
+    @Singleton
+    @Provides
+    fun achievementsStoragePort(): AchievementsStoragePort {
+        return object : AchievementsStoragePort {
+            //TODO t: provide real implementation
+            override fun load(): Achievements? = null
+
+            override fun save(achievements: Achievements) {
+            }
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun addTreasureToAchievementsUC(storage: AchievementsStoragePort, gainNewBadgesUC: GainNewBadgesUC) =
+        AddTreasureToAchievementsUC(storage, gainNewBadgesUC)
+
+    @Singleton
+    @Provides
+    fun gainNewBadgesUC() = GainNewBadgesUC()
 
     @Singleton
     @Provides

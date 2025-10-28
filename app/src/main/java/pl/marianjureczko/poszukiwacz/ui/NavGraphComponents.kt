@@ -18,6 +18,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
+import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 
@@ -42,8 +43,8 @@ fun NavGraphBuilder.searching(
             goToTipPhoto = { tipPhoto, routeName ->
                 navController.navigate(Screens.TipPhoto.doRoute(tipPhoto, routeName))
             },
-            goToResult = { routeName, resultType, treasureId, amount ->
-                navController.navigate(Screens.Results.doRoute(routeName, resultType, treasureId, amount))
+            goToResult = GoToResults { routeName, resultType, isJustFound, treasureId, amount ->
+                navController.navigate(Screens.Results.doRoute(routeName, resultType, isJustFound, treasureId, amount))
             },
             goToMap = { navController.navigate(Screens.Map.doRoute(it)) },
             goToTreasureSelector = { treasureDescriptionId ->
@@ -91,6 +92,7 @@ fun NavGraphBuilder.results(
         arguments = listOf(
             navArgument(Screens.Results.PARAMETER_ROUTE_NAME) { type = NavType.StringType },
             navArgument(Screens.Results.PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) },
+            navArgument(Screens.Results.PARAMETER_IS_JUST_FOUND) { type = NavType.BoolType },
             navArgument(Screens.Results.PARAMETER_TREASURE_ID) { type = NavType.IntType },
             navArgument(Screens.Results.PARAMETER_TREASURE_AMOUNT) { type = NavType.IntType },
         )

@@ -1,6 +1,9 @@
 package pl.marianjureczko.poszukiwacz.screen.result
 
+import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureType
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.usecase.badges.Badge
 
 data class ResultState(
     val resultType: ResultType,
@@ -9,8 +12,12 @@ data class ResultState(
     val moviePath: String?,
     val subtitlesLine: String?,
     val subtitlesPath: String?,
+    val route: Route?,
+    val progress: TreasuresProgress?,
     val localesWithSubtitles: Boolean = false,
-    val isPlayVisible: Boolean = true
+    val badgesToShow: List<Badge> = listOf(),
+    val isPlayVisible: Boolean = true,
+    val isBadgesVisible: Boolean = false,
 )
 
 enum class ResultType {
