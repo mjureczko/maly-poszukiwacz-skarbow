@@ -1,11 +1,15 @@
 package pl.marianjureczko.poszukiwacz.usecase.badges
 
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someObjects
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import org.mockito.BDDMockito.given
+import org.mockito.Mockito.mock
+import pl.marianjureczko.poszukiwacz.any
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -130,5 +134,25 @@ class AddTreasureToAchievementsUCTest {
         val actual = storage.load()!!
         val expected = treasure1.quantity + treasure2.quantity
         assertThat(actual.golds).isEqualTo(if (treasureType == TreasureType.GOLD) expected else 0)
+    }
+
+    @Test
+    fun `SHOULD store badges WHEN badges returned by Gain New Badges Use case`() {
+        //given
+        val gainNewBadgesUC: GainNewBadgesUC = mock()
+        val badges = someObjects<Badge>(3).toList()
+        given(gainNewBadgesUC.invoke(any(Achievements::class.java))).willReturn(badges)
+        val sut = AddTreasureToAchievementsUC(storage, gainNewBadgesUC)
+
+        val route = some<Route>()
+        val treasure = some<Treasure>().copy(type = TreasureType.RUBY)
+        val progress = TreasuresProgress()
+
+        //when
+        sut(route, treasure, progress)
+
+        //then
+        val actual = storage.load()!!
+        assertThat(actual.badges).isEqualTo(badges)
     }
 }

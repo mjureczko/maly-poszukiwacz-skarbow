@@ -13,13 +13,13 @@ import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.port.external.ExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocationFactory
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
-import pl.marianjureczko.poszukiwacz.usecase.badges.Achievements
 import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
 import pl.marianjureczko.poszukiwacz.usecase.badges.AddTreasureToAchievementsUC
 import pl.marianjureczko.poszukiwacz.usecase.badges.GainNewBadgesUC
@@ -100,14 +100,8 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun achievementsStoragePort(): AchievementsStoragePort {
-        return object : AchievementsStoragePort {
-            //TODO t: provide real implementation
-            override fun load(): Achievements? = null
-
-            override fun save(achievements: Achievements) {
-            }
-        }
+    fun achievementsStoragePort(@ApplicationContext appContext: Context): AchievementsStoragePort {
+        return ExternalStoragePort(appContext)
     }
 
     @Singleton

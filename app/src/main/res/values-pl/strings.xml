@@ -45,6 +45,7 @@
     <string name="missing_location_permission">Pozwolenie na dostęp do lokalizacji jest niezbędne do rozgrywki. Uruchom ponownie grę albo przejdź do ustawień żeby przyznać dostęp.</string>
     <string name="missing_commemorative_photo_permission">Pozwolenie jest potrzebne do zrobienia pomiątkowego zdjęcia z poszukiwania skarbu. Możesz przyznać je w ustawieniach aplikacji.</string>
     <string name="missing_tip_photo_permission">Pozwolenie jest potrzebne do zrobienia zdjęcia z podpowiedzią. Możesz przyznać je w ustawieniach aplikacji.</string>
+    <string name="missing_external_storage_permission">Pozwolenie jest potrzebne do zapisywania osiągnięć i odznak. Możesz przyznać je w ustawieniach aplikacji.</string>
     <string name="photo_permission_not_granted">Aby robić zdjęcia, zezwól aplikacji na dostęp do aparatu.</string>
     <string name="well_done">Gratulacje! Wszystkie skarby zostały odnalezione!</string>
     <string name="well_done_facebook">Możesz podzielić się tym osiągnięciem na</string>
@@ -65,4 +66,5 @@
     <string name="badge_of_treasures">- liczba odkrytych skarbów</string>
     <string name="badge_of_completed_routes">- liczba ukończonych tras</string>
     <string name="badge_of_longest_route">- liczba odkrytych skarbów na pojedyńczej ukończonej trasie</string>
+    <string name="badges_dialog_header">Twoje osiągnięcia są imponujące. Znajdując ten skarb zdobywasz odznaki:</string>
 </resources>

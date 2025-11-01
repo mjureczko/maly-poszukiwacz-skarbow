@@ -33,9 +33,10 @@ class AddTreasureToAchievementsUC(
                 achievements = achievements.copy(greatestNumberOfTreasuresOnRoute = route.treasures.size)
             }
         }
-        gainNewBadgesUC(achievements)
+        val newBadges = gainNewBadgesUC(achievements)
+        achievements = achievements.copy(badges = achievements.badges + newBadges)
         storage.save(achievements)
-        return listOf()
+        return newBadges
     }
 
     private fun hasCompletedNewLongestRoute(route: Route, achievements: Achievements): Boolean {

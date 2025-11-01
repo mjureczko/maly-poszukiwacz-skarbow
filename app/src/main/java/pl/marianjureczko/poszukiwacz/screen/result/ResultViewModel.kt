@@ -42,6 +42,15 @@ class ResultViewModel @Inject constructor(
 
     private var _state: MutableState<ResultState> = mutableStateOf(createState())
 
+    init {
+        val treasureType = state.value.resultType.toTreasureType()
+        stateHandle.get<Boolean>(Screens.Results.PARAMETER_IS_JUST_FOUND)?.let { isJustFound ->
+            if (isJustFound && realTreasuresTypes.contains(treasureType)) {
+                delayedAchievementsProcessing()
+            }
+        }
+    }
+
     val state: State<ResultState>
         get() = _state
 
@@ -59,6 +68,10 @@ class ResultViewModel @Inject constructor(
 
     fun setSubtitlesLine(line: String?) {
         _state.value = _state.value.copy(subtitlesLine = line)
+    }
+
+    fun hideBadges() {
+        _state.value = _state.value.copy(isBadgesVisible = false)
     }
 
     private fun createState(): ResultState {
@@ -86,7 +99,6 @@ class ResultViewModel @Inject constructor(
                     route = storagePort.loadRoute(routeName!!)
                 }
                 progress = storagePort.loadProgress(routeName!!)
-                delayedAchievementsProcessing()
             }
         }
         return ResultState(
@@ -109,12 +121,12 @@ class ResultViewModel @Inject constructor(
     private fun treasureDescriptionHasBeenIdentified(treasureDescId: Int) = NOTHING_FOUND_TREASURE_ID != treasureDescId
 
     private fun delayedAchievementsProcessing() {
+        val badges = addTreasureToAchievementsUC(
+            route = state.value.route!!,
+            treasure = Treasure("_", state.value.amount!!, state.value.treasureType!!),
+            currentProgress = state.value.progress!!,
+        )
         viewModelScope.launch(ioDispatcher) {
-            val badges = addTreasureToAchievementsUC(
-                route = state.value.route!!,
-                treasure = Treasure("_", state.value.amount!!, state.value.treasureType!!),
-                currentProgress = state.value.progress!!,
-            )
             if (badges.isNotEmpty()) {
                 delay(400)
                 _state.value = _state.value.copy(

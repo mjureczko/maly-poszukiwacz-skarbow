@@ -37,9 +37,10 @@ class GainNewBadgesUC {
         achievedBadges: List<Badge>,
     ) {
         val possesedBadge = getBestBadgeOfType(BadgeType.Pathfinder, achievedBadges)
+        val alreadyRewarded = possesedBadge?.achievementValue ?: 0
         val currentLevel = possesedBadge?.level ?: 0
 
-        if (greatestNumberOfTreasuresOnRoute > 0) {
+        if (greatestNumberOfTreasuresOnRoute > alreadyRewarded) {
             gained.add(Badge(BadgeType.Pathfinder, currentLevel + 1, greatestNumberOfTreasuresOnRoute))
         }
     }

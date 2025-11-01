@@ -128,7 +128,6 @@ fun TopBar(
                         }
                     }
                     menuConfig.onClickBadges?.let { goToBadgesScreen ->
-                        //TODO t: create MenuEntry
                         MenuEntry(
                             drawableId = R.drawable.icon_badges,
                             textId = R.string.achievements,

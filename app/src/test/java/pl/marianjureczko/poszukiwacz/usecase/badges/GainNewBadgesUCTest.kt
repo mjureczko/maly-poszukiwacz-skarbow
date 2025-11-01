@@ -192,4 +192,23 @@ class GainNewBadgesUCTest {
                 )
             )
     }
+
+    @Test
+    fun `SHOULD not grand 2nd pathfinder WHEN currently finished route is of the same length as the badgelevel`() {
+        //given
+        val achievements = Achievements().copy(
+            treasures = 4,
+            completedRoutes = 2,
+            greatestNumberOfTreasuresOnRoute = 2,
+            badges = listOf(
+                Badge(type = BadgeType.Pathfinder, level = 1, achievementValue = 2),
+            )
+        )
+
+        //when
+        val actual = sut(achievements)
+
+        //then
+        assertThat(actual).isEmpty()
+    }
 }
