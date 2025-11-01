@@ -7,13 +7,19 @@ import android.widget.VideoView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,17 +44,22 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasureType
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsToExternalStorage
 import pl.marianjureczko.poszukiwacz.screen.searching.ResultSharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
-import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
+import pl.marianjureczko.poszukiwacz.ui.components.BadgeCard
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
+import pl.marianjureczko.poszukiwacz.ui.components.OkDialog
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
 import pl.marianjureczko.poszukiwacz.ui.getSharedViewModel
+import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 const val PLAY_MOVIE_BUTTON = "Play the movie"
@@ -56,38 +67,43 @@ const val TREASURE_QUANTITY = "treasure quantity"
 const val DO_NOT_SHOW_TREASURE_MSG = "Cannot show treasure"
 private const val SUBTITLES_MIME_TYPE = "application/x-subrip"
 
+@OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ResultScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: GoToGuide,
-    onClickOnFacebook: GoToFacebook
+    onClickOnFacebook: GoToFacebook,
+    onClickBadges: GoToBadgesScreen,
 ) {
     val sharedViewModel: ResultSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
     val restarter = ViewModelProgressRestarter { sharedViewModel.restartProgress() }
+    handlePermission(RequirementsToExternalStorage)
     Scaffold(
         topBar = {
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.treasure),
-                menuConfig = MenuConfig(
+                menuConfig = resultsMenuConfig(
                     onClickOnGuide,
-                    { onClickOnFacebook(sharedViewModel.getRouteName()) },
-                    restarter
+                    onClickOnFacebook,
+                    sharedViewModel,
+                    restarter,
+                    onClickBadges
                 ),
             )
         },
-        content = { ResultScreenBody(sharedViewModel) }
+        content = { paddingValues -> ResultScreenBody(Modifier.padding(paddingValues), sharedViewModel) }
     )
 }
 
 @Composable
-fun ResultScreenBody(sharedViewModel: ResultSharedViewModel) {
+fun ResultScreenBody(modifier: Modifier, sharedViewModel: ResultSharedViewModel) {
     val localViewModel: ResultViewModel = hiltViewModel()
     val localState: ResultState = localViewModel.state.value
     sharedViewModel.resultPresented()
-    Column {
+    Column(modifier = modifier) {
         Spacer(
             modifier = Modifier
                 .weight(0.01f)
@@ -113,6 +129,34 @@ fun ResultScreenBody(sharedViewModel: ResultSharedViewModel) {
                 .background(Color.Transparent)
         )
         AdvertBanner()
+    }
+    OkDialog(localState.isBadgesVisible, localViewModel::hideBadges) {
+        NewBadgesDialogContent(localState)
+    }
+}
+
+@Composable
+private fun NewBadgesDialogContent(localState: ResultState) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 100.dp, max = 300.dp)
+            .padding(top = (0).dp),
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.badges_dialog_header),
+        )
+        LazyColumn(
+            contentPadding = PaddingValues(vertical = 1.dp, horizontal = 8.dp),
+        ) {
+            items(localState.badgesToShow) { badge ->
+                BadgeCard(badge, MaterialTheme.typography.bodyLarge)
+            }
+        }
     }
 }
 
@@ -162,10 +206,15 @@ private fun Message(localState: ResultState) {
         stringResource(R.string.treasure_already_taken_msg)
     }
     Text(
-        modifier = Modifier.semantics { contentDescription = DO_NOT_SHOW_TREASURE_MSG },
-        fontSize = 60.sp,
-        fontWeight = FontWeight.Bold,
-        fontFamily = FANCY_FONT,
+        modifier = Modifier
+            .semantics { contentDescription = DO_NOT_SHOW_TREASURE_MSG }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        style = MaterialTheme.typography.headlineLarge.copy(
+            fontSize = 60.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FANCY_FONT,
+            lineHeight = 72.sp
+        ),
         color = Color.Gray,
         textAlign = TextAlign.Center,
         text = text,

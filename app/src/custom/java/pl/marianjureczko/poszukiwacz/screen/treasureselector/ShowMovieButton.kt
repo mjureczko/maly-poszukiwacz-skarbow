@@ -27,7 +27,7 @@ fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, g
                 .semantics { contentDescription = SHOW_MOVIE_BUTTON }
                 .padding(2.dp)
                 .height(35.dp)
-                .clickable { goToResult(treasure.id) },
+                .clickable { goToResult(treasure.id, isJustFound = false) },
             contentDescription = "Show treasure movie",
             contentScale = ContentScale.Inside,
         )

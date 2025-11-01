@@ -51,10 +51,18 @@ const val TOPBAR_MENU_RESTART = "Restart menu entry"
 data class MenuConfig(
     val onClickOnGuide: (() -> Unit)?,
     val onClickOnFacebook: (() -> Unit)? = null,
-    val onClickOnRestart: (ViewModelProgressRestarter)? = null
-)
+    val onClickOnRestart: ViewModelProgressRestarter? = null,
+    val onClickBadges: GoToBadgesScreen? = null,
+) {
+
+}
+
 
 fun interface ViewModelProgressRestarter {
+    operator fun invoke()
+}
+
+fun interface GoToBadgesScreen {
     operator fun invoke()
 }
 
@@ -118,6 +126,14 @@ fun TopBar(
                             showMenu.value = false
                             showRestartDialog.value = true
                         }
+                    }
+                    menuConfig.onClickBadges?.let { goToBadgesScreen ->
+                        MenuEntry(
+                            drawableId = R.drawable.icon_badges,
+                            textId = R.string.achievements,
+                            modifier = Modifier.semantics { contentDescription = "TODO" },
+                            onClick = { goToBadgesScreen() },
+                        )
                     }
                 }
             }

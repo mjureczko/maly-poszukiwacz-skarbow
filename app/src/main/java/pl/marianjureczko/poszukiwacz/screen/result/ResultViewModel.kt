@@ -5,9 +5,19 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import pl.marianjureczko.poszukiwacz.model.Route
+import pl.marianjureczko.poszukiwacz.model.Treasure
+import pl.marianjureczko.poszukiwacz.model.TreasureType
+import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.Screens
+import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.badges.AddTreasureToAchievementsUC
 import java.util.Locale
 import javax.inject.Inject
 
@@ -22,10 +32,24 @@ interface MovieController {
 @HiltViewModel
 class ResultViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
-    private val storagePort: StoragePort
+    private val storagePort: StoragePort,
+    private val addTreasureToAchievementsUC: AddTreasureToAchievementsUC,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(), MovieController {
 
+    private val realTreasuresTypes =
+        setOf(TreasureType.KNOWLEDGE, TreasureType.GOLD, TreasureType.RUBY, TreasureType.DIAMOND)
+
     private var _state: MutableState<ResultState> = mutableStateOf(createState())
+
+    init {
+        val treasureType = state.value.resultType.toTreasureType()
+        stateHandle.get<Boolean>(Screens.Results.PARAMETER_IS_JUST_FOUND)?.let { isJustFound ->
+            if (isJustFound && realTreasuresTypes.contains(treasureType)) {
+                delayedAchievementsProcessing()
+            }
+        }
+    }
 
     val state: State<ResultState>
         get() = _state
@@ -46,14 +70,21 @@ class ResultViewModel @Inject constructor(
         _state.value = _state.value.copy(subtitlesLine = line)
     }
 
+    fun hideBadges() {
+        _state.value = _state.value.copy(isBadgesVisible = false)
+    }
+
     private fun createState(): ResultState {
         var moviePath: String? = null
         var subtitlesPath: String? = null
+        var route: Route? = null
+        var progress: TreasuresProgress? = null
         val treasureDescId = stateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_ID) ?: NOTHING_FOUND_TREASURE_ID
+        val routeName = stateHandle.get<String>(Screens.Results.PARAMETER_ROUTE_NAME)
         if (treasureDescriptionHasBeenIdentified(treasureDescId)) {
-            stateHandle.get<String>(Screens.Results.PARAMETER_ROUTE_NAME)?.let { routeName ->
-                val treasureDescription = storagePort.loadRoute(routeName).treasures
-                    .find { it.id == treasureDescId }
+            routeName?.let { name ->
+                route = storagePort.loadRoute(name)
+                val treasureDescription = route!!.treasures.find { it.id == treasureDescId }
                 moviePath = treasureDescription?.movieFileName
                 subtitlesPath = treasureDescription?.subtitlesFileName
             }
@@ -62,7 +93,25 @@ class ResultViewModel @Inject constructor(
         val resultType = stateHandle.get<ResultType>(Screens.Results.PARAMETER_RESULT_TYPE) ?: ResultType.NOT_A_TREASURE
         val treasureType = resultType.toTreasureType()
         val amount = stateHandle.get<Int>(Screens.Results.PARAMETER_TREASURE_AMOUNT) ?: 0
-        return ResultState(resultType, treasureType, amount, moviePath, null, subtitlesPath, localesWithSubtitles)
+        stateHandle.get<Boolean>(Screens.Results.PARAMETER_IS_JUST_FOUND)?.let { isJustFound ->
+            if (isJustFound && realTreasuresTypes.contains(treasureType)) {
+                if (route == null) {
+                    route = storagePort.loadRoute(routeName!!)
+                }
+                progress = storagePort.loadProgress(routeName!!)
+            }
+        }
+        return ResultState(
+            resultType = resultType,
+            treasureType = treasureType,
+            amount = amount,
+            moviePath = moviePath,
+            subtitlesLine = null,
+            subtitlesPath = subtitlesPath,
+            route = route,
+            progress = progress,
+            localesWithSubtitles = localesWithSubtitles,
+        )
     }
 
     /**
@@ -71,4 +120,20 @@ class ResultViewModel @Inject constructor(
      */
     private fun treasureDescriptionHasBeenIdentified(treasureDescId: Int) = NOTHING_FOUND_TREASURE_ID != treasureDescId
 
+    private fun delayedAchievementsProcessing() {
+        val badges = addTreasureToAchievementsUC(
+            route = state.value.route!!,
+            treasure = Treasure("_", state.value.amount!!, state.value.treasureType!!),
+            currentProgress = state.value.progress!!,
+        )
+        viewModelScope.launch(ioDispatcher) {
+            if (badges.isNotEmpty()) {
+                delay(400)
+                _state.value = _state.value.copy(
+                    badgesToShow = badges,
+                    isBadgesVisible = true,
+                )
+            }
+        }
+    }
 }

@@ -46,21 +46,3 @@ fun OkDialog(
     }
 
 }
-
-//@Preview(showBackground = true, apiLevel = 35)
-//@Composable
-//fun OkDialogPreview() {
-//    OkDialog(true, {}) {
-//        Column {
-//            Row() {
-//                Text("A")
-//                Image(
-//                    painterResource(R.drawable.chest_small),
-//                    contentDescription = "",
-//                )
-//                Text("B")
-//            }
-//            Text("CCCCCC")
-//        }
-//    }
-//}

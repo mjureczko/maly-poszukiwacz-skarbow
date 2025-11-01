@@ -48,6 +48,7 @@
     <string name="missing_location_permission">Location permission is essential for gameplay. Relaunch the game or go to its settings to grant the permission.</string>
     <string name="missing_commemorative_photo_permission">Permission is needed to do a commemorative photo with treasure finding. Enter the application settings to grant it.</string>
     <string name="missing_tip_photo_permission">Permission is needed to do a tip photo for stashed treasure. Enter the application settings to grant it.</string>
+    <string name="missing_external_storage_permission">Permission is needed to save you achievements and badges. Enter the application settings to grant it.</string>
     <string name="photo_permission_not_granted">To take photos, allow camera access.</string>">
     <string name="well_done">Congratulations! All the treasures have been found!</string>
     <string name="well_done_facebook">You can share this achievement on</string>
@@ -56,4 +57,17 @@
     <string name="low_gps_signal">Low GPS signal</string>
     <string name="medium_gps_signal">Medium GPS signal</string>
     <string name="no_gps_signal">No GPS signal</string>
+    <string name="achievements">Achievements</string>
+    <string name="badges_header">Earned badges:</string>
+    <string name="total_loot_collected">Total loot collected:</string>
+    <string name="discovered_treasures">Discovered treasures:</string>
+    <string name="completed_routes">Completed routes:</string>
+    <string name="longest_completed_route">Longest completed route:</string>
+    <string name="badge_for">granted for</string>
+    <string name="badge_unit_text_base">of</string>
+    <string name="badge_of_jewelries">collected jewelries of all three types</string>
+    <string name="badge_of_treasures">discovered treasures</string>
+    <string name="badge_of_completed_routes">completed routes</string>
+    <string name="badge_of_longest_route">treasures discovered on a single completed route</string>
+    <string name="badges_dialog_header">Your achievements are amazing! By finding this treasure, you earn the badges:</string>
 </resources>

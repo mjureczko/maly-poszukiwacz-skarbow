@@ -29,14 +29,21 @@ object Screens {
     object Results {
         const val PARAMETER_ROUTE_NAME = "route_name"
         const val PARAMETER_RESULT_TYPE = "result_type"
+        const val PARAMETER_IS_JUST_FOUND = "just_found"
         const val PARAMETER_TREASURE_ID = "treasure_id"
         const val PARAMETER_TREASURE_AMOUNT = "treasure_amount"
         const val PATH = "result"
         const val ROUTE =
-            "$PATH/{${PARAMETER_ROUTE_NAME}}/{$PARAMETER_RESULT_TYPE}/{$PARAMETER_TREASURE_ID}/{$PARAMETER_TREASURE_AMOUNT}"
+            "$PATH/{${PARAMETER_ROUTE_NAME}}/{$PARAMETER_RESULT_TYPE}/{$PARAMETER_IS_JUST_FOUND}/{$PARAMETER_TREASURE_ID}/{$PARAMETER_TREASURE_AMOUNT}"
 
-        fun doRoute(routeName: String, resultType: ResultType, treasureId: Int?, treasureAmount: Int?): String {
-            return "$PATH/$routeName/$resultType/$treasureId/$treasureAmount"
+        fun doRoute(
+            routeName: String,
+            resultType: ResultType,
+            justFound: Boolean,
+            treasureId: Int?,
+            treasureAmount: Int?
+        ): String {
+            return "$PATH/$routeName/$resultType/$justFound/$treasureId/$treasureAmount"
         }
     }
 
@@ -93,5 +100,10 @@ object Screens {
         const val ROUTE = "$PATH/{$PARAMETER_MODE}/{$PARAMETER_ROUTE_TO_SENT}"
 
         fun doRoute(mode: Mode, routeToSent: String) = "$PATH/$mode/$routeToSent"
+    }
+
+    object Badges {
+        private const val PATH = "badges"
+        const val ROUTE = PATH
     }
 }

@@ -136,7 +136,7 @@ class SharedViewModel @Inject constructor(
                 }
             }
             result?.let {
-                goToResults(state.value.route.name, it, treasureId, scannedTreasure?.quantity ?: 0)
+                goToResults(state.value.route.name, it, true, treasureId, scannedTreasure?.quantity ?: 0)
             }
         }
     }

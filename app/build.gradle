@@ -5,6 +5,7 @@ plugins {
     id 'de.mannodermaus.android-junit5'
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlin_version}"
 }
 
 android {
@@ -160,10 +161,13 @@ dependencies {
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.google.android.gms:play-services-location:21.1.0'
 
+// never version leads to "Provided Metadata instance has version 2.2.0, while maximum supported version is 2.0.0." error
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
-    testImplementation("com.ocadotechnology.gembus:test-arranger:1.6.4") {
+    testImplementation("com.ocadotechnology.gembus:test-arranger:1.7.0") {
         exclude group: "dk.brics.automaton", module: "automaton"
     }
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
@@ -172,7 +176,7 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0'
     testImplementation 'org.mockito.kotlin:mockito-kotlin:5.4.0'
 
-    androidTestImplementation("com.ocadotechnology.gembus:test-arranger:1.6.4") {
+    androidTestImplementation("com.ocadotechnology.gembus:test-arranger:1.7.0") {
         exclude group: "dk.brics.automaton", module: "automaton"
     }
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

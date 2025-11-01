@@ -15,7 +15,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.MapHelper.DEFAULT_STYLE
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
-import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.TreasureHunterMap
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
@@ -26,7 +26,8 @@ fun MapScreen(
     navController: NavController,
     navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: GoToGuide,
-    onClickOnFacebook: GoToFacebook
+    onClickOnFacebook: GoToFacebook,
+    onClickBadges: GoToBadgesScreen,
 ) {
     val viewModel: MapViewModel = hiltViewModel()
     val state = viewModel.state.value
@@ -37,7 +38,7 @@ fun MapScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.map_activity_title),
-                menuConfig = MenuConfig(onClickOnGuide, { onClickOnFacebook(state.route.name) }, restarter),
+                menuConfig = mapMenuConfig(onClickOnGuide, onClickOnFacebook, state, restarter, onClickBadges),
             )
         },
         content = { paddingValues -> MapScreenBody(Modifier.padding(paddingValues), state) }

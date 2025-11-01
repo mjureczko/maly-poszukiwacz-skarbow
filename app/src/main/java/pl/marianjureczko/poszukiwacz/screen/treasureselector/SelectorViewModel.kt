@@ -21,7 +21,7 @@ import javax.inject.Inject
 class SelectorViewModel @Inject constructor(
     private val stateHandle: SavedStateHandle,
     private val photoHelper: PhotoHelper,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SelectorState> = mutableStateOf(createState())

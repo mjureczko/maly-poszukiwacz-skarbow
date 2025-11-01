@@ -18,7 +18,9 @@ import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
+import pl.marianjureczko.poszukiwacz.shared.GoToResults
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 
 fun getGoToCommemorative(navController: NavHostController): GoToCommemorative = { treasureId, photoPath ->
     navController.navigate(Screens.Commemorative.doRoute(treasureId, PhotoHelper.encodePhotoPath(photoPath)))
@@ -28,7 +30,8 @@ fun NavGraphBuilder.searching(
     navController: NavHostController,
     onClickGuide: GoToGuide,
     goToFacebook: GoToFacebook,
-    goToCommemorative: GoToCommemorative
+    goToCommemorative: GoToCommemorative,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.Searching.ROUTE,
@@ -40,8 +43,8 @@ fun NavGraphBuilder.searching(
             goToTipPhoto = { tipPhoto, routeName ->
                 navController.navigate(Screens.TipPhoto.doRoute(tipPhoto, routeName))
             },
-            goToResult = { routeName, resultType, treasureId, amount ->
-                navController.navigate(Screens.Results.doRoute(routeName, resultType, treasureId, amount))
+            goToResult = GoToResults { routeName, resultType, isJustFound, treasureId, amount ->
+                navController.navigate(Screens.Results.doRoute(routeName, resultType, isJustFound, treasureId, amount))
             },
             goToMap = { navController.navigate(Screens.Map.doRoute(it)) },
             goToTreasureSelector = { treasureDescriptionId ->
@@ -49,6 +52,7 @@ fun NavGraphBuilder.searching(
             },
             goToFacebook = goToFacebook,
             goToCommemorative = goToCommemorative,
+            onClickBadges = goToBadges,
         )
     }
 }
@@ -59,6 +63,7 @@ fun NavGraphBuilder.selector(
     goToCommemorative: GoToCommemorative,
     goToFacebook: GoToFacebook,
     goToResultsFromSelector: GoToResultWithTreasure,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.Selector.ROUTE,
@@ -70,7 +75,8 @@ fun NavGraphBuilder.selector(
             onClickGuide,
             goToResult = goToResultsFromSelector,
             goToCommemorative = goToCommemorative,
-            onClickOnFacebook = goToFacebook
+            onClickOnFacebook = goToFacebook,
+            onClickBadges = goToBadges,
         )
     }
 }
@@ -78,23 +84,26 @@ fun NavGraphBuilder.selector(
 fun NavGraphBuilder.results(
     navController: NavHostController,
     onClickGuide: GoToGuide,
-    goToFacebook: GoToFacebook
+    goToFacebook: GoToFacebook,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.Results.ROUTE,
         arguments = listOf(
             navArgument(Screens.Results.PARAMETER_ROUTE_NAME) { type = NavType.StringType },
             navArgument(Screens.Results.PARAMETER_RESULT_TYPE) { type = NavType.EnumType(ResultType::class.java) },
+            navArgument(Screens.Results.PARAMETER_IS_JUST_FOUND) { type = NavType.BoolType },
             navArgument(Screens.Results.PARAMETER_TREASURE_ID) { type = NavType.IntType },
             navArgument(Screens.Results.PARAMETER_TREASURE_AMOUNT) { type = NavType.IntType },
         )
-    ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
+    ) { navBackStackEntry -> ResultScreen(navController, navBackStackEntry, onClickGuide, goToFacebook, goToBadges) }
 }
 
 fun NavGraphBuilder.tipPhoto(
     navController: NavHostController,
     onClickGuide: GoToGuide,
-    goToFacebook: GoToFacebook
+    goToFacebook: GoToFacebook,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.TipPhoto.ROUTE,
@@ -107,7 +116,8 @@ fun NavGraphBuilder.tipPhoto(
             navController = navController,
             navBackStackEntry = navBackStackEntry,
             onClickOnGuide = onClickGuide,
-            onClickOnFacebook = goToFacebook
+            onClickOnFacebook = goToFacebook,
+            onClickBadges = goToBadges,
         )
     }
 }
@@ -115,7 +125,8 @@ fun NavGraphBuilder.tipPhoto(
 fun NavGraphBuilder.map(
     navController: NavHostController,
     onClickGuide: GoToGuide,
-    goToFacebook: GoToFacebook
+    goToFacebook: GoToFacebook,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.Map.ROUTE,
@@ -125,7 +136,8 @@ fun NavGraphBuilder.map(
             navController = navController,
             navBackStackEntry = navBackStackEntry,
             onClickOnGuide = onClickGuide,
-            onClickOnFacebook = goToFacebook
+            onClickOnFacebook = goToFacebook,
+            onClickBadges = goToBadges,
         )
     }
 }
@@ -133,7 +145,8 @@ fun NavGraphBuilder.map(
 fun NavGraphBuilder.commemorative(
     navController: NavHostController,
     onClickGuide: GoToGuide,
-    goToFacebook: GoToFacebook
+    goToFacebook: GoToFacebook,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.Commemorative.ROUTE,
@@ -141,15 +154,24 @@ fun NavGraphBuilder.commemorative(
             navArgument(Screens.Commemorative.PARAMETER_TREASURE_DESCRIPTION_ID) { type = NavType.IntType },
             navArgument(Screens.Commemorative.PARAMETER_PHOTO_PATH) { type = NavType.StringType }
         )
-    ) { navBackStackEntry -> CommemorativeScreen(navController, navBackStackEntry, onClickGuide, goToFacebook) }
+    ) { navBackStackEntry ->
+        CommemorativeScreen(
+            navController,
+            navBackStackEntry,
+            onClickGuide,
+            goToFacebook,
+            goToBadges
+        )
+    }
 }
 
 fun NavGraphBuilder.facebook(
     navController: NavHostController,
-    onClickGuide: GoToGuide
+    onClickGuide: GoToGuide,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.Facebook.ROUTE,
         arguments = listOf(navArgument(Screens.Facebook.PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
-    ) { navBackStackEntry -> FacebookScreen(navController, onClickGuide) }
+    ) { navBackStackEntry -> FacebookScreen(navController, onClickGuide, goToBadges) }
 }

@@ -63,7 +63,7 @@ import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.Screen.dw
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
-import pl.marianjureczko.poszukiwacz.ui.components.MenuConfig
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
@@ -84,7 +84,8 @@ fun SearchingScreen(
     goToMap: GoToMap,
     goToTreasureSelector: GoToTreasureSelector,
     goToFacebook: GoToFacebook,
-    goToCommemorative: GoToCommemorative
+    goToCommemorative: GoToCommemorative,
+    onClickBadges: GoToBadgesScreen,
 ) {
     val cameraPermission: PermissionState = handlePermission(RequirementsForDoingCommemorativePhoto)
     val viewModel: SearchingViewModel = getViewModel()
@@ -98,7 +99,7 @@ fun SearchingScreen(
             TopBar(
                 navController = navController,
                 title = title,
-                menuConfig = MenuConfig(onClickOnGuide, { goToFacebook(state.route.name) }, restarter)
+                menuConfig = searchingMenuConfig(onClickOnGuide, goToFacebook, state, restarter, onClickBadges)
             )
         },
         content = { paddingValues ->
@@ -117,7 +118,6 @@ fun SearchingScreen(
         }
     )
 }
-
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable

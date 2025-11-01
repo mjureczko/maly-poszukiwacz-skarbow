@@ -45,6 +45,7 @@
     <string name="missing_location_permission">Pozwolenie na dostęp do lokalizacji jest niezbędne do rozgrywki. Uruchom ponownie grę albo przejdź do ustawień żeby przyznać dostęp.</string>
     <string name="missing_commemorative_photo_permission">Pozwolenie jest potrzebne do zrobienia pomiątkowego zdjęcia z poszukiwania skarbu. Możesz przyznać je w ustawieniach aplikacji.</string>
     <string name="missing_tip_photo_permission">Pozwolenie jest potrzebne do zrobienia zdjęcia z podpowiedzią. Możesz przyznać je w ustawieniach aplikacji.</string>
+    <string name="missing_external_storage_permission">Pozwolenie jest potrzebne do zapisywania osiągnięć i odznak. Możesz przyznać je w ustawieniach aplikacji.</string>
     <string name="photo_permission_not_granted">Aby robić zdjęcia, zezwól aplikacji na dostęp do aparatu.</string>
     <string name="well_done">Gratulacje! Wszystkie skarby zostały odnalezione!</string>
     <string name="well_done_facebook">Możesz podzielić się tym osiągnięciem na</string>
@@ -53,4 +54,17 @@
     <string name="low_gps_signal">Słaby sygnał GPS</string>
     <string name="medium_gps_signal">Średni sygnał GPS</string>
     <string name="no_gps_signal">Brak sygnału GPS</string>
+    <string name="achievements">Osiągnięcia</string>
+    <string name="badges_header">Earned badges:</string>
+    <string name="total_loot_collected">Łącznie kosztowności:</string>
+    <string name="discovered_treasures">Odkrytych skarbów:</string>
+    <string name="completed_routes">Ukończone wyprawy:</string>
+    <string name="longest_completed_route">Najdłuższa ukończona wyprawa:</string>
+    <string name="badge_for">przyznana za</string>
+    <string name="badge_unit_text_base"> </string>
+    <string name="badge_of_jewelries">- łączna liczba zdobytych kosztowności wszystkich trzech rodzajów</string>
+    <string name="badge_of_treasures">- liczba odkrytych skarbów</string>
+    <string name="badge_of_completed_routes">- liczba ukończonych tras</string>
+    <string name="badge_of_longest_route">- liczba odkrytych skarbów na pojedyńczej ukończonej trasie</string>
+    <string name="badges_dialog_header">Twoje osiągnięcia są imponujące. Znajdując ten skarb zdobywasz odznaki:</string>
 </resources>

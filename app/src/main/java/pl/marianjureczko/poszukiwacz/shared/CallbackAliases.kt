@@ -4,13 +4,19 @@ import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 
 typealias GoToGuide = () -> Unit
-typealias GoToResults = (String, ResultType, Int, Int) -> Unit
+
+fun interface GoToResults {
+    operator fun invoke(routeName: String, resultType: ResultType, isJustFound: Boolean, treasureId: Int, amount: Int)
+}
 typealias GoToFacebook = (String) -> Unit
 typealias GoToSearching = (String) -> Unit
 typealias GoToQrScanner = () -> Unit
 typealias GoToTipPhoto = (String, String) -> Unit
 typealias GoToMap = (String) -> Unit
-typealias GoToResultWithTreasure = (Int) -> Unit
+
+fun interface GoToResultWithTreasure {
+    operator fun invoke(treasureId: Int, isJustFound: Boolean)
+}
 typealias GoToTreasureSelector = (Int) -> Unit
 
 typealias RotatePhoto = (Int) -> Unit

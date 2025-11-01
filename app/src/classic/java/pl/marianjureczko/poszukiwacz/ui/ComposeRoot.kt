@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import pl.marianjureczko.poszukiwacz.screen.Screens
+import pl.marianjureczko.poszukiwacz.screen.badges.BadgesScreen
 import pl.marianjureczko.poszukiwacz.screen.bluetooth.BluetoothScreen
 import pl.marianjureczko.poszukiwacz.screen.bluetooth.Mode
 import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookHelper
@@ -19,6 +20,7 @@ import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.shared.GoToTreasureEditor
+import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 
 //Classic
 @Composable
@@ -28,25 +30,37 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
     val goToCommemorative: GoToCommemorative = getGoToCommemorative(navController)
     val goToEditor: GoToTreasureEditor =
         { routeName -> navController.navigate(Screens.TreasureEditor.doRoute(routeName)) }
-    val goToResultsFromSelector: GoToResultWithTreasure = {}
+    val goToResultsFromSelector = GoToResultWithTreasure { _, _ -> /*do nothing*/ }
+    val goToBadges = GoToBadgesScreen { navController.navigate(Screens.Badges.ROUTE) }
 
     NavHost(navController, startDestination = Screens.Main.ROUTE) {
-        main(navController, onClickGuide, goToFacebook, goToEditor)
-        treasureEditor(navController, onClickGuide, goToFacebook)
-        searching(navController, onClickGuide, goToFacebook, goToCommemorative)
-        results(navController, onClickGuide, goToFacebook)
-        tipPhoto(navController, onClickGuide, goToFacebook)
-        map(navController, onClickGuide, goToFacebook)
-        selector(navController, onClickGuide, goToCommemorative, goToFacebook, goToResultsFromSelector)
-        commemorative(navController, onClickGuide, goToFacebook)
-        facebook(navController, onClickGuide)
-        bluetooth(navController, onClickGuide)
+        main(navController, onClickGuide, goToFacebook, goToEditor, goToBadges)
+        treasureEditor(navController, onClickGuide, goToBadges)
+        searching(navController, onClickGuide, goToFacebook, goToCommemorative, goToBadges)
+        results(navController, onClickGuide, goToFacebook, goToBadges)
+        tipPhoto(navController, onClickGuide, goToFacebook, goToBadges)
+        map(navController, onClickGuide, goToFacebook, goToBadges)
+        selector(navController, onClickGuide, goToCommemorative, goToFacebook, goToResultsFromSelector, goToBadges)
+        commemorative(navController, onClickGuide, goToFacebook, goToBadges)
+        facebook(navController, onClickGuide, goToBadges)
+        bluetooth(navController, onClickGuide, goToBadges)
+        badges(navController, onClickGuide)
+    }
+}
+
+private fun NavGraphBuilder.badges(
+    navController: NavHostController,
+    onClickGuide: GoToGuide,
+) {
+    composable(route = Screens.Badges.ROUTE) { _ ->
+        BadgesScreen(navController = navController, onClickOnGuide = onClickGuide)
     }
 }
 
 private fun NavGraphBuilder.bluetooth(
     navController: NavHostController,
     onClickGuide: GoToGuide,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.Bluetooth.ROUTE,
@@ -54,15 +68,13 @@ private fun NavGraphBuilder.bluetooth(
             navArgument(Screens.Bluetooth.PARAMETER_MODE) { type = NavType.EnumType(Mode::class.java) },
             navArgument(Screens.Bluetooth.PARAMETER_ROUTE_TO_SENT) { type = NavType.StringType },
         ),
-    ) { navBackStackEntry ->
-        BluetoothScreen(navController = navController, onClickOnGuide = onClickGuide)
-    }
+    ) { _ -> BluetoothScreen(navController = navController, onClickOnGuide = onClickGuide, goToBadges = goToBadges) }
 }
 
 private fun NavGraphBuilder.treasureEditor(
     navController: NavHostController,
     onClickGuide: GoToGuide,
-    goToFacebook: GoToFacebook
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(
         route = Screens.TreasureEditor.ROUTE,
@@ -71,7 +83,7 @@ private fun NavGraphBuilder.treasureEditor(
         TreasureEditorScreen(
             navController = navController,
             onClickOnGuide = onClickGuide,
-            onClickOnFacebook = goToFacebook
+            goToBadges = goToBadges
         )
     }
 }
@@ -80,19 +92,19 @@ private fun NavGraphBuilder.main(
     navController: NavHostController,
     onClickGuide: GoToGuide,
     goToFacebook: GoToFacebook,
-    goToEditor: GoToTreasureEditor
+    goToEditor: GoToTreasureEditor,
+    goToBadges: GoToBadgesScreen,
 ) {
     composable(route = Screens.Main.ROUTE) {
         MainScreen(
             navController = navController,
             onClickOnGuide = onClickGuide,
-            onClickOnFacebook = goToFacebook,
             goToBluetooth = { mode: Mode, route: String ->
                 navController.navigate(Screens.Bluetooth.doRoute(mode, route))
             },
             goToTreasureEditor = goToEditor,
-        ) { routeName ->
-            navController.navigate(Screens.Searching.doRoute(routeName))
-        }
+            goToSearching = { routeName -> navController.navigate(Screens.Searching.doRoute(routeName)) },
+            goToBadges = goToBadges,
+        )
     }
 }
