@@ -29,6 +29,14 @@ val Typography = Typography(
         fontFamily = FANCY_FONT,
         fontSize = 57.sp,
     ),
+    displayMedium = TextStyle(
+        fontFamily = FANCY_FONT,
+        fontSize = 45.sp,
+    ),
+    displaySmall = TextStyle(
+        fontFamily = FANCY_FONT,
+        fontSize = 36.sp,
+    ),
     headlineLarge = TextStyle(
         fontFamily = FANCY_FONT,
         fontSize = 32.sp,
@@ -43,5 +51,8 @@ val Typography = Typography(
     ),
     titleMedium = TextStyle(
         fontFamily = FANCY_FONT,
+    ),
+    titleLarge = TextStyle(
+        fontSize = 20.sp,
     ),
 )

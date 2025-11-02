@@ -31,7 +31,7 @@ fun LargeButton(title: String, description: String = "", enabled: Boolean = true
             .semantics { contentDescription = description }
             .clickable { Log.d("LargeButton", "LargeButton: ") },
         colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = Color.LightGray,
+            containerColor = Color.White,
             contentColor = contentColor
         ),
         border = BorderStroke(2.dp, Color.LightGray),

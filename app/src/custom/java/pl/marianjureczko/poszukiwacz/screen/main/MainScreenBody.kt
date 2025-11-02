@@ -61,7 +61,7 @@ fun MainScreenBody(modifier: Modifier, goToSearching: GoToSearching) {
         ) {
             Text(
                 text = stringResource(R.string.custom_title),
-                style = MaterialTheme.typography.displayLarge,
+                style = MaterialTheme.typography.displaySmall,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Center
             )

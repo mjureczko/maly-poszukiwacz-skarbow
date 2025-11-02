@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import pl.marianjureczko.poszukiwacz.screen.Screens
+import pl.marianjureczko.poszukiwacz.screen.badges.BadgesScreen
 import pl.marianjureczko.poszukiwacz.screen.facebook.FacebookHelper
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
@@ -45,6 +46,16 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
         selector(navController, onClickGuide, goToCommemorative, goToFacebook, goToResultsFromSelector, goToBadges)
         commemorative(navController, onClickGuide, goToFacebook, goToBadges)
         facebook(navController, onClickGuide, goToBadges)
+        badges(navController, onClickGuide)
+    }
+}
+
+private fun NavGraphBuilder.badges(
+    navController: NavHostController,
+    onClickGuide: GoToGuide,
+) {
+    composable(route = Screens.Badges.ROUTE) { _ ->
+        BadgesScreen(navController = navController, onClickOnGuide = onClickGuide)
     }
 }
 
