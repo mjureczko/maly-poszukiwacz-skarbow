@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pęgów</string>
+    <string name="custom_lead1">Zapraszamy na wyjątkową podróż po pozornie zwyczajnej TODO</string>
+    <string name="custom_lead2">Dokładny przebieg trasy zależy od Twoich decyzji ale możesz się spodziewać, że jej długość to będzie około TODO km. Rozważ rozbicie poszukiwań na kilka dni albo wspomaganie się rowerem.</string>
+    <string name="custom_title">Przygoda w Pęgowie</string>
+    <string name="help_path">https://TODO-little-treasure-hunter.netlify.app</string>
+</resources>

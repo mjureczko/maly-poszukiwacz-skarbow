@@ -36,11 +36,11 @@ class MainScreenTest : UiTest() {
 
         //then
         text.assertTextEquals(context.getString(R.string.custom_lead1))
-        assertImageIsDisplayed(R.drawable.al)
+        assertImageIsDisplayed(R.drawable.host)
 
         performTap(NEXT_GUIDE_BUTTON)
         text.assertTextEquals(context.getString(R.string.custom_lead2))
-        assertImageIsDisplayed(R.drawable.kalinowice_wita)
+        assertImageIsDisplayed(R.drawable.welcome_to_the_town)
 
         performTap(NEXT_GUIDE_BUTTON)
         text.assertTextEquals(context.getString(R.string.custom_lead3))

@@ -75,6 +75,11 @@ android {
             dimension "assets"
             applicationIdSuffix ".kalinowice"
         }
+
+        pegow {
+            dimension "assets"
+            applicationIdSuffix ".pegow"
+        }
     }
     variantFilter { variant ->
         def names = variant.flavors*.name

@@ -1,0 +1,17 @@
+<route>
+    <name>custom</name>
+    <treasures class="java.util.ArrayList">
+        <treasureDescription>
+            <!--dąb-->
+            <id>1</id>
+            <latitude>51.249419</latitude>
+            <longitude>16.932994</longitude>
+            <photoFileName>tip_02.jpg</photoFileName>
+            <tipFileName>tip_02.m4a</tipFileName>
+            <qrCode>p02001</qrCode>
+            <movieFileName>pegow_02.mp4</movieFileName>
+            <subtitlesFileName>en_02.srt</subtitlesFileName>
+        </treasureDescription>
+
+    </treasures>
+</route>

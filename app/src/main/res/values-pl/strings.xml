@@ -67,4 +67,6 @@
     <string name="badge_of_completed_routes">- liczba ukończonych tras</string>
     <string name="badge_of_longest_route">- liczba odkrytych skarbów na pojedyńczej ukończonej trasie</string>
     <string name="badges_dialog_header">Twoje osiągnięcia są imponujące. Znajdując ten skarb zdobywasz odznaki:</string>
+    <string name="well_done_classic_app">→ samodzielne tworzenie tras</string>
+    <string name="well_done_custom_app">→ misja w</string>
 </resources>

@@ -4,4 +4,5 @@
     <string name="custom_lead4">To discover the secrets behind the QR code, you need to scan it by pressing:</string>
     <string name="custom_lead5">The game will help us by telling how many steps in a straight line are left to the treasure and whether to go north, south, east, or west. But you have to find the directions by yourself. Don’t worry because you can find hints under these buttons:</string>
     <string name="custom_lead6">There are several treasures to find. You can change the one you are currently searching for by pressing this button:</string>
+    <string name="well_done_little_treasure_hunter">Little Treasure Hunter</string>
 </resources>
