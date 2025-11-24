@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
+import pl.marianjureczko.poszukiwacz.ui.Screen.dh
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
@@ -65,9 +66,14 @@ fun MainScreenBody(modifier: Modifier, goToSearching: GoToSearching) {
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Center
             )
+            val style = if (1.0.dh.value > 850) {
+                MaterialTheme.typography.titleLarge
+            } else {
+                MaterialTheme.typography.bodyLarge
+            }
             Text(
                 text = state.messages[state.messageIndex].text,
-                style = MaterialTheme.typography.titleLarge,
+                style = style,
                 color = colorResource(R.color.colorPrimaryVariant),
                 textAlign = TextAlign.Justify,
                 modifier = Modifier.semantics { contentDescription = GUIDE_TEXT }
