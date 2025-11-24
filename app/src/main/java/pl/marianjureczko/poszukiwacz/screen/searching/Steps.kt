@@ -19,18 +19,19 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
+import pl.marianjureczko.poszukiwacz.ui.dp2SameSizeSp
 import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 @Composable
 fun Steps(stepsToTreasure: Int?) {
+    val height = 0.14.dh
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Transparent)
-            .height(0.14.dh),
+            .height(height),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top,
     ) {
@@ -41,7 +42,7 @@ fun Steps(stepsToTreasure: Int?) {
                     .semantics { contentDescription = STEPS_TO_TREASURE },
                 style = TextStyle(
                     fontFamily = FANCY_FONT,
-                    fontSize = 88.sp,
+                    fontSize = dp2SameSizeSp(height),
                 ),
                 color = Color.Gray,
                 text = stepsToTreasure.toString()

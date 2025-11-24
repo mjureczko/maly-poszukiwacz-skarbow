@@ -36,18 +36,19 @@ fun BadgesScreenBody(
     state: BadgesState,
 ) {
     Column(modifier = modifier.background(Color.White)) {
+        val scoresHeight = 0.04.dh
         Row(
             modifier = Modifier
                 .padding(10.dp)
                 .fillMaxWidth()
                 .background(Color.Transparent)
-                .height(0.04.dh),
+                .height(scoresHeight),
             horizontalArrangement = Arrangement.Center // Added to center content horizontally
         ) {
-            Score(state.golds, R.drawable.gold, "gold image")
-            Score(state.rubies, R.drawable.ruby, "ruby image")
-            Score(state.diamonds, R.drawable.diamond, "diamond image")
-            Score(state.knowledge, R.drawable.chest_small, "tourist treasure image")
+            Score(state.golds, R.drawable.gold, "gold image", scoresHeight)
+            Score(state.rubies, R.drawable.ruby, "ruby image", scoresHeight)
+            Score(state.diamonds, R.drawable.diamond, "diamond image", scoresHeight)
+            Score(state.knowledge, R.drawable.chest_small, "tourist treasure image", scoresHeight)
         }
         Achievement(R.string.total_loot_collected, state.totalLoot())
         Achievement(R.string.discovered_treasures, state.treasures)
