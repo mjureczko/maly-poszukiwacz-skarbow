@@ -17,16 +17,17 @@ import pl.marianjureczko.poszukiwacz.ui.components.Score
 
 @Composable
 fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
+    val scoresHeight = 0.05.dh
     Row(
         modifier = modifier
             .padding(10.dp)
             .fillMaxWidth()
             .background(Color.Transparent)
-            .height(0.05.dh),
+            .height(scoresHeight),
         verticalAlignment = Alignment.Top,
     ) {
-        Score(score.golds, R.drawable.gold, "gold image")
-        Score(score.rubies, R.drawable.ruby, "ruby image")
-        Score(score.diamonds, R.drawable.diamond, "diamond image")
+        Score(score.golds, R.drawable.gold, "gold image", scoresHeight)
+        Score(score.rubies, R.drawable.ruby, "ruby image", scoresHeight)
+        Score(score.diamonds, R.drawable.diamond, "diamond image", scoresHeight)
     }
 }
