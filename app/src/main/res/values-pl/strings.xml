@@ -66,5 +66,5 @@
     <string name="badge_of_treasures">- liczba odkrytych skarbów</string>
     <string name="badge_of_completed_routes">- liczba ukończonych tras</string>
     <string name="badge_of_longest_route">- liczba odkrytych skarbów na pojedyńczej ukończonej trasie</string>
-    <string name="badges_dialog_header">Twoje osiągnięcia są imponujące. Znajdując ten skarb zdobywasz odznaki:</string>
+    <string name="badges_dialog_header">Twoje osiągnięcia są imponujące. Znajdując ten skarb zdobywasz:</string>
 </resources>
