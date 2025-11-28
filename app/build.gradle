@@ -47,6 +47,7 @@ android {
             resValue "string", "photo_ad", "ca-app-pub-6283649742373707/4442655778"
         }
         debug {
+            debuggable true
             resValue "string", "main_ad", "ca-app-pub-3940256099942544/6300978111"
             resValue "string", "searching_ad", "ca-app-pub-3940256099942544/6300978111"
             resValue "string", "photo_ad", "ca-app-pub-3940256099942544/6300978111"

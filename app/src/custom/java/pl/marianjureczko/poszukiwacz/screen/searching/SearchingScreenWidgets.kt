@@ -14,22 +14,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.ui.Screen.dh
-import pl.marianjureczko.poszukiwacz.ui.theme.ScoresOnSearchingScreenTextStyle
+import pl.marianjureczko.poszukiwacz.ui.dp2SameSizeSp
+import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 const val KNOWLEDGE_SCORE_TEXT = "Knowledge score"
 
 @Composable
 fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
+    val scoresHeight = 0.05.dh
+    val textStyle = TextStyle(
+        fontFamily = FANCY_FONT,
+        fontSize = dp2SameSizeSp(scoresHeight),
+    )
     Row(
         modifier = modifier
             .padding(10.dp)
             .fillMaxWidth()
             .background(Color.Transparent)
-            .height(0.05.dh),
+            .height(scoresHeight),
     ) {
         Image(
             painterResource(R.drawable.chest_small),
@@ -40,7 +47,7 @@ fun Scores(modifier: Modifier = Modifier, score: TreasuresProgress) {
         Text(
             color = Color.Gray,
             text = score.knowledge.toString(),
-            style = ScoresOnSearchingScreenTextStyle(),
+            style = textStyle,
             modifier = Modifier
                 .padding(end = 5.dp)
                 .semantics { contentDescription = KNOWLEDGE_SCORE_TEXT }

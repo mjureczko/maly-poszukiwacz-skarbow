@@ -14,24 +14,58 @@ class GainNewBadgesUC {
      */
     operator fun invoke(achievements: Achievements): List<Badge> {
         val gained = mutableListOf<Badge>()
-        grantBadges(gained, BadgeType.GoldHunter, achievements.golds, achievements.badges, JEWELRY_THRESHOLD)
-        grantBadges(gained, BadgeType.RubyCollector, achievements.rubies, achievements.badges, JEWELRY_THRESHOLD)
-        grantBadges(gained, BadgeType.DiamondExplorer, achievements.diamonds, achievements.badges, JEWELRY_THRESHOLD)
-        grantBadges(
+        grantBadgesByAddingToGainedBadges(
+            gained,
+            BadgeType.GoldHunter,
+            achievements.golds,
+            achievements.badges,
+            JEWELRY_THRESHOLD
+        )
+        grantBadgesByAddingToGainedBadges(
+            gained,
+            BadgeType.RubyCollector,
+            achievements.rubies,
+            achievements.badges,
+            JEWELRY_THRESHOLD
+        )
+        grantBadgesByAddingToGainedBadges(
+            gained,
+            BadgeType.DiamondExplorer,
+            achievements.diamonds,
+            achievements.badges,
+            JEWELRY_THRESHOLD
+        )
+        grantBadgesByAddingToGainedBadges(
             gained, BadgeType.Treasurer, achievements.allJewelries(), achievements.badges,
             ALL_JEVELRY_THRESHOLD
         )
-        grantBadges(gained, BadgeType.TreasureSeeker, achievements.treasures, achievements.badges, TREASURES_THRESHOLD)
-        grantBadges(
+        grantBadgesByAddingToGainedBadges(
+            gained,
+            BadgeType.TreasureSeeker,
+            achievements.treasures,
+            achievements.badges,
+            TREASURES_THRESHOLD
+        )
+        grantBadgesByAddingToGainedBadges(
             gained, BadgeType.EnduringTraveler, achievements.completedRoutes, achievements.badges,
             ROUTES_THRESHOLD
         )
-        grantPathfinderBadge(gained, achievements.greatestNumberOfTreasuresOnRoute, achievements.badges)
-        grantBadges(gained, BadgeType.KnowledgeHero, achievements.knowledge, achievements.badges, KNOWLEDGE_THRESHOLD)
+        grantPathfinderBadgeByAddingToGainedBadges(
+            gained,
+            achievements.greatestNumberOfTreasuresOnRoute,
+            achievements.badges
+        )
+        grantBadgesByAddingToGainedBadges(
+            gained,
+            BadgeType.KnowledgeHero,
+            achievements.knowledge,
+            achievements.badges,
+            KNOWLEDGE_THRESHOLD
+        )
         return gained
     }
 
-    private fun grantPathfinderBadge(
+    private fun grantPathfinderBadgeByAddingToGainedBadges(
         gained: MutableList<Badge>,
         greatestNumberOfTreasuresOnRoute: Int,
         achievedBadges: List<Badge>,
@@ -45,17 +79,17 @@ class GainNewBadgesUC {
         }
     }
 
-    private fun grantBadges(
+    private fun grantBadgesByAddingToGainedBadges(
         gainedBadges: MutableList<Badge>,
         type: BadgeType,
-        jewelryQuantity: Int,
+        collectedQuantity: Int,
         achievedBadges: List<Badge>,
         threshold: Int
     ) {
         val badgeLevel = getBestBadgeOfType(type, achievedBadges)?.level ?: 0
-        val goldBadgeExpectedLevel = jewelryQuantity / threshold
+        val goldBadgeExpectedLevel = collectedQuantity / threshold
         if (goldBadgeExpectedLevel > badgeLevel) {
-            gainedBadges.add(Badge(type, badgeLevel + 1, jewelryQuantity))
+            gainedBadges.add(Badge(type, badgeLevel + 1, collectedQuantity))
         }
     }
 

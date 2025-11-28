@@ -203,7 +203,7 @@ fun Compass(arcRotation: Float, gpsAccuracy: GpsAccuracy, modifier: Modifier) {
         modifier = modifier
             .padding(start = 15.dp, end = 15.dp, top = 1.dp, bottom = 1.dp)
             .fillMaxWidth()
-            .height(0.38.dh)
+            .height(0.35.dh)
             .semantics { contentDescription = COMPASS },
         contentAlignment = Alignment.Center
     ) {
