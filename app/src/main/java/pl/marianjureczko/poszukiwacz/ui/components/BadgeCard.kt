@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.BadgeUiHelper
 import pl.marianjureczko.poszukiwacz.usecase.badges.Badge
+import java.text.DateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -80,6 +83,15 @@ fun BadgeCard(
                             .align(Alignment.CenterVertically)
                     )
                 }
+                val loc = Locale.getDefault()
+                val date = DateFormat.getDateInstance(DateFormat.DEFAULT, loc).format(Date(badge.timestamp))
+                Text(
+                    text = " [$date]",
+                    style = textStyle,
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(start = 10.dp)
+                )
             }
         }
     }
