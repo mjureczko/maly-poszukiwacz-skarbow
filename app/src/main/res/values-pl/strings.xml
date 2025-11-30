@@ -55,7 +55,7 @@
     <string name="medium_gps_signal">Średni sygnał GPS</string>
     <string name="no_gps_signal">Brak sygnału GPS</string>
     <string name="achievements">Osiągnięcia</string>
-    <string name="badges_header">Earned badges:</string>
+    <string name="badges_header">Zdobyte odznaki:</string>
     <string name="total_loot_collected">Łącznie kosztowności:</string>
     <string name="discovered_treasures">Odkrytych skarbów:</string>
     <string name="completed_routes">Ukończone wyprawy:</string>

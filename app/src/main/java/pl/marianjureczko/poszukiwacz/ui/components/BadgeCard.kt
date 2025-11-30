@@ -2,6 +2,8 @@ package pl.marianjureczko.poszukiwacz.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,6 +27,7 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.BadgeUiHelper
 import pl.marianjureczko.poszukiwacz.usecase.badges.Badge
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BadgeCard(
     badge: Badge,
@@ -58,24 +61,25 @@ fun BadgeCard(
                     modifier = Modifier.matchParentSize()
                 )
             }
-            val unitText = stringResource(BadgeUiHelper.badgeUnitText(badge))
-            Text(
-                style = textStyle,
-                text = stringResource(R.string.badge_for) + " " + badge.achievementValue + " " + unitText,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(start = 15.dp)
-            )
-            BadgeUiHelper.badgeUnitImage(badge)?.let { imageId ->
-                Image(
-                    painterResource(imageId),
-                    contentDescription = "",
-                    contentScale = ContentScale.Inside,
+            FlowRow(modifier = Modifier.fillMaxWidth()) {
+                val unitText = stringResource(BadgeUiHelper.badgeUnitText(badge))
+                Text(
+                    style = textStyle,
+                    text = stringResource(R.string.badge_for) + " " + badge.achievementValue + " " + unitText,
                     modifier = Modifier
-                        .padding(start = 5.dp)
-                        .height(40.dp)
                         .align(Alignment.CenterVertically)
+                        .padding(start = 15.dp)
                 )
+                BadgeUiHelper.badgeUnitImage(badge)?.let { imageId ->
+                    Image(
+                        painterResource(imageId),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .height(40.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
             }
         }
     }
