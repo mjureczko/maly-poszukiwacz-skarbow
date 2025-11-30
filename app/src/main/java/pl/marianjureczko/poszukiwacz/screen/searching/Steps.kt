@@ -42,7 +42,7 @@ fun Steps(stepsToTreasure: Int?) {
                     .semantics { contentDescription = STEPS_TO_TREASURE },
                 style = TextStyle(
                     fontFamily = FANCY_FONT,
-                    fontSize = dp2SameSizeSp(height),
+                    fontSize = dp2SameSizeSp(height, factor = 0.6),
                 ),
                 color = Color.Gray,
                 text = stepsToTreasure.toString()

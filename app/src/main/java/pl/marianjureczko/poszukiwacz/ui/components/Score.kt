@@ -27,7 +27,7 @@ fun Score(value: Int, @DrawableRes painterResourceId: Int, contentDescription: S
         contentScale = ContentScale.Inside,
     )
     Text(
-        modifier = Modifier.offset(y = (-5).dp),
+        modifier = Modifier.offset(y = (-8).dp),
         color = Color.Gray,
         text = value.toString(),
         style = textStyle,

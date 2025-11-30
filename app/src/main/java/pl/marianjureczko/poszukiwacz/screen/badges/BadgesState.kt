@@ -10,8 +10,9 @@ class BadgesState(
     val treasures: Int = 0,
     val completedRoutes: Int = 0,
     val greatestNumberOfTreasuresOnRoute: Int = 0,
-    val badges: List<Badge> = listOf()
+    badges: List<Badge> = listOf()
 ) {
+    val badges: List<Badge> = badges.sortedByDescending { it.timestamp }
 
     fun totalLoot(): Int {
         return golds + diamonds + rubies
