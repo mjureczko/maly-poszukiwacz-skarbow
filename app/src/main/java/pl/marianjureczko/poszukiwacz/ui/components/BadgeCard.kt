@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,9 @@ import pl.marianjureczko.poszukiwacz.usecase.badges.Badge
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
+
+const val BADGE_ICON = "Icon of the granted badge"
+const val BADGE_DESCRIPTION = "BadgeText"
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -47,7 +52,7 @@ fun BadgeCard(
             ) {
                 Image(
                     painterResource(BadgeUiHelper.badgeImage(badge)),
-                    contentDescription = "",
+                    contentDescription = BADGE_ICON,
                     contentScale = ContentScale.Inside,
                     modifier = Modifier.matchParentSize()
                 )
@@ -72,6 +77,7 @@ fun BadgeCard(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(start = 15.dp)
+                        .semantics { contentDescription = BADGE_DESCRIPTION },
                 )
                 BadgeUiHelper.badgeUnitImage(badge)?.let { imageId ->
                     Image(

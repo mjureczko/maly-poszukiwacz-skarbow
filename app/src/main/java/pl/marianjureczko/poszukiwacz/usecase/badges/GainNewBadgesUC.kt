@@ -3,11 +3,15 @@ package pl.marianjureczko.poszukiwacz.usecase.badges
 
 class GainNewBadgesUC {
 
-    private val JEWELRY_THRESHOLD = 50
-    private val ALL_JEVELRY_THRESHOLD = 100
-    private val TREASURES_THRESHOLD = 10
-    private val ROUTES_THRESHOLD = 5
-    private val KNOWLEDGE_THRESHOLD = 5
+    companion object {
+        // visibility for tests
+        const val JEWELRY_THRESHOLD = 50
+        private val ALL_JEVELRY_THRESHOLD = 100
+        private val TREASURES_THRESHOLD = 10
+        private val ROUTES_THRESHOLD = 5
+        private val KNOWLEDGE_THRESHOLD = 5
+
+    }
 
     /**
      * @param achievements all achievements except badges should be already updated
