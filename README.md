@@ -2,7 +2,8 @@
 
 GPLv3 (https://www.gnu.org/licenses/gpl-3.0.html)
 
-TODO:
+## Available apps:
 
-- make all fields in states immutable
-- remove layout/*.xml files
+- [Little Treasure Hunter](https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz&hl=en)
+- [Kalinowice](https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz.kalinowice&hl=en)
+
