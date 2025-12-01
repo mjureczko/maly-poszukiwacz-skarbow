@@ -201,3 +201,75 @@ configurations {
         exclude group: 'xpp3', module: 'xpp3'
     }
 }
+
+// Custom task to check that all CustomArranger classes are registered in arranger.properties
+tasks.register('checkArrangers') {
+    description = 'Validates that all CustomArranger classes are registered in arranger.properties'
+
+    def projectDir = project.projectDir
+    def testSharedDir = new File(projectDir, 'src/testShared/java/pl/marianjureczko/poszukiwacz')
+    def arrangerPropsFile = new File(projectDir, 'src/testShared/resources/arranger.properties')
+
+    doLast {
+        println "Checking CustomArranger registrations..."
+
+        def customArrangerClasses = []
+
+        // Find all CustomArranger extending classes in testShared source
+        testSharedDir.eachFileRecurse { file ->
+            if (file.name.endsWith('Arranger.kt')) {
+                def content = file.text
+                if (content.contains('CustomArranger')) {
+                    // Extract class name from file
+                    def className = file.name.replace('.kt', '')
+                    def matcher = content =~ /package\s+([\w.]+)/
+                    if (matcher.find()) {
+                        def packageName = matcher.group(1)
+                        def fullClassName = packageName + '.' + className
+                        customArrangerClasses.add(fullClassName)
+                    }
+                }
+            }
+        }
+        println "Found CustomArranger classes in testShared: ${customArrangerClasses}"
+
+        if (!arrangerPropsFile.exists()) {
+            throw new GradleException("arranger.properties not found at ${arrangerPropsFile.absolutePath}")
+        }
+        def props = new Properties()
+        arrangerPropsFile.withInputStream { stream ->
+            props.load(stream)
+        }
+
+        def registeredArrangers = props.getProperty('arranger.android.customArrangers', '')
+                .split(',')
+                .collect { it.trim() }
+                .findAll { it.length() > 0 }
+
+        println "Registered arrangers: ${registeredArrangers}"
+
+        def unregisteredArrangers = customArrangerClasses.findAll { !registeredArrangers.contains(it) }
+        if (unregisteredArrangers.size() > 0) {
+            throw new GradleException(
+                    "The following CustomArranger classes are not registered in arranger.properties:\n" +
+                            unregisteredArrangers.join('\n') +
+                            "\n\nAdd them to arranger.android.customArrangers property in " +
+                            "src/testShared/resources/arranger.properties"
+            )
+        }
+
+        def missingArrangers = registeredArrangers.findAll { !customArrangerClasses.contains(it) }
+        if (missingArrangers.size() > 0) {
+            println "WARNING: The following registered arrangers were not found in the source code:"
+            missingArrangers.each { println "  - $it" }
+        }
+
+        println "✓ All CustomArranger classes are properly registered!"
+    }
+}
+
+// Make checkArrangers run before test and androidTest tasks
+tasks.matching { task -> task.name in ['test', 'connectedAndroidTest', 'connectedDefaultAssetsDebugAndroidTest', 'connectedKalinowiceDebugAndroidTest'] }.configureEach { task ->
+    task.dependsOn checkArrangers
+}
+
