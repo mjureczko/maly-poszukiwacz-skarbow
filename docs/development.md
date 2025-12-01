@@ -1,3 +1,9 @@
+TODO:
+
+- make all fields in states immutable
+- remove layout/*.xml files
+- is FACEBOOK_TOKEN still needed?
+
 # Development environment configuration
 
 To ~/.gradle/gradle.properties add:
