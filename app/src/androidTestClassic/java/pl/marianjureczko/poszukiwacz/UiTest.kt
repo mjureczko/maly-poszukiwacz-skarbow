@@ -1,9 +1,10 @@
 package pl.marianjureczko.poszukiwacz
 
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.main.EDIT_ROUTE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.main.ROUTE
+import pl.marianjureczko.poszukiwacz.ui.components.TOPBAR_MENU_BADGES
+import pl.marianjureczko.poszukiwacz.ui.components.TOPBAR_MENU_BUTTON
 
 open class UiTest : AbstractUITest() {
 
@@ -14,6 +15,11 @@ open class UiTest : AbstractUITest() {
 
     fun goToSearchingScreen(route: Route) {
         performTap("$ROUTE ${route.name}")
+    }
+
+    protected fun goToAchievementsScreen() {
+        performTap(TOPBAR_MENU_BUTTON)
+        performTap(TOPBAR_MENU_BADGES)
     }
 
     override fun getRouteFromStorage(): Route {

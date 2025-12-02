@@ -12,6 +12,7 @@ import pl.marianjureczko.poszukiwacz.screen.result.TREASURE_QUANTITY
 import pl.marianjureczko.poszukiwacz.screen.searching.SCAN_TREASURE_BUTTON
 import pl.marianjureczko.poszukiwacz.screen.treasureselector.TREASURE_COLLECTED_CHECKBOX
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
+import pl.marianjureczko.poszukiwacz.usecase.badges.Achievements
 
 //Prepared for Pixel 6a API 34
 @UninstallModules(PortsModule::class)
@@ -27,6 +28,7 @@ class SearchingScreenTest : UiTest() {
         val selectedTreasureDef = route!!.treasures.first()
         TestPortsModule.location.updateLocation(selectedTreasureDef.latitude, selectedTreasureDef.longitude)
         TestPortsModule.qrScannerPort.setContents("g01001")
+        TestPortsModule.achievementsStoragePort.save(Achievements())
         val treasure: Treasure = TreasureParser().parse(TestPortsModule.qrScannerPort.getContents())
 
         //when

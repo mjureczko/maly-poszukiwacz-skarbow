@@ -10,6 +10,7 @@ import pl.marianjureczko.poszukiwacz.screen.searching.SCAN_TREASURE_BUTTON
 import pl.marianjureczko.poszukiwacz.shared.di.PortsModule
 import pl.marianjureczko.poszukiwacz.ui.components.BADGE_DESCRIPTION
 import pl.marianjureczko.poszukiwacz.ui.components.BADGE_ICON
+import pl.marianjureczko.poszukiwacz.usecase.badges.Achievements
 import pl.marianjureczko.poszukiwacz.usecase.badges.GainNewBadgesUC
 
 //Prepared for Pixel 6a API 34
@@ -25,6 +26,7 @@ class SelectorScreenTest : UiTest() {
         goToSearchingScreen(route!!)
         val selectedTreasureDef = route!!.treasures.first()
         TestPortsModule.location.updateLocation(selectedTreasureDef.latitude, selectedTreasureDef.longitude)
+        TestPortsModule.achievementsStoragePort.save(Achievements())
 
         //the gold amount must be above GainNewBadgesUC.JEWELRY_THRESHOLD
         val goldAmount = GainNewBadgesUC.JEWELRY_THRESHOLD + 1

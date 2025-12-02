@@ -13,9 +13,14 @@ import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.external.ExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
 import javax.inject.Singleton
 
+/**
+ * Module providing beans that shall be overridden in espresso tests.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object PortsModule {
@@ -59,5 +64,11 @@ object PortsModule {
     @Provides
     fun qrScannerPort(): QrScannerPort {
         return QrScannerPort()
+    }
+
+    @Singleton
+    @Provides
+    fun achievementsStoragePort(@ApplicationContext appContext: Context): AchievementsStoragePort {
+        return ExternalStoragePort(appContext)
     }
 }

@@ -44,6 +44,7 @@ const val TOPBAR_SCREEN_TITLE = "Screen title"
 const val TOPBAR_GO_BACK = "Go back"
 const val TOPBAR_MENU_BUTTON = "Open menu"
 const val TOPBAR_MENU_RESTART = "Restart menu entry"
+const val TOPBAR_MENU_BADGES = "Achievements menu entry"
 
 /**
  * Do not show entries for onClickHandlers that are null.
@@ -131,7 +132,7 @@ fun TopBar(
                         MenuEntry(
                             drawableId = R.drawable.icon_badges,
                             textId = R.string.achievements,
-                            modifier = Modifier.semantics { contentDescription = "TODO" },
+                            modifier = Modifier.semantics { contentDescription = TOPBAR_MENU_BADGES },
                             onClick = { goToBadgesScreen() },
                         )
                     }
