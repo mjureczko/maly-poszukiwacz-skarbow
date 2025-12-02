@@ -12,6 +12,8 @@ import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
+import pl.marianjureczko.poszukiwacz.usecase.badges.TestAchievementsStoragePort
 import javax.inject.Singleton
 
 @Module
@@ -22,6 +24,7 @@ object TestPortsModule {
     val location = TestLocationPort()
     val camera = TestCameraPort()
     val qrScannerPort = TestQrScannerPort()
+    val achievementsStoragePort = TestAchievementsStoragePort()
     var ioDispatcher = StandardTestDispatcher()
 
     @Provides
@@ -52,4 +55,9 @@ object TestPortsModule {
         return qrScannerPort
     }
 
+    @Singleton
+    @Provides
+    fun achievementsStoragePort(): AchievementsStoragePort {
+        return achievementsStoragePort
+    }
 }

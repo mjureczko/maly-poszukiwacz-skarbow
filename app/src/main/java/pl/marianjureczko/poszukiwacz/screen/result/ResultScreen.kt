@@ -65,6 +65,7 @@ import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 const val PLAY_MOVIE_BUTTON = "Play the movie"
 const val TREASURE_QUANTITY = "treasure quantity"
 const val DO_NOT_SHOW_TREASURE_MSG = "Cannot show treasure"
+const val BADGE_GRANTED_HEADER = "Badge granted header"
 private const val SUBTITLES_MIME_TYPE = "application/x-subrip"
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -147,7 +148,9 @@ private fun NewBadgesDialogContent(localState: ResultState) {
         Text(
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentDescription = BADGE_GRANTED_HEADER },
             text = stringResource(R.string.badges_dialog_header),
         )
         LazyColumn(

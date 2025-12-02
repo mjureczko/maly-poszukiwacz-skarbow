@@ -21,6 +21,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -30,6 +32,10 @@ import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.BadgeCard
 import pl.marianjureczko.poszukiwacz.ui.components.Score
 
+const val TOTAL_LOOT_ACHIEVEMENT = "Total loot collected achievement"
+const val DISCOVERED_TREASURES_ACHIEVEMENT = "Discovered treasures achievement"
+const val COMPLETED_ROUTES_ACHIEVEMENT = "Completed routes achievement"
+const val LONGEST_COMPLETED_ROUTE_ACHIEVEMENT = "Longest completed route achievement"
 @Composable
 fun BadgesScreenBody(
     modifier: Modifier,
@@ -50,10 +56,14 @@ fun BadgesScreenBody(
             Score(state.diamonds, R.drawable.diamond, "diamond image", scoresHeight)
             Score(state.knowledge, R.drawable.chest_small, "tourist treasure image", scoresHeight)
         }
-        Achievement(R.string.total_loot_collected, state.totalLoot())
-        Achievement(R.string.discovered_treasures, state.treasures)
-        Achievement(R.string.completed_routes, state.completedRoutes)
-        Achievement(R.string.longest_completed_route, state.greatestNumberOfTreasuresOnRoute)
+        Achievement(R.string.total_loot_collected, state.totalLoot(), TOTAL_LOOT_ACHIEVEMENT)
+        Achievement(R.string.discovered_treasures, state.treasures, DISCOVERED_TREASURES_ACHIEVEMENT)
+        Achievement(R.string.completed_routes, state.completedRoutes, COMPLETED_ROUTES_ACHIEVEMENT)
+        Achievement(
+            R.string.longest_completed_route,
+            state.greatestNumberOfTreasuresOnRoute,
+            LONGEST_COMPLETED_ROUTE_ACHIEVEMENT
+        )
         if (state.showBadges()) {
             Badges(Modifier.weight(0.99f), state)
         }
@@ -63,9 +73,11 @@ fun BadgesScreenBody(
 }
 
 @Composable
-private fun Achievement(@StringRes testId: Int, value: Int) {
+private fun Achievement(@StringRes testId: Int, value: Int, description: String = "") {
     Text(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { contentDescription = description },
         style = MaterialTheme.typography.headlineMedium,
         text = stringResource(testId) + " " + value,
         textAlign = TextAlign.Center

@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
-import pl.marianjureczko.poszukiwacz.shared.port.external.ExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
@@ -38,6 +37,9 @@ annotation class IoDispatcher
 @Retention(AnnotationRetention.BINARY)
 annotation class DefaultDispatcher
 
+/**
+ * Module providing beans that shall be used in bot production and in espresso tests.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object SingletonModule {
@@ -96,12 +98,6 @@ object SingletonModule {
     @Provides
     fun updateLocationUC(storage: StoragePort, locationCalculator: LocationCalculator): UpdateLocationUC {
         return UpdateLocationUC(storage, locationCalculator)
-    }
-
-    @Singleton
-    @Provides
-    fun achievementsStoragePort(@ApplicationContext appContext: Context): AchievementsStoragePort {
-        return ExternalStoragePort(appContext)
     }
 
     @Singleton
