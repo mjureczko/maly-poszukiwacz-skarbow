@@ -80,7 +80,7 @@ fun WellDoneOkDialogText(textResourceId: Int) {
 
 @Composable
 fun MoreApps(data: List<MoreApsEntry>) {
-    Column() {
+    Column {
         data.forEach {
             Row() {
                 WellDoneOkDialogText(it.prefixResourceId)

@@ -76,6 +76,5 @@
     <string name="well_done_custom_app">→ mission in</string>
     <string name="classic_app_link" translatable="false">https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz</string>
     <string name="kalinowice_app_link" translatable="false">https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz.kalinowice</string>
-    <!--    TODO: change link-->
-    <string name="pegow_app_link" translatable="false">https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz.kalinowice</string>
+    <string name="pegow_app_link" translatable="false">https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz.pegow</string>
 </resources>
