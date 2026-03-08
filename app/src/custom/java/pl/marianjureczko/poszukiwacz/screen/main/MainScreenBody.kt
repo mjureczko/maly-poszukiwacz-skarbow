@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.shared.GoToSearching
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
+import pl.marianjureczko.poszukiwacz.ui.components.AnimGifImage
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 
@@ -80,12 +81,16 @@ fun MainScreenBody(modifier: Modifier, goToSearching: GoToSearching) {
                 horizontalArrangement = Arrangement.End,
             ) {
                 val imageId = state.messages[state.messageIndex].imageId
-                Image(
-                    painterResource(imageId),
-                    contentDescription = GUIDE_IMAGE,
-                    contentScale = ContentScale.Inside,
-                    modifier = Modifier.testTag(imageId.toString())
-                )
+                if (animGifs().contains(imageId)) {
+                    AnimGifImage(imageId)
+                } else {
+                    Image(
+                        painterResource(imageId),
+                        contentDescription = GUIDE_IMAGE,
+                        contentScale = ContentScale.Inside,
+                        modifier = Modifier.testTag(imageId.toString())
+                    )
+                }
             }
         }
         Row(
