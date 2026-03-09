@@ -7,8 +7,18 @@ MAPBOX_DOWNLOADS_TOKEN = <token>
 FACEBOOK_TOKEN = <token>
 ```
 
-Both tokens can be obtained from KeePass.
 When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_DOWNLOADS_TOKEN=<token>` or `-PFACEBOOK_TOKEN=<token>`.
+
+Create ap/src/main/res/values/developer-config.xml file with the following content:
+
+```xml
+
+<resources>
+    <string name="mapbox_access_token" translatable="false">TOKEN_VALUE</string>
+</resources>
+```
+
+All tokens can be obtained from Keeper.
 
 # Screens flow
 
