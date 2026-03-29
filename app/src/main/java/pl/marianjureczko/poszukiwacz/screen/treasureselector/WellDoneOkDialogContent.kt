@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -82,14 +81,11 @@ fun WellDoneOkDialogText(textResourceId: Int) {
 fun MoreApps(data: List<MoreApsEntry>) {
     Column {
         data.forEach {
-            Row() {
-                WellDoneOkDialogText(it.prefixResourceId)
-                Spacer(modifier = Modifier.width(10.dp))
-                Link(
-                    stringResource(it.linkTextResourceId),
-                    stringResource(it.linkUrlResourceId)
-                )
-            }
+            WellDoneOkDialogText(it.prefixResourceId)
+            Link(
+                stringResource(it.linkTextResourceId),
+                stringResource(it.linkUrlResourceId)
+            )
         }
     }
 }

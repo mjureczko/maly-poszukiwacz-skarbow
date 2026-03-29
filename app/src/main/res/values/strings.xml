@@ -51,7 +51,7 @@
     <string name="photo_permission_not_granted">To take photos, allow camera access.</string>">
     <string name="well_done">Congratulations! All the treasures have been found!</string>
     <string name="well_done_facebook">You can share this achievement on</string>
-    <string name="well_done_more">"Want more adventures? Try</string>
+    <string name="well_done_more">"Want more adventures? Try:</string>
     <string name="error_on_exporting_map">Map export error – try exporting without map</string>
     <string name="low_gps_signal">Low GPS signal</string>
     <string name="medium_gps_signal">Medium GPS signal</string>
@@ -72,7 +72,7 @@
     <string name="well_done_kalinowice" translatable="false">Kalinowice</string>
     <string name="well_done_pegow" translatable="false">Pęgów</string>
     <string name="well_done_classic_app">→ making own routes</string>
-    <string name="well_done_custom_app">→ mission in</string>
+    <string name="well_done_custom_app">→ mission in:</string>
     <string name="classic_app_link" translatable="false">https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz</string>
     <string name="kalinowice_app_link" translatable="false">https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz.kalinowice</string>
     <string name="pegow_app_link" translatable="false">https://play.google.com/store/apps/details?id=pl.marianjureczko.poszukiwacz.pegow</string>
