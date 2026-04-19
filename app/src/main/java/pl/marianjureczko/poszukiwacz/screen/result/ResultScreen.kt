@@ -131,6 +131,7 @@ fun ResultScreenBody(modifier: Modifier, sharedViewModel: ResultSharedViewModel)
         )
         AdvertBanner()
     }
+    //DEBUG: set true to show badge
     OkDialog(localState.isBadgesVisible, localViewModel::hideBadges) {
         NewBadgesDialogContent(localState)
     }
@@ -156,6 +157,7 @@ private fun NewBadgesDialogContent(localState: ResultState) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 1.dp, horizontal = 8.dp),
         ) {
+            //DEBUG: use `listOf(Badge(BadgeType.Treasurer, level=2, achievementValue=995))` to have something to show
             items(localState.badgesToShow) { badge ->
                 BadgeCard(badge, MaterialTheme.typography.bodyLarge)
             }

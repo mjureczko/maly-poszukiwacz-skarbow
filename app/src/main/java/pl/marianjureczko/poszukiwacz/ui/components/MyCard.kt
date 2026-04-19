@@ -6,12 +6,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 
 @Composable
 fun MyCard(
     modifier: Modifier = Modifier,
+    shape: Shape = Shapes.large,
     content: @Composable () -> Unit
 ) {
     Card(
@@ -20,7 +22,7 @@ fun MyCard(
             pressedElevation = 8.dp,
         ),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = Shapes.large,
+        shape = shape,
         modifier = modifier.padding(4.dp),
     ) {
         content()
