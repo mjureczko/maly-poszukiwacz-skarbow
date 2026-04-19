@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -41,7 +42,7 @@ fun BadgeCard(
     badge: Badge,
     textStyle: TextStyle = MaterialTheme.typography.headlineMedium,
 ) {
-    MyCard() {
+    MyCard(content = {
         Row(
             modifier = Modifier.fillMaxWidth(),
         ) {
@@ -100,5 +101,5 @@ fun BadgeCard(
                 )
             }
         }
-    }
+    }, shape = RectangleShape)
 }

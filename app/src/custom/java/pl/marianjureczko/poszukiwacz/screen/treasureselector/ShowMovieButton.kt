@@ -20,6 +20,7 @@ const val SHOW_MOVIE_BUTTON = "Show movie button"
 
 @Composable
 fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, goToResult: GoToResultWithTreasure) {
+    //DEBUG: change condition to true to enable showing result
     if (state.isTreasureCollected(treasure.id)) {
         Image(
             painterResource(R.drawable.movie),

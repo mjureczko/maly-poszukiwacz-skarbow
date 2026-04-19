@@ -48,6 +48,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 import java.io.File
 import java.io.FileOutputStream
 
@@ -141,7 +142,7 @@ private fun FacebookImage(modifier: Modifier) {
 
 @Composable
 fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRotatePhoto: RotatePhoto) {
-    MyCard {
+    MyCard(content = {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
@@ -185,7 +186,7 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
                 )
             }
         }
-    }
+    }, shape = Shapes.large)
 }
 
 object FacebookShareHelper {
