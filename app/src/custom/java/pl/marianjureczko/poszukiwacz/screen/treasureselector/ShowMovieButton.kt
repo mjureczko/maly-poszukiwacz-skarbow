@@ -20,7 +20,7 @@ const val SHOW_MOVIE_BUTTON = "Show movie button"
 
 @Composable
 fun ShowMovieButton(state: SelectorSharedState, treasure: TreasureDescription, goToResult: GoToResultWithTreasure) {
-    if (state.isTreasureCollected(treasure.id)) {
+    if (true/*state.isTreasureCollected(treasure.id)*/) {
         Image(
             painterResource(R.drawable.movie),
             modifier = Modifier
