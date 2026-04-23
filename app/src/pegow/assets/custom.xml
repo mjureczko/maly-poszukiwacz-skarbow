@@ -1,0 +1,148 @@
+<route>
+    <name>custom</name>
+    <treasures class="java.util.ArrayList">
+        <treasureDescription>
+            <!--dąb-->
+            <id>1</id>
+            <latitude>51.249419</latitude>
+            <longitude>16.932994</longitude>
+            <photoFileName>tip_02.jpg</photoFileName>
+            <tipFileName>tip_02.m4a</tipFileName>
+            <qrCode>k02001</qrCode>Copy
+            <movieFileName>02_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_02.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--skarb-->
+            <id>2</id>
+            <latitude>51.254</latitude>
+            <longitude>16.948</longitude>
+            <photoFileName>tip_03.jpg</photoFileName>
+            <tipFileName>tip_03.m4a</tipFileName>
+            <qrCode>k03001</qrCode>
+            <movieFileName>03_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_03.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--stacja kolejowa-->
+            <id>3</id>
+            <latitude>51.247</latitude>
+            <longitude>16.927</longitude>
+            <photoFileName>tip_04.jpg</photoFileName>
+            <tipFileName>tip_04.m4a</tipFileName>
+            <qrCode>k04001</qrCode>
+            <movieFileName>04_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_04.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--osp-->
+            <id>4</id>
+            <latitude>51.247</latitude>
+            <longitude>16.929</longitude>
+            <photoFileName>tip_05.jpg</photoFileName>
+            <tipFileName>tip_05.m4a</tipFileName>
+            <qrCode>k05001</qrCode>
+            <movieFileName>05_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_05.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--kornelowka-->
+            <id>5</id>
+            <latitude>51.262</latitude>
+            <longitude>16.939</longitude>
+            <photoFileName>tip_06.jpg</photoFileName>
+            <tipFileName>tip_06.m4a</tipFileName>
+            <qrCode>k06001</qrCode>
+            <movieFileName>06_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_06.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--kosciol-->
+            <id>6</id>
+            <latitude>51.244</latitude>
+            <longitude>16.934</longitude>
+            <photoFileName>tip_07.jpg</photoFileName>
+            <tipFileName>tip_07.m4a</tipFileName>
+            <qrCode>k07001</qrCode>
+            <movieFileName>07_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_07.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--najstarszy dom-->
+            <id>7</id>
+            <latitude>51.245</latitude>
+            <longitude>16.932</longitude>
+            <photoFileName>tip_08.jpg</photoFileName>
+            <tipFileName>tip_08.m4a</tipFileName>
+            <qrCode>k08001</qrCode>
+            <movieFileName>08_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_08.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--truskawka-->
+            <id>8</id>
+            <latitude>51.252</latitude>
+            <longitude>16.930</longitude>
+            <photoFileName>tip_09.jpg</photoFileName>
+            <tipFileName>tip_09.m4a</tipFileName>
+            <qrCode>k09001</qrCode>
+            <movieFileName>09_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_09.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--zorza-->
+            <id>9</id>
+            <latitude>51.252</latitude>
+            <longitude>16.929</longitude>
+            <photoFileName>tip_10.jpg</photoFileName>
+            <tipFileName>tip_10.m4a</tipFileName>
+            <qrCode>k10001</qrCode>
+            <movieFileName>10_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_10.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--rowy przeciwczołgowe-->
+            <id>10</id>
+            <latitude>51.266</latitude>
+            <longitude>16.945</longitude>
+            <photoFileName>tip_11.jpg</photoFileName>
+            <tipFileName>tip_11.m4a</tipFileName>
+            <qrCode>k11001</qrCode>
+            <movieFileName>11_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_11.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--lotnisko-->
+            <id>11</id>
+            <latitude>51.247</latitude>
+            <longitude>16.909</longitude>
+            <photoFileName>tip_13.jpg</photoFileName>
+            <tipFileName>tip_13.m4a</tipFileName>
+            <qrCode>k13001</qrCode>
+            <movieFileName>13_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_13.srt</subtitlesFileName>
+        </treasureDescription>
+
+        <treasureDescription>
+            <!--nazwa-->
+            <id>12</id>
+            <latitude>51.237</latitude>
+            <longitude>16.940</longitude>
+            <photoFileName>tip_14.jpg</photoFileName>
+            <tipFileName>tip_14.m4a</tipFileName>
+            <qrCode>k14001</qrCode>
+            <movieFileName>14_pegow.mp4</movieFileName>
+            <subtitlesFileName>en_14.srt</subtitlesFileName>
+        </treasureDescription>
+    </treasures>
+</route>

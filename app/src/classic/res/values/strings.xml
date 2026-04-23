@@ -61,6 +61,4 @@
     <string name="no_gps">Location unavailable</string>
     <string name="cannot_remove_last_treasure">The last treasure cannot be removed</string>
     <string name="bluetooth_permission_not_given">Not all permissions required for Bluetooth transfer were granted.</string>
-    <string name="well_done_classic_app">mission in</string>
-    <string name="well_done_kalinowice">Kalinowice</string>
 </resources>
