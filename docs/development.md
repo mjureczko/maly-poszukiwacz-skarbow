@@ -15,7 +15,7 @@ FACEBOOK_TOKEN = <token>
 
 When using gradle directly the token can be delivered as a parameter: `-PMAPBOX_DOWNLOADS_TOKEN=<token>` or `-PFACEBOOK_TOKEN=<token>`.
 
-Create ap/src/main/res/values/developer-config.xml file with the following content:
+Create app/src/main/res/values/developer-config.xml file with the following content:
 
 ```xml
 
@@ -153,7 +153,7 @@ That leads, thanks to the `variantFilter` configuration as well as `mode` and `a
 
 In order to refer to one of the variant, for instance to execute unit tests, one need to execute:
 ```
-$ ./gradlew testCustomDebugUnitTest
+$ ./gradlew testKalinowiceCustomDebugUnitTest
 ```
 The above line will execute tests from the "custom" flavors as well as from the "unflavoured" source set, i.e. src/test.
 

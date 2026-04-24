@@ -1,5 +1,6 @@
 /build
 src/main/res/values/developer-config.xml
+/src/androidTest/res/values/developer-config.xml
 /src/pegow/assets/02_pegow.mp4
 /src/pegow/assets/03_pegow.mp4
 /src/pegow/assets/04_pegow.mp4
