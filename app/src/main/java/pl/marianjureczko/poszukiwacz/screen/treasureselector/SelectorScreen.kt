@@ -38,6 +38,7 @@ import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedState
 import pl.marianjureczko.poszukiwacz.screen.searching.SelectorSharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGallery
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
@@ -60,6 +61,7 @@ fun SelectorScreen(
     goToResult: GoToResultWithTreasure,
     goToCommemorative: GoToCommemorative,
     onClickOnFacebook: GoToFacebook,
+    goToGallery: GoToGallery,
     onClickBadges: GoToBadgesScreen,
 ) {
     val cameraPermission: PermissionState =
@@ -75,6 +77,7 @@ fun SelectorScreen(
                 menuConfig = selectorMenuConfig(
                     onClickOnGuide,
                     onClickOnFacebook,
+                    goToGallery,
                     sharedState,
                     restarter,
                     onClickBadges

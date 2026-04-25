@@ -52,12 +52,11 @@ const val TOPBAR_MENU_BADGES = "Achievements menu entry"
 data class MenuConfig(
     val onClickOnGuide: (() -> Unit)?,
     val onClickOnFacebook: (() -> Unit)? = null,
+    val onClickOnGallery: (() -> Unit)? = null,
     val onClickOnRestart: ViewModelProgressRestarter? = null,
     val onClickBadges: GoToBadgesScreen? = null,
 ) {
-
 }
-
 
 fun interface ViewModelProgressRestarter {
     operator fun invoke()
@@ -117,6 +116,10 @@ fun TopBar(
                     }
                     menuConfig.onClickOnFacebook?.let {
                         MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClick = it)
+                    }
+                    menuConfig.onClickOnGallery?.let {
+                        //TODO t: use R.drawable.gallery
+                        MenuEntry(R.drawable.facebook, R.string.menu_gallery, onClick = it)
                     }
                     menuConfig.onClickOnRestart?.let { _ ->
                         MenuEntry(

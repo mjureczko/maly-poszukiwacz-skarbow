@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.screen.searching.RestarterSharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGallery
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
 import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
@@ -37,6 +38,7 @@ fun TipPhotoScreen(
     navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook,
+    goToGallery: GoToGallery,
     onClickBadges: GoToBadgesScreen,
 ) {
     val viewModel: TipPhotoViewModel = hiltViewModel()
@@ -48,7 +50,14 @@ fun TipPhotoScreen(
             TopBar(
                 navController = navController,
                 title = stringResource(R.string.photo_tip),
-                menuConfig = tipPhotoMenuConfig(onClickOnGuide, onClickOnFacebook, state, restarter, onClickBadges)
+                menuConfig = tipPhotoMenuConfig(
+                    onClickOnGuide,
+                    onClickOnFacebook,
+                    goToGallery,
+                    state,
+                    restarter,
+                    onClickBadges
+                )
             )
         },
         content = { paddingValues ->

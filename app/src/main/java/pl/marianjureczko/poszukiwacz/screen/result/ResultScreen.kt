@@ -50,6 +50,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsToExternalStorage
 import pl.marianjureczko.poszukiwacz.screen.searching.ResultSharedViewModel
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGallery
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.UpdateSubtitlesLine
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
@@ -76,6 +77,7 @@ fun ResultScreen(
     navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: GoToGuide,
     onClickOnFacebook: GoToFacebook,
+    goToGallery: GoToGallery,
     onClickBadges: GoToBadgesScreen,
 ) {
     val sharedViewModel: ResultSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
@@ -89,6 +91,7 @@ fun ResultScreen(
                 menuConfig = resultsMenuConfig(
                     onClickOnGuide,
                     onClickOnFacebook,
+                    goToGallery,
                     sharedViewModel,
                     restarter,
                     onClickBadges

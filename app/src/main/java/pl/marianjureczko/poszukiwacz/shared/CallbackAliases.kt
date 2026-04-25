@@ -9,6 +9,7 @@ fun interface GoToResults {
     operator fun invoke(routeName: String, resultType: ResultType, isJustFound: Boolean, treasureId: Int, amount: Int)
 }
 typealias GoToFacebook = (String) -> Unit
+typealias GoToGallery = (String) -> Unit
 typealias GoToSearching = (String) -> Unit
 typealias GoToQrScanner = () -> Unit
 typealias GoToTipPhoto = (String, String) -> Unit
