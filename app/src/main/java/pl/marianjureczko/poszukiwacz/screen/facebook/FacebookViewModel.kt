@@ -23,6 +23,7 @@ import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import javax.inject.Inject
 
 const val PARAMETER_ROUTE_NAME = "route_name"
+const val PARAMETER_MODE = "mode"
 
 @HiltViewModel
 class FacebookViewModel @Inject constructor(
@@ -56,6 +57,7 @@ class FacebookViewModel @Inject constructor(
     }
 
     private fun createState(): FacebookState {
+        val mode = stateHandle.get<Mode>(PARAMETER_MODE) ?: Mode.FACEBOOK
         var index = 0
         val routeName = stateHandle.get<String>(PARAMETER_ROUTE_NAME)!!
         val route = storagePort.loadRoute(routeName)
@@ -110,7 +112,7 @@ class FacebookViewModel @Inject constructor(
             )
         )
 
-        return FacebookState(path, progress, route, elements)
+        return FacebookState(mode, path, progress, route, elements)
     }
 
     private fun preparePhoto(index: Int, photoFile: String) {

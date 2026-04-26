@@ -23,6 +23,7 @@ interface FacebookReportState {
     fun getMapSummary(): ElementDescription?
     fun getMapRoute(): ElementDescription?
 
+    val mode: Mode
     val hunterPath: HunterPath?
     val route: Route
     val progress: TreasuresProgress

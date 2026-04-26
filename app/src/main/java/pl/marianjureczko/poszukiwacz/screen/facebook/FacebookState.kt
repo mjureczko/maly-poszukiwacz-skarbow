@@ -6,6 +6,7 @@ import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import java.util.Random
 
 data class FacebookState(
+    override val mode: Mode,
     override val hunterPath: HunterPath?,
     override val progress: TreasuresProgress,
     override val route: Route,

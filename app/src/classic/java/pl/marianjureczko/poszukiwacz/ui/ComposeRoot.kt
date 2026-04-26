@@ -28,7 +28,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
-    val goToGallery: GoToGallery = FacebookHelper.createFacebookCallback(navController)
+    val goToGallery: GoToGallery = FacebookHelper.createGalleryCallback(navController)
     val goToCommemorative: GoToCommemorative = getGoToCommemorative(navController)
     val goToEditor: GoToTreasureEditor =
         { routeName -> navController.navigate(Screens.TreasureEditor.doRoute(routeName)) }

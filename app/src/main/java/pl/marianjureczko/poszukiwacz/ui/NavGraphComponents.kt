@@ -193,6 +193,11 @@ fun NavGraphBuilder.facebook(
 ) {
     composable(
         route = Screens.Facebook.ROUTE,
-        arguments = listOf(navArgument(Screens.Facebook.PARAMETER_ROUTE_NAME) { type = NavType.StringType }),
+        arguments = listOf(
+            navArgument(Screens.Facebook.PARAMETER_MODE) {
+                type = NavType.EnumType(pl.marianjureczko.poszukiwacz.screen.facebook.Mode::class.java)
+            },
+            navArgument(Screens.Facebook.PARAMETER_ROUTE_NAME) { type = NavType.StringType }
+        ),
     ) { navBackStackEntry -> FacebookScreen(navController, onClickGuide, goToBadges) }
 }

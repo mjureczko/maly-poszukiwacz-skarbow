@@ -118,8 +118,7 @@ fun TopBar(
                         MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClick = it)
                     }
                     menuConfig.onClickOnGallery?.let {
-                        //TODO t: use R.drawable.gallery
-                        MenuEntry(R.drawable.facebook, R.string.menu_gallery, onClick = it)
+                        MenuEntry(R.drawable.gallery, R.string.menu_gallery, onClick = it)
                     }
                     menuConfig.onClickOnRestart?.let { _ ->
                         MenuEntry(

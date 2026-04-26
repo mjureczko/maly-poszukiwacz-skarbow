@@ -1,10 +1,12 @@
 package pl.marianjureczko.poszukiwacz.screen.facebook
 
 import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -79,7 +81,7 @@ fun FacebookScreenBody(modifier: Modifier) {
         SubHeader()
         Elements(Modifier.weight(0.99f), state, viewModel, viewModel.rotatePhoto())
         Spacer(modifier = Modifier.weight(0.01f))
-        ShareOnFacebookButton(state, viewModel.locationCalculator)
+        ShareOnButton(state, viewModel.locationCalculator)
         AdvertBanner()
     }
 }
@@ -112,26 +114,65 @@ private fun Elements(
     }
 }
 
+
+fun saveBitmapToGallery(context: Context, bitmap: Bitmap, fileName: String): Boolean {
+    val resolver = context.contentResolver
+
+    val contentValues = ContentValues().apply {
+        put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+        put(MediaStore.Images.Media.WIDTH, bitmap.width)
+        put(MediaStore.Images.Media.HEIGHT, bitmap.height)
+    }
+
+    val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues) ?: return false
+    val outputStream = resolver.openOutputStream(imageUri) ?: return false
+    outputStream.use { stream ->
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream)
+    }
+    return true
+}
+
 @Composable
-private fun ShareOnFacebookButton(model: FacebookReportState, locationCalculator: LocationCalculator) {
+private fun ShareOnButton(model: FacebookReportState, locationCalculator: LocationCalculator) {
     Box {
         val context = LocalContext.current
         val sharingErrorMsg = stringResource(R.string.facebook_share_error)
         val noFacebookErrorMsg = stringResource(id = R.string.facebook_share_impossible)
         LargeButton(R.string.share_button) {
             ReportGenerator().create(context, model, locationCalculator) { bitmap ->
-                FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
+                if (model.mode == Mode.FACEBOOK) {
+                    FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
+                } else {
+                    //TODO t: create port
+                    val fileName = model.route.name
+                    if (saveBitmapToGallery(context, bitmap, fileName)) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.save_to_gallery_success, fileName),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(context, context.getString(R.string.save_to_gallery_error), Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
             }
         }
-        FacebookImage(Modifier.align(AbsoluteAlignment.CenterLeft))
-        FacebookImage(Modifier.align(AbsoluteAlignment.CenterRight))
+        val imageId = if (model.mode == Mode.FACEBOOK) {
+            R.drawable.facebook
+        } else {
+            R.drawable.gallery
+        }
+        ButtonImage(Modifier.align(AbsoluteAlignment.CenterLeft), imageId)
+        ButtonImage(Modifier.align(AbsoluteAlignment.CenterRight), imageId)
     }
 }
 
 @Composable
-private fun FacebookImage(modifier: Modifier) {
+private fun ButtonImage(modifier: Modifier, imageId: Int) {
     Image(
-        painter = painterResource(id = R.drawable.facebook),
+        painter = painterResource(id = imageId),
         contentDescription = "Share on Facebook icon",
         modifier = modifier
             .height(50.dp)
@@ -197,6 +238,7 @@ object FacebookShareHelper {
             try {
                 shareContent(context, uri)
             } catch (ex: ActivityNotFoundException) {
+                ex.printStackTrace()
                 Toast.makeText(context, noFacebookErrorMsg, Toast.LENGTH_LONG).show()
             }
         } else {
