@@ -1,12 +1,10 @@
 package pl.marianjureczko.poszukiwacz.screen.facebook
 
 import android.content.ActivityNotFoundException
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,7 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsToExternalStorage
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
@@ -50,6 +50,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 import java.io.File
 import java.io.FileOutputStream
@@ -72,16 +73,20 @@ fun FacebookScreen(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun FacebookScreenBody(modifier: Modifier) {
     val viewModel: FacebookViewModel = hiltViewModel()
     val state: FacebookState = viewModel.state.value
+    if (state.mode == Mode.GALLERY) {
+        handlePermission(RequirementsToExternalStorage)
+    }
 
     Column(modifier.background(Color.White)) {
         SubHeader()
         Elements(Modifier.weight(0.99f), state, viewModel, viewModel.rotatePhoto())
         Spacer(modifier = Modifier.weight(0.01f))
-        ShareOnButton(state, viewModel.locationCalculator)
+        ShareOnButton(state, viewModel, viewModel.locationCalculator)
         AdvertBanner()
     }
 }
@@ -114,27 +119,12 @@ private fun Elements(
     }
 }
 
-
-fun saveBitmapToGallery(context: Context, bitmap: Bitmap, fileName: String): Boolean {
-    val resolver = context.contentResolver
-
-    val contentValues = ContentValues().apply {
-        put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        put(MediaStore.Images.Media.WIDTH, bitmap.width)
-        put(MediaStore.Images.Media.HEIGHT, bitmap.height)
-    }
-
-    val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues) ?: return false
-    val outputStream = resolver.openOutputStream(imageUri) ?: return false
-    outputStream.use { stream ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream)
-    }
-    return true
-}
-
 @Composable
-private fun ShareOnButton(model: FacebookReportState, locationCalculator: LocationCalculator) {
+private fun ShareOnButton(
+    model: FacebookReportState,
+    viewModel: FacebookViewModel,
+    locationCalculator: LocationCalculator
+) {
     Box {
         val context = LocalContext.current
         val sharingErrorMsg = stringResource(R.string.facebook_share_error)
@@ -144,18 +134,7 @@ private fun ShareOnButton(model: FacebookReportState, locationCalculator: Locati
                 if (model.mode == Mode.FACEBOOK) {
                     FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
                 } else {
-                    //TODO t: create port
-                    val fileName = model.route.name
-                    if (saveBitmapToGallery(context, bitmap, fileName)) {
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.save_to_gallery_success, fileName),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        Toast.makeText(context, context.getString(R.string.save_to_gallery_error), Toast.LENGTH_LONG)
-                            .show()
-                    }
+                    saveBitmapToGallery(context, viewModel, bitmap, model.route.name)
                 }
             }
         }
@@ -167,6 +146,16 @@ private fun ShareOnButton(model: FacebookReportState, locationCalculator: Locati
         ButtonImage(Modifier.align(AbsoluteAlignment.CenterLeft), imageId)
         ButtonImage(Modifier.align(AbsoluteAlignment.CenterRight), imageId)
     }
+}
+
+private fun saveBitmapToGallery(context: Context, viewModel: FacebookViewModel, bitmap: Bitmap, fileName: String) {
+    val result = viewModel.saveReportBitmapInGallery(bitmap, fileName)
+    val toShow = if (result) {
+        context.getString(R.string.save_to_gallery_success, fileName)
+    } else {
+        context.getString(R.string.save_to_gallery_error)
+    }
+    Toast.makeText(context, toShow, Toast.LENGTH_LONG).show()
 }
 
 @Composable

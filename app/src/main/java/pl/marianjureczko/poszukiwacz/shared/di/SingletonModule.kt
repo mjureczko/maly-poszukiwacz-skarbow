@@ -10,14 +10,17 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
+import pl.marianjureczko.poszukiwacz.shared.port.external.ExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocationFactory
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
+import pl.marianjureczko.poszukiwacz.usecase.SaveBitmapToGalleryUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
 import pl.marianjureczko.poszukiwacz.usecase.badges.AddTreasureToAchievementsUC
@@ -102,6 +105,12 @@ object SingletonModule {
 
     @Singleton
     @Provides
+    fun saveBitmapToGalleryUC(storage: ReportStoragePort): SaveBitmapToGalleryUC {
+        return SaveBitmapToGalleryUC(storage)
+    }
+
+    @Singleton
+    @Provides
     fun addTreasureToAchievementsUC(storage: AchievementsStoragePort, gainNewBadgesUC: GainNewBadgesUC) =
         AddTreasureToAchievementsUC(storage, gainNewBadgesUC)
 
@@ -113,5 +122,11 @@ object SingletonModule {
     @Provides
     fun androidLocationFactory(): AndroidLocationFactory {
         return AndroidLocationFactoryImpl()
+    }
+
+    @Singleton
+    @Provides
+    fun reportStoragePort(@ApplicationContext appContext: Context): ReportStoragePort {
+        return ExternalStoragePort(appContext)
     }
 }

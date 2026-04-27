@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.facebook
 
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -20,6 +21,7 @@ import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
 import pl.marianjureczko.poszukiwacz.shared.di.DefaultDispatcher
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.SaveBitmapToGalleryUC
 import javax.inject.Inject
 
 const val PARAMETER_ROUTE_NAME = "route_name"
@@ -31,6 +33,7 @@ class FacebookViewModel @Inject constructor(
     private val storagePort: StoragePort,
     val locationCalculator: LocationCalculator,
     private val resources: Resources,
+    private val saveBitmapToGalleryUC: SaveBitmapToGalleryUC,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -54,6 +57,10 @@ class FacebookViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun saveReportBitmapInGallery(bitmap: Bitmap, fileName: String): Boolean {
+        return saveBitmapToGalleryUC(bitmap, fileName)
     }
 
     private fun createState(): FacebookState {

@@ -105,7 +105,7 @@ There are three levels of state persistence.
    When 3. is required it doesn't make much sense to additionally do 2.
 
 3. **Persistent storage.** To save data that should remain available till the user decides to remove it.
-   It should by done through serialization to XML and then saving to disc using the `StorageHelper` class.
+   It should be done through serialization to XML and then saving to disc using the `StorageHelper` class.
    The data that supposed to be saved should be wrapped by the view model, and the view model should handle its
    lifecycle.
    The view model should be aware of changes in such data and persist it immediately after the change.
@@ -119,7 +119,7 @@ Solution based on:
 - https://google.github.io/accompanist/permissions/
 - https://github.com/google/accompanist/tree/main/sample/src/main/java/com/google/accompanist/sample/permissions
 
-The permission is requested on the screen there it is needed for the first time.
+The permission is requested on the screen where it is needed for the first time.
 What permission is needed is declared by implmenting the `Requirement` interface.
 Implementation shall deliver three values:
 
