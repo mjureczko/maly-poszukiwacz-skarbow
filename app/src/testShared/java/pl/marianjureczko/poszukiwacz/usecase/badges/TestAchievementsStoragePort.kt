@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.usecase.badges
 class TestAchievementsStoragePort : AchievementsStoragePort {
     private var achievements: Achievements? = null
 
-    override fun load(): Achievements? {
+    override fun loadAchievements(): Achievements? {
         return achievements
     }
 

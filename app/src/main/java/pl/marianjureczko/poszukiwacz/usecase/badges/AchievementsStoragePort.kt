@@ -1,6 +1,6 @@
 package pl.marianjureczko.poszukiwacz.usecase.badges
 
 interface AchievementsStoragePort {
-    fun load(): Achievements?
+    fun loadAchievements(): Achievements?
     fun save(achievements: Achievements)
 }

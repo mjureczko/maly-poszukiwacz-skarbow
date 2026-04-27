@@ -21,7 +21,7 @@ class BadgesViewModel @Inject constructor(
         get() = _state
 
     private fun createState(): BadgesState {
-        val achievements = achievementsStoragePort.load()
+        val achievements = achievementsStoragePort.loadAchievements()
         return BadgesState(
             golds = achievements?.golds ?: 0,
             diamonds = achievements?.diamonds ?: 0,

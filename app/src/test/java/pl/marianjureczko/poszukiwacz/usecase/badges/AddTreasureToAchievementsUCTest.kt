@@ -35,7 +35,7 @@ class AddTreasureToAchievementsUCTest {
         sut(routeWithTwoTreasures, treasure, progress)
 
         // then
-        val actual = storage.load()!!
+        val actual = storage.loadAchievements()!!
         assertThat(actual.golds).isEqualTo(if (treasureType == TreasureType.GOLD) treasure.quantity else 0)
         assertThat(actual.rubies).isEqualTo(if (treasureType == TreasureType.RUBY) treasure.quantity else 0)
         assertThat(actual.diamonds).isEqualTo(if (treasureType == TreasureType.DIAMOND) treasure.quantity else 0)
@@ -58,7 +58,7 @@ class AddTreasureToAchievementsUCTest {
         sut(routeWithTwoTreasures, knowledgeTreasure, progress)
 
         // then
-        val actual = storage.load()!!
+        val actual = storage.loadAchievements()!!
         assertThat(actual.golds).isEqualTo(0)
         assertThat(actual.rubies).isEqualTo(0)
         assertThat(actual.diamonds).isEqualTo(0)
@@ -105,7 +105,7 @@ class AddTreasureToAchievementsUCTest {
         sut(routeWithThreeTreasures, diamond, progress)
 
         // then
-        val actual = storage.load()!!
+        val actual = storage.loadAchievements()!!
         assertThat(actual.golds).isEqualTo(gold.quantity)
         assertThat(actual.rubies).isEqualTo(ruby.quantity)
         assertThat(actual.diamonds).isEqualTo(diamond.quantity)
@@ -131,7 +131,7 @@ class AddTreasureToAchievementsUCTest {
         sut(routeWithThreeTreasures, treasure2, progress)
 
         //then
-        val actual = storage.load()!!
+        val actual = storage.loadAchievements()!!
         val expected = treasure1.quantity + treasure2.quantity
         assertThat(actual.golds).isEqualTo(if (treasureType == TreasureType.GOLD) expected else 0)
     }
@@ -152,7 +152,7 @@ class AddTreasureToAchievementsUCTest {
         sut(route, treasure, progress)
 
         //then
-        val actual = storage.load()!!
+        val actual = storage.loadAchievements()!!
         assertThat(actual.badges).isEqualTo(badges)
     }
 }

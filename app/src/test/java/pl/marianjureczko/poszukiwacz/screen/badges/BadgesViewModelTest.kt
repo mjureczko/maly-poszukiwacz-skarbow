@@ -15,7 +15,7 @@ class BadgesViewModelTest {
         //given
         val achievements = some<Achievements>()
         val port: AchievementsStoragePort = mock()
-        given(port.load()).willReturn(achievements)
+        given(port.loadAchievements()).willReturn(achievements)
 
         //when
         val sut = BadgesViewModel(port)
