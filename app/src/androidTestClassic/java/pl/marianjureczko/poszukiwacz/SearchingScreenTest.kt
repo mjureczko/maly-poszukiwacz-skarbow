@@ -28,7 +28,7 @@ class SearchingScreenTest : UiTest() {
         val selectedTreasureDef = route!!.treasures.first()
         TestPortsModule.location.updateLocation(selectedTreasureDef.latitude, selectedTreasureDef.longitude)
         TestPortsModule.qrScannerPort.setContents("g01001")
-        TestPortsModule.achievementsStoragePort.save(Achievements())
+        TestPortsModule.testExternalStoragePort.save(Achievements())
         val treasure: Treasure = TreasureParser().parse(TestPortsModule.qrScannerPort.getContents())
 
         //when

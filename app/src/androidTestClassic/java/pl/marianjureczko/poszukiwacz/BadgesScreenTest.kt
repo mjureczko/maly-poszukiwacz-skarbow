@@ -23,7 +23,7 @@ class BadgesScreenTest : UiTest() {
     fun shouldShowScreenWithBadges_when_badgesWereAchieved() {
         // given
         val achievements = some<Achievements>()
-        TestPortsModule.achievementsStoragePort.save(achievements)
+        TestPortsModule.testExternalStoragePort.save(achievements)
         composeRule.waitForIdle()
 
         // when

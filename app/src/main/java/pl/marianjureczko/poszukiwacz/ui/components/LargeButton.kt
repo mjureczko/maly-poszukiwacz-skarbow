@@ -44,6 +44,9 @@ fun LargeButton(title: String, description: String = "", enabled: Boolean = true
     }
 }
 
+/**
+ * @description Can be used as test id
+ */
 @Composable
 fun LargeButton(title: Int, description: String = "", enabled: Boolean = true, onClick: () -> Unit) {
     LargeButton(stringResource(title), description, enabled, onClick)

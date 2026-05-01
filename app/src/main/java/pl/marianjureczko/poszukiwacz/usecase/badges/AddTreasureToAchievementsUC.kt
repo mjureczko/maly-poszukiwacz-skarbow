@@ -13,7 +13,7 @@ class AddTreasureToAchievementsUC(
      * @currentProgress - progress AFTER adding the treasure from 2nd parameter
      */
     operator fun invoke(route: Route, treasure: Treasure, currentProgress: TreasuresProgress): List<Badge> {
-        var achievements = storage.load() ?: Achievements()
+        var achievements = storage.loadAchievements() ?: Achievements()
 
         when (treasure.type) {
             TreasureType.GOLD -> achievements = achievements.copy(golds = achievements.golds + treasure.quantity)

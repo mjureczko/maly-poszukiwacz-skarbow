@@ -48,5 +48,8 @@ jobs:
       - name: Run Unit Test Kalinowice
         run: ./gradlew testKalinowiceCustomDebugTest
 
+      - name: Run Unit Test Pegow
+        run: ./gradlew testPegowCustomDebugUnitTest
+
       - name: Run Unit Test Classic
         run: ./gradlew testDefaultAssetClassicDebugUnitTest

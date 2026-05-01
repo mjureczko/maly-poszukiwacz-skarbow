@@ -87,10 +87,12 @@ object Screens {
 
     object Facebook {
         const val PARAMETER_ROUTE_NAME = "route_name"
+        const val PARAMETER_MODE = "mode"
         private const val PATH = "facebook"
-        const val ROUTE = "$PATH/{${PARAMETER_ROUTE_NAME}}"
+        const val ROUTE = "$PATH/{${PARAMETER_MODE}}/{${PARAMETER_ROUTE_NAME}}"
 
-        fun doRoute(routeName: String) = "$PATH/$routeName"
+        fun doRoute(mode: pl.marianjureczko.poszukiwacz.screen.facebook.Mode, routeName: String) =
+            "$PATH/${mode.name}/$routeName"
     }
 
     object Bluetooth {

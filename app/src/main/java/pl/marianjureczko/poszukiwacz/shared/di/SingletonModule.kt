@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
@@ -18,6 +19,7 @@ import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocationFactory
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
+import pl.marianjureczko.poszukiwacz.usecase.SaveBitmapToGalleryUC
 import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
 import pl.marianjureczko.poszukiwacz.usecase.badges.AddTreasureToAchievementsUC
@@ -98,6 +100,12 @@ object SingletonModule {
     @Provides
     fun updateLocationUC(storage: StoragePort, locationCalculator: LocationCalculator): UpdateLocationUC {
         return UpdateLocationUC(storage, locationCalculator)
+    }
+
+    @Singleton
+    @Provides
+    fun saveBitmapToGalleryUC(storage: ReportStoragePort): SaveBitmapToGalleryUC {
+        return SaveBitmapToGalleryUC(storage)
     }
 
     @Singleton

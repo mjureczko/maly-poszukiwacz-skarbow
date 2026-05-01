@@ -45,6 +45,7 @@ const val TOPBAR_GO_BACK = "Go back"
 const val TOPBAR_MENU_BUTTON = "Open menu"
 const val TOPBAR_MENU_RESTART = "Restart menu entry"
 const val TOPBAR_MENU_BADGES = "Achievements menu entry"
+const val TOPBAR_MENU_GALLERY = "Gallery menu entry"
 
 /**
  * Do not show entries for onClickHandlers that are null.
@@ -52,12 +53,11 @@ const val TOPBAR_MENU_BADGES = "Achievements menu entry"
 data class MenuConfig(
     val onClickOnGuide: (() -> Unit)?,
     val onClickOnFacebook: (() -> Unit)? = null,
+    val onClickOnGallery: (() -> Unit)? = null,
     val onClickOnRestart: ViewModelProgressRestarter? = null,
     val onClickBadges: GoToBadgesScreen? = null,
 ) {
-
 }
-
 
 fun interface ViewModelProgressRestarter {
     operator fun invoke()
@@ -117,6 +117,14 @@ fun TopBar(
                     }
                     menuConfig.onClickOnFacebook?.let {
                         MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClick = it)
+                    }
+                    menuConfig.onClickOnGallery?.let {
+                        MenuEntry(
+                            drawableId = R.drawable.gallery,
+                            textId = R.string.menu_gallery,
+                            modifier = Modifier.semantics { contentDescription = TOPBAR_MENU_GALLERY },
+                            onClick = it
+                        )
                     }
                     menuConfig.onClickOnRestart?.let { _ ->
                         MenuEntry(

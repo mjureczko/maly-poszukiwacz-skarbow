@@ -51,6 +51,7 @@ import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.screen.result.NOTHING_FOUND_TREASURE_ID
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGallery
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToMap
 import pl.marianjureczko.poszukiwacz.shared.GoToQrScanner
@@ -84,6 +85,7 @@ fun SearchingScreen(
     goToMap: GoToMap,
     goToTreasureSelector: GoToTreasureSelector,
     goToFacebook: GoToFacebook,
+    goToGallery: GoToGallery,
     goToCommemorative: GoToCommemorative,
     onClickBadges: GoToBadgesScreen,
 ) {
@@ -99,7 +101,14 @@ fun SearchingScreen(
             TopBar(
                 navController = navController,
                 title = title,
-                menuConfig = searchingMenuConfig(onClickOnGuide, goToFacebook, state, restarter, onClickBadges)
+                menuConfig = searchingMenuConfig(
+                    onClickOnGuide,
+                    goToFacebook,
+                    goToGallery,
+                    state,
+                    restarter,
+                    onClickBadges
+                )
             )
         },
         content = { paddingValues ->

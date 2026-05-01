@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
@@ -69,6 +70,12 @@ object PortsModule {
     @Singleton
     @Provides
     fun achievementsStoragePort(@ApplicationContext appContext: Context): AchievementsStoragePort {
+        return ExternalStoragePort(appContext)
+    }
+
+    @Singleton
+    @Provides
+    fun reportStoragePort(@ApplicationContext appContext: Context): ReportStoragePort {
         return ExternalStoragePort(appContext)
     }
 }

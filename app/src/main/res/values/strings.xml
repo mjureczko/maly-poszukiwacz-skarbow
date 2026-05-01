@@ -8,6 +8,9 @@
     <string name="steps_to_treasure">[%1$d] %2$d steps to treasure</string>
     <string name="photo_saved">New photo has been saved</string>
     <string name="photo_not_replaced">New photo has not been saved</string>
+    <!-- Added strings for saving report to gallery -->
+    <string name="save_to_gallery_success">Saved as %1$s.jpg</string>
+    <string name="save_to_gallery_error">An error occurred while saving the file.</string>
     <string name="photo_tip">Hint</string>
     <string name="no_photo_to_show">No hint has been prepared</string>
     <string name="no_tip_to_play">No hint has been prepared</string>
@@ -15,6 +18,7 @@
     <string name="map_activity_title">Treasures map</string>
     <string name="menu_help">Guide</string>
     <string name="menu_facebook">Share on Facebook</string>
+    <string name="menu_gallery">Save to Gallery</string>
     <string name="menu_restart">Restart route</string>
     <string name="restart_msg">Are you sure you want remove all the searching progress?</string>
     <string name="restart_confirmation">The searching progress was removed</string>

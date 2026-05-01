@@ -38,6 +38,7 @@ import pl.marianjureczko.poszukiwacz.screen.searching.CommemorativeSharedState
 import pl.marianjureczko.poszukiwacz.screen.searching.CommemorativeSharedViewModel
 import pl.marianjureczko.poszukiwacz.screen.searching.DoCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGallery
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.ui.components.AdvertBanner
@@ -53,6 +54,7 @@ fun CommemorativeScreen(
     navBackStackEntry: NavBackStackEntry,
     onClickOnGuide: GoToGuide,
     goToFacebook: GoToFacebook,
+    gotToExportToGallery: GoToGallery,
     onClickBadges: GoToBadgesScreen,
 ) {
     val sharedViewModel: CommemorativeSharedViewModel = getSharedViewModel(navBackStackEntry, navController)
@@ -64,8 +66,9 @@ fun CommemorativeScreen(
                 title = stringResource(R.string.app_name),
                 menuConfig = commemorativeMenuConfig(
                     onClickOnGuide,
-                    { goToFacebook(sharedState.route.name) },
-                    onClickBadges
+                    onClickFacebook = { goToFacebook(sharedState.route.name) },
+                    onClickGallery = { gotToExportToGallery(sharedState.route.name) },
+                    onClickBadges = onClickBadges
                 ),
             )
         },
@@ -164,5 +167,11 @@ private fun DoPhotoButton(
 fun commemorativeMenuConfig(
     onClickOnGuide: GoToGuide,
     onClickFacebook: () -> Unit,
+    onClickGallery: () -> Unit,
     onClickBadges: GoToBadgesScreen
-) = MenuConfig(onClickOnGuide, onClickFacebook, onClickBadges = onClickBadges)
+) = MenuConfig(
+    onClickOnGuide = onClickOnGuide,
+    onClickOnFacebook = onClickFacebook,
+    onClickOnGallery = onClickGallery,
+    onClickBadges = onClickBadges
+)

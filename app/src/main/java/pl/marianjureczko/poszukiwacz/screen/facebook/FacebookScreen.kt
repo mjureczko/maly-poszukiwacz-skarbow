@@ -34,12 +34,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.permissions.RequirementsToExternalStorage
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto
@@ -48,9 +52,14 @@ import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.LargeButton
 import pl.marianjureczko.poszukiwacz.ui.components.MyCard
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
+import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 import java.io.File
 import java.io.FileOutputStream
+
+const val FACEBOOK_SCREEN_BODY = "facebook screen body"
+const val FACEBOOK_SHARE_BUTTON = "share button"
+const val INCLUDE_MAP = "treasures map"
 
 @Composable
 fun FacebookScreen(
@@ -70,16 +79,24 @@ fun FacebookScreen(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun FacebookScreenBody(modifier: Modifier) {
     val viewModel: FacebookViewModel = hiltViewModel()
     val state: FacebookState = viewModel.state.value
+    if (state.mode == Mode.GALLERY) {
+        handlePermission(RequirementsToExternalStorage)
+    }
 
-    Column(modifier.background(Color.White)) {
+    Column(
+        modifier = modifier
+            .background(Color.White)
+            .semantics { contentDescription = FACEBOOK_SCREEN_BODY }
+    ) {
         SubHeader()
         Elements(Modifier.weight(0.99f), state, viewModel, viewModel.rotatePhoto())
         Spacer(modifier = Modifier.weight(0.01f))
-        ShareOnFacebookButton(state, viewModel.locationCalculator)
+        ShareOnButton(state, viewModel, viewModel.locationCalculator)
         AdvertBanner()
     }
 }
@@ -113,25 +130,48 @@ private fun Elements(
 }
 
 @Composable
-private fun ShareOnFacebookButton(model: FacebookReportState, locationCalculator: LocationCalculator) {
+private fun ShareOnButton(
+    model: FacebookReportState,
+    viewModel: FacebookViewModel,
+    locationCalculator: LocationCalculator
+) {
     Box {
         val context = LocalContext.current
         val sharingErrorMsg = stringResource(R.string.facebook_share_error)
         val noFacebookErrorMsg = stringResource(id = R.string.facebook_share_impossible)
-        LargeButton(R.string.share_button) {
+        LargeButton(R.string.share_button, description = FACEBOOK_SHARE_BUTTON) {
             ReportGenerator().create(context, model, locationCalculator) { bitmap ->
-                FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
+                if (model.mode == Mode.FACEBOOK) {
+                    FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
+                } else {
+                    saveBitmapToGallery(context, viewModel, bitmap, model.route.name)
+                }
             }
         }
-        FacebookImage(Modifier.align(AbsoluteAlignment.CenterLeft))
-        FacebookImage(Modifier.align(AbsoluteAlignment.CenterRight))
+        val imageId = if (model.mode == Mode.FACEBOOK) {
+            R.drawable.facebook
+        } else {
+            R.drawable.gallery
+        }
+        ButtonImage(Modifier.align(AbsoluteAlignment.CenterLeft), imageId)
+        ButtonImage(Modifier.align(AbsoluteAlignment.CenterRight), imageId)
     }
 }
 
+private fun saveBitmapToGallery(context: Context, viewModel: FacebookViewModel, bitmap: Bitmap, fileName: String) {
+    val result = viewModel.saveReportBitmapInGallery(bitmap, fileName)
+    val toShow = if (result) {
+        context.getString(R.string.save_to_gallery_success, fileName)
+    } else {
+        context.getString(R.string.save_to_gallery_error)
+    }
+    Toast.makeText(context, toShow, Toast.LENGTH_LONG).show()
+}
+
 @Composable
-private fun FacebookImage(modifier: Modifier) {
+private fun ButtonImage(modifier: Modifier, imageId: Int) {
     Image(
-        painter = painterResource(id = R.drawable.facebook),
+        painter = painterResource(id = imageId),
         contentDescription = "Share on Facebook icon",
         modifier = modifier
             .height(50.dp)
@@ -161,7 +201,7 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
                     .padding(2.dp)
                     .height(40.dp)
                     .clickable { viewModel.changeSelectionAt(it.index) },
-                contentDescription = "Change treasure button",
+                contentDescription = if (it.isTreasuresMap) INCLUDE_MAP else "Change treasure button",
                 contentScale = ContentScale.Inside,
             )
             Text(
@@ -197,6 +237,7 @@ object FacebookShareHelper {
             try {
                 shareContent(context, uri)
             } catch (ex: ActivityNotFoundException) {
+                ex.printStackTrace()
                 Toast.makeText(context, noFacebookErrorMsg, Toast.LENGTH_LONG).show()
             }
         } else {
