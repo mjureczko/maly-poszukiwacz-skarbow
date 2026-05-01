@@ -14,6 +14,7 @@ import pl.marianjureczko.poszukiwacz.screen.main.MainScreen
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.shared.GoToCommemorative
 import pl.marianjureczko.poszukiwacz.shared.GoToFacebook
+import pl.marianjureczko.poszukiwacz.shared.GoToGallery
 import pl.marianjureczko.poszukiwacz.shared.GoToGuide
 import pl.marianjureczko.poszukiwacz.shared.GoToResultWithTreasure
 import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
@@ -23,6 +24,7 @@ import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 fun ComposeRoot(onClickGuide: GoToGuide) {
     val navController = rememberNavController()
     val goToFacebook: GoToFacebook = FacebookHelper.createFacebookCallback(navController)
+    val goToGallery: GoToGallery = FacebookHelper.createGalleryCallback(navController)
     val goToCommemorative: GoToCommemorative = getGoToCommemorative(navController)
     val goToResultsFromSelector = GoToResultWithTreasure { treasureId, isJustFound ->
         navController.navigate(
@@ -39,12 +41,20 @@ fun ComposeRoot(onClickGuide: GoToGuide) {
 
     NavHost(navController, startDestination = Screens.Main.ROUTE) {
         main(navController, onClickGuide, goToBadges)
-        searching(navController, onClickGuide, goToFacebook, goToCommemorative, goToBadges)
-        results(navController, onClickGuide, goToFacebook, goToBadges)
-        tipPhoto(navController, onClickGuide, goToFacebook, goToBadges)
-        map(navController, onClickGuide, goToFacebook, goToBadges)
-        selector(navController, onClickGuide, goToCommemorative, goToFacebook, goToResultsFromSelector, goToBadges)
-        commemorative(navController, onClickGuide, goToFacebook, goToBadges)
+        searching(navController, onClickGuide, goToFacebook, goToGallery, goToCommemorative, goToBadges)
+        results(navController, onClickGuide, goToFacebook, goToGallery, goToBadges)
+        tipPhoto(navController, onClickGuide, goToFacebook, goToGallery, goToBadges)
+        map(navController, onClickGuide, goToFacebook, goToGallery, goToBadges)
+        selector(
+            navController,
+            onClickGuide,
+            goToCommemorative,
+            goToFacebook,
+            goToGallery,
+            goToResultsFromSelector,
+            goToBadges
+        )
+        commemorative(navController, onClickGuide, goToFacebook, goToGallery, goToBadges)
         facebook(navController, onClickGuide, goToBadges)
         badges(navController, onClickGuide)
     }
