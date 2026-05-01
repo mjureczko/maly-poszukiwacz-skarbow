@@ -15,10 +15,11 @@ import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
+import pl.marianjureczko.poszukiwacz.shared.port.TestExternalStoragePort
 
 class AddTreasureToAchievementsUCTest {
 
-    val storage = TestAchievementsStoragePort()
+    val storage = TestExternalStoragePort()
     val sut = AddTreasureToAchievementsUC(storage, GainNewBadgesUC())
 
     @ParameterizedTest(name = "SHOULD store {0} in quantity from treasure WHEN adding first treasure which is {0}")

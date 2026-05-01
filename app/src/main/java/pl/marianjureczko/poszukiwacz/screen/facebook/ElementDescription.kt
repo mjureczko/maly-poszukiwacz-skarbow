@@ -7,6 +7,7 @@ data class ElementDescription(
     val type: Type,
     val isSelected: Boolean,
     val description: String,
+    val isTreasuresMap: Boolean = false,
     val orderNumber: Int? = null,
     val photo: String? = null,
     val scaledPhoto: Bitmap? = null

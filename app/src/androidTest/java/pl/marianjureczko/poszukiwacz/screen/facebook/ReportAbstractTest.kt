@@ -13,8 +13,10 @@ import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.shared.port.TestExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.SaveBitmapToGalleryUC
 
 abstract class ReportAbstractTest {
     val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
@@ -33,6 +35,7 @@ abstract class ReportAbstractTest {
             storagePort,
             LocationCalculator(AndroidLocationFactoryImpl()),
             context.resources,
+            SaveBitmapToGalleryUC(TestExternalStoragePort()),
             testDispatcher,
             testDispatcher
         )

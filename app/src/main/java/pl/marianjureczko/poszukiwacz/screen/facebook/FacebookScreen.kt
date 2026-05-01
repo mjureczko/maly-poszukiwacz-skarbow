@@ -34,6 +34,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
@@ -54,6 +56,10 @@ import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.theme.Shapes
 import java.io.File
 import java.io.FileOutputStream
+
+const val FACEBOOK_SCREEN_BODY = "facebook screen body"
+const val FACEBOOK_SHARE_BUTTON = "share button"
+const val INCLUDE_MAP = "treasures map"
 
 @Composable
 fun FacebookScreen(
@@ -82,7 +88,11 @@ fun FacebookScreenBody(modifier: Modifier) {
         handlePermission(RequirementsToExternalStorage)
     }
 
-    Column(modifier.background(Color.White)) {
+    Column(
+        modifier = modifier
+            .background(Color.White)
+            .semantics { contentDescription = FACEBOOK_SCREEN_BODY }
+    ) {
         SubHeader()
         Elements(Modifier.weight(0.99f), state, viewModel, viewModel.rotatePhoto())
         Spacer(modifier = Modifier.weight(0.01f))
@@ -129,7 +139,7 @@ private fun ShareOnButton(
         val context = LocalContext.current
         val sharingErrorMsg = stringResource(R.string.facebook_share_error)
         val noFacebookErrorMsg = stringResource(id = R.string.facebook_share_impossible)
-        LargeButton(R.string.share_button) {
+        LargeButton(R.string.share_button, description = FACEBOOK_SHARE_BUTTON) {
             ReportGenerator().create(context, model, locationCalculator) { bitmap ->
                 if (model.mode == Mode.FACEBOOK) {
                     FacebookShareHelper.shareBitmapOnFacebook(context, bitmap, sharingErrorMsg, noFacebookErrorMsg)
@@ -191,7 +201,7 @@ fun FacebookElement(it: ElementDescription, viewModel: FacebookViewModel, onRota
                     .padding(2.dp)
                     .height(40.dp)
                     .clickable { viewModel.changeSelectionAt(it.index) },
-                contentDescription = "Change treasure button",
+                contentDescription = if (it.isTreasuresMap) INCLUDE_MAP else "Change treasure button",
                 contentScale = ContentScale.Inside,
             )
             Text(

@@ -45,6 +45,7 @@ const val TOPBAR_GO_BACK = "Go back"
 const val TOPBAR_MENU_BUTTON = "Open menu"
 const val TOPBAR_MENU_RESTART = "Restart menu entry"
 const val TOPBAR_MENU_BADGES = "Achievements menu entry"
+const val TOPBAR_MENU_GALLERY = "Gallery menu entry"
 
 /**
  * Do not show entries for onClickHandlers that are null.
@@ -118,7 +119,12 @@ fun TopBar(
                         MenuEntry(R.drawable.facebook, R.string.menu_facebook, onClick = it)
                     }
                     menuConfig.onClickOnGallery?.let {
-                        MenuEntry(R.drawable.gallery, R.string.menu_gallery, onClick = it)
+                        MenuEntry(
+                            drawableId = R.drawable.gallery,
+                            textId = R.string.menu_gallery,
+                            modifier = Modifier.semantics { contentDescription = TOPBAR_MENU_GALLERY },
+                            onClick = it
+                        )
                     }
                     menuConfig.onClickOnRestart?.let { _ ->
                         MenuEntry(

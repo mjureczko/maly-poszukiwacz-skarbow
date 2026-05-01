@@ -99,7 +99,8 @@ class FacebookViewModel @Inject constructor(
                 index++,
                 Type.MAP,
                 true,
-                resources.getString(R.string.treasures_map)
+                resources.getString(R.string.treasures_map),
+                true
             )
         )
         elements.add(

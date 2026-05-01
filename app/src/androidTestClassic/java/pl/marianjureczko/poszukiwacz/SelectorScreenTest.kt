@@ -26,7 +26,7 @@ class SelectorScreenTest : UiTest() {
         goToSearchingScreen(route!!)
         val selectedTreasureDef = route!!.treasures.first()
         TestPortsModule.location.updateLocation(selectedTreasureDef.latitude, selectedTreasureDef.longitude)
-        TestPortsModule.achievementsStoragePort.save(Achievements())
+        TestPortsModule.testExternalStoragePort.save(Achievements())
 
         //the gold amount must be above GainNewBadgesUC.JEWELRY_THRESHOLD
         val goldAmount = GainNewBadgesUC.JEWELRY_THRESHOLD + 1

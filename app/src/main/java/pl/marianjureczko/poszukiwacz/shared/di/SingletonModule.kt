@@ -14,7 +14,6 @@ import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
-import pl.marianjureczko.poszukiwacz.shared.port.external.ExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
@@ -122,11 +121,5 @@ object SingletonModule {
     @Provides
     fun androidLocationFactory(): AndroidLocationFactory {
         return AndroidLocationFactoryImpl()
-    }
-
-    @Singleton
-    @Provides
-    fun reportStoragePort(@ApplicationContext appContext: Context): ReportStoragePort {
-        return ExternalStoragePort(appContext)
     }
 }

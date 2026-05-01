@@ -8,12 +8,13 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.mockito.Mockito.mock
+import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
+import pl.marianjureczko.poszukiwacz.shared.port.TestExternalStoragePort
 import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
-import pl.marianjureczko.poszukiwacz.usecase.badges.TestAchievementsStoragePort
 import javax.inject.Singleton
 
 @Module
@@ -24,7 +25,7 @@ object TestPortsModule {
     val location = TestLocationPort()
     val camera = TestCameraPort()
     val qrScannerPort = TestQrScannerPort()
-    val achievementsStoragePort = TestAchievementsStoragePort()
+    val testExternalStoragePort = TestExternalStoragePort()
     var ioDispatcher = StandardTestDispatcher()
 
     @Provides
@@ -58,6 +59,12 @@ object TestPortsModule {
     @Singleton
     @Provides
     fun achievementsStoragePort(): AchievementsStoragePort {
-        return achievementsStoragePort
+        return testExternalStoragePort
+    }
+
+    @Singleton
+    @Provides
+    fun reportStoragePort(): ReportStoragePort {
+        return testExternalStoragePort
     }
 }

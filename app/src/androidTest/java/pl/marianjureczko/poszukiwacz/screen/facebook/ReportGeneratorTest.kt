@@ -15,8 +15,10 @@ import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
+import pl.marianjureczko.poszukiwacz.shared.port.TestExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.usecase.SaveBitmapToGalleryUC
 import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 import java.io.File
 
@@ -60,6 +62,7 @@ class ReportGeneratorTest {
             StoragePort(context),
             LocationCalculator(AndroidLocationFactoryImpl()),
             context.resources,
+            SaveBitmapToGalleryUC(TestExternalStoragePort()),
             testDispatcher,
             testDispatcher
         )

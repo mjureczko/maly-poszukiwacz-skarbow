@@ -137,31 +137,59 @@ The logic is delivered in the `PermissionsHandler` class.
 # Variants
 
 Build variants (https://developer.android.com/build/build-variants) are used to create different variants of the app.
-It's a solution based on product flavors.
-On top of the predefined `release` and `debug` flavors are defined the following custom flavors:
-- classic
-   - defaultAssets
-- custom
-  - kalinowice
-  - ...
+This is accomplished using two **independent flavor dimensions**:
 
-That leads, thanks to the `variantFilter` configuration as well as `mode` and `assets` dimension from build.gradle, to the following variants:
-  - kalinowiceCustomDebug
-  - kalinowiceCustomRelease
-  - defaultAssetsClassicDebug
-  - defaultAssetsClassicRelease
+## Flavor Dimensions
 
-In order to refer to one of the variant, for instance to execute unit tests, one need to execute:
+### 1. Mode Dimension (`mode`)
+
+Controls the app functionality:
+
+- **`classic`**: Original app mode (read-only routes)
+- **`custom`**: Custom app mode (users can create/customize treasure routes)
+
+### 2. Assets Dimension (`assets`)
+
+Controls which location-specific treasure data is bundled with the app:
+
+- **`defaultAssets`**: Generic app with no pre-bundled location data (routes loaded dynamically)
+- **`kalinowice`**: Pre-bundled with Kalinowice region treasure hunt data (13 routes)
+- **`pegow`**: Pre-bundled with Pegow region treasure hunt data (12 routes)
+
+Each flavor dimension contains its own source set with location-specific assets in `app/src/<flavorName>/assets/`.
+
+## Valid Variants
+
+Not all combinations are valid. The `variantFilter` in build.gradle blocks incompatible combinations:
+
+- ❌ Blocked: `custom` + `defaultAssets` (doesn't make sense to have custom mode without regional data)
+- ❌ Blocked: `classic` without `defaultAssets` (classic mode requires generic/default setup)
+
+Valid variants produced:
+
+- `defaultAssetsClassicDebug`
+- `defaultAssetsClassicRelease`
+- `kalinowiceCustomDebug`
+- `kalinowiceCustomRelease`
+- `pegowCustomDebug`
+- `pegowCustomRelease`
+
+## Running Tests
+
+To execute unit tests for a specific variant:
+
+For kalinowice custom:
 ```
 $ ./gradlew testKalinowiceCustomDebugUnitTest
 ```
-The above line will execute tests from the "custom" flavors as well as from the "unflavoured" source set, i.e. src/test.
 
-For classic execute:
-
+For classic:
 ```
 $ ./gradlew testClassicDebugUnitTest
 ```
+
+These commands execute tests from the variant-specific flavor source sets as well as from the shared `src/test` source
+set.
 
 # Source sets
 
