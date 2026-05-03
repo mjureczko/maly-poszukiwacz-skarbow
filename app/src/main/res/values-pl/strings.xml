@@ -52,7 +52,7 @@
     <string name="photo_permission_not_granted">Aby robić zdjęcia, zezwól aplikacji na dostęp do aparatu.</string>
     <string name="well_done">Gratulacje! Wszystkie skarby zostały odnalezione!</string>
     <string name="well_done_facebook">Możesz podzielić się tym osiągnięciem na</string>
-    <string name="well_done_more">Chętny na więcej przygód? Wypróbuj:</string>
+    <string name="well_done_more">Chętny na więcej przygód i kolejne odznaki? Wypróbuj:</string>
     <string name="error_on_exporting_map">Błąd eksportu mapy - spróbuj publikować bez mapy</string>
     <string name="low_gps_signal">Słaby sygnał GPS</string>
     <string name="medium_gps_signal">Średni sygnał GPS</string>
@@ -63,12 +63,12 @@
     <string name="discovered_treasures">Odkrytych skarbów:</string>
     <string name="completed_routes">Ukończone wyprawy:</string>
     <string name="longest_completed_route">Najdłuższa ukończona wyprawa:</string>
-    <string name="badge_for">przyznana za</string>
-    <string name="badge_unit_text_base"> </string>
-    <string name="badge_of_jewelries">- łączna liczba zdobytych kosztowności wszystkich trzech rodzajów</string>
-    <string name="badge_of_treasures">- liczba odkrytych skarbów</string>
-    <string name="badge_of_completed_routes">- liczba ukończonych tras</string>
-    <string name="badge_of_longest_route">- liczba odkrytych skarbów na pojedyńczej ukończonej trasie</string>
+    <string name="badge_for">Masz już</string>
+    <string name="badge_unit_text_base">w kategorii: liczba zdobotych </string>
+    <string name="badge_of_jewelries">w kategorii: łączna liczba zdobytych kosztowności wszystkich trzech rodzajów</string>
+    <string name="badge_of_treasures">w kategorii: liczba odkrytych skarbów dowolnego rodzaju</string>
+    <string name="badge_of_completed_routes">w kategorii: liczba ukończonych tras</string>
+    <string name="badge_of_longest_route">w kategorii: liczba odkrytych skarbów na pojedyńczej ukończonej trasie</string>
     <string name="badges_dialog_header">Twoje osiągnięcia są imponujące. Znajdując ten skarb zdobywasz:</string>
     <string name="well_done_classic_app">→ samodzielne tworzenie tras</string>
     <string name="well_done_custom_app">→ misja w:</string>

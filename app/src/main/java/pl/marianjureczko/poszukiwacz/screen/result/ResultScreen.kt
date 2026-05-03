@@ -134,7 +134,7 @@ fun ResultScreenBody(modifier: Modifier, sharedViewModel: ResultSharedViewModel)
         )
         AdvertBanner()
     }
-    //DEBUG: set true to show badge
+    //DEBUG: use true as localState.isBadgesVisible to show badge
     OkDialog(localState.isBadgesVisible, localViewModel::hideBadges) {
         NewBadgesDialogContent(localState)
     }

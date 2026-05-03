@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -70,34 +71,34 @@ fun BadgeCard(
                     modifier = Modifier.matchParentSize()
                 )
             }
-            FlowRow(modifier = Modifier.fillMaxWidth()) {
-                val unitText = stringResource(BadgeUiHelper.badgeUnitText(badge))
-                Text(
-                    style = textStyle,
-                    text = stringResource(R.string.badge_for) + " " + badge.achievementValue + " " + unitText,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 15.dp)
-                        .semantics { contentDescription = BADGE_DESCRIPTION },
-                )
-                BadgeUiHelper.badgeUnitImage(badge)?.let { imageId ->
-                    Image(
-                        painterResource(imageId),
-                        contentDescription = "",
+            Column(modifier = Modifier.fillMaxWidth()) {
+                FlowRow(modifier = Modifier.fillMaxWidth()) {
+                    val unitText = stringResource(BadgeUiHelper.badgeUnitText(badge))
+                    Text(
+                        style = textStyle,
+                        text = stringResource(R.string.badge_for) + " " + badge.achievementValue + " " + unitText,
                         modifier = Modifier
-                            .padding(start = 5.dp)
-                            .height(40.dp)
                             .align(Alignment.CenterVertically)
+                            .padding(start = 15.dp)
+                            .semantics { contentDescription = BADGE_DESCRIPTION },
                     )
+                    BadgeUiHelper.badgeUnitImage(badge)?.let { imageId ->
+                        Image(
+                            painterResource(imageId),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .padding(start = 5.dp)
+                                .height(30.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
                 }
                 val loc = Locale.getDefault()
                 val date = DateFormat.getDateInstance(DateFormat.DEFAULT, loc).format(Date(badge.timestamp))
                 Text(
                     text = " [$date]",
                     style = textStyle,
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 10.dp)
+                    modifier = Modifier.padding(start = 15.dp, top = 5.dp)
                 )
             }
         }

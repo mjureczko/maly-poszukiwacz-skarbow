@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Pęgów</string>
     <string name="custom_lead1">Join us on a special journey to the seemingly ordinary Lower Silesian village of Pęgów. Together with the Pęgów Development Association, who know this area better than anyone else, we will discover its biggest secrets and uncover many fun and surprising treasures of knowledge! [ROUTE IN PREPARATION]</string>
-    <string name="custom_lead2">The exact route depends on your choices, but you can expect it to be about TODO km long. Consider breaking the journey into a few days or using a bike.</string>
+    <string name="custom_lead2">The exact route depends on your choices, but you can expect it to be about 12 km long. Consider breaking the journey into a few days or using a bike.</string>
     <string name="custom_title">Pęgów Adventure Trip</string>
     <string name="help_path">https://TODO-little-treasure-hunter.netlify.app/#/README_en</string>
     <string name="pretty_route_name" translatable="false">Pęgów</string>
