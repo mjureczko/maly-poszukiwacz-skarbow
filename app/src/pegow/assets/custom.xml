@@ -16,8 +16,8 @@
         <treasureDescription>
             <!--skarb-->
             <id>2</id>
-            <latitude>51.254</latitude>
-            <longitude>16.948</longitude>
+            <latitude>51.254722</latitude>
+            <longitude>16.949111</longitude>
             <photoFileName>tip_03.jpg</photoFileName>
             <tipFileName>tip_03.m4a</tipFileName>
             <qrCode>k03001</qrCode>
@@ -28,8 +28,8 @@
         <treasureDescription>
             <!--stacja kolejowa-->
             <id>3</id>
-            <latitude>51.247</latitude>
-            <longitude>16.927</longitude>
+            <latitude>51.251972</latitude>
+            <longitude>16.922972</longitude>
             <photoFileName>tip_04.jpg</photoFileName>
             <tipFileName>tip_04.m4a</tipFileName>
             <qrCode>k04001</qrCode>
@@ -40,8 +40,8 @@
         <treasureDescription>
             <!--osp-->
             <id>4</id>
-            <latitude>51.247</latitude>
-            <longitude>16.929</longitude>
+            <latitude>51.247944</latitude>
+            <longitude>16.930250</longitude>
             <photoFileName>tip_05.jpg</photoFileName>
             <tipFileName>tip_05.m4a</tipFileName>
             <qrCode>k05001</qrCode>
@@ -52,8 +52,8 @@
         <treasureDescription>
             <!--kornelowka-->
             <id>5</id>
-            <latitude>51.262</latitude>
-            <longitude>16.939</longitude>
+            <latitude>51.264444</latitude>
+            <longitude>16.938781</longitude>
             <photoFileName>tip_06.jpg</photoFileName>
             <tipFileName>tip_06.m4a</tipFileName>
             <qrCode>k06001</qrCode>
@@ -64,8 +64,8 @@
         <treasureDescription>
             <!--kosciol-->
             <id>6</id>
-            <latitude>51.244</latitude>
-            <longitude>16.934</longitude>
+            <latitude>51.244611</latitude>
+            <longitude>16.933972</longitude>
             <photoFileName>tip_07.jpg</photoFileName>
             <tipFileName>tip_07.m4a</tipFileName>
             <qrCode>k07001</qrCode>
@@ -76,8 +76,8 @@
         <treasureDescription>
             <!--najstarszy dom-->
             <id>7</id>
-            <latitude>51.245</latitude>
-            <longitude>16.932</longitude>
+            <latitude>51.247861</latitude>
+            <longitude>16.933639</longitude>
             <photoFileName>tip_08.jpg</photoFileName>
             <tipFileName>tip_08.m4a</tipFileName>
             <qrCode>k08001</qrCode>
@@ -88,8 +88,8 @@
         <treasureDescription>
             <!--truskawka-->
             <id>8</id>
-            <latitude>51.252</latitude>
-            <longitude>16.930</longitude>
+            <latitude>51.252500</latitude>
+            <longitude>16.929306</longitude>
             <photoFileName>tip_09.jpg</photoFileName>
             <tipFileName>tip_09.m4a</tipFileName>
             <qrCode>k09001</qrCode>
@@ -100,8 +100,8 @@
         <treasureDescription>
             <!--zorza-->
             <id>9</id>
-            <latitude>51.252</latitude>
-            <longitude>16.929</longitude>
+            <latitude>51.252667</latitude>
+            <longitude>16.928972</longitude>
             <photoFileName>tip_10.jpg</photoFileName>
             <tipFileName>tip_10.m4a</tipFileName>
             <qrCode>k10001</qrCode>
@@ -112,8 +112,8 @@
         <treasureDescription>
             <!--rowy przeciwczołgowe-->
             <id>10</id>
-            <latitude>51.266</latitude>
-            <longitude>16.945</longitude>
+            <latitude>51.265639</latitude>
+            <longitude>16.940889</longitude>
             <photoFileName>tip_11.jpg</photoFileName>
             <tipFileName>tip_11.m4a</tipFileName>
             <qrCode>k11001</qrCode>
@@ -124,8 +124,8 @@
         <treasureDescription>
             <!--lotnisko-->
             <id>11</id>
-            <latitude>51.247</latitude>
-            <longitude>16.909</longitude>
+            <latitude>51.247333</latitude>
+            <longitude>16.909083</longitude>
             <photoFileName>tip_13.jpg</photoFileName>
             <tipFileName>tip_13.m4a</tipFileName>
             <qrCode>k13001</qrCode>
@@ -136,8 +136,8 @@
         <treasureDescription>
             <!--nazwa-->
             <id>12</id>
-            <latitude>51.237</latitude>
-            <longitude>16.940</longitude>
+            <latitude>51.249750</latitude>
+            <longitude>16.931722</longitude>
             <photoFileName>tip_14.jpg</photoFileName>
             <tipFileName>tip_14.m4a</tipFileName>
             <qrCode>k14001</qrCode>
