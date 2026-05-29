@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureselector
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -34,7 +33,7 @@ fun TreasureCollectedCheckbox(
         modifier = Modifier
             .padding(2.dp)
             .height(40.dp)
-            .clickable(onClick = createTreasureCollectedCheckboxOnClickHandler(treasure, selectorSharedViewModel)),
+            .treasureCollectedClickable(treasure, selectorSharedViewModel),
         contentDescription = description,
         contentScale = ContentScale.Inside,
     )
