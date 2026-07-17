@@ -269,7 +269,7 @@ Ports should wrap all external dependencies to make it possible to mock them in 
 3. Google Play Console: Testuj i publikuj -> Test Otwarty -> Utworz nową wersję
 4. Google Play Console: Pakiety aplikacji -> Prześlij (upload the aab file from app/variantName/release/)
 5. Wait for tests results... unless test are irrelevant; other test paths may be considered as well
-6. Google Play Console: Testuj i publikuj -> Przegląd wersji -> Panel wersji ->  Utwórz nową wersję
+6. Google Play Console: Testuj i publikuj -> Produkcyjna -> Utwórz nową wersję
 7. Google Play Console: Pakiety aplikacji -> Choose from library the version submitted for "Test Otwarty"
 8. Wait till google approves the new version which takes at least one day and publish once approved.
 

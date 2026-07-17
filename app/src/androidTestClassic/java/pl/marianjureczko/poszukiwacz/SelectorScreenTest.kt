@@ -41,6 +41,6 @@ class SelectorScreenTest : UiTest() {
         composeRule.waitForIdle()
         getNode(BADGE_GRANTED_HEADER).assertExists()
         getNode(BADGE_ICON).assertExists()
-        getNode(BADGE_DESCRIPTION).assertTextEquals("granted for $goldAmount of")
+        getNode(BADGE_DESCRIPTION).assertTextEquals("You already have $goldAmount in the category: number of collected")
     }
 }
