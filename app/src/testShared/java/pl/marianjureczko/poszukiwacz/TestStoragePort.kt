@@ -15,7 +15,7 @@ class TestStoragePort(context: Context) : StoragePort(context) {
     val routes: MutableMap<String, Route> = mutableMapOf()
     val requestedTipRemovals: MutableList<Int> = mutableListOf()
     val progresses: MutableMap<String, TreasuresProgress> = mutableMapOf()
-    var newPhotoFile: String = someString()
+    var newPhotoFile: String = context.filesDir.absolutePath + "/" + someString()
     var fileNotEmpty = false
     var hunterPaths: MutableMap<String, HunterPath> = mutableMapOf()
     val removedFiles: MutableList<String> = mutableListOf()

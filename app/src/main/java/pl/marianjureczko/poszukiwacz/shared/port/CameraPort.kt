@@ -22,7 +22,7 @@ open class CameraPort(val context: Context) {
         successMsg: Int,
         failureMsg: Int,
         getPhotoUri: () -> Uri,
-        handleSuccess: () -> Unit = {}
+        handleSuccess: () -> Unit
         ): DoPhoto {
 
         val cameraLauncher = rememberLauncherForActivityResult(
