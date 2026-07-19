@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-kapt'
-    id 'de.mannodermaus.android-junit5'
+    id 'de.mannodermaus.android-junit'
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'org.jetbrains.kotlin.plugin.serialization' version "${kotlin_version}"
