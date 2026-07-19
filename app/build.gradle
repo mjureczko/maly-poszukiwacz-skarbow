@@ -114,8 +114,9 @@ android {
 
     buildFeatures {
         compose true
+        buildConfig = true
+        viewBinding = true
     }
-
 
     testOptions {
         unitTests {
@@ -123,9 +124,6 @@ android {
         }
     }
 
-    buildFeatures {
-        viewBinding = true
-    }
     namespace 'pl.marianjureczko.poszukiwacz'
 }
 
