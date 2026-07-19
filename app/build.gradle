@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 37
     defaultConfig {
         applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 23
-        targetSdkVersion 35
+        targetSdkVersion 37
         versionCode 27
         versionName "2.5.27"
         testInstrumentationRunner "pl.marianjureczko.poszukiwacz.CustomTestRunner"
@@ -163,6 +163,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.google.android.gms:play-services-location:21.1.0'
+
+    // Local consumption of the compass module (docs/modules.md).
+    implementation project(':compass')
 
 // never version leads to "Provided Metadata instance has version 2.2.0, while maximum supported version is 2.0.0." error
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
