@@ -6,3 +6,5 @@ When adding new file, automatically add it to git as well (unless it's a temp fi
 
 Project documentation is in `docs/development.md`.
 Consult the file in case of doubts.
+
+When searching through the source code use CodeGraphContext MCP to sped up the process.

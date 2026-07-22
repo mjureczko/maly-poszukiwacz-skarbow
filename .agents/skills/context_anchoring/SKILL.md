@@ -1,3 +1,10 @@
+---
+name: context-anchoring
+description: externalize feature (task) context to file; when user provides design decisions update the context; create new context file
+---
+
+# Context Anchoring
+
 ## Problem
 
 AI no persistent memory.
