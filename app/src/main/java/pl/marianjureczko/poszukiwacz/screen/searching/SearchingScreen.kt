@@ -3,11 +3,6 @@ package pl.marianjureczko.poszukiwacz.screen.searching
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,19 +11,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -44,6 +35,7 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.journeyapps.barcodescanner.ScanOptions
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.compass.api.CompassAndSteps
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.permissions.RequirementsForDoingCommemorativePhoto
@@ -67,8 +59,10 @@ import pl.marianjureczko.poszukiwacz.ui.components.CommemorativePhotoButton
 import pl.marianjureczko.poszukiwacz.ui.components.GoToBadgesScreen
 import pl.marianjureczko.poszukiwacz.ui.components.TopBar
 import pl.marianjureczko.poszukiwacz.ui.components.ViewModelProgressRestarter
+import pl.marianjureczko.poszukiwacz.ui.dp2SameSizeSp
 import pl.marianjureczko.poszukiwacz.ui.handlePermission
 import pl.marianjureczko.poszukiwacz.ui.isOnStack
+import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 const val COMPASS = "Compass"
 const val STEPS_TO_TREASURE = "Steps to treasure"
@@ -173,10 +167,15 @@ private fun SearchingScreenBody(
             )
             Column {
                 Scores(Modifier.align(Alignment.Start), score = state.treasuresProgress)
-                Compass(state.needleRotation, state.gpsAccuracy, Modifier.align(Alignment.CenterHorizontally))
             }
         }
-        Steps(state.stepsToTreasure)
+        CompassAndSteps(
+            needleRotation = state.needleRotation,
+            gpsAccuracy = state.gpsAccuracy,
+            height = 0.49.dh,
+            textStyle = TextStyle(fontFamily = FANCY_FONT, fontSize = dp2SameSizeSp(0.14.dh, factor = 0.6)),
+            stepsToTreasure = state.stepsToTreasure
+        )
         MySpacer(Modifier.weight(0.01f))
         Buttons(
             scanQrCallback,
@@ -194,58 +193,6 @@ private fun SearchingScreenBody(
 @Composable
 fun MySpacer(modifier: Modifier) {
     Spacer(modifier = modifier.background(Color.Transparent))
-}
-
-@Composable
-fun Compass(arcRotation: Float, gpsAccuracy: GpsAccuracy, modifier: Modifier) {
-    val infiniteTransition = rememberInfiniteTransition()
-    val alpha by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-
-    Box(
-        modifier = modifier
-            .padding(start = 15.dp, end = 15.dp, top = 1.dp, bottom = 1.dp)
-            .fillMaxWidth()
-            .height(0.35.dh)
-            .semantics { contentDescription = COMPASS },
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painterResource(R.drawable.compass),
-            contentDescription = "compass face",
-            contentScale = ContentScale.Inside,
-        )
-        Image(
-            painter = painterResource(R.drawable.arrow),
-            contentDescription = "compass needle",
-            contentScale = ContentScale.Inside,
-            modifier = Modifier.rotate(arcRotation)
-        )
-        if (gpsAccuracy != GpsAccuracy.Fine) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.BottomStart
-            ) {
-                val textResId = when (gpsAccuracy) {
-                    GpsAccuracy.Medium -> R.string.medium_gps_signal
-                    GpsAccuracy.Low -> R.string.low_gps_signal
-                    else -> R.string.no_gps_signal
-                }
-                Text(
-                    text = stringResource(textResId),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Color.Red.copy(alpha = alpha),
-                    modifier = Modifier.padding(end = 1.dp, bottom = 1.dp)
-                )
-            }
-        }
-    }
 }
 
 @Composable

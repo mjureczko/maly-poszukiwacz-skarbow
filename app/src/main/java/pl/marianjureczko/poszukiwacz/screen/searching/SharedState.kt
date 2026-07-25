@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
 import android.media.MediaPlayer
+import pl.marianjureczko.poszukiwacz.compass.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription

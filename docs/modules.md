@@ -7,9 +7,8 @@ files.
 * Local Development (maly-poszukiwacz-skarbow): The app consumes the module directly via implementation(project(":
   compass-feature")). This provides an instant feedback loop during development.
 * External Consumption (nowy-poszukiwacz): The module is packaged into an .aar and consumed as a remote dependency.
-* Encapsulation: The module utilizes standard Android packaging (data, domain, presentation). All internal logic,
-  repositories, and ViewModels are marked with the internal visibility modifier. Only the public Composable wrapper is
-  exposed to the host app.
+* Encapsulation: All internal logic, repositories, and ViewModels are marked with the internal visibility modifier.
+  Only the classes from api subpacakge are exposed to the host app.
 
 # Dependency Management
 

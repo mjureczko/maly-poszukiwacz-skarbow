@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.screen.searching
+package pl.marianjureczko.poszukiwacz.compass
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,17 +18,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.ui.Screen.dh
-import pl.marianjureczko.poszukiwacz.ui.dp2SameSizeSp
-import pl.marianjureczko.poszukiwacz.ui.theme.FANCY_FONT
 
 @Composable
-fun Steps(stepsToTreasure: Int?) {
-    val height = 0.14.dh
+fun Steps(stepsToTreasure: Int?, textStyle: TextStyle, modifier: Modifier = Modifier, height: Dp) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.Transparent)
             .height(height),
@@ -39,11 +35,8 @@ fun Steps(stepsToTreasure: Int?) {
             Text(
                 modifier = Modifier
                     .padding(start = 40.dp)
-                    .semantics { contentDescription = STEPS_TO_TREASURE },
-                style = TextStyle(
-                    fontFamily = FANCY_FONT,
-                    fontSize = dp2SameSizeSp(height, factor = 0.6),
-                ),
+                    .semantics { contentDescription = "Steps to treasure" },
+                style = textStyle,
                 color = Color.Gray,
                 text = stepsToTreasure.toString()
             )

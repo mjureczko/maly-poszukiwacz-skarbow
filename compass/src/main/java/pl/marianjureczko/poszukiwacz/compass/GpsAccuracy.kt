@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.screen.searching
+package pl.marianjureczko.poszukiwacz.compass
 
 enum class GpsAccuracy {
     Fine,

@@ -2,8 +2,8 @@ package pl.marianjureczko.poszukiwacz.usecase
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import pl.marianjureczko.poszukiwacz.compass.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.ArcCalculator
-import pl.marianjureczko.poszukiwacz.screen.searching.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
