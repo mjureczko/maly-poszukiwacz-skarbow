@@ -57,9 +57,6 @@
     <string name="well_done_facebook">You can share this achievement on</string>
     <string name="well_done_more">"Want more adventures and badges? Try:</string>
     <string name="error_on_exporting_map">Map export error – try exporting without map</string>
-    <string name="low_gps_signal">Low GPS signal</string>
-    <string name="medium_gps_signal">Medium GPS signal</string>
-    <string name="no_gps_signal">No GPS signal</string>
     <string name="achievements">Achievements</string>
     <string name="badges_header">Earned badges:</string>
     <string name="total_loot_collected">Total loot collected:</string>

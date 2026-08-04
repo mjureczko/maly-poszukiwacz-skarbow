@@ -9,6 +9,8 @@ files.
 * External Consumption (nowy-poszukiwacz): The module is packaged into an .aar and consumed as a remote dependency.
 * Encapsulation: All internal logic, repositories, and ViewModels are marked with the internal visibility modifier.
   Only the classes from api subpacakge are exposed to the host app.
+* Source structure: no other than the `api` subpackages are obligatory, i.e. all remaining classes may be in the same
+  package.
 
 # Dependency Management
 

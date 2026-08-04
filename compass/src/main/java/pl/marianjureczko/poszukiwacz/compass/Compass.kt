@@ -32,7 +32,6 @@ fun Compass(
     modifier: Modifier = Modifier,
     height: Dp
 ) {
-    val infiniteTransition = rememberInfiniteTransition()
     val alpha = rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
         targetValue = 1f,
@@ -61,12 +60,13 @@ fun Compass(
             contentScale = ContentScale.Inside,
             modifier = Modifier.rotate(arcRotation)
         )
-        if (gpsAccuracy != GpsAccuracy.Fine) {
+        if (gpsAccuracy != GpsAccuracy.Fine || true) {
             Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.BottomStart
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
             ) {
-                val textResId = when (gpsAccuracy) {
+                val textResId = when (GpsAccuracy.Medium) {
                     GpsAccuracy.Medium -> R.string.medium_gps_signal
                     GpsAccuracy.Low -> R.string.low_gps_signal
                     else -> R.string.no_gps_signal
