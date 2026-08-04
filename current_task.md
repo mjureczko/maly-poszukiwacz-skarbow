@@ -45,24 +45,21 @@ To produce a `compass.aar` artifact, the module needs:
 - [x] Staged module scaffolding in git (`compass/build.gradle`, `compass/src/main/AndroidManifest.xml`,
   `settings.gradle`); build output excluded.
 - [x] Refactored UI widgets: `Compass` and `Steps` are now in the same container (Row) in `SearchingScreenBody`.
+- [x] **Android Resources** (`R.*` from host app):
+  - `R.drawable.compass`, `R.drawable.arrow`, `R.drawable.steps` — move drawables into
+    `compass/src/main/res/drawable/`
+  - `R.string.medium_gps_signal`, `R.string.low_gps_signal`, `R.string.no_gps_signal` — move strings into
+    `compass/src/main/res/values/strings.xml`
+- [x] **Complete compass module build configuration**: Added
+  `composeOptions { kotlinCompilerExtensionVersion compose_version }`, `maven-publish` plugin, and `publishing` block
+  with GitHub Packages repository configuration. Version set to `1.0.0`.
+- [x] **Enhance AndroidManifest.xml**: Already has package declaration, GPS permissions (ACCESS_FINE_LOCATION,
+  ACCESS_COARSE_LOCATION), and location feature declaration.
+- [ ] Move `Compass` and `Steps` Compose components + their `SearchingViewModel` logic into `:compass`
+  (presentation, `internal` ViewModels, domain, data/GPS layers per modules.md encapsulation).
 
 ### Remaining for next session:
 
-#### External Dependencies (to rearrange) from `:compass` Module
-
-The `:compass` module currently depends on the `:app` module (wrong direction). These must be inverted:
-
-- [ ] **Android Resources** (`R.*` from host app):
-    - `R.drawable.compass`, `R.drawable.arrow`, `R.drawable.steps` — move drawables into
-      `compass/src/main/res/drawable/`
-    - `R.string.medium_gps_signal`, `R.string.low_gps_signal`, `R.string.no_gps_signal` — move strings into
-      `compass/src/main/res/values/strings.xml`
-
-- [ ] **Complete compass module build configuration**: Update `compass/build.gradle` with Hilt plugin, kapt,
-  play-services-location, correct SDK/Java versions
-- [ ] **Enhance AndroidManifest.xml**: Add package, GPS permissions, and location feature declaration
-- [ ] Move `Compass` and `Steps` Compose components + their `SearchingViewModel` logic into `:compass`
-  (presentation, `internal` ViewModels, domain, data/GPS layers per modules.md encapsulation).
 - [ ] Define public Composable wrappers (only those exposed to host app; Hilt + `hiltViewModel()`).
 - [ ] Wire `app` -> `implementation(project(":compass"))` in `app/build.gradle` and update `SearchingScreen`
   imports/usages.

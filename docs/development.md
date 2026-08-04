@@ -276,3 +276,19 @@ Ports should wrap all external dependencies to make it possible to mock them in 
 ## Debug release
 
 Build -> Generate Signed Bundle/APK -> APK
+
+## Module release
+
+The following example is given for the compass module.
+
+To build the aar file execute:
+
+```bash
+./gradlew :compass:assembleRelease
+```
+
+To publish the aar file to GitHub Packages execute:
+
+```bash
+./gradlew :compass:publishReleasePublicationToGitHubPackagesRepository
+```

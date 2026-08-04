@@ -8,8 +8,8 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import pl.marianjureczko.poszukiwacz.compass.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.model.HunterPath
-import pl.marianjureczko.poszukiwacz.screen.searching.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
