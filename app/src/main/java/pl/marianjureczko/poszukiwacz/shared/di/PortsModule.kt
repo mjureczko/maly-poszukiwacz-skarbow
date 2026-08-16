@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import pl.marianjureczko.poszukiwacz.compass.api.CompassIoDispatcher
 import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
@@ -28,6 +29,7 @@ object PortsModule {
 
     @Provides
     @IoDispatcher
+    @CompassIoDispatcher
     fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Singleton

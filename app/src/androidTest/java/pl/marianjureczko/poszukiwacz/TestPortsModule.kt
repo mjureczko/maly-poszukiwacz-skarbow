@@ -8,6 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.mockito.Mockito.mock
+import pl.marianjureczko.poszukiwacz.compass.api.CompassIoDispatcher
 import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
@@ -30,6 +31,7 @@ object TestPortsModule {
 
     @Provides
     @IoDispatcher
+    @CompassIoDispatcher
     fun ioDispatcher(): CoroutineDispatcher = ioDispatcher //Dispatchers.IO
 
     @Singleton

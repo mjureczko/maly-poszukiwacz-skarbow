@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.usecase
+package pl.marianjureczko.poszukiwacz.compass.data
 
 data class LocationHolder(
     private val currentUserLocation: AndroidLocation? = null,

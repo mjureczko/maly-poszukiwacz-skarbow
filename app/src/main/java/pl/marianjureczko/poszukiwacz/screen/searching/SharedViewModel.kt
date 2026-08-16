@@ -13,10 +13,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
-import pl.marianjureczko.poszukiwacz.compass.GpsAccuracy
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
@@ -35,9 +33,7 @@ import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
-import pl.marianjureczko.poszukiwacz.usecase.LocationHolder.Companion.GPS_NO_SIGNAL_THRESHOLD_IN_MILIS
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
-import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import javax.inject.Inject
 
 interface RestarterSharedViewModel {
@@ -80,9 +76,7 @@ class SharedViewModel @Inject constructor(
     private val photoHelper: PhotoHelper,
     private val stateHandle: SavedStateHandle,
     private val cameraPort: CameraPort,
-    private val locationCalculator: LocationCalculator,
     override val qrScannerPort: QrScannerPort,
-    private val updateLocationUC: UpdateLocationUC,
     private val resetProgressUC: ResetProgressUC,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
@@ -90,8 +84,9 @@ class SharedViewModel @Inject constructor(
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
 
     init {
-        locationPort.startFetching(viewModelScope, { location -> updateLocationUC(location, _state) })
-        scheduleGpsCheck()
+        locationPort.startFetching(
+            viewModelScope,
+            { location: pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation -> /* compass logic removed */ })
     }
 
     override val state: State<SharedState>
@@ -114,11 +109,11 @@ class SharedViewModel @Inject constructor(
                 val newCode = scanedContent
                 try {
                     scannedTreasure = TreasureParser().parse(newCode)
-                    val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures, locationCalculator)
+                    val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures, null)
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
                         selectedTreasureDescription = state.value.selectedTreasureDescription(),
-                        userLocation = state.value.currentLocation.getCurrentUserLocation()
+                        userLocation = null
                     )
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
                     if (treasuresProgress.contains(scannedTreasure)) {
@@ -288,24 +283,12 @@ class SharedViewModel @Inject constructor(
             else -> Log.e(TAG, "An unknown error occurred: $extra")
         }
         return true
-
     }
 
-    private fun scheduleGpsCheck() {
-        gpsJob = viewModelScope.launch(ioDispatcher) {
-            while (isActive) {
-                delay(GPS_NO_SIGNAL_THRESHOLD_IN_MILIS)
-                if (state.value.hunterPath.isLocationBeingUpdated() == false) {
-                    _state.value = state.value.copy(gpsAccuracy = GpsAccuracy.NoSignal)
-                }
-            }
-        }
-    }
 
     //for test only START
     var respawn: Boolean = true
 
     var gpsJob: Job? = null
     //for test only END
-
 }

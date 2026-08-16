@@ -1,25 +1,24 @@
-package pl.marianjureczko.poszukiwacz.usecase
+package pl.marianjureczko.poszukiwacz.compass.domain
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import pl.marianjureczko.poszukiwacz.compass.GpsAccuracy
-import pl.marianjureczko.poszukiwacz.screen.searching.ArcCalculator
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.screen.searching.SharedState
-import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.data.HunterPathService
+import pl.marianjureczko.poszukiwacz.compass.state.CompassState
 
 class UpdateLocationUC(
-    private val storage: StoragePort,
-    private val locationCalculator: LocationCalculator,
+    private val locationCalculator: LocationCalculator
+    private val hunterPathService: HunterPathService
 ) {
 
     private val TAG = javaClass.simpleName
 
-    operator fun invoke(location: AndroidLocation, state: MutableState<SharedState>) {
+    operator fun invoke(location: AndroidLocation, state: MutableState<CompassState>) {
         val arcCalculator = ArcCalculator()
 
         Log.i(TAG, "location updated")
-        val selectedTreasure = state.value.selectedTreasureDescription()
+
         state.value = state.value.copy(
             currentLocation = state.value.currentLocation.updateLocation(location),
             stepsToTreasure = if (selectedTreasure != null) {
@@ -32,18 +31,17 @@ class UpdateLocationUC(
                     location.longitude,
                     location.latitude
                 ).toFloat()
-            } else 0f,
-            distancesInSteps = state.value.route.treasures
-                .associate { it.id to locationCalculator.distanceInSteps(it, location) }
-                .toMap()
+            } else 0f
+//            ,
+//            distancesInSteps = state.value.route.treasures
+//                .associate { it.id to locationCalculator.distanceInSteps(it, location) }
+//                .toMap()
         )
         updateAccuracy(location, state)
-        state.value.hunterPath = state.value.hunterPath.addLocation(location) {
-            storage.save(it)
-        }
+        hunterPathService.addLocation(location)
     }
 
-    private fun updateAccuracy(location: AndroidLocation, state: MutableState<SharedState>) {
+    private fun updateAccuracy(location: AndroidLocation, state: MutableState<CompassState>) {
         if (location.accuracy <= 30) {
             state.value = state.value.copy(gpsAccuracy = GpsAccuracy.Fine)
         } else if (location.accuracy <= 100) {

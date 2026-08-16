@@ -1,14 +1,15 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
 import android.util.Log
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.domain.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class JustFoundTreasureDescriptionFinder(
     private val treasureDescriptions: List<TreasureDescription>,
-    private val locationCalculator: LocationCalculator,
+    private val locationCalculator: LocationCalculator? = null,
 ) {
 
     private val TAG = javaClass.simpleName

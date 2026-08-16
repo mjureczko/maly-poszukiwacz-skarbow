@@ -170,11 +170,11 @@ private fun SearchingScreenBody(
             }
         }
         CompassAndSteps(
-            needleRotation = state.needleRotation,
-            gpsAccuracy = state.gpsAccuracy,
+            selectedTreasure = state.selectedTreasureDescription(),
+            route = state.route,
+            hunterPathService = viewModel,
             height = 0.49.dh,
-            textStyle = TextStyle(fontFamily = FANCY_FONT, fontSize = dp2SameSizeSp(0.14.dh, factor = 0.6)),
-            stepsToTreasure = state.stepsToTreasure
+            textStyle = TextStyle(fontFamily = FANCY_FONT, fontSize = dp2SameSizeSp(0.14.dh, factor = 0.6))
         )
         MySpacer(Modifier.weight(0.01f))
         Buttons(
