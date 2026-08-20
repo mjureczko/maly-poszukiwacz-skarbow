@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 36
     defaultConfig {
         applicationId "pl.marianjureczko.poszukiwacz"
         minSdkVersion 23
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 27
         versionName "2.5.27"
         testInstrumentationRunner "pl.marianjureczko.poszukiwacz.CustomTestRunner"
