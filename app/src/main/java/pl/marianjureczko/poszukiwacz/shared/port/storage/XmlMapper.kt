@@ -1,8 +1,8 @@
 package pl.marianjureczko.poszukiwacz.shared.port.storage
 
+import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
 import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 import pl.marianjureczko.poszukiwacz.model.HunterPath
-import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
 
 object XmlMapper {
 

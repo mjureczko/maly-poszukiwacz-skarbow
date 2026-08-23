@@ -1,8 +1,8 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 typealias OverrideQuestionProvider = (TreasureDescription) -> Boolean
 

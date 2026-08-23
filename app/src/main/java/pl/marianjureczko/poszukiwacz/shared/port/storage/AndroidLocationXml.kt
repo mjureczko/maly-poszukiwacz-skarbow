@@ -1,8 +1,8 @@
 package pl.marianjureczko.poszukiwacz.shared.port.storage
 
 import org.simpleframework.xml.Element
-import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
 
 class AndroidLocationXml {
 

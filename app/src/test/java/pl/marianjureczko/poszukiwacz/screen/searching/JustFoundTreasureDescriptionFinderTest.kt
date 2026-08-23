@@ -13,11 +13,12 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.BDDMockito
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.domain.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class CustomJustFoundTreasureDescriptionFinderTest {
 

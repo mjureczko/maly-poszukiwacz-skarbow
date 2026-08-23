@@ -1,8 +1,8 @@
 package pl.marianjureczko.poszukiwacz.shared.port.location
 
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
 import pl.marianjureczko.poszukiwacz.model.AveragedLocation
-import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocationFactory
 
 class AndroidLocationFactoryImpl : AndroidLocationFactory {

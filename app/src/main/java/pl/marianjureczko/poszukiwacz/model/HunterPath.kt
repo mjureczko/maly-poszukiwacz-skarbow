@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.domain.LocationCalculator
 import pl.marianjureczko.poszukiwacz.usecase.CalculateAveragedLocationUC
 import java.util.Date
 

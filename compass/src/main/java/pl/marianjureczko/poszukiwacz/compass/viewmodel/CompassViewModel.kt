@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.compass.api.CompassIoDispatcher
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
 import pl.marianjureczko.poszukiwacz.compass.data.HunterPathService
 import pl.marianjureczko.poszukiwacz.compass.data.LocationHolder
 import pl.marianjureczko.poszukiwacz.compass.data.LocationPort
@@ -18,7 +19,6 @@ import pl.marianjureczko.poszukiwacz.compass.domain.ArcCalculator
 import pl.marianjureczko.poszukiwacz.compass.domain.LocationCalculator
 import pl.marianjureczko.poszukiwacz.compass.domain.UpdateLocationUC
 import pl.marianjureczko.poszukiwacz.compass.model.Route
-import pl.marianjureczko.poszukiwacz.compass.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.compass.state.CompassState
 import javax.inject.Inject
 
@@ -35,20 +35,20 @@ class CompassViewModel @Inject constructor(
     private val _state = mutableStateOf(CompassState())
     val state: State<CompassState> = _state
 
-    private var selectedTreasure: TreasureDescription? = null
+    private var selectedTreasure: AndroidLocation? = null
     private var route: Route? = null
     private var gpsJob: Job? = null
 
     init {
         locationPort.startFetching(viewModelScope) { location ->
-            updateLocationUC(location, _state)
+            updateLocationUC(location, selectedTreasure, _state)
             recalculateIfNeeded()
         }
         scheduleGpsCheck()
     }
 
-    fun setSelectedTreasure(treasure: TreasureDescription?) {
-        selectedTreasure = treasure
+    fun setSelectedTreasure(target: AndroidLocation?) {
+        this.selectedTreasure = target
         recalculate()
     }
 

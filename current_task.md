@@ -18,6 +18,10 @@ The module extraction should be finished in such a way that it is possible to co
   should work with locations. The responsibilities should be split so that selected treasure will stay in the app, but
   it's location will be available for the module.
 
+- `UpdateLocationUC` keeps updating `stepsToTreasure` and `needleRotation` (required by the Compass/Steps widgets),
+  but the target is provided as an `AndroidLocation?` (per invocation) instead of a treasure. The app will supply the
+  selected treasure's location; when no target is set, steps are `null` and rotation is `0f`.
+
 - The module's model classes (`compass/model/TreasureDescription.kt`, `compass/model/Route.kt`) are duplicates of the
   app's
   `pl.marianjureczko.poszukiwacz.model` classes and import the app's `StoragePort` (which is a dependency-direction
@@ -66,12 +70,20 @@ The module extraction should be finished in such a way that it is possible to co
 - [x] Re-analysis of compilation errors after partial fixes (hilt-navigation-compose added, HunterPathService
   introduced,
   GpsAccuracy import fixed, LocationHolder import fixed).
-- [ ] 
-  1. `UpdateLocationUC.kt`: missing comma between constructor params; remove `selectedTreasure` logic — UC only updates
-     currentLocation + gpsAccuracy (+ delegates hunter path update).
-- [ ] 
-  2. Delete `compass/model/TreasureDescription.kt` and `compass/model/Route.kt` (resolves unresolved `StoragePort`
-     references).
+- [x] 
+    1. `UpdateLocationUC.kt`: missing comma between constructor params; remove `selectedTreasure` logic — UC updates
+       currentLocation + gpsAccuracy + stepsToTreasure/needleRotation (target passed as `AndroidLocation?`) and
+       delegates
+       hunter path update.
+- [x] 
+    2. Delete `compass/model/TreasureDescription.kt` and redesign LocationCalculator API to use AndroidLocation in place
+       of app's TreasureDescription.
+       2.1 Delete `compass/model/Route.kt` (resolves unresolved `StoragePort` references).
+
+  Note (item 2): `Route.kt` was left completely untouched per user decision — it now has compile errors
+  (references the deleted module `TreasureDescription`) and will be handled together with item 2.1.
+  `CompassViewModel` and `CompassAndSteps` were adapted to a location-based target (`setTarget(AndroidLocation?)`),
+  keeping their `Route` usage as-is; `UpdateLocationUC` call in the ViewModel now passes `target`.
 - [ ] 
   3. Refactor `compass/domain/LocationCalculator.kt` to coordinates-based API (public step-distance API for the app).
 - [ ] 
@@ -82,7 +94,7 @@ The module extraction should be finished in such a way that it is possible to co
 - [ ] 
   5. Change `api/CompassAndSteps.kt` signature to location-based params; forward target + hunterPathService to
      ViewModel.
-- [ ] 
+- [x] 
   6. Remove `AndroidLocation` from app and use only the one from module.
 - [ ] 
   7. Make app's `shared.port.LocationPort` implement `compass.data.LocationPort`; add Hilt binding in `PortsModule`. -
@@ -102,5 +114,7 @@ The module extraction should be finished in such a way that it is possible to co
   11. Adapt `SearchingScreen`'s `CompassAndSteps` call (pass selected treasure coordinates instead of treasure/route).
 - [ ] 
   12. Verify/update `TestPortsModule` (androidTest) overrides for new bindings.
+- [ ] 
+    13. Check if LocationWrapper can be encapsulated in compass module
 - [ ] The project compiles.
  

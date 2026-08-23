@@ -14,14 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.compass.Compass
 import pl.marianjureczko.poszukiwacz.compass.Steps
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
 import pl.marianjureczko.poszukiwacz.compass.data.HunterPathService
 import pl.marianjureczko.poszukiwacz.compass.model.Route
-import pl.marianjureczko.poszukiwacz.compass.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.compass.viewmodel.CompassViewModel
 
 @Composable
 fun CompassAndSteps(
-    selectedTreasure: TreasureDescription?,
+    selectedTreasure: AndroidLocation?,
     route: Route,
     hunterPathService: HunterPathService,
     height: Dp = 0.49.dp,

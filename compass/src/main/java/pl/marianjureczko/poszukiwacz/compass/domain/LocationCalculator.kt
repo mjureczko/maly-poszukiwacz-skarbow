@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.compass.domain
 
 import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
-import pl.marianjureczko.poszukiwacz.compass.model.TreasureDescription
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -11,16 +10,16 @@ class LocationCalculator {
     // Average step length in meters
     private val AVERAGE_STEP_LENGTH = 0.7f
 
-    fun distanceInSteps(treasure: TreasureDescription, userLocation: AndroidLocation): Int {
-        val distanceInMeters = distanceInMeters(treasure, userLocation)
+    fun distanceInSteps(target: AndroidLocation, userLocation: AndroidLocation): Int {
+        val distanceInMeters = distanceInMeters(target, userLocation)
         return (distanceInMeters / AVERAGE_STEP_LENGTH).toInt()
     }
 
-    fun distanceInMeters(treasure: TreasureDescription, userLocation: AndroidLocation): Float {
+    fun distanceInMeters(target: AndroidLocation, userLocation: AndroidLocation): Float {
         val lat1 = Math.toRadians(userLocation.latitude)
         val lon1 = Math.toRadians(userLocation.longitude)
-        val lat2 = Math.toRadians(treasure.latitude)
-        val lon2 = Math.toRadians(treasure.longitude)
+        val lat2 = Math.toRadians(target.latitude)
+        val lon2 = Math.toRadians(target.longitude)
 
         val dLat = lat2 - lat1
         val dLon = lon2 - lon1

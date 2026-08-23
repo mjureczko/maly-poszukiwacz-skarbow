@@ -27,13 +27,13 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
 import pl.marianjureczko.poszukiwacz.any
+import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
 import pl.marianjureczko.poszukiwacz.eq
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
 import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.LocationWrapper
 
 
 @ExtendWith(MockitoExtension::class)

@@ -6,11 +6,11 @@ import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteContainsTreasureWith
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteDoesNotContainTresureWithId
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class TreasureEditorViewModelTest {
 

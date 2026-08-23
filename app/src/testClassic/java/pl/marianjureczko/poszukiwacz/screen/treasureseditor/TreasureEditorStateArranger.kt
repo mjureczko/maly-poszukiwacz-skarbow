@@ -2,8 +2,8 @@ package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
 import com.ocadotechnology.gembus.test.CustomArranger
 import com.ocadotechnology.gembus.test.some
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
-import pl.marianjureczko.poszukiwacz.usecase.AndroidLocation
 
 class TreasureEditorStateArranger : CustomArranger<TreasureEditorState>() {
     override fun instance(): TreasureEditorState {

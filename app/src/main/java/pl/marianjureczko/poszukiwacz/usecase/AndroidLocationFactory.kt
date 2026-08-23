@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.usecase
 
+import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 
 interface AndroidLocationFactory {
