@@ -8,7 +8,6 @@ import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.usecase.LocationHolder
 
 class SharedStateTest {
     @Test
@@ -20,8 +19,6 @@ class SharedStateTest {
             mediaPlayer = mock(MediaPlayer::class.java),
             route = route,
             treasuresProgress = some<TreasuresProgress>().copy(selectedTreasureDescriptionId = selectedTreasureDescription.id),
-            currentLocation = LocationHolder(),
-            stepsToTreasure = null,
             hunterPath = HunterPath(route.name),
         )
 

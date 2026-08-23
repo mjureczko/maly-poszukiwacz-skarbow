@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.usecase
 
 import org.apache.commons.math3.stat.StatUtils
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 
 class CalculateAveragedLocationUC {

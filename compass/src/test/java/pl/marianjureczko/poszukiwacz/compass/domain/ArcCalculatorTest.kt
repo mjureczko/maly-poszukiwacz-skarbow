@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.screen.searching
+package pl.marianjureczko.poszukiwacz.compass.domain
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

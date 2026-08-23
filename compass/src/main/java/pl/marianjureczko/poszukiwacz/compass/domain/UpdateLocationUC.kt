@@ -1,15 +1,15 @@
 package pl.marianjureczko.poszukiwacz.compass.domain
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import pl.marianjureczko.poszukiwacz.compass.GpsAccuracy
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
-import pl.marianjureczko.poszukiwacz.compass.data.HunterPathService
-import pl.marianjureczko.poszukiwacz.compass.state.CompassState
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
+import pl.marianjureczko.poszukiwacz.compass.api.LocationUpdateCallback
+import pl.marianjureczko.poszukiwacz.compass.viewmodel.CompassState
+import javax.inject.Inject
 
-class UpdateLocationUC(
-    private val locationCalculator: LocationCalculator,
-    private val hunterPathService: HunterPathService
+class UpdateLocationUC @Inject constructor(
+    private val locationCalculator: LocationCalculator
 ) {
 
     private val TAG = javaClass.simpleName
@@ -17,11 +17,10 @@ class UpdateLocationUC(
     operator fun invoke(
         location: AndroidLocation,
         target: AndroidLocation?,
-        state: MutableState<CompassState>
+        state: MutableState<CompassState>,
+        callback: LocationUpdateCallback? = null
     ) {
         val arcCalculator = ArcCalculator()
-
-        Log.i(TAG, "location updated")
 
         val gpsAccuracy = when {
             location.accuracy <= 30 -> GpsAccuracy.Fine
@@ -40,11 +39,9 @@ class UpdateLocationUC(
                 ).toFloat()
             } ?: 0f,
             gpsAccuracy = gpsAccuracy
-            //  TODO t: need to be coverd in the main app          ,
-//            distancesInSteps = state.value.route.treasures
-//                .associate { it.id to locationCalculator.distanceInSteps(it, location) }
-//                .toMap()
+            //TODO t: update lastLocationUpdateTime
         )
-        hunterPathService.addLocation(location)
+
+        callback?.onLocationUpdated(location)
     }
 }

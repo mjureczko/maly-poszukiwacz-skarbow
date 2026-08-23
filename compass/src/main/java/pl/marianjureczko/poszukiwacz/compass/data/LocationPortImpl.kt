@@ -1,4 +1,4 @@
-package pl.marianjureczko.poszukiwacz.shared.port
+package pl.marianjureczko.poszukiwacz.compass.data
 
 import android.Manifest
 import android.content.Context
@@ -14,20 +14,20 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
-import pl.marianjureczko.poszukiwacz.compass.data.UpdateLocationCallback
-import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
-import pl.marianjureczko.poszukiwacz.shared.di.MainDispatcher
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.CompassIoDispatcher
+import pl.marianjureczko.poszukiwacz.compass.api.CompassMainDispatcher
+import pl.marianjureczko.poszukiwacz.compass.api.LocationPort
 import kotlin.coroutines.suspendCoroutine
 
 private const val defaultIntervalMs: Long = 1_000L
 
-open class LocationPort(
+open class LocationPortImpl(
     private val context: Context,
     private val fusedLocationClient: FusedLocationProviderClient,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
-) {
+    @CompassIoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @CompassMainDispatcher private val mainDispatcher: CoroutineDispatcher
+) : LocationPort {
 
     private val TAG = javaClass.simpleName
     private lateinit var updateLocationCallback: UpdateLocationCallback
@@ -36,28 +36,28 @@ open class LocationPort(
             super.onLocationResult(locationResult)
             locationResult.lastLocation?.let {
                 Log.i(TAG, "New location, lat: ${it.latitude} long: ${it.longitude} accuracy: ${it.accuracy}m")
-                updateLocationCallback(LocationWrapper(it))
+                updateLocationCallback(AndroidLocation.create(it))
             }
         }
     }
 
-    open fun startFetching(
-        viewModelScope: CoroutineScope,
-        updateLocationCallback: UpdateLocationCallback
+    override fun startFetching(
+        coroutineScope: CoroutineScope,
+        updateLocationCallback: (AndroidLocation) -> Unit
     ) {
-        fetch(defaultIntervalMs, viewModelScope, updateLocationCallback)
+        fetch(defaultIntervalMs, coroutineScope, updateLocationCallback)
         // after between screen navigation location updating may stop, hence needs to be retriggered periodically
-        viewModelScope.launch(ioDispatcher) {
+        coroutineScope.launch(ioDispatcher) {
             delay(20_000)
             // Switch to main thread for location operations
-            viewModelScope.launch(mainDispatcher) {
+            coroutineScope.launch(mainDispatcher) {
                 stopFetching()
-                fetch(defaultIntervalMs, viewModelScope, updateLocationCallback)
+                fetch(defaultIntervalMs, coroutineScope, updateLocationCallback)
             }
         }
     }
 
-    open fun stopFetching() {
+    override fun stopFetching() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 

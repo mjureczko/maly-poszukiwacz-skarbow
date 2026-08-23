@@ -6,8 +6,8 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Build
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.HunterPath
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import java.text.DateFormat
 import java.util.Locale
 

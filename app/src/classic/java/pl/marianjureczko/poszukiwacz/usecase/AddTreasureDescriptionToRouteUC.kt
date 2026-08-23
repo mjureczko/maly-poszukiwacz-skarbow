@@ -1,5 +1,6 @@
 package pl.marianjureczko.poszukiwacz.usecase
 
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort

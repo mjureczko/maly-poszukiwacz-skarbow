@@ -3,6 +3,7 @@ package pl.marianjureczko.poszukiwacz.usecase
 import com.ocadotechnology.gembus.test.some
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 
 class CalculateAveragedLocationUCTest {
     @Test

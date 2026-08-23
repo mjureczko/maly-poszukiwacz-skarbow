@@ -1,8 +1,7 @@
 package pl.marianjureczko.poszukiwacz.shared.port.storage
 
 import org.simpleframework.xml.Element
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
-import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 
 class AndroidLocationXml {
 
@@ -37,15 +36,6 @@ class AndroidLocationXml {
     @field:Element(required = false)
     var observedAt: Long = System.currentTimeMillis()
         private set
-
-    fun toAndroidLocation(): AndroidLocation {
-        return LocationWrapper(
-            longitude = longitude,
-            latitude = latitude,
-            accuracy = accuracy,
-            observedAt = observedAt
-        )
-    }
 
     override fun toString(): String {
         return "longitude=$longitude, latitude=$latitude, accuracy=$accuracy, observedAt=$observedAt"

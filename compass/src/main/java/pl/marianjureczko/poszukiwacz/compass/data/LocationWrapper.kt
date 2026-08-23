@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.compass.data
 
 import android.location.Location
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 
 class LocationWrapper(
     override var latitude: Double,
@@ -15,16 +16,6 @@ class LocationWrapper(
         accuracy = location.accuracy,
         observedAt = location.time
     )
-
-    override fun distanceTo(dest: AndroidLocation): Float {
-        val results = FloatArray(1)
-        Location.distanceBetween(
-            latitude, longitude,
-            dest.latitude, dest.longitude,
-            results
-        )
-        return results[0]
-    }
 
     override fun toString(): String {
         return "LocationWrapper(latitude=$latitude, longitude=$longitude, accuracy=$accuracy, observedAt=$observedAt)"

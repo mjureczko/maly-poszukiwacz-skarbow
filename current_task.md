@@ -48,6 +48,12 @@ The module extraction should be finished in such a way that it is possible to co
   `HunterPath.pathLengthInKm()`, `ReportGenerator`, `ReportMapSummary`, `FacebookViewModel`, `FacebookScreen`.
   The obsolete `updateLocationUC` provider in `SingletonModule` will be removed (nothing injects it anymore).
 
+- Inside module main directory there is additional `README.md` file that holds the most important decisions regarding
+  the module. Specifically it covers the module requirements. Update the `README.md` file whenever important facts or
+  decisions regarding the module pops up.
+
+- Only ONE `LocationCalculator` remains — in the compass module.
+
 ## Constraints
 
 - The dependencies versions should not be changed. Specifically if module needs the same dependency as the app, it
@@ -80,41 +86,120 @@ The module extraction should be finished in such a way that it is possible to co
        of app's TreasureDescription.
        2.1 Delete `compass/model/Route.kt` (resolves unresolved `StoragePort` references).
 
-  Note (item 2): `Route.kt` was left completely untouched per user decision — it now has compile errors
-  (references the deleted module `TreasureDescription`) and will be handled together with item 2.1.
-  `CompassViewModel` and `CompassAndSteps` were adapted to a location-based target (`setTarget(AndroidLocation?)`),
-  keeping their `Route` usage as-is; `UpdateLocationUC` call in the ViewModel now passes `target`.
-- [ ] 
-  3. Refactor `compass/domain/LocationCalculator.kt` to coordinates-based API (public step-distance API for the app).
-- [ ] 
-  4. Refactor `CompassViewModel`: hold target coordinates instead of treasure/route; receive `hunterPathService` via
-     setter;
+  Note (item 2 + 2.1): both module model classes are deleted. `CompassViewModel` holds
+  `selectedTreasure: AndroidLocation?` (`setSelectedTreasure(...)`) with no route state; `CompassAndSteps(
+  selectedTreasure: AndroidLocation?, hunterPathService, ...)` — the `route` parameter was removed. The ViewModel's
+  `startFetching` callback passes `selectedTreasure` to `UpdateLocationUC`. No remaining references to
+  `compass.model.*` in the project.
+- [x] 
+    3. Refactor `compass/domain/LocationCalculator.kt` to coordinates-based API (public step-distance API for the app).
+- [x] 
+    4. Refactor `CompassViewModel`: hold target coordinates instead of treasure/route (done); receive
+       `hunterPathService`
+       via setter;
      make its dependencies Hilt-resolvable (`@Inject` constructors on `UpdateLocationUC`, `LocationCalculator`,
      `ArcCalculator`).
-- [ ] 
-  5. Change `api/CompassAndSteps.kt` signature to location-based params; forward target + hunterPathService to
-     ViewModel.
+
+  Note (item 4): `UpdateLocationUC` no longer depends on `HunterPathService` — path recording now handled through
+  `LocationUpdateCallback`.
 - [x] 
-  6. Remove `AndroidLocation` from app and use only the one from module.
-- [ ] 
-  7. Make app's `shared.port.LocationPort` implement `compass.data.LocationPort`; add Hilt binding in `PortsModule`. -
-     It must be discussed in details before implementation!
-- [ ] 
-  8. Implement `HunterPathService` in `SharedViewModel` (`addLocation` updates+saves hunter path;
-     `isLocationBeingUpdated`
-     delegates to `HunterPath.isLocationBeingUpdated()`).
-- [ ] 
-  9. Restore minimal app-side `LocationCalculator` (`distanceInKm`); update imports in `HunterPath`, `ReportGenerator`,
+  5. Change `api/CompassAndSteps.kt` signature to location-based params (done); forward target to ViewModel.
+- [x] 
+    6. Remove `AndroidLocation` from app and use only the one from module.
+- [x] 
+    7. Move `shared.port.LocationPort` to compass module and remove the corresponding interface (
+       `compass.data.LocationPort`); add Hilt binding in `PortsModule`; handle @MainDispatcher the same way as the
+       @IoDispatcher is already handled
+
+  Note (item 7): the concrete `LocationPort` class now lives in `compass/data/LocationPort.kt` and uses
+  `@CompassIoDispatcher` / `@CompassMainDispatcher`; new `CompassMainDispatcher` qualifier added in
+  `compass/api/DispatcherQualifiers.kt`. `PortsModule` provides `mainDispatcher()` annotated with both
+  `@MainDispatcher` + `@CompassMainDispatcher`, and `locationPort(...)` returns the module class using the compass
+  qualifiers. Imports updated in `SharedViewModel`, `TreasureEditorViewModel`, `TestLocationPort`,
+  `SharedViewModelTest`, `SharedViewModelFixture`. `compass/README.md` updated. `TestPortsModule` (androidTest) still
+  references the old type — left for item 12.
+- [x] 
+  8. Consolidate `HunterPathService` into `LocationUpdateCallback` - path recording logic moved to callback
+     implementation.
+
+  Note (item 8): `HunterPathService` interface removed. Path recording logic (previously in `addLocation`) moved to
+  `LocationUpdateCallback` implementation in `SharedViewModel`. `CompassAndSteps` and `SearchingScreen` updated to
+  remove `hunterPathService` parameter. All location update handling now consolidated through `LocationUpdateCallback`.
+- [x] 
+    9. Restore minimal app-side `LocationCalculator` (`distanceInKm`); update imports in `HunterPath`,
+       `ReportGenerator`,
      `ReportMapSummary`, `FacebookViewModel`, `FacebookScreen`; remove obsolete providers from `SingletonModule`
      (`locationCalculator` pointing at deleted class, `updateLocationUC`). - It must be discussed in details before
      implementation!
-- [ ] 
+
+  Note (item 9): restored `screen/searching/LocationCalculator.kt` with only `distanceInKm(AveragedLocation,
+  AveragedLocation)` + `METERS_TO_STEPS_FACTOR` constant (used by SearchingScreenTest), keeping the
+  `AndroidLocationFactory` constructor so existing call sites compile unchanged. `HunterPath` import switched to the
+  app calculator; facebook/report files already imported `screen.searching.LocationCalculator` so they need no change.
+  In `SingletonModule` only the `updateLocationUC` provider was removed — the `locationCalculator` provider is valid
+  again after the restore and is still needed (`FacebookViewModel` injects it).
+- [x] 
   10. Adapt `JustFoundTreasureDescriptionFinder` to the new coordinates-based calculator signature.
-- [ ] 
+
+  Note (item 10): the JustFoundTreasureDescriptionFinder now builds a module `LocationWrapper` from the selected
+  treasure's coordinates
+  (`accuracy = 0f`, `observedAt = 0`) and calls `locationCalculator.distanceInSteps(target, userLocation)`.
+  The parameterized test's stubbing was updated to matchers (`any<AndroidLocation>(), eq(userCoordinates)`).
+  Follow-up (user decision): `locationCalculator` in the finder is no longer nullable — `SharedViewModel` injects the
+  module `compass.domain.LocationCalculator` and passes it to the finder; `SharedViewModelFixture` updated accordingly (
+  module calculator mock, obsolete `updateLocationUC` argument removed); finder test uses an import alias to
+  disambiguate the module calculator from the same-package app calculator.
+- [x] 
   11. Adapt `SearchingScreen`'s `CompassAndSteps` call (pass selected treasure coordinates instead of treasure/route).
+
+  Note (item 11): the call now builds a module `LocationWrapper` from the selected treasure's coordinates
+  (`accuracy = 0f`, `observedAt = 0`) and no longer passes `route`. Path recording logic moved to
+  `LocationUpdateCallback` implementation.
 - [ ] 
   12. Verify/update `TestPortsModule` (androidTest) overrides for new bindings.
-- [ ] 
-    13. Check if LocationWrapper can be encapsulated in compass module
-- [ ] The project compiles.
+- [x] 
+  13. Check if LocationWrapper can be encapsulated in compass module
+
+  Note (item 13): DONE. `AndroidLocation` moved to `compass.api` package; a factory was added to its companion
+  object: `AndroidLocation.create(latitude, longitude, accuracy, observedAt)` and
+  `AndroidLocation.create(android.location.Location)` — both instantiate the module-internal `LocationWrapper`.
+  All app-side `LocationWrapper(...)` constructions replaced with the factory:
+  `AndroidLocationFactoryImpl`, `XmlMapper`, `SearchingScreen`, `JustFoundTreasureDescriptionFinder`,
+  `SharedViewModelTest`. The app now has ZERO references to `LocationWrapper`; remaining `compass.data`
+  dependencies are `LocationHolder`, `LocationPort`, `UpdateLocationCallback` (ports/state,
+  acceptable). Test fallout fixed along the way: imports updated in `TestLocation`, `AndroidLocationArranger`,
+  `CalculateAveragedLocationUCTest`, `LocationHolderTest`, `AddTreasureDescriptionToRouteUCTest`,
+  `SharedStateTest` (removed obsolete `stepsToTreasure` ctor arg); `ArcCalculatorTest` moved to the compass
+  module; obsolete `CartesianCalculatorTest` (tested removed `Quarter` API) deleted; `SharedViewModelTest`
+  steps/needle assertions removed (state fields moved into the module's CompassState).
+  Verified: `assembleDefaultAssetsClassicDebug`, `compileDefaultAssetsClassicDebugUnitTestKotlin`,
+  `compass:compileDebugUnitTestKotlin` → BUILD SUCCESSFUL.
+
+Follow-up (user decision):
+
+- Deleted the restored app-side `screen/searching/LocationCalculator.kt` and the dead
+  `usecase/UpdateLocationUCTest.kt` (tested the removed app UC).
+- Module `LocationCalculator` gained a coordinates-based overload
+  `distanceInKm(startLatitude, startLongitude, endLatitude, endLongitude)`; `HunterPath.pathLengthInKm` uses it
+  over `AveragedLocation` coordinates.
+- Imports switched to `compass.domain.LocationCalculator` in `HunterPath`, facebook/report files,
+  androidTest files (`ReportAbstractTest`, `ReportGeneratorTest`, `HunterPathAndroidTest` now construct
+  `LocationCalculator()`), finder test (alias removed).
+- `SingletonModule`: `locationCalculator` provider removed (module class has `@Inject` constructor; Hilt resolves it).
+- `SearchingScreenTest` expectation now uses the module formula `(distance / 0.7f).toInt()`.
+  Runtime caveat: module UC computes steps via haversine coordinates, not via mocked `distanceTo`, so this espresso test
+  may need rework together with item 11.
+- [x] The project compiles.
+
+  Note (compile fixes on the way to a green build):
+  - Correct assemble task name is `assembleDefaultAssetsClassicDebug` (dimension order: assets × mode),
+    not `assembleClassicDefaultAssetsDebug`.
+  - `compass/build.gradle`: compileSdk/targetSdk aligned down to 36 to match the app (module required nothing from API
+    37).
+  - Re-deleted resurrected `compass/model/Route.kt` (no references to `compass.model.*` remain).
+  - `PortsModule`: Dagger forbids more than one `@Qualifier` per `@Provides` method — split into separate
+    providers for `@IoDispatcher`/`@CompassIoDispatcher` and `@MainDispatcher`/`@CompassMainDispatcher`
+    (all returning the same dispatchers).
+  - Classic flavor `AddTreasureDescriptionToRouteUC`: import switched to module `compass.data.AndroidLocation`.
+  - Verified with `./gradlew :app:assembleDefaultAssetsClassicDebug -x test` → BUILD SUCCESSFUL.
  

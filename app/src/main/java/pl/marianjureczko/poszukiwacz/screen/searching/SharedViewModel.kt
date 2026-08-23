@@ -15,6 +15,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
+import pl.marianjureczko.poszukiwacz.compass.api.LocationPort
+import pl.marianjureczko.poszukiwacz.compass.api.LocationUpdateCallback
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.Treasure
@@ -31,7 +35,6 @@ import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.ScanTreasureCallback
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
-import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import javax.inject.Inject
@@ -55,6 +58,7 @@ interface SearchingViewModel : DoCommemorative {
     val state: State<SharedState>
     val qrScannerPort: QrScannerPort
     fun scannedTreasureCallback(goToResults: GoToResults): ScanTreasureCallback
+    fun createLocationUpdateCallback(): LocationUpdateCallback
 }
 
 interface SelectorSharedViewModel : DoCommemorative {
@@ -78,16 +82,11 @@ class SharedViewModel @Inject constructor(
     private val cameraPort: CameraPort,
     override val qrScannerPort: QrScannerPort,
     private val resetProgressUC: ResetProgressUC,
+    private val locationCalculator: LocationCalculator,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SearchingViewModel, ResultSharedViewModel, SelectorSharedViewModel, CommemorativeSharedViewModel, ViewModel() {
     private val TAG = javaClass.simpleName
     private var _state: MutableState<SharedState> = mutableStateOf(createState())
-
-    init {
-        locationPort.startFetching(
-            viewModelScope,
-            { location: pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation -> /* compass logic removed */ })
-    }
 
     override val state: State<SharedState>
         get() = _state
@@ -109,7 +108,7 @@ class SharedViewModel @Inject constructor(
                 val newCode = scanedContent
                 try {
                     scannedTreasure = TreasureParser().parse(newCode)
-                    val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures, null)
+                    val tdFinder = JustFoundTreasureDescriptionFinder(state.value.route.treasures, locationCalculator)
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
                         selectedTreasureDescription = state.value.selectedTreasureDescription(),
@@ -197,7 +196,7 @@ class SharedViewModel @Inject constructor(
 
     override fun onCleared() {
         Log.i(TAG, "ViewModel cleared")
-        locationPort.stopFetching()
+        // stopFetching is now handled by CompassViewModel
         state.value.mediaPlayer.release()
         super.onCleared()
     }
@@ -285,10 +284,36 @@ class SharedViewModel @Inject constructor(
         return true
     }
 
+    override fun createLocationUpdateCallback(): LocationUpdateCallback {
+        return LocationUpdateCallback { location ->
+            updateDistancesInSteps(location)
+            // Handle path recording
+            _state.value.hunterPath = state.value.hunterPath.addLocation(location) {
+                storage.save(it)
+            }
+        }
+    }
+
+    private fun updateDistancesInSteps(location: AndroidLocation) {
+        val currentDistances = state.value.route.treasures
+            .associate { treasure ->
+                val treasureLocation = AndroidLocation.create(
+                    latitude = treasure.latitude,
+                    longitude = treasure.longitude,
+                    accuracy = 0f,
+                    observedAt = 0
+                )
+                treasure.id to locationCalculator.distanceInSteps(treasureLocation, location)
+            }
+            .toMap()
+
+        _state.value = state.value.copy(distancesInSteps = currentDistances)
+    }
 
     //for test only START
     var respawn: Boolean = true
 
     var gpsJob: Job? = null
+
     //for test only END
 }

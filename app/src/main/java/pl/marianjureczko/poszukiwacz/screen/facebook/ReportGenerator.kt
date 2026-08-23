@@ -6,10 +6,10 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.core.content.res.ResourcesCompat
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import java.util.Collections
 
 interface ReportPart {

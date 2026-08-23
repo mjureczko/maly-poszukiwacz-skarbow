@@ -13,8 +13,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.PhotoScalingHelper
 import pl.marianjureczko.poszukiwacz.shared.RotatePhoto

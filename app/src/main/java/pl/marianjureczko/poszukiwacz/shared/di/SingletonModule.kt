@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.main.CustomInitializerForRoute
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
@@ -20,7 +19,6 @@ import pl.marianjureczko.poszukiwacz.shared.port.storage.XmlHelper
 import pl.marianjureczko.poszukiwacz.usecase.AndroidLocationFactory
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
 import pl.marianjureczko.poszukiwacz.usecase.SaveBitmapToGalleryUC
-import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
 import pl.marianjureczko.poszukiwacz.usecase.badges.AddTreasureToAchievementsUC
 import pl.marianjureczko.poszukiwacz.usecase.badges.GainNewBadgesUC
@@ -80,12 +78,6 @@ object SingletonModule {
 
     @Singleton
     @Provides
-    fun locationCalculator(androidLocationFactory: AndroidLocationFactory): LocationCalculator {
-        return LocationCalculator(androidLocationFactory)
-    }
-
-    @Singleton
-    @Provides
     fun xmlHelper(): XmlHelper {
         return XmlHelper()
     }
@@ -94,12 +86,6 @@ object SingletonModule {
     @Provides
     fun resetProgressUseCase(storage: StoragePort): ResetProgressUC {
         return ResetProgressUC(storage)
-    }
-
-    @Singleton
-    @Provides
-    fun updateLocationUC(storage: StoragePort, locationCalculator: LocationCalculator): UpdateLocationUC {
-        return UpdateLocationUC(storage, locationCalculator)
     }
 
     @Singleton

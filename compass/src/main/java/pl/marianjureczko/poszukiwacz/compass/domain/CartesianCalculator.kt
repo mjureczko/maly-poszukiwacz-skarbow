@@ -1,31 +1,45 @@
 package pl.marianjureczko.poszukiwacz.compass.domain
 
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.pow
+import kotlin.math.sqrt
+
+/**
+ *   ^
+ * 2 | 1
+ * --+-->
+ * 3 | 4
+ */
+enum class Quarter {
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    LINE_X,
+    LINE_Y
+}
 
 class CartesianCalculator {
-    /**
-     * Converts polar coordinates (distance, angle) to Cartesian coordinates (x, y)
-     */
-    fun polarToCartesian(distance: Double, angleDegrees: Double): Pair<Double, Double> {
-        val angleRadians = Math.toRadians(angleDegrees)
-        val x = distance * cos(angleRadians)
-        val y = distance * sin(angleRadians)
-        return Pair(x, y)
+
+    fun quarter(xTreasure: Double, yTreasure: Double, xLocation: Double, yLocation: Double): Quarter {
+        return if (yTreasure == yLocation) {
+            Quarter.LINE_X
+        } else if (xTreasure == xLocation) {
+            Quarter.LINE_Y
+        } else if (xTreasure > xLocation && yTreasure > yLocation) {
+            Quarter.ONE
+        } else if (xTreasure < xLocation && yTreasure > yLocation) {
+            Quarter.TWO
+        } else if (xTreasure < xLocation && yTreasure < yLocation) {
+            Quarter.THREE
+        } else {
+            Quarter.FOUR
+        }
     }
 
-    /**
-     * Converts Cartesian coordinates (x, y) to polar coordinates (distance, angle)
-     */
-    fun cartesianToPolar(x: Double, y: Double): Pair<Double, Double> {
-        val distance = sqrt(x * x + y * y)
-        val angleRadians = atan2(y, x)
-        val angleDegrees = Math.toDegrees(angleRadians)
-        return Pair(distance, (angleDegrees + 360) % 360)
-    }
-
-    private fun sqrt(value: Double): Double {
-        return kotlin.math.sqrt(value)
+    fun cos(xTreasure: Double, yTreasure: Double, xLocation: Double, yLocation: Double): Double {
+        val y = yTreasure - yLocation
+        val x = xTreasure - xLocation
+        val c = sqrt(y.pow(2.0) + x.pow(2.0))
+        return y / c
     }
 }

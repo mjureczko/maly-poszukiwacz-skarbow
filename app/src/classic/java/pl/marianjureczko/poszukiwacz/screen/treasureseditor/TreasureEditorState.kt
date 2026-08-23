@@ -1,6 +1,6 @@
 package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 

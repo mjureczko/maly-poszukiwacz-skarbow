@@ -5,6 +5,7 @@ import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someDouble
 import com.ocadotechnology.gembus.test.someFloat
 import com.ocadotechnology.gembus.test.somePositiveLong
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 
 class AndroidLocationArranger : CustomArranger<AndroidLocation>() {
     override fun instance(): AndroidLocation {

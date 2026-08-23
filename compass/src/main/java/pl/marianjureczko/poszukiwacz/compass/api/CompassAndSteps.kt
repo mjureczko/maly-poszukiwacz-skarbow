@@ -14,25 +14,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pl.marianjureczko.poszukiwacz.compass.Compass
 import pl.marianjureczko.poszukiwacz.compass.Steps
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
-import pl.marianjureczko.poszukiwacz.compass.data.HunterPathService
-import pl.marianjureczko.poszukiwacz.compass.model.Route
 import pl.marianjureczko.poszukiwacz.compass.viewmodel.CompassViewModel
 
 @Composable
 fun CompassAndSteps(
     selectedTreasure: AndroidLocation?,
-    route: Route,
-    hunterPathService: HunterPathService,
+    locationUpdateCallback: LocationUpdateCallback? = null,
     height: Dp = 0.49.dp,
     textStyle: TextStyle = TextStyle(),
     modifier: Modifier = Modifier,
 ) {
     val viewModel: CompassViewModel = hiltViewModel()
 
-    LaunchedEffect(selectedTreasure, route) {
+    LaunchedEffect(selectedTreasure, locationUpdateCallback) {
         viewModel.setSelectedTreasure(selectedTreasure)
-        viewModel.setRoute(route)
+        viewModel.setLocationUpdateCallback(locationUpdateCallback)
     }
 
     val compassHeight = height * (0.35f / 0.49f)

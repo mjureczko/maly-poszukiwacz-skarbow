@@ -4,14 +4,15 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.compose'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'de.mannodermaus.android-junit'
     id 'maven-publish'
 }
 
 android {
-    compileSdk 37
+    compileSdk 36
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 37
+        targetSdkVersion 36
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -44,6 +45,17 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     implementation "org.simpleframework:simple-xml:2.7.1"
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.2'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
+    testImplementation("com.ocadotechnology.gembus:test-arranger:1.7.0") {
+        exclude group: "org.mockito"
+    }
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.15.2'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:5.4.0'
+    testImplementation project(path: ':app', configuration: 'testShared')
 }
 
 afterEvaluate {

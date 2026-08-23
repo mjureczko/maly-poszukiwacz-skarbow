@@ -1,12 +1,12 @@
-package pl.marianjureczko.poszukiwacz.compass.domain
+package pl.marianjureczko.poszukiwacz.compass.api
 
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import javax.inject.Inject
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-class LocationCalculator {
+class LocationCalculator @Inject constructor() {
     // Average step length in meters
     private val AVERAGE_STEP_LENGTH = 0.7f
 
@@ -35,10 +35,24 @@ class LocationCalculator {
     }
 
     fun distanceInKm(location1: AndroidLocation, location2: AndroidLocation): Double {
-        val lat1 = Math.toRadians(location1.latitude)
-        val lon1 = Math.toRadians(location1.longitude)
-        val lat2 = Math.toRadians(location2.latitude)
-        val lon2 = Math.toRadians(location2.longitude)
+        return distanceInKm(
+            startLatitude = location1.latitude,
+            startLongitude = location1.longitude,
+            endLatitude = location2.latitude,
+            endLongitude = location2.longitude
+        )
+    }
+
+    fun distanceInKm(
+        startLatitude: Double,
+        startLongitude: Double,
+        endLatitude: Double,
+        endLongitude: Double
+    ): Double {
+        val lat1 = Math.toRadians(startLatitude)
+        val lon1 = Math.toRadians(startLongitude)
+        val lat2 = Math.toRadians(endLatitude)
+        val lon2 = Math.toRadians(endLongitude)
 
         val dLat = lat2 - lat1
         val dLon = lon2 - lon1

@@ -35,6 +35,7 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.journeyapps.barcodescanner.ScanOptions
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.compass.api.CompassAndSteps
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -170,9 +171,15 @@ private fun SearchingScreenBody(
             }
         }
         CompassAndSteps(
-            selectedTreasure = state.selectedTreasureDescription(),
-            route = state.route,
-            hunterPathService = viewModel,
+            selectedTreasure = state.selectedTreasureDescription()?.let {
+                AndroidLocation.create(
+                    latitude = it.latitude,
+                    longitude = it.longitude,
+                    accuracy = 0f,
+                    observedAt = 0
+                )
+            },
+            locationUpdateCallback = viewModel.createLocationUpdateCallback(),
             height = 0.49.dh,
             textStyle = TextStyle(fontFamily = FANCY_FONT, fontSize = dp2SameSizeSp(0.14.dh, factor = 0.6))
         )

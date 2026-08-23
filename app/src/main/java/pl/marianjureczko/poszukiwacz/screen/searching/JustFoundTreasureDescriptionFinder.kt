@@ -1,15 +1,15 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
 import android.util.Log
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
-import pl.marianjureczko.poszukiwacz.compass.domain.LocationCalculator
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
 
 class JustFoundTreasureDescriptionFinder(
     private val treasureDescriptions: List<TreasureDescription>,
-    private val locationCalculator: LocationCalculator? = null,
+    private val locationCalculator: LocationCalculator,
 ) {
 
     private val TAG = javaClass.simpleName
@@ -25,7 +25,13 @@ class JustFoundTreasureDescriptionFinder(
             }
         } else {
             return if (selectedTreasureDescription != null && userLocation != null) {
-                val distance = locationCalculator.distanceInSteps(selectedTreasureDescription, userLocation)
+                val target = AndroidLocation.create(
+                    latitude = selectedTreasureDescription.latitude,
+                    longitude = selectedTreasureDescription.longitude,
+                    accuracy = 0f,
+                    observedAt = 0
+                )
+                val distance = locationCalculator.distanceInSteps(target, userLocation)
                 Log.d(TAG, "Distance is $distance")
                 if (distance < 60) {
                     selectedTreasureDescription

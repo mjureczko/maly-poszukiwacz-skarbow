@@ -1,6 +1,6 @@
 package pl.marianjureczko.poszukiwacz.shared.port.storage
 
-import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.AveragedLocation
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 
@@ -24,7 +24,7 @@ object XmlMapper {
             routeName = xml.routeName,
             locations = xml.locations
                 .map {
-                    LocationWrapper(
+                    AndroidLocation.create(
                         latitude = it.latitude,
                         longitude = it.longitude,
                         accuracy = it.accuracy,

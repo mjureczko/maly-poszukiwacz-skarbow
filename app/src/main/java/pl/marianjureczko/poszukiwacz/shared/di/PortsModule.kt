@@ -11,10 +11,11 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import pl.marianjureczko.poszukiwacz.compass.api.CompassIoDispatcher
+import pl.marianjureczko.poszukiwacz.compass.api.CompassMainDispatcher
+import pl.marianjureczko.poszukiwacz.compass.api.LocationPort
 import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
-import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.external.ExternalStoragePort
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
@@ -27,10 +28,23 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object PortsModule {
 
+    // Dagger does not allow more than one @Qualifier per @Provides method,
+    // so the app and compass qualifiers get separate providers.
     @Provides
     @IoDispatcher
-    @CompassIoDispatcher
     fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @CompassIoDispatcher
+    fun compassIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @MainDispatcher
+    fun mainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
+    @Provides
+    @CompassMainDispatcher
+    fun compassMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Singleton
     @Provides
@@ -49,10 +63,10 @@ object PortsModule {
     fun locationPort(
         @ApplicationContext appContext: Context,
         locationClient: FusedLocationProviderClient,
-        @IoDispatcher ioDispatcher: CoroutineDispatcher,
-        @MainDispatcher mainDispatcher: CoroutineDispatcher
+        @CompassIoDispatcher ioDispatcher: CoroutineDispatcher,
+        @CompassMainDispatcher mainDispatcher: CoroutineDispatcher
     ): LocationPort {
-        return LocationPort(appContext, locationClient, ioDispatcher, mainDispatcher)
+        return LocationPort.create(appContext, locationClient, ioDispatcher, mainDispatcher)
     }
 
     @Singleton

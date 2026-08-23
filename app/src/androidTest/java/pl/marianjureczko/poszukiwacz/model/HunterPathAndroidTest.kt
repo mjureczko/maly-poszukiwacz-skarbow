@@ -5,8 +5,7 @@ import com.ocadotechnology.gembus.test.some
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
-import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.usecase.TestLocation
 
 @RunWith(AndroidJUnit4::class)
@@ -22,7 +21,7 @@ class HunterPathAndroidTest {
             .addLocation(TestLocation(51.14499, 16.55419, observedAt = 300_000))
 
         //when
-        val actual = path.pathLengthInKm(LocationCalculator(AndroidLocationFactoryImpl()))
+        val actual = path.pathLengthInKm(LocationCalculator())
 
         //then
         Assert.assertEquals(2.92, actual, 0.01)

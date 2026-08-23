@@ -13,16 +13,17 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.BDDMockito
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
-import pl.marianjureczko.poszukiwacz.compass.domain.LocationCalculator
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Treasure
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.model.TreasureType
-import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 
 class CustomJustFoundTreasureDescriptionFinderTest {
 
-    private val locationCalculator = LocationCalculator(AndroidLocationFactoryImpl())
+    private val locationCalculator = LocationCalculator()
 
     @Test
     fun `SHOULD find treasure description by qr code WHEN type is knowledge and qr code is among descriptions`() {
@@ -51,6 +52,19 @@ class CustomJustFoundTreasureDescriptionFinderTest {
         //then
         assertThat(actual).isNull()
     }
+
+    @Test
+    fun `SHOULD return null WHEN type is knowledge and treasure descriptions list is empty`() {
+        //given
+        val finder = JustFoundTreasureDescriptionFinder(listOf(), locationCalculator)
+        val treasure = Treasure(someString(), somePositiveInt(10), TreasureType.KNOWLEDGE)
+
+        //when
+        val actual = finder.findTreasureDescription(treasure)
+
+        //then
+        assertThat(actual).isNull()
+    }
 }
 
 @ExtendWith(MockitoExtension::class)
@@ -60,11 +74,11 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
         @JvmStatic
         fun data(): List<Arguments> {
             val someDescription = some<TreasureDescription>()
-            val someTreasure = some<Treasure>()
+            val nonKnowledgeTreasure = some<Treasure>().copy(type = TreasureType.GOLD)
             return listOf<Arguments>(
                 Arguments.of(
                     "SHOULD return null WHEN description and coordinates are null",
-                    someTreasure,
+                    nonKnowledgeTreasure,
                     null,
                     null,
                     0,
@@ -72,7 +86,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
                 ),
                 Arguments.of(
                     "SHOULD return null WHEN only description is null",
-                    someTreasure,
+                    nonKnowledgeTreasure,
                     someDescription,
                     null,
                     0,
@@ -80,7 +94,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
                 ),
                 Arguments.of(
                     "SHOULD return null WHEN only coordinates is null",
-                    someTreasure,
+                    nonKnowledgeTreasure,
                     null,
                     some<AndroidLocation>(),
                     0,
@@ -88,7 +102,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
                 ),
                 Arguments.of(
                     "SHOULD return null WHEN description is far away from coordinates",
-                    someTreasure,
+                    nonKnowledgeTreasure,
                     someDescription,
                     some<AndroidLocation>(),
                     60,
@@ -96,7 +110,7 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
                 ),
                 Arguments.of(
                     "SHOULD return description WHEN description is close to coordinates",
-                    someTreasure,
+                    nonKnowledgeTreasure,
                     someDescription,
                     some<AndroidLocation>(),
                     59,
@@ -123,13 +137,12 @@ class ClassicJustFoundTreasureDescriptionFinderTest {
         justFoundTreasure?.let {
             description?.let {
                 userCoordinates?.let {
-                    BDDMockito.given(locationCalculator.distanceInSteps(description, userCoordinates))
+                    BDDMockito.given(locationCalculator.distanceInSteps(any<AndroidLocation>(), eq(userCoordinates)))
                         .willReturn(coordinatesDistance)
                 }
             }
         }
         val finder = JustFoundTreasureDescriptionFinder(listOf(), locationCalculator)
-            //justFoundTreasure, description, userCoordinates, locationCalculator)
 
         //when
         val actual = finder.findTreasureDescription(justFoundTreasure, description, userCoordinates)

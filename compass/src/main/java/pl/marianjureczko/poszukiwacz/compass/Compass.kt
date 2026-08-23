@@ -60,13 +60,13 @@ fun Compass(
             contentScale = ContentScale.Inside,
             modifier = Modifier.rotate(arcRotation)
         )
-        if (gpsAccuracy != GpsAccuracy.Fine || true) {
+        if (gpsAccuracy != GpsAccuracy.Fine) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter),
             ) {
-                val textResId = when (GpsAccuracy.Medium) {
+                val textResId = when (gpsAccuracy) {
                     GpsAccuracy.Medium -> R.string.medium_gps_signal
                     GpsAccuracy.Low -> R.string.low_gps_signal
                     else -> R.string.no_gps_signal

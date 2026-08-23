@@ -2,6 +2,7 @@ package pl.marianjureczko.poszukiwacz.usecase
 
 import com.ocadotechnology.gembus.test.someFloat
 import com.ocadotechnology.gembus.test.someLong
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 
 data class TestLocation(
     override var latitude: Double,
@@ -18,9 +19,5 @@ data class TestLocation(
     @Synchronized
     fun setDistance(value: Float) {
         distance = value
-    }
-
-    override fun distanceTo(dest: AndroidLocation): Float {
-        return getDistance()
     }
 }

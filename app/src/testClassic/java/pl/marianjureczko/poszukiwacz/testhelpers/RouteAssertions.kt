@@ -2,7 +2,7 @@ package pl.marianjureczko.poszukiwacz.testhelpers
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.Offset
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
 
 val offset: Offset<Double> = Offset.offset(0.001)

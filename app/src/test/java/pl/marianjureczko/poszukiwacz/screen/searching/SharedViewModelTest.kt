@@ -1,39 +1,25 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
-import android.content.Context
-import android.location.Location
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.ocadotechnology.gembus.test.some
-import com.ocadotechnology.gembus.test.somePositiveInt
 import com.ocadotechnology.gembus.test.someString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.data.Offset
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.then
 import org.mockito.BDDMockito.times
-import org.mockito.Mockito.mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.atLeastOnce
 import pl.marianjureczko.poszukiwacz.any
-import pl.marianjureczko.poszukiwacz.compass.data.LocationWrapper
-import pl.marianjureczko.poszukiwacz.eq
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.result.ResultType
-import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 
 
 @ExtendWith(MockitoExtension::class)
@@ -114,48 +100,6 @@ class SharedViewModelTest {
         assertThat(captor.lastValue)
             .usingRecursiveComparison()
             .isEqualTo(emptyHunterPath)
-    }
-
-    @Test
-    fun `SHOULD update location`() = scope.runTest {
-        //given
-        val context = mock(Context::class.java)
-        val locationProvider = mock(FusedLocationProviderClient::class.java)
-        val locationPort = LocationPort(context, locationProvider, dispatcher, dispatcher)
-        val fixture = SharedViewModelFixture(dispatcher, locationPort = locationPort)
-        val captor = argumentCaptor<LocationCallback>()
-        given(locationProvider.requestLocationUpdates(any(LocationRequest::class.java), captor.capture(), eq(null)))
-            .willReturn(mock())
-        val viewModel = fixture.givenMocksForNoProgress()
-        viewModel.gpsJob!!.cancel()
-
-        val location: Location = mock()
-        val locationResult: LocationResult = mock()
-        val selectedTreasure = viewModel.state.value.selectedTreasureDescription()!!
-        val latitude = selectedTreasure.latitude
-        val longitude = selectedTreasure.longitude - 1
-        given(location.getLatitude()).willReturn(latitude)
-        given(location.getLongitude()).willReturn(longitude)
-        given(location.getAccuracy()).willReturn(0f)
-        val expectedDistance: Int = somePositiveInt(999_999)
-        val locationWrapper = LocationWrapper(location)
-        given(fixture.locationCalculator.distanceInSteps(selectedTreasure, locationWrapper))
-            .willReturn(expectedDistance)
-
-        //when
-        advanceTimeBy(100L)
-        val locationCallback = captor.firstValue
-        given(locationResult.getLastLocation()).willReturn(location)
-        locationCallback.onLocationResult(locationResult)
-
-        //then
-        assertThat(viewModel.state.value.currentLocation.getCurrentUserLocation()).isEqualTo(locationWrapper)
-        assertThat(viewModel.state.value.stepsToTreasure).isEqualTo(expectedDistance)
-        assertThat(viewModel.state.value.needleRotation).isCloseTo(90.0f, Offset.offset(0.01f))
-        assertThat(viewModel.state.value.hunterPath.locations)
-            .containsExactly(locationWrapper)
-
-        advanceTimeBy(5000L)
     }
 
     /**
@@ -253,5 +197,20 @@ class SharedViewModelTest {
         assertThat(callbackUsed).isEqualTo(2)
         // there should be no 3rd save for the already taken treasure
         then(fixture.storage).should(times(2)).save(any(TreasuresProgress::class.java))
+    }
+
+    @Test
+    fun `SHOULD append a new location to hunterPath WHEN the location update callback fires`() {
+        // given
+        val fixture = SharedViewModelFixture(dispatcher)
+        val viewModel = fixture.givenMocksForNoProgress()
+        val location = some<AndroidLocation>()
+
+        // when
+        val callback = viewModel.createLocationUpdateCallback()
+        callback.onLocationUpdated(location)
+
+        // then
+        assertThat(viewModel.state.value.hunterPath.locations).containsExactly(location)
     }
 }

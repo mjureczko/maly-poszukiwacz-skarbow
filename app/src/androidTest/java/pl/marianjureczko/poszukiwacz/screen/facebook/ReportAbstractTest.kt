@@ -10,11 +10,10 @@ import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.Before
 import pl.marianjureczko.poszukiwacz.R
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
-import pl.marianjureczko.poszukiwacz.screen.searching.LocationCalculator
 import pl.marianjureczko.poszukiwacz.shared.port.TestExternalStoragePort
-import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.SaveBitmapToGalleryUC
 
@@ -33,7 +32,7 @@ abstract class ReportAbstractTest {
         FacebookViewModel(
             stateHandle,
             storagePort,
-            LocationCalculator(AndroidLocationFactoryImpl()),
+            LocationCalculator(),
             context.resources,
             SaveBitmapToGalleryUC(TestExternalStoragePort()),
             testDispatcher,

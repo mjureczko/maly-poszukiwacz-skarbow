@@ -2,7 +2,7 @@ package pl.marianjureczko.poszukiwacz.screen.treasureseditor
 
 import com.ocadotechnology.gembus.test.CustomArranger
 import com.ocadotechnology.gembus.test.some
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
 
 class TreasureEditorStateArranger : CustomArranger<TreasureEditorState>() {

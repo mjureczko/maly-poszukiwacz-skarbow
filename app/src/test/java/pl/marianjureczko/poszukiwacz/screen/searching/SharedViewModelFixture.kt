@@ -6,17 +6,16 @@ import com.ocadotechnology.gembus.test.someString
 import kotlinx.coroutines.CoroutineDispatcher
 import org.mockito.BDDMockito
 import org.mockito.Mockito.mock
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
+import pl.marianjureczko.poszukiwacz.compass.api.LocationPort
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescriptionArranger
 import pl.marianjureczko.poszukiwacz.model.TreasuresProgress
 import pl.marianjureczko.poszukiwacz.screen.Screens
 import pl.marianjureczko.poszukiwacz.shared.PhotoHelper
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
-import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
-import pl.marianjureczko.poszukiwacz.shared.port.location.AndroidLocationFactoryImpl
 import pl.marianjureczko.poszukiwacz.shared.port.storage.StoragePort
 import pl.marianjureczko.poszukiwacz.usecase.ResetProgressUC
-import pl.marianjureczko.poszukiwacz.usecase.UpdateLocationUC
 
 data class SharedViewModelFixture(
     val testDispatcher: CoroutineDispatcher,
@@ -55,10 +54,9 @@ data class SharedViewModelFixture(
             photoHelper = photoHelper,
             stateHandle = savedState,
             cameraPort = cameraPort,
-            locationCalculator = LocationCalculator(AndroidLocationFactoryImpl()),
             qrScannerPort = qrScannerPort,
             resetProgressUC = resetProgressUC,
-            updateLocationUC = UpdateLocationUC(storage, locationCalculator),
+            locationCalculator = locationCalculator,
             ioDispatcher = testDispatcher,
         )
         result.respawn = false

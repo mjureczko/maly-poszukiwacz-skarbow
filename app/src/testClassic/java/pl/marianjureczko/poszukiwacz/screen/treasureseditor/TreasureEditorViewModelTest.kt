@@ -6,7 +6,7 @@ import com.ocadotechnology.gembus.test.someString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
 import pl.marianjureczko.poszukiwacz.testhelpers.assertRouteContainsTreasureWith
@@ -35,7 +35,7 @@ class TreasureEditorViewModelTest {
         fixture.storage.clear()
 
         //when
-        val sut = fixture.initializeViewModel() // createTreasureEditorViewModel()
+        val sut = fixture.initializeViewModel()
 
         //then
         val actual = sut.state.value.route

@@ -4,6 +4,7 @@ import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someFloat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import pl.marianjureczko.poszukiwacz.compass.data.LocationHolder
 
 class LocationHolderTest {
 

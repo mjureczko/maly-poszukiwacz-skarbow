@@ -1,7 +1,7 @@
 package pl.marianjureczko.poszukiwacz.model
 
-import pl.marianjureczko.poszukiwacz.compass.data.AndroidLocation
-import pl.marianjureczko.poszukiwacz.compass.domain.LocationCalculator
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
+import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.usecase.CalculateAveragedLocationUC
 import java.util.Date
 
@@ -43,19 +43,18 @@ data class HunterPath(
         var result = 0.0
         chunkedCoordinates.forEachIndexed { index, location ->
             if (index > 0) {
-                result += calculator.distanceInKm(chunkedCoordinates[index - 1], location)
+                result += calculator.distanceInKm(
+                    startLatitude = chunkedCoordinates[index - 1].latitude,
+                    startLongitude = chunkedCoordinates[index - 1].longitude,
+                    endLatitude = location.latitude,
+                    endLongitude = location.longitude
+                )
             }
         }
         return result
     }
 
     fun path(): List<AveragedLocation> = chunkedCoordinates
-
-    fun isLocationBeingUpdated(): Boolean {
-        if (end == null) return true
-        val now = Date()
-        return (now.time - end!!.time) < 5000
-    }
 
     private fun establishStart(date: Date): HunterPath {
         var updated = this

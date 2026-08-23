@@ -1,5 +1,7 @@
 package pl.marianjureczko.poszukiwacz.compass.data
 
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
+
 data class LocationHolder(
     private val currentUserLocation: AndroidLocation? = null,
 

@@ -8,3 +8,10 @@ import javax.inject.Qualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class CompassIoDispatcher
+
+/**
+ * When using the compass module a main dispatcher with this qualifier must be delivered to Hilt.
+ */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class CompassMainDispatcher
