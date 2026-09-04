@@ -1,7 +1,6 @@
 package pl.marianjureczko.poszukiwacz.compass.domain
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -39,10 +38,5 @@ class ArcCalculatorTest {
                 Arguments.of(-sqrt(3.0) / 2, -0.5f, 0f, 0f, 240)
             ).toList()
         }
-    }
-
-    @Test
-    fun cos() {
-
     }
 }

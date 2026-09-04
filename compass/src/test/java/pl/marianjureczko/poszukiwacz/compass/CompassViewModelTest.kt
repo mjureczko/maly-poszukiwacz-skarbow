@@ -196,7 +196,7 @@ class CompassViewModelTest {
         val expectedDistance = 1234
         given(locationCalculator.distanceInSteps(target, newLocation)).willReturn(expectedDistance)
 
-        // capture the lambda the SUT registers with LocationPort.startFetching in init {}.
+        // capture the lambda the SUT registers with LocationPort.startFetching in start().
         // We use a plain object so we can also access the lambda without mockito matchers
         // (which are awkward with Kotlin function types).
         val locationPort = object : LocationPort {
@@ -222,6 +222,7 @@ class CompassViewModelTest {
             StandardTestDispatcher()
         )
         sut.setSelectedTreasure(target)
+        sut.start()
 
         // when: simulate a single GPS fix
         locationPort.fire(newLocation)
@@ -238,7 +239,9 @@ class CompassViewModelTest {
         locationCalculator: LocationCalculator = LocationCalculator(),
         updateLocationUC: UpdateLocationUC = UpdateLocationUC(LocationCalculator()),
         ioDispatcher: CoroutineDispatcher = StandardTestDispatcher(),
-    ): CompassViewModel = CompassViewModel(locationPort, locationCalculator, updateLocationUC, ioDispatcher)
+    ): CompassViewModel =
+        CompassViewModel(locationPort, locationCalculator, updateLocationUC, ioDispatcher)
+            .also { it.start() }
 
     companion object {
         @JvmStatic

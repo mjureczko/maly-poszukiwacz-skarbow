@@ -25,7 +25,6 @@ class TestLocationPort : LocationPort {
             longitude = longitude,
             observedAt = System.currentTimeMillis()
         )
-        location.setDistance(distanceToTreasure)
         locationCallback?.invoke(location)
     }
 }

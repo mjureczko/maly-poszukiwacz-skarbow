@@ -38,13 +38,17 @@ class CompassViewModel @Inject constructor(
     private var selectedTreasure: AndroidLocation? = null
     private var locationUpdateCallback: LocationUpdateCallback? = null
     private var gpsJob: Job? = null
+    private var started: Boolean = false
 
-    init {
-        locationPort.startFetching(viewModelScope) { location ->
-            updateLocationUC(location, selectedTreasure, _state, locationUpdateCallback)
-            _state.value = _state.value.copy(lastLocationUpdateTime = Date(location.observedAt))
+    fun start() {
+        if (!started) {
+            locationPort.startFetching(viewModelScope) { location ->
+                updateLocationUC(location, selectedTreasure, _state, locationUpdateCallback)
+                _state.value = _state.value.copy(lastLocationUpdateTime = Date(location.observedAt))
+            }
+            scheduleGpsCheck()
+            started = true
         }
-        scheduleGpsCheck()
     }
 
     //visibility for tests

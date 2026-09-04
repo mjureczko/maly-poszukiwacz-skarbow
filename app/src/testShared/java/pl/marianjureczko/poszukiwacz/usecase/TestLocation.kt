@@ -9,15 +9,4 @@ data class TestLocation(
     override var longitude: Double,
     override val accuracy: Float = someFloat(),
     override val observedAt: Long = someLong()
-) : AndroidLocation {
-
-    private var distance = 0f
-
-    @Synchronized
-    fun getDistance(): Float = distance
-
-    @Synchronized
-    fun setDistance(value: Float) {
-        distance = value
-    }
-}
+) : AndroidLocation

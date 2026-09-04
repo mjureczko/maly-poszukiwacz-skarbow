@@ -59,7 +59,6 @@ data class SharedViewModelFixture(
             locationCalculator = locationCalculator,
             ioDispatcher = testDispatcher,
         )
-        result.respawn = false
         return result
     }
 

@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pl.marianjureczko.poszukiwacz.R
@@ -309,11 +308,4 @@ class SharedViewModel @Inject constructor(
 
         _state.value = state.value.copy(distancesInSteps = currentDistances)
     }
-
-    //for test only START
-    var respawn: Boolean = true
-
-    var gpsJob: Job? = null
-
-    //for test only END
 }

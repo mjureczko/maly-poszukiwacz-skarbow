@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -179,7 +180,7 @@ private fun SearchingScreenBody(
                     observedAt = 0
                 )
             },
-            locationUpdateCallback = viewModel.createLocationUpdateCallback(),
+            locationUpdateCallback = remember(viewModel) { viewModel.createLocationUpdateCallback() },
             height = 0.49.dh,
             textStyle = TextStyle(fontFamily = FANCY_FONT, fontSize = dp2SameSizeSp(0.14.dh, factor = 0.6))
         )

@@ -30,7 +30,7 @@ open class LocationPortImpl(
 ) : LocationPort {
 
     private val TAG = javaClass.simpleName
-    private lateinit var updateLocationCallback: UpdateLocationCallback
+    private lateinit var updateLocationCallback: (AndroidLocation) -> Unit
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
@@ -67,7 +67,7 @@ open class LocationPortImpl(
     private fun fetch(
         interval: Long,
         viewModelScope: CoroutineScope,
-        updateLocationCallback: UpdateLocationCallback
+        updateLocationCallback: (AndroidLocation) -> Unit
     ) {
         this.updateLocationCallback = updateLocationCallback
         // Location updates must be requested on main thread due to Looper requirement

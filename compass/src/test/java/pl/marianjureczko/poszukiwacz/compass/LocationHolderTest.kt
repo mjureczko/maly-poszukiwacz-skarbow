@@ -1,8 +1,7 @@
-package pl.marianjureczko.poszukiwacz.usecase
+package pl.marianjureczko.poszukiwacz.compass
 
-import com.ocadotechnology.gembus.test.some
 import com.ocadotechnology.gembus.test.someFloat
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import pl.marianjureczko.poszukiwacz.compass.data.LocationHolder
 
@@ -13,72 +12,72 @@ class LocationHolderTest {
     @Test
     fun `SHOULD use new location as current WHEN is of high accuracy`() {
         //given
-        val newLocation = AndroidLocationArranger.accuracyBelow50m()
+        val newLocation = LocationWrapperArranger.accuracyBelow50m()
 
         //when
         val actual = sut.updateLocation(newLocation)
 
         //then
-        assertThat(actual.getCurrentUserLocation()).isEqualTo(newLocation)
+        Assertions.assertThat(actual.getCurrentUserLocation()).isEqualTo(newLocation)
     }
 
     @Test
     fun `SHOULD not use new location as current when is of low accuracy`() {
         //given
-        val accurateLocation = AndroidLocationArranger.accuracyBelow50m()
+        val accurateLocation = LocationWrapperArranger.accuracyBelow50m()
         var actual = sut.updateLocation(accurateLocation)
-        val inaccurateLocation = AndroidLocationArranger.accuracyAbove50m()
+        val inaccurateLocation = LocationWrapperArranger.accuracyAbove50m()
 
         //when
         actual = actual.updateLocation(inaccurateLocation)
 
         //then
-        assertThat(actual.getCurrentUserLocation()).isEqualTo(accurateLocation)
+        Assertions.assertThat(actual.getCurrentUserLocation()).isEqualTo(accurateLocation)
     }
 
     @Test
     fun `SHOULD use new location as current WHEN is of low accuracy but for long time period there were no good accuracies`() {
         //given
-        val goodLocationTimeAnchor = AndroidLocationArranger.accuracyBelow50m(0L)
+        val goodLocationTimeAnchor = LocationWrapperArranger.accuracyBelow50m(0L)
         var actual = sut.updateLocation(goodLocationTimeAnchor)
-        val lowAccuracyLocation = AndroidLocationArranger.accuracyAbove50m(goodLocationTimeAnchor.observedAt + 4001L)
+        val lowAccuracyLocation = LocationWrapperArranger.accuracyAbove50m(goodLocationTimeAnchor.observedAt + 4001L)
 
         //when
         actual = actual.updateLocation(lowAccuracyLocation)
 
         //then
-        assertThat(actual.getCurrentUserLocation()).isEqualTo(lowAccuracyLocation)
+        Assertions.assertThat(actual.getCurrentUserLocation()).isEqualTo(lowAccuracyLocation)
     }
 
     @Test
     fun `SHOULD use inaccurate location as current WHEN it is the first reading`() {
         //given
-        val lowAccuracyLocation = AndroidLocationArranger.accuracyAbove50m()
+        val lowAccuracyLocation = LocationWrapperArranger.accuracyAbove50m()
 
         //when
         val actual = sut.updateLocation(lowAccuracyLocation)
 
         //then
-        assertThat(actual.getCurrentUserLocation()).isEqualTo(lowAccuracyLocation)
+        Assertions.assertThat(actual.getCurrentUserLocation()).isEqualTo(lowAccuracyLocation)
     }
 
     @Test
     fun `SHOULD use the most accurate location from the inaccurate ones WHEN for long time period there were no good accuracies`() {
         //given
-        val goodLocationTimeAnchor = AndroidLocationArranger.accuracyBelow50m(0L)
+        val goodLocationTimeAnchor = LocationWrapperArranger.accuracyBelow50m(0L)
         var actual = sut.updateLocation(goodLocationTimeAnchor)
-        val lowAccuracyShortPeriod = some<TestLocation>().copy(
+        val lowAccuracyShortPeriod = LocationWrapperArranger.givenAccuracy(
             accuracy = someFloat(100f, 200f),
             observedAt = goodLocationTimeAnchor.observedAt + 1000L
         )
         actual = actual.updateLocation(lowAccuracyShortPeriod)
-        val lowButBestAccuracyShortPeriod = some<TestLocation>().copy(
+        val lowButBestAccuracyShortPeriod = LocationWrapperArranger.givenAccuracy(
             accuracy = lowAccuracyShortPeriod.accuracy - 1f,
             observedAt = goodLocationTimeAnchor.observedAt + 1001L
         )
         actual = actual.updateLocation(lowButBestAccuracyShortPeriod)
-        assertThat(actual.getCurrentUserLocation()).isEqualTo(goodLocationTimeAnchor)
-        val lowAccuracyLongPeriod = some<TestLocation>().copy(
+        Assertions.assertThat(actual.getCurrentUserLocation()).isEqualTo(goodLocationTimeAnchor)
+        val lowAccuracyLongPeriod = LocationWrapperArranger.givenAccuracy(
             accuracy = lowAccuracyShortPeriod.accuracy + 1f,
             observedAt = goodLocationTimeAnchor.observedAt + 4001L
         )
@@ -87,6 +86,6 @@ class LocationHolderTest {
         actual = actual.updateLocation(lowAccuracyLongPeriod)
 
         //then
-        assertThat(actual.getCurrentUserLocation()).isEqualTo(lowButBestAccuracyShortPeriod)
+        Assertions.assertThat(actual.getCurrentUserLocation()).isEqualTo(lowButBestAccuracyShortPeriod)
     }
 }

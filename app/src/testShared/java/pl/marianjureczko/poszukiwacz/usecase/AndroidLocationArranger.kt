@@ -18,20 +18,6 @@ class AndroidLocationArranger : CustomArranger<AndroidLocation>() {
     }
 
     companion object {
-        fun accuracyBelow50m(observedAt: Long = System.currentTimeMillis()): AndroidLocation {
-            return some<TestLocation>().copy(
-                accuracy = someFloat(0f, 49.9f),
-                observedAt = observedAt
-            )
-        }
-
-        fun accuracyAbove50m(observedAt: Long = System.currentTimeMillis()): AndroidLocation {
-            return some<TestLocation>().copy(
-                accuracy = someFloat(50f, 149f),
-                observedAt = observedAt
-            )
-        }
-
         fun withAccuracy(accuracy: Float): AndroidLocation {
             return some<TestLocation>().copy(accuracy = accuracy)
         }

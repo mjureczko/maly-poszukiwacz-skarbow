@@ -29,6 +29,7 @@ fun CompassAndSteps(
     LaunchedEffect(selectedTreasure, locationUpdateCallback) {
         viewModel.setSelectedTreasure(selectedTreasure)
         viewModel.setLocationUpdateCallback(locationUpdateCallback)
+        viewModel.start()
     }
 
     val compassHeight = height * (0.35f / 0.49f)
