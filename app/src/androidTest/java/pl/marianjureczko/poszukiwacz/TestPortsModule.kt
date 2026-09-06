@@ -9,11 +9,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.mockito.Mockito.mock
 import pl.marianjureczko.poszukiwacz.compass.api.CompassIoDispatcher
+import pl.marianjureczko.poszukiwacz.compass.api.LocationPort
 import pl.marianjureczko.poszukiwacz.screen.facebook.ReportStoragePort
 import pl.marianjureczko.poszukiwacz.screen.searching.QrScannerPort
 import pl.marianjureczko.poszukiwacz.shared.di.IoDispatcher
 import pl.marianjureczko.poszukiwacz.shared.port.CameraPort
-import pl.marianjureczko.poszukiwacz.shared.port.LocationPort
 import pl.marianjureczko.poszukiwacz.shared.port.TestExternalStoragePort
 import pl.marianjureczko.poszukiwacz.usecase.badges.AchievementsStoragePort
 import javax.inject.Singleton
@@ -31,8 +31,11 @@ object TestPortsModule {
 
     @Provides
     @IoDispatcher
-    @CompassIoDispatcher
     fun ioDispatcher(): CoroutineDispatcher = ioDispatcher //Dispatchers.IO
+
+    @Provides
+    @CompassIoDispatcher
+    fun compassIoDispatcher(): CoroutineDispatcher = ioDispatcher //Dispatchers.IO
 
     @Singleton
     @Provides
