@@ -19,7 +19,7 @@ class TestLocationPort : LocationPort {
         locationCallback = null
     }
 
-    fun updateLocation(latitude: Double, longitude: Double, distanceToTreasure: Float = 0f) {
+    fun updateLocation(latitude: Double, longitude: Double) {
         val location = TestLocation(
             latitude = latitude,
             longitude = longitude,

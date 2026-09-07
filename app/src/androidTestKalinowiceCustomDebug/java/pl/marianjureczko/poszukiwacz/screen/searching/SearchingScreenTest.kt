@@ -3,7 +3,7 @@ package pl.marianjureczko.poszukiwacz.screen.searching
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertTextEquals
 import androidx.test.espresso.Espresso.pressBack
-import com.ocadotechnology.gembus.test.somePositiveInt
+import com.ocadotechnology.gembus.test.someDouble
 import com.ocadotechnology.gembus.test.someString
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -27,20 +27,21 @@ class SearchingScreenTest : UiTest() {
         composeRule.waitForIdle()
         TestPortsModule.ioDispatcher.scheduler.runCurrent()
         goToSearching()
-        val distanceToTreasure = somePositiveInt(999)
+        //start at random location
+        TestPortsModule.location.updateLocation(someDouble(), someDouble())
+        composeRule.waitForIdle()
 
         //when
         TestPortsModule.location.updateLocation(
             route!!.treasures[0].latitude + 0.01,
             route!!.treasures[0].longitude + 0.01,
-            distanceToTreasure = distanceToTreasure.toFloat()
         )
 
         //then
         composeRule.waitForIdle()
         val stepsToTreasure: SemanticsNodeInteraction = getNode(STEPS_TO_TREASURE)
         composeRule.waitForIdle()
-        val expected = (distanceToTreasure / 0.7f).toInt()
+        val expected = 1882 // steps for diff of [0.01, 0.01]
         stepsToTreasure.assertTextEquals(expected.toString())
     }
 
