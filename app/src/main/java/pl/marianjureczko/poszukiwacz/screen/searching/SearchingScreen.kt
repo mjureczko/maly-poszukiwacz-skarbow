@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -138,11 +139,21 @@ private fun SearchingScreenBody(
     cameraPermissionState: PermissionState,
     goToCommemorative: GoToCommemorative
 ) {
-    if (!isOnStack(navController, Screens.Selector.ROUTE)
-        && !isOnStack(navController, Screens.Results.ROUTE)
-        && state.treasureFoundAndResultAlreadyPresented()
+    // When the result was just presented and the user is back on the searching screen,
+    // automatically navigate to the selector to prompt the user to pick the next treasure.
+    // Using LaunchedEffect ties the launching to state transitions and to the composable's
+    // lifecycle (recompositions): the block runs when this composable first
+    // enters composition, and again whenever one of the keys changes.
+    LaunchedEffect(
+        state.treasuresProgress.justFoundTreasureId,
+        state.treasuresProgress.resultRequiresPresentation,
     ) {
-        goToTreasureSelector(state.treasuresProgress.justFoundTreasureId!!)
+        if (!isOnStack(navController, Screens.Selector.ROUTE)
+            && !isOnStack(navController, Screens.Results.ROUTE)
+            && state.treasureFoundAndResultAlreadyPresented()
+        ) {
+            goToTreasureSelector(state.treasuresProgress.justFoundTreasureId!!)
+        }
     }
     val scanQrLauncher: ActivityResultLauncher<ScanOptions> =
         viewModel.qrScannerPort.provideLauncher(viewModel, goToResult)

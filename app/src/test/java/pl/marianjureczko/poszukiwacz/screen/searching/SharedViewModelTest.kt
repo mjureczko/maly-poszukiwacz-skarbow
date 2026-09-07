@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
 import com.ocadotechnology.gembus.test.some
+import com.ocadotechnology.gembus.test.someDouble
 import com.ocadotechnology.gembus.test.someString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -212,5 +213,66 @@ class SharedViewModelTest {
 
         // then
         assertThat(viewModel.state.value.hunterPath.locations).containsExactly(location)
+    }
+
+    @Test
+    fun `SHOULD store last known location on state WHEN the location update callback fires`() {
+        // given
+        val fixture = SharedViewModelFixture(dispatcher)
+        val viewModel = fixture.givenMocksForNoProgress()
+        val location = some<AndroidLocation>()
+
+        // when
+        val callback = viewModel.createLocationUpdateCallback()
+        callback.onLocationUpdated(location)
+
+        // then
+        assertThat(viewModel.state.value.lastLocation).isEqualTo(location)
+    }
+
+    @Test
+    fun `SHOULD set justFoundTreasureId to selected treasure WHEN a non knowledge treasure is scanned while the user is at the selected location`() {
+        // given
+        val qrCode = TreasureDescriptionArranger.validQrCode("g")
+        val fixture = SharedViewModelFixture(dispatcher, firstTreasureQrCode = qrCode)
+        val viewModel = fixture.givenMocksForNoProgress()
+        val selectedTreasure = viewModel.state.value.route.treasures.first()
+        // pin the first treasure location to a known point so we are certain the user is at it
+        selectedTreasure.latitude = someDouble()
+        selectedTreasure.longitude = someDouble()
+        val userLocation =
+            AndroidLocation.create(latitude = selectedTreasure.latitude, longitude = selectedTreasure.longitude)
+        viewModel.state.value.lastLocation = userLocation
+        val qrResult = TreasureDescriptionArranger.validQrCode("g")
+
+        // when
+        val callback = viewModel.scannedTreasureCallback { _, _, _, _, _ -> }
+        callback(qrResult)
+
+        // then
+        assertThat(viewModel.state.value.treasuresProgress.justFoundTreasureId).isEqualTo(selectedTreasure.id)
+    }
+
+    @Test
+    fun `SHOULD keep justFoundTreasureId null WHEN a non knowledge treasure is scanned but the user is not at the selected location`() {
+        // given
+        val qrCode = TreasureDescriptionArranger.validQrCode("g")
+        val fixture = SharedViewModelFixture(dispatcher, firstTreasureQrCode = qrCode)
+        val viewModel = fixture.givenMocksForNoProgress()
+        // pin the first treasure location so the test does not depend on random arranger data
+        val selectedTreasure = viewModel.state.value.route.treasures.first()
+        selectedTreasure.latitude = someDouble()
+        selectedTreasure.longitude = someDouble()
+        // user is at a clearly distant point (>60 steps away)
+        val farAwayLocation = AndroidLocation.create(latitude = someDouble(), selectedTreasure.longitude + 1.0)
+        viewModel.state.value.lastLocation = farAwayLocation
+        val qrResult = TreasureDescriptionArranger.validQrCode("g")
+
+        // when
+        val callback = viewModel.scannedTreasureCallback { _, _, _, _, _ -> }
+        callback(qrResult)
+
+        // then
+        assertThat(viewModel.state.value.treasuresProgress.justFoundTreasureId).isNull()
     }
 }

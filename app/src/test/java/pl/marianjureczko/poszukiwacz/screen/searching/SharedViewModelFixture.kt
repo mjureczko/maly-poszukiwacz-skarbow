@@ -23,7 +23,7 @@ data class SharedViewModelFixture(
     val firstTreasureQrCode: String = TreasureDescriptionArranger.validQrCode(),
     val storage: StoragePort = mock(StoragePort::class.java),
     val locationPort: LocationPort = mock(LocationPort::class.java),
-    val locationCalculator: LocationCalculator = mock(),
+    val locationCalculator: LocationCalculator = LocationCalculator(),
     val savedState: SavedStateHandle = mock(SavedStateHandle::class.java),
     val photoHelper: PhotoHelper = mock(PhotoHelper::class.java),
     val cameraPort: CameraPort = mock(CameraPort::class.java),

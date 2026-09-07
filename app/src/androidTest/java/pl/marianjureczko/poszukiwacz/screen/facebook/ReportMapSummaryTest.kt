@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import junit.framework.TestCase
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import pl.marianjureczko.poszukiwacz.model.HunterPath
@@ -37,6 +37,6 @@ class ReportMapSummaryTest : ReportAbstractTest() {
         //then
         //save to hava a reference in case of failing test
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, File(context.getFilesDir(), "/map_summary.png").outputStream())
-        TestCase.assertTrue(bitmap.sameAs(expected("map_summary.png")))
+        assertTrue(bitmap.sameAs(expected("map_summary.png")))
     }
 }

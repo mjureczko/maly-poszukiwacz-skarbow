@@ -111,7 +111,7 @@ class SharedViewModel @Inject constructor(
                     val foundTd: TreasureDescription? = tdFinder.findTreasureDescription(
                         justFoundTreasure = scannedTreasure,
                         selectedTreasureDescription = state.value.selectedTreasureDescription(),
-                        userLocation = null
+                        userLocation = state.value.lastLocation
                     )
                     var treasuresProgress: TreasuresProgress = state.value.treasuresProgress
                     if (treasuresProgress.contains(scannedTreasure)) {
@@ -286,6 +286,7 @@ class SharedViewModel @Inject constructor(
     override fun createLocationUpdateCallback(): LocationUpdateCallback {
         return LocationUpdateCallback { location ->
             updateDistancesInSteps(location)
+            _state.value = _state.value.copy(lastLocation = location)
             // Handle path recording
             _state.value.hunterPath = state.value.hunterPath.addLocation(location) {
                 storage.save(it)

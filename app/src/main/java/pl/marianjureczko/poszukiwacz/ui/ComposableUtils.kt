@@ -33,7 +33,6 @@ fun shareViewModelStoreOwner(navBackStackEntry: NavBackStackEntry, navController
     return remember(navBackStackEntry) { navController.getBackStackEntry(Screens.Searching.ROUTE) }
 }
 
-@Composable
 fun isOnStack(navController: NavController, route: String): Boolean {
     return navController.backQueue.any { it.destination.route == route }
 }

@@ -62,7 +62,7 @@ To produce a `compass.aar` artifact, the module needs:
 
 ### Remaining for next session:
 
-- [ ] Automatize module publication
+- [ ] Automatize module publication (distributed using GitHub Packages)
 - [ ] Adopt a shared Gradle Version Catalog + Git submodule (per modules.md) so `compose_version`, `kotlin_version`,
   `hilt_version` are no longer `ext.*` in the root `build.gradle` but sourced from `libs.versions.toml`.
 

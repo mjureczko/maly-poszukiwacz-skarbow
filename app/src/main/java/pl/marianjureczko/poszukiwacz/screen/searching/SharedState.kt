@@ -1,6 +1,7 @@
 package pl.marianjureczko.poszukiwacz.screen.searching
 
 import android.media.MediaPlayer
+import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.model.HunterPath
 import pl.marianjureczko.poszukiwacz.model.Route
 import pl.marianjureczko.poszukiwacz.model.TreasureDescription
@@ -23,6 +24,10 @@ interface SearchingSharedState : HasCommemorativePhoto {
     val route: Route
     var treasuresProgress: TreasuresProgress
     var hunterPath: HunterPath
+
+    /** Most recent location reported by the user. Used to decide whether a scanned treasure is the selected one. */
+    var lastLocation: AndroidLocation?
+
     fun treasureFoundAndResultAlreadyPresented(): Boolean
     fun selectedTreasureDescription(): TreasureDescription?
 }
@@ -40,6 +45,7 @@ data class SharedState(
     override val distancesInSteps: Map<Int, Int?> = route.treasures
         .associate { it.id to null }
         .toMap(),
+    override var lastLocation: AndroidLocation? = null,
 ) : SelectorSharedState, SearchingSharedState, CommemorativeSharedState {
 
     override fun isTreasureCollected(treasureId: Int): Boolean =

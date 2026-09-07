@@ -44,7 +44,6 @@ class CompassViewModel @Inject constructor(
         if (!started) {
             locationPort.startFetching(viewModelScope) { location ->
                 updateLocationUC(location, selectedTreasure, _state, locationUpdateCallback)
-                _state.value = _state.value.copy(lastLocationUpdateTime = Date(location.observedAt))
             }
             scheduleGpsCheck()
             started = true

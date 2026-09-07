@@ -6,6 +6,7 @@ import pl.marianjureczko.poszukiwacz.compass.api.AndroidLocation
 import pl.marianjureczko.poszukiwacz.compass.api.LocationCalculator
 import pl.marianjureczko.poszukiwacz.compass.api.LocationUpdateCallback
 import pl.marianjureczko.poszukiwacz.compass.viewmodel.CompassState
+import java.util.Date
 import javax.inject.Inject
 
 class UpdateLocationUC @Inject constructor(
@@ -38,8 +39,8 @@ class UpdateLocationUC @Inject constructor(
                     location.latitude
                 ).toFloat()
             } ?: 0f,
-            gpsAccuracy = gpsAccuracy
-            //TODO t: update lastLocationUpdateTime
+            gpsAccuracy = gpsAccuracy,
+            lastLocationUpdateTime = Date(location.observedAt)
         )
 
         callback?.onLocationUpdated(location)
