@@ -29,10 +29,9 @@ combined with Git Submodules.
 
 The compiled .aar files are distributed using GitHub Packages.
 
-* Pipeline: The maven-publish plugin exposes the release build variant of the module.
-* Security: Accessing the packages requires a Personal Access Token (PAT) with package read/write permissions. These
-  credentials must be stored locally in gradle.properties (ignored by Git) or provided via CI/CD environment variables
-  to prevent token leakage.
+The complete publishing procedure — versioning, automatic publishing from CI (tag-driven), publishing from a local
+computer (including `-SNAPSHOT` builds), and consumer setup (e.g. for nowy-poszukiwacz) — is documented in _Module
+release_ in `docs/development.md`.
 
 # Dependency Injection (Hilt)
 

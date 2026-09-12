@@ -281,14 +281,137 @@ Build -> Generate Signed Bundle/APK -> APK
 
 The following example is given for the compass module.
 
-To build the aar file execute:
+To publish the compass module aar file to GitHub Packages execute (it embeds the assembleRelease task):
+
+```bash
+./gradlew :compass:publishReleasePublicationToGitHubPackagesRepository -PCOMPASS_VERSION=0.0.1
+```
+
+The maven-publish plugin exposes the release build variant of the module.
+
+To only build the aar file execute:
 
 ```bash
 ./gradlew :compass:assembleRelease
 ```
 
-To publish the aar file to GitHub Packages execute:
+### Authentication
 
-```bash
-./gradlew :compass:publishReleasePublicationToGitHubPackagesRepository
+Publishing to GitHub Packages additionally credentials.
+The build resolves them in the following order (see the `credentials` block in `compass/build.gradle`):
+
+1. `gpr.user` / `gpr.key` Gradle properties — read from `~/.gradle/gradle.properties`, a `-P` command-line
+   parameter, or (in CI) the `GRADLE_PROPERTIES` secret,
+2. falling back to the `GITHUB_ACTOR` / `GITHUB_TOKEN` environment variables.
+
+In practice:
+
+- Local computer: one-time setup — add to `~/.gradle/gradle.properties`:
+
+  ```
+  gpr.user=<github-login>
+  gpr.key=<PAT with write:packages>
+  ```
+
+  **How to obtain the credentials:**
+
+    1. **`gpr.user`** — your GitHub account login (username). No special setup needed; just use the same name you use to
+       log into GitHub.
+    2. **`gpr.key`** — a [Personal Access Token (PAT)](https://github.com/settings/tokens) with the `write:packages`
+       permission:
+
+        - Go to **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)** (or "Fine-grained
+          tokens" if preferred).
+        - Click **Generate new token**.
+        - For a classic token, select the **`write:packages`** scope (the `repo` scope is also commonly included but not
+          strictly required for packages).
+        - For a fine-grained token, under **Repository permissions** grant **Packages → Write** (and optionally *
+          *Contents → Read** if the token also needs to fetch source).
+        - Set an expiration and a descriptive note (e.g. "maly-poszukiwacz-skarbow compass publish").
+        - Copy the generated token — it will be shown only once. This is the value for `gpr.key`.
+
+       **Security notes:**
+        - Treat the PAT like a password. Never commit it to the project `gradle.properties` (which is tracked by git) —
+          always use `~/.gradle/gradle.properties` or a CI secret.
+        - Rotate the PAT if it is ever exposed. GitHub lets you revoke tokens at any time from the same settings page.
+        - The minimal scope for publishing is `write:packages`. If you also need to consume the package from the same
+          machine (e.g. for a local consumer build), add `read:packages` as well.
+
+- CI: nothing to configure — the publish workflow sets `GITHUB_ACTOR` / `GITHUB_TOKEN` automatically (the ephemeral
+  token with the `packages: write` permission).
+
+### Versioning
+
+The version of the published artifact is managed as follows:
+
+- By default it comes from the `COMPASS_VERSION` property in `gradle.properties` (currently `1.0.0`).
+- To publish a different version without editing the file, override the property on the command line:
+
+  ```bash
+  ./gradlew :compass:publishReleasePublicationToGitHubPackagesRepository -PCOMPASS_VERSION=0.0.1
+  ```
+
+- GitHub Packages versions are immutable — an already published version cannot be overwritten, so re-running
+  the command with the same version fails. Always use a new version for each publication. This applies to
+  `-SNAPSHOT` versions as well — see _Publishing from a local computer_ below.
+- After publishing, update `COMPASS_VERSION` in `gradle.properties` and commit it, so that the default version
+  matches the released artifact and the next release starts from the right baseline.
+
+### Automatic publishing (CI) — preferred
+
+Push a git tag named `compass-v<version>` (e.g. `compass-v1.0.0`). The `Publish Compass Module` workflow
+(`.github/workflows/publish_compass.yml`) runs the `:compass` unit tests and publishes the artifact to GitHub
+Packages.
+
+The workflow authenticates with the ephemeral `GITHUB_TOKEN` (`permissions: { contents: read, packages: write }`) —
+publishing from this repository requires no Personal Access Token (PAT) and no stored secret. For the full
+credentials resolution order (and the `gpr.*` precedence caveat) see _Authentication_ above.
+
+### Publishing from a local computer
+
+Publishing locally is useful for a work-in-progress build that a consumer can test before an official release.
+Use a `-SNAPSHOT` version for such builds.
+
+Prerequisites: complete the one-time credential setup described in _Authentication_ above.
+
+Then:
+
+1. Run the module's unit tests:
+
+   ```bash
+   ./gradlew :compass:test
+   ```
+
+2. Publish with an explicit `-SNAPSHOT` version, for example:
+
+   ```bash
+   ./gradlew :compass:publishReleasePublicationToGitHubPackagesRepository -PCOMPASS_VERSION=1.0.1-SNAPSHOT
+   ```
+
+Caveat: GitHub Packages does not implement Maven snapshot semantics — every version, including `-SNAPSHOT` ones,
+is immutable, so the same version string can be published only once. For the next work-in-progress build change
+the version string, e.g. `1.0.1-SNAPSHOT-2`, `1.0.1-SNAPSHOT-3`, etc.
+
+### Consumer setup (e.g. nowy-poszukiwacz)
+
+In the consumer's root `build.gradle`, inside `allprojects.repositories` (the same pattern as the Mapbox repository):
+
+```groovy
+maven {
+    url 'https://maven.pkg.github.com/mjureczko/maly-poszukiwacz-skarbow'
+    credentials {
+        username = project.findProperty('gpr.user')
+        password = project.findProperty('gpr.key')
+    }
+}
 ```
+
+then depend on the module:
+
+```groovy
+implementation 'pl.marianjureczko.poszukiwacz:compass:1.0.0'
+```
+
+Auth caveat: GitHub Packages requires authentication even for public packages. A consumer living in a different
+repository (like nowy-poszukiwacz) needs a PAT with `read:packages`, stored as `gpr.user` / `gpr.key` in the
+consumer's `~/.gradle/gradle.properties` or its CI secrets — the publisher's `GITHUB_TOKEN` cannot be reused.
