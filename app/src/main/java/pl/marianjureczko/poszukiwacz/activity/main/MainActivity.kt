@@ -3,11 +3,14 @@ package pl.marianjureczko.poszukiwacz.activity.main
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import pl.marianjureczko.poszukiwacz.R
 import pl.marianjureczko.poszukiwacz.ui.ComposeRoot
@@ -24,6 +27,17 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Enable edge-to-edge
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = Color.TRANSPARENT
+            ),
+            navigationBarStyle = SystemBarStyle.dark(
+                scrim = Color.TRANSPARENT
+            )
+        )
+
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
         Screen.init(this)
